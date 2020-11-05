@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using UniRx;
 
 
 namespace BeastHunter
@@ -16,7 +17,8 @@ namespace BeastHunter
 
         public WeaponHitBoxBehavior LeftWeaponBehavior { get; set; }
         public WeaponHitBoxBehavior RightWeaponBehavior { get; set; }
-        public WeaponData WeaponData { get; set; }
+        public WeaponItem LeftHandWeapon { get; set; }
+        public WeaponItem RightHandWeapon { get; set; }
 
         public WeakPointData FirstWeakPointData { get; set; }
         public WeakPointData SecondWeakPointData { get; set; }
@@ -45,6 +47,10 @@ namespace BeastHunter
         public bool IsGrounded { get; set; }
         public bool IsPlayerNear { get; set; }
 
+        public MovementPoint[] MovementPoints { get; set; }
+        
+        public bool MovementLoop { get; set; }
+
         #endregion
 
 
@@ -53,8 +59,8 @@ namespace BeastHunter
         public BossModel(GameObject prefab, BossData bossData, Vector3 groundPosition, GameContext context)
         {
             BossData = bossData;
-            BossSettings = BossData._bossSettings;
-            BossStats = BossData._bossStats;
+            BossSettings = BossData.BossSettings;
+            BossStats = BossData.BaseStats;
             BossTransform = prefab.transform;
             BossTransform.rotation = Quaternion.Euler(0, BossSettings.InstantiateDirection, 0);
             BossTransform.name = BossSettings.InstanceName;
@@ -81,7 +87,7 @@ namespace BeastHunter
                 BossRigitbody.angularDrag = BossSettings.RigitbodyAngularDrag;
             }
 
-            BossRigitbody.isKinematic = BossData._bossSettings.IsRigitbodyKinematic;
+            BossRigitbody.isKinematic = BossData.BossSettings.IsRigitbodyKinematic;
 
             if (prefab.GetComponent<CapsuleCollider>() != null)
             {
@@ -131,6 +137,17 @@ namespace BeastHunter
                 BossBehavior = prefab.AddComponent<BossBehavior>();
             }
 
+            GameObject movement = GameObject.Instantiate(BossData._movementPrefab);
+            MovementPath movementPath = movement.GetComponent<MovementPath>();
+
+            if (!movementPath)
+            {
+                movementPath = movement.AddComponent<MovementPath>();
+            }
+            
+            MovementPoints = movementPath.GetPoints().ToArray();
+            MovementLoop = movementPath.Loop;
+
             BossBehavior.SetType(InteractableObjectType.Enemy);
             BossBehavior.Stats = BossStats.MainStats;
             BossStateMachine = new BossStateMachine(context, this);
@@ -141,7 +158,7 @@ namespace BeastHunter
             IsPlayerNear = false;
 
             CurrentSpeed = 0f;
-            AnimationSpeed = BossData._bossSettings.AnimatorBaseSpeed;
+            AnimationSpeed = BossData.BossSettings.AnimatorBaseSpeed;
 
             LeftHand = BossAnimator.GetBoneTransform(HumanBodyBones.LeftHand);
             RightHand = BossAnimator.GetBoneTransform(HumanBodyBones.RightHand);
@@ -157,24 +174,22 @@ namespace BeastHunter
                 BossNavAgent = prefab.AddComponent<NavMeshAgent>();
             }
 
-            WeaponData = Data.BossFeasts;
-
-            GameObject leftHandWeapon = GameObject.Instantiate((WeaponData as TwoHandedWeaponData).
-                FirstActialWeapon.WeaponPrefab, LeftHand);
+            LeftHandWeapon = Data.BossFeast;
+            GameObject leftHandWeapon = GameObject.Instantiate(LeftHandWeapon.WeaponPrefab, LeftHand);
             SphereCollider LeftHandTrigger = leftHandWeapon.GetComponent<SphereCollider>();
-            LeftHandTrigger.radius = BossData._bossSettings.LeftHandHitBoxRadius;
-            LeftHandTrigger.center = BossData._bossSettings.LeftHandHitBoxCenter;
+            LeftHandTrigger.radius = BossData.BossSettings.LeftHandHitBoxRadius;
+            LeftHandTrigger.center = BossData.BossSettings.LeftHandHitBoxCenter;
             LeftHandTrigger.isTrigger = true;
             LeftHand.gameObject.AddComponent<Rigidbody>().isKinematic = true;
             LeftWeaponBehavior = leftHandWeapon.GetComponent<WeaponHitBoxBehavior>();
             LeftWeaponBehavior.SetType(InteractableObjectType.HitBox);
             LeftWeaponBehavior.IsInteractable = false;
 
-            GameObject rightHandWeapon = GameObject.Instantiate((WeaponData as TwoHandedWeaponData).
-                SecondActualWeapon.WeaponPrefab, RightHand);
+            RightHandWeapon = Data.BossFeast;
+            GameObject rightHandWeapon = GameObject.Instantiate(RightHandWeapon.WeaponPrefab, RightHand);
             SphereCollider RightHandTrigger = rightHandWeapon.GetComponent<SphereCollider>();
-            RightHandTrigger.radius = BossData._bossSettings.RightHandHitBoxRadius;
-            RightHandTrigger.center = BossData._bossSettings.RightHandHitBoxCenter;
+            RightHandTrigger.radius = BossData.BossSettings.RightHandHitBoxRadius;
+            RightHandTrigger.center = BossData.BossSettings.RightHandHitBoxCenter;
             RightHandTrigger.isTrigger = true;
             RightHand.gameObject.AddComponent<Rigidbody>().isKinematic = true;
             RightWeaponBehavior = rightHandWeapon.GetComponent<WeaponHitBoxBehavior>();
@@ -231,22 +246,18 @@ namespace BeastHunter
 
         public override EnemyStats GetStats()
         {
-            return BossStats;
+            return BossData.BaseStats;
         }
 
         public override void TakeDamage(Damage damage)
         {
             CurrentHealth = CurrentHealth < damage.PhysicalDamage ? 0 : CurrentHealth - damage.PhysicalDamage;
 
-            Debug.Log("Boss recieved: " + damage.PhysicalDamage + " of damage and has: " + CurrentHealth + " of HP");
+            Debug.Log("Boss has: " + CurrentHealth + " of HP");
 
-            if (damage.StunProbability > BossData._bossStats.MainStats.StunResistance)
+            if (damage.StunProbability > BossData.BaseStats.MainStats.StunResistance)
             {
                 GlobalEventsModel.OnBossStunned?.Invoke();
-            }
-            else
-            {
-                GlobalEventsModel.OnBossHitted?.Invoke();
             }
         }
 
