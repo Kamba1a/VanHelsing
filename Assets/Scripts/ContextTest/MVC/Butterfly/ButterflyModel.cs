@@ -37,7 +37,11 @@ namespace BeastHunter
 
         #region Methods
 
-        public void Execute() => objData.Act(this);
+        public void Execute()
+        {
+            objData.Act(this);
+            Debug.DrawLine(ObjTransform.position, TargetPoint, Color.red);
+        }
         public void OnTriggerEnter(Collider collider) => objData.TriggerEnter(collider, this);
 
         #endregion

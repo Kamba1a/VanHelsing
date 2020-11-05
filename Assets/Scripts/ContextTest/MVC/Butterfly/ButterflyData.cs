@@ -62,7 +62,7 @@ public class ButterflyData : ScriptableObject
                     if (transform.position.y >= model.MaxFlyAltitude && model.TargetPoint.y > transform.position.y)
                     {
                         Debug.Log(this + " maxFlyAltitude has reached");
-                        model.TargetPoint = NewTargetPointInOppositeDirection(transform.position, model.TargetPoint.DirectionTo(transform.position), "Y");
+                        model.TargetPoint = NewTargetPointInBackDirection(transform.position, model.TargetPoint.DirectionTo(transform.position), Vector3.up);
                     }
                     transform.rotation = Turn(model.TargetPoint, transform.position, transform.forward);
                     transform.position = Move(model.TargetPoint, transform.position);
@@ -88,7 +88,7 @@ public class ButterflyData : ScriptableObject
 
         if (collider.gameObject.tag == TagManager.GROUND)
         {
-            model.TargetPoint = NewTargetPointInOppositeDirection(model.ObjTransform.position, model.TargetPoint - model.ObjTransform.position, "Y");
+            model.TargetPoint = NewTargetPointInBackDirection(model.ObjTransform.position, model.TargetPoint - model.ObjTransform.position, Vector3.up);
             if (Random.Range(1, 100) <= SITTING_CHANCE)
             {
                 Debug.Log(this + " is sitting");
@@ -132,28 +132,55 @@ public class ButterflyData : ScriptableObject
     }
 
     /// <summary>Return random coordinates within MaxDistanceFromCurrentPosition in the opposite direction along the specified coordinate axis</summary>
-    private Vector3 NewTargetPointInOppositeDirection(Vector3 currentPosition, Vector3 currentDirection, string axis)
+    private Vector3 NewTargetPointInBackDirection(Vector3 currentPosition, Vector3 currentDirection, string axis)
     {
         Vector3 newTarget = NewTargetPoint(currentPosition);
 
         switch (axis.ToUpper())
         {
-            case "X": newTarget.x = GetRandomCoord(currentPosition.x, currentDirection.x); break;
-            case "Y": newTarget.y = GetRandomCoord(currentPosition.y, currentDirection.y); break;
-            case "Z": newTarget.z = GetRandomCoord(currentPosition.z, currentDirection.z); break;
+            case "X": newTarget.x = GetRandomCoordInBackDirection(currentPosition.x, currentDirection.x); break;
+            case "Y": newTarget.y = GetRandomCoordInBackDirection(currentPosition.y, currentDirection.y); break;
+            case "Z": newTarget.z = GetRandomCoordInBackDirection(currentPosition.z, currentDirection.z); break;
         }
 
         return newTarget;
     }
 
-    private float GetRandomCoord(float currentCoord, float? directionCoord = null)
+    /// <summary>Return random coordinates within MaxDistanceFromCurrentPosition in the opposite direction along the specified coordinate axis</summary>
+    private Vector3 NewTargetPointInBackDirection(Vector3 currentPosition, Vector3 currentDirection, Vector3 axis)
     {
-        if (directionCoord.HasValue && directionCoord.Value != 0)
+        Vector3 newTarget = NewTargetPoint(currentPosition);
+
+        if (axis.x != 0) newTarget.x = GetRandomCoordInBackDirection(currentPosition.x, currentDirection.x);
+        if (axis.y != 0) newTarget.y = GetRandomCoordInBackDirection(currentPosition.y, currentDirection.y);
+        if (axis.z != 0) newTarget.z = GetRandomCoordInBackDirection(currentPosition.z, currentDirection.z);
+
+        return newTarget;
+    }
+
+    private float GetRandomCoord(float currentCoord)
+    {
+        return Random.Range(currentCoord - Struct.MaxDistanceFromCurrentPosition, currentCoord + Struct.MaxDistanceFromCurrentPosition);
+    }
+
+    private float GetRandomCoordInBackDirection(float currentCoord, float directionCoord)
+    {
+        if (directionCoord != 0)
         {
             if (directionCoord > 0) return Random.Range(currentCoord - Struct.MaxDistanceFromCurrentPosition, currentCoord - 0.5f);
             else return Random.Range(currentCoord + 0.5f, currentCoord + Struct.MaxDistanceFromCurrentPosition);
         }
-        return Random.Range(currentCoord - Struct.MaxDistanceFromCurrentPosition, currentCoord + Struct.MaxDistanceFromCurrentPosition); ;
+        return GetRandomCoord(currentCoord);
+    }
+
+    private float GetRandomCoordInForwardDirection(float currentCoord, float directionCoord)
+    {
+        if (directionCoord != 0)
+        {
+            if (directionCoord > 0) return Random.Range(currentCoord + 0.5f, currentCoord + Struct.MaxDistanceFromCurrentPosition);
+            else return Random.Range(currentCoord - Struct.MaxDistanceFromCurrentPosition, currentCoord - 0.5f);
+        }
+        return GetRandomCoord(currentCoord);
     }
 
     private Vector3 NewCirclePoint(Vector3 currentPosition)
