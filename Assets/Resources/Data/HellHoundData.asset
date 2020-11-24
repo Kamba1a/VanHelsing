@@ -39,7 +39,7 @@ MonoBehaviour:
     AttackJumpMinDistance: 2.5
     IdlingMinTime: 5
     IdlingMaxTime: 10
-    RestingChance: 10
+    RestingChance: 20
     RestingMinTime: 30
     RestingMaxTime: 60
     EscapeDistance: 30

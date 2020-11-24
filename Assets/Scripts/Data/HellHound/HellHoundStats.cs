@@ -43,7 +43,7 @@ namespace BeastHunter
         public float IdlingMaxTime;
 
         [Header("Resting")]
-        [Tooltip ("The chance is calculated from idling chance. Default: 10.0")]
+        [Tooltip ("The chance is calculated from idling chance. Default: 20.0")]
         public float RestingChance;
         [Tooltip ("Default: 30.0")]
         public float RestingMinTime;
