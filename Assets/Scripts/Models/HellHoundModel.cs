@@ -17,12 +17,14 @@ namespace BeastHunter
 
         public HellHoundData.BehaviourState BehaviourState;
         public Vector3 SpawnPoint;
-        public Transform ChasingTarget;
+        public Collider ChasingTarget;
         public bool IsAttacking;
         public float Timer;
 
         public float RotatePosition1;
         public float RotatePosition2;
+
+        public List<Collider> Enemies;
 
         #endregion
 
@@ -87,6 +89,8 @@ namespace BeastHunter
                 attackStates[i].OnStateEnterHandler += OnAttackStateEnter;
                 attackStates[i].OnStateExitHandler += OnAttackStateExit;
             }
+
+            Enemies = new List<Collider>();
 
             CurrentHealth = this.hellHoundData.BaseStats.MainStats.MaxHealth;
             IsDead = false;
