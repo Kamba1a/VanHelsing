@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 namespace BeastHunter
 {
 
-    [CreateAssetMenu(fileName = "NewModel", menuName = "CreateData/Rabbit", order = 2)]
+    [CreateAssetMenu(fileName = "NewModel", menuName = "CreateData/Rabbit")]
     public sealed class RabbitData : EnemyData
     {
         #region PrivateData
@@ -114,7 +114,7 @@ namespace BeastHunter
                 case BehaviourState.Returning:
                     {
                         Return(rabbit);
-                        var moveDistance = RabbitStats.RunningRadius / STOP_RETURNING_DISTANCE_FACTOR;
+                        var moveDistance = RabbitStats.RunningRadius / RabbitData.STOP_RETURNING_DISTANCE_FACTOR;
                         if ((rabbit.RabbitTransform.position - rabbit.RabbitStartPosition).sqrMagnitude < moveDistance * moveDistance)
                         {
                             rabbit.RabbitState = BehaviourState.Roaming;
@@ -245,7 +245,6 @@ namespace BeastHunter
 
         private void Hop(Rigidbody rigidbody, Vector3 direction, float acceleration)
         {
-            Debug.Log(direction + " " + RabbitStats.MoveSpeed + " " + acceleration + " " + RabbitStats.JumpHeight + " " + HOP_FORCE_MULTIPLIER);
             rigidbody.AddForce((direction * RabbitStats.MoveSpeed * acceleration + Vector3.up * RabbitStats.JumpHeight) * HOP_FORCE_MULTIPLIER);
         }
 
@@ -365,7 +364,7 @@ namespace BeastHunter
         #endregion
 
 
-        #region NpcData
+        #region EnemyData
 
         public override void TakeDamage(EnemyModel instance, Damage damage)
         {

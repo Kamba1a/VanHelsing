@@ -17,15 +17,21 @@ namespace BeastHunter
 
         public override void OnAwake()
         {
+            var locationData = Resources.Load<LocationData>("Data/LocationData");
+            var spawnPoint = locationData.BossSpawnData.SpawnPoint; 
+
             var bossData = Data.BossData;
 
-            Vector3 instantiatePosition = bossData.BossSettings.InstantiatePosition;
-            Vector3 groundedInstancePosition = GetGroundedPosition(instantiatePosition);
+            Vector3 groundedInstancePosition = GetGroundedPosition(spawnPoint);
 
-            GameObject instance = GameObject.Instantiate(bossData.BossSettings.Prefab);
-            BossModel boss = new BossModel(instance, bossData, groundedInstancePosition, _context);
+            //Vector3 instantiatePosition = bossData._bossSettings.InstantiatePosition;
+            //Vector3 groundedInstancePosition = GetGroundedPosition(instantiatePosition);
 
-            _context.EnemyModels.Add(instance.GetInstanceID(), boss);
+            GameObject instance = GameObject.Instantiate(bossData._bossSettings.Prefab);
+            //BossModel boss = new BossModel(instance, bossData, groundedInstancePosition, _context);
+            BossModel boss = new BossModel(instance, bossData, spawnPoint, _context);
+
+            _context.NpcModels.Add(instance.GetInstanceID(), boss);
         }
 
         #endregion
