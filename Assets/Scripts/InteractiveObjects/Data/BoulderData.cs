@@ -74,17 +74,34 @@ namespace BeastHunter
         {
             BoulderModel model = interactiveObjectModel as BoulderModel;
 
-            model.Rigidbody.constraints = RigidbodyConstraints.None;
-            Vector3 force = new Vector3(0,0,PushingForce);
-            model.Rigidbody.AddRelativeForce(force, ForceMode.Impulse);
-
-
+            Vector3 force = new Vector3(0, 0, PushingForce);
+            for (int i = 0; i < model.Rigidbodies.Length; i++)
+            {
+                model.Rigidbodies[i].constraints = RigidbodyConstraints.None;
+                model.Rigidbodies[i].AddRelativeForce(force, ForceMode.Impulse);
+                //model.Rigidbodies[i].
+            }
+            model.InteractiveTrigger.enabled = false;
+            model.CanvasObject.gameObject.SetActive(false);
         }
 
         //what happens when deactivated
         protected override void Deactivate(SimpleInteractiveObjectModel interactiveObjectModel)
         {
-            //deactivation should happen automatically, not by the player
+            //does not require implementation (the object is activated once)
+        }
+
+        public void Act(BoulderModel model)
+        {
+            for (int i = 0; i < model.Rigidbodies.Length; i++)
+            {
+                if (model.Rigidbodies[i].velocity == Vector3.zero)
+                {
+                    //destroy
+                }
+                //if collision..
+            }
+
         }
 
         #endregion
