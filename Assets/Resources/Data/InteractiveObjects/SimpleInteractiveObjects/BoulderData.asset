@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d63798768fe41a44b92f7e80c3f4a681, type: 3}
-  m_Name: LocationData
+  m_Script: {fileID: 11500000, guid: 253929a19fd57ab4685842ef59fa99d7, type: 3}
+  m_Name: BoulderData
   m_EditorClassIdentifier: 
-  PlayerSpawnData:
-    _spawnPoint: {x: 511.11, y: 14.8, z: 755.1}
-  BossSpawnData:
-    _spawnPoint: {x: -10, y: 1, z: -10}
+  Prefab: {fileID: 3821023361300054295, guid: 00b8e29ef790ade468d9939de1ffd372, type: 3}
+  _isActivated: 1
+  _canvasObjectName: CanvasObject
+  _prefabPosition: {x: 514.99, y: 14.172, z: 764.55}
