@@ -10,14 +10,26 @@ namespace BeastHunter
 
         [SerializeField] private Vector3 _prefabPosition;
         [SerializeField] private Vector3 _prefabEulers;
+        [SerializeField] private float _pushingForce;
+
+        [Header("Rigidbody")]
+        [SerializeField] private float _mass;
+        [SerializeField] private float _drag;
+        [SerializeField] private float _angularDrag;
+        [SerializeField] private float _bounciness;
 
         #endregion
 
 
         #region Properties
 
-        public Vector3 PrefabPosition => _prefabPosition;
+        public Vector3 PrefabPosition => _prefabPosition ;
         public Vector3 PrefabEulers => _prefabEulers;
+        public float PushingForce => _pushingForce;
+        public float Mass => _mass;
+        public float Drag => _drag;
+        public float AngularDrag => _angularDrag;
+        public float Bounciness => _bounciness;
 
         #endregion
 
@@ -28,6 +40,12 @@ namespace BeastHunter
         {
             _prefabPosition = new Vector3(514.99f, 14.172f, 764.55f);
             _prefabEulers = new Vector3();
+
+            _pushingForce = 100.0f;
+            _mass = 40.0f;
+            _drag = 0.1f;
+            _angularDrag = 0.75f;
+            _bounciness = 0.1f;
         }
 
         #endregion
@@ -57,8 +75,10 @@ namespace BeastHunter
             BoulderModel model = interactiveObjectModel as BoulderModel;
 
             model.Rigidbody.constraints = RigidbodyConstraints.None;
-            Vector3 force = new Vector3(0,0,100);
+            Vector3 force = new Vector3(0,0,PushingForce);
             model.Rigidbody.AddRelativeForce(force, ForceMode.Impulse);
+
+
         }
 
         //what happens when deactivated
