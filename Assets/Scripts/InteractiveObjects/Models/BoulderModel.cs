@@ -7,7 +7,7 @@ namespace BeastHunter
     {
         #region Properties
 
-
+        public Rigidbody Rigidbody { get; private set; }
 
         #endregion
 
@@ -16,7 +16,7 @@ namespace BeastHunter
 
         public BoulderModel(GameObject gameobject, BoulderData data) : base(gameobject, data)
         {
-            
+            Rigidbody = gameobject.GetComponent<Rigidbody>();
         }
 
         #endregion

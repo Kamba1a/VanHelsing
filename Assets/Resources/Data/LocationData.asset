@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: LocationData
   m_EditorClassIdentifier: 
   PlayerSpawnData:
-    _spawnPoint: {x: 511.11, y: 14.8, z: 755.1}
+    _spawnPoint: {x: 0, y: 25, z: 0}
   BossSpawnData:
     _spawnPoint: {x: -10, y: 1, z: -10}
