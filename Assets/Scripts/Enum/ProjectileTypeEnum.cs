@@ -4,6 +4,7 @@
     {
         None,
         AcidBomb,
+        Boulder
     }
 }
 

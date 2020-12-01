@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9210191408298762870}
   - component: {fileID: 4897121134032247336}
   - component: {fileID: 5100637757069984441}
-  - component: {fileID: 8435981088284338442}
+  - component: {fileID: 377693690346731558}
   m_Layer: 0
   m_Name: Boulder (2)
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 0.45, y: 0.4, z: 0.4}
   m_Children: []
-  m_Father: {fileID: 3821023361300054292}
+  m_Father: {fileID: 6543618462936840098}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5272021042055672501
@@ -109,7 +109,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
---- !u!114 &8435981088284338442
+--- !u!114 &377693690346731558
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,10 +118,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2293194659254143052}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca8c0632839b858468e5195b7c0fc210, type: 3}
+  m_Script: {fileID: 11500000, guid: 97fe0664b28543c4a9e55d291b5860a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _projectileData: {fileID: 0}
 --- !u!1 &3259736011213278118
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 3821023360884018087}
   - component: {fileID: 8634572861505173640}
   - component: {fileID: 11902596365923072}
-  - component: {fileID: 7364747888233680018}
+  - component: {fileID: 4817968480151569641}
   m_Layer: 0
   m_Name: Boulder
   m_TagString: Untagged
@@ -233,7 +233,7 @@ Transform:
   m_LocalPosition: {x: -1, y: 0, z: 0}
   m_LocalScale: {x: 0.45, y: 0.4, z: 0.4}
   m_Children: []
-  m_Father: {fileID: 3821023361300054292}
+  m_Father: {fileID: 6543618462936840098}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3821023360884018086
@@ -310,7 +310,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
---- !u!114 &7364747888233680018
+--- !u!114 &4817968480151569641
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -319,10 +319,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3821023360884018081}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca8c0632839b858468e5195b7c0fc210, type: 3}
+  m_Script: {fileID: 11500000, guid: 97fe0664b28543c4a9e55d291b5860a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _projectileData: {fileID: 0}
 --- !u!1 &3821023361300054295
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,10 +352,8 @@ Transform:
   m_LocalPosition: {x: 514.99, y: 14.172, z: 764.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3821023360884018080}
-  - {fileID: 8082693219600202852}
-  - {fileID: 6752798090211525311}
   - {fileID: 756065344028432434}
+  - {fileID: 6543618462936840098}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -460,6 +458,39 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!1 &4665575419386754217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6543618462936840098}
+  m_Layer: 0
+  m_Name: BouldersProjectiles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6543618462936840098
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4665575419386754217}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3821023360884018080}
+  - {fileID: 8082693219600202852}
+  - {fileID: 6752798090211525311}
+  m_Father: {fileID: 3821023361300054292}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4818717703915895124
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,7 +572,7 @@ GameObject:
   - component: {fileID: 7521226802483481561}
   - component: {fileID: 3395698492968590016}
   - component: {fileID: 3146070217369612958}
-  - component: {fileID: 6917895125879022828}
+  - component: {fileID: 4090095912836608799}
   m_Layer: 0
   m_Name: Boulder (1)
   m_TagString: Untagged
@@ -560,7 +591,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.45, y: 0.4, z: 0.4}
   m_Children: []
-  m_Father: {fileID: 3821023361300054292}
+  m_Father: {fileID: 6543618462936840098}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4900721656975407897
@@ -637,7 +668,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
---- !u!114 &6917895125879022828
+--- !u!114 &4090095912836608799
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -646,10 +677,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7398432118896350999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca8c0632839b858468e5195b7c0fc210, type: 3}
+  m_Script: {fileID: 11500000, guid: 97fe0664b28543c4a9e55d291b5860a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 0
+  _projectileData: {fileID: 0}
 --- !u!1 &8385966506952212097
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,5 +710,5 @@ Transform:
   m_Children:
   - {fileID: 7846761027998548978}
   m_Father: {fileID: 3821023361300054292}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

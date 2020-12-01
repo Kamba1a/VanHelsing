@@ -3,29 +3,31 @@
 
 namespace BeastHunter
 {
-    public sealed class BoulderModel : SimpleInteractiveObjectModel
+    public sealed class BouldersModel : SimpleInteractiveObjectModel
     {
         #region Fields
 
-        BoulderData _data;
+        BouldersData _data;
 
         #endregion
 
 
         #region Properties
 
+        public Collider InteractiveTrigger { get; private set; }
         public Rigidbody[] Rigidbodies { get; private set; }
         public Collider[] Colliders { get; private set; }
-        public Collider InteractiveTrigger { get; private set; }
+        public ProjectileBehavior[] Behaviours { get; set; }
 
         #endregion
 
 
         #region ClassLifeCycle
 
-        public BoulderModel(GameObject prefab, BoulderData data) : base(prefab, data)
+        public BouldersModel(GameObject prefab, BouldersData data) : base(prefab, data)
         {
             _data = data;
+
             Rigidbodies = prefab.GetComponentsInChildren<Rigidbody>();
             for (int i = 0; i < Rigidbodies.Length; i++)
             {
@@ -45,6 +47,7 @@ namespace BeastHunter
                 }
             }
 
+            Behaviours = prefab.GetComponentsInChildren<ProjectileBehavior>();
             InteractiveTrigger = prefab.GetComponent<CapsuleCollider>();
         }
 

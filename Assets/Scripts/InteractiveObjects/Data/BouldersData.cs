@@ -3,8 +3,8 @@
 
 namespace BeastHunter
 {
-    [CreateAssetMenu(fileName = "BoulderData", menuName = "CreateData/SimpleInteractiveObjects/BoulderData", order = 0)]
-    public sealed class BoulderData : SimpleInteractiveObjectData
+    [CreateAssetMenu(fileName = "BouldersData", menuName = "CreateData/SimpleInteractiveObjects/BouldersData", order = 0)]
+    public sealed class BouldersData : SimpleInteractiveObjectData
     {
         #region Fields
 
@@ -36,7 +36,7 @@ namespace BeastHunter
 
         #region ClassLifeCycle
 
-        public BoulderData()
+        public BouldersData()
         {
             _prefabPosition = new Vector3(514.99f, 14.172f, 764.55f);
             _prefabEulers = new Vector3();
@@ -57,7 +57,7 @@ namespace BeastHunter
         public override void MakeInteractive(BaseInteractiveObjectModel interactiveObjectModel, 
             ITrigger interactiveTrigger, Collider enteredCollider)
         {
-            (interactiveObjectModel as BoulderModel).CanvasObject.gameObject.SetActive(true);
+            (interactiveObjectModel as BouldersModel).CanvasObject.gameObject.SetActive(true);
             interactiveObjectModel.IsInteractive = true;
         }
 
@@ -66,21 +66,21 @@ namespace BeastHunter
             ITrigger interactiveTrigger, Collider exitedCollider)
         {
             interactiveObjectModel.IsInteractive = false;
-            (interactiveObjectModel as BoulderModel).CanvasObject.gameObject.SetActive(false);
+            (interactiveObjectModel as BouldersModel).CanvasObject.gameObject.SetActive(false);
         }
 
         //what happens when activated
         protected override void Activate(SimpleInteractiveObjectModel interactiveObjectModel)
         {
-            BoulderModel model = interactiveObjectModel as BoulderModel;
+            BouldersModel model = interactiveObjectModel as BouldersModel;
 
             Vector3 force = new Vector3(0, 0, PushingForce);
             for (int i = 0; i < model.Rigidbodies.Length; i++)
             {
                 model.Rigidbodies[i].constraints = RigidbodyConstraints.None;
                 model.Rigidbodies[i].AddRelativeForce(force, ForceMode.Impulse);
-                //model.Rigidbodies[i].
             }
+
             model.InteractiveTrigger.enabled = false;
             model.CanvasObject.gameObject.SetActive(false);
         }
@@ -91,7 +91,7 @@ namespace BeastHunter
             //does not require implementation (the object is activated once)
         }
 
-        public void Act(BoulderModel model)
+        public void Act(BouldersModel model)
         {
             for (int i = 0; i < model.Rigidbodies.Length; i++)
             {

@@ -41,4 +41,4 @@ MonoBehaviour:
   _materialsDataPath: MaterialsData
   _torchObjectPath: InteractiveObjects/SimpleInteractiveObjects/TorchData
   _hellHoundDataPath: HellHoundData
-  _boulderObjectPath: InteractiveObjects/SimpleInteractiveObjects/BoulderData
+  _bouldersObjectPath: InteractiveObjects/SimpleInteractiveObjects/BouldersData
