@@ -7,7 +7,8 @@ using UnityEngine;
 
 namespace BeastHunter
 {
-    class BoulderData : ProjectileData
+    [CreateAssetMenu(fileName = "BoulderProjectileData", menuName = "CreateProjectileData/CreateBoulderProjectileData", order = 0)]
+    public class BoulderProjectileData : ProjectileData
     {
         //boulder hit filter
         public override bool FilterCollision(Collision touchedCollider)

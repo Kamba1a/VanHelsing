@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Extensions;
+using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace BeastHunter
@@ -7,7 +9,8 @@ namespace BeastHunter
     {
         #region Fields
 
-        BouldersData _data;
+        private BouldersData _data;
+        private InteractableObjectBehavior[] _interactableObjects;
 
         #endregion
 
@@ -18,6 +21,8 @@ namespace BeastHunter
         public Rigidbody[] Rigidbodies { get; private set; }
         public Collider[] Colliders { get; private set; }
         public ProjectileBehavior[] Behaviours { get; set; }
+        public float Timer { get; set; }
+        public InteractableObjectBehavior ActiveObject { get; }
 
         #endregion
 
@@ -49,19 +54,31 @@ namespace BeastHunter
 
             Behaviours = prefab.GetComponentsInChildren<ProjectileBehavior>();
             InteractiveTrigger = prefab.GetComponent<CapsuleCollider>();
+
+            _interactableObjects = prefab.GetComponentsInChildren<InteractableObjectBehavior>();
+            ActiveObject = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject);
+            InteractiveTrigger = ActiveObject.gameObject.GetComponent<CapsuleCollider>();
         }
+
+        #endregion
+
+
+        #region SimpleInteractiveObjectModel
 
         public override void Updating()
         {
-            base.Updating();
-
             if (IsActivated)
             {
                 _data.Act(this);
             }
+            else
+            {
+                base.Updating();
+            }
         }
 
-            #endregion
-        }
+        #endregion
+
+    }
 }
 

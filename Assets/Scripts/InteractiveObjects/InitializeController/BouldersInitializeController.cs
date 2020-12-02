@@ -31,7 +31,7 @@ namespace BeastHunter
 
 
 
-            #region for BouldersTest Scene:
+            #region for BouldersTest Scene only:
 
             GameObject gameobject = GameObject.Instantiate(Data.BoulderObjectData.Prefab,
                 new Vector3(-6.70f, 20.52f, 32.1f), Quaternion.Euler(new Vector3(0, -90, 0)));

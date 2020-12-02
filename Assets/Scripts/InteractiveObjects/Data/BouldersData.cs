@@ -6,11 +6,14 @@ namespace BeastHunter
     [CreateAssetMenu(fileName = "BouldersData", menuName = "CreateData/SimpleInteractiveObjects/BouldersData", order = 0)]
     public sealed class BouldersData : SimpleInteractiveObjectData
     {
+        private const float CHECK_VELOCITY_TIME = 2.0f;
+
         #region Fields
 
         [SerializeField] private Vector3 _prefabPosition;
         [SerializeField] private Vector3 _prefabEulers;
         [SerializeField] private float _pushingForce;
+        [SerializeField] private float _timeToDestroy;
 
         [Header("Rigidbody")]
         [SerializeField] private float _mass;
@@ -46,6 +49,7 @@ namespace BeastHunter
             _drag = 0.1f;
             _angularDrag = 0.75f;
             _bounciness = 0.1f;
+            _timeToDestroy = 30.0f;
         }
 
         #endregion
@@ -69,9 +73,22 @@ namespace BeastHunter
             (interactiveObjectModel as BouldersModel).CanvasObject.gameObject.SetActive(false);
         }
 
+        public override void Interact(BaseInteractiveObjectModel interactiveObjectModel)
+        {
+            BouldersModel model = interactiveObjectModel as BouldersModel;
+
+            if (!model.IsActivated)
+            {
+                model.IsActivated = true;
+                Activate(model);
+            }
+        }
+
         //what happens when activated
         protected override void Activate(SimpleInteractiveObjectModel interactiveObjectModel)
         {
+            Debug.Log("Boulders activate");
+
             BouldersModel model = interactiveObjectModel as BouldersModel;
 
             Vector3 force = new Vector3(0, 0, PushingForce);
@@ -81,27 +98,50 @@ namespace BeastHunter
                 model.Rigidbodies[i].AddRelativeForce(force, ForceMode.Impulse);
             }
 
-            model.InteractiveTrigger.enabled = false;
-            model.CanvasObject.gameObject.SetActive(false);
+            Destroy(model.InteractiveTrigger);
+            Destroy(model.CanvasObject.gameObject);
+            model.IsInteractive = false;
+            model.Timer = _timeToDestroy;
         }
 
         //what happens when deactivated
         protected override void Deactivate(SimpleInteractiveObjectModel interactiveObjectModel)
         {
-            //does not require implementation (the object is activated once)
+            Debug.Log("Boulders deactivate");
+
+            BouldersModel model = interactiveObjectModel as BouldersModel;
+
+            for (int i = 0; i < model.Rigidbodies.Length; i++)
+            {
+                if (model.Rigidbodies[i] != null)
+                {
+                    Destroy(model.Rigidbodies[i]);
+                }
+            }
+
+            //for... destroy IOBehaviours
         }
 
         public void Act(BouldersModel model)
         {
-            for (int i = 0; i < model.Rigidbodies.Length; i++)
+            if (_timeToDestroy - model.Timer > CHECK_VELOCITY_TIME)
             {
-                if (model.Rigidbodies[i].velocity == Vector3.zero)
+                for (int i = 0; i < model.Rigidbodies.Length; i++)
                 {
-                    //destroy
+                    if (model.Rigidbodies[i] != null && model.Rigidbodies[i].velocity == Vector3.zero)
+                    {
+                        Debug.Log("Destroy boulder rigidbody");
+                        Destroy(model.Rigidbodies[i]);
+                    }
                 }
-                //if collision..
             }
 
+            model.Timer -= Time.deltaTime;
+            if (model.Timer <= 0)
+            {
+                model.IsActivated = false;
+                Deactivate(model);
+            }
         }
 
         #endregion

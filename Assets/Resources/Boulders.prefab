@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 9210191408298762870}
   - component: {fileID: 4897121134032247336}
   - component: {fileID: 5100637757069984441}
-  - component: {fileID: 377693690346731558}
   m_Layer: 0
   m_Name: Boulder (2)
   m_TagString: Untagged
@@ -109,19 +108,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
---- !u!114 &377693690346731558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2293194659254143052}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97fe0664b28543c4a9e55d291b5860a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _projectileData: {fileID: 0}
 --- !u!1 &3259736011213278118
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,7 +200,6 @@ GameObject:
   - component: {fileID: 3821023360884018087}
   - component: {fileID: 8634572861505173640}
   - component: {fileID: 11902596365923072}
-  - component: {fileID: 4817968480151569641}
   m_Layer: 0
   m_Name: Boulder
   m_TagString: Untagged
@@ -310,19 +295,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
---- !u!114 &4817968480151569641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3821023360884018081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97fe0664b28543c4a9e55d291b5860a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _projectileData: {fileID: 0}
 --- !u!1 &3821023361300054295
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,7 +544,6 @@ GameObject:
   - component: {fileID: 7521226802483481561}
   - component: {fileID: 3395698492968590016}
   - component: {fileID: 3146070217369612958}
-  - component: {fileID: 4090095912836608799}
   m_Layer: 0
   m_Name: Boulder (1)
   m_TagString: Untagged
@@ -668,19 +639,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
---- !u!114 &4090095912836608799
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7398432118896350999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97fe0664b28543c4a9e55d291b5860a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _projectileData: {fileID: 0}
 --- !u!1 &8385966506952212097
 GameObject:
   m_ObjectHideFlags: 0
