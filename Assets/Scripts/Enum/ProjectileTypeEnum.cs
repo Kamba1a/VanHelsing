@@ -4,7 +4,9 @@
     {
         None,
         AcidBomb,
-        Boulder
+        CrossbowBolt,
+        Bomb,
+        Boulder,
     }
 }
 
