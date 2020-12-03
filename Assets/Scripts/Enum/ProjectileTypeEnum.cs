@@ -6,6 +6,7 @@
         AcidBomb,
         CrossbowBolt,
         Bomb,
+        Boulder,
     }
 }
 
