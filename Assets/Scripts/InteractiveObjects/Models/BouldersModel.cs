@@ -55,8 +55,8 @@ namespace BeastHunter
             _interactableObjects = prefab.GetComponentsInChildren<InteractableObjectBehavior>();
             _activeObject = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject);
             InteractiveTrigger = _activeObject.GetComponent<CapsuleCollider>();
-
             BoulderBehaviours = _interactableObjects.GetInteractableObjectsByType(InteractableObjectType.HitBox);
+            //todo: groundcheck?
         }
 
         #endregion

@@ -115,11 +115,10 @@ namespace BeastHunter
             Destroy(model.CanvasObject.gameObject);
             model.Timer = _timeToDeactivate;
 
-            Vector3 force = new Vector3(0, 0, PushingForce);
             for (int i = 0; i < model.Rigidbodies.Length; i++)
             {
                 model.Rigidbodies[i].constraints = RigidbodyConstraints.None;
-                model.Rigidbodies[i].AddRelativeForce(force, ForceMode.Impulse);
+                model.Rigidbodies[i].AddForce(model.Prefab.transform.forward * PushingForce, ForceMode.Impulse);
             }
 
             for (int i = 0; i < model.BoulderBehaviours.Count; i++)
