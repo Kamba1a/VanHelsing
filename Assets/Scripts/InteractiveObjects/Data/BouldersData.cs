@@ -108,18 +108,8 @@ namespace BeastHunter
         protected override void Deactivate(SimpleInteractiveObjectModel interactiveObjectModel)
         {
             Debug.Log("Boulders deactivate");
-
             BouldersModel model = interactiveObjectModel as BouldersModel;
-
-            for (int i = 0; i < model.Rigidbodies.Length; i++)
-            {
-                if (model.Rigidbodies[i] != null)
-                {
-                    Destroy(model.Rigidbodies[i]);
-                }
-            }
-
-            //for... destroy IOBehaviours
+            model.Clean();
         }
 
         public void Act(BouldersModel model)
@@ -130,7 +120,7 @@ namespace BeastHunter
                 {
                     if (model.Rigidbodies[i] != null && model.Rigidbodies[i].velocity == Vector3.zero)
                     {
-                        Debug.Log("Destroy boulder rigidbody");
+                        Debug.Log("Destroy boulder rigidbody (velocity = 0,0,0)");
                         Destroy(model.Rigidbodies[i]);
                     }
                 }

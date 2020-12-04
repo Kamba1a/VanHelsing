@@ -20,9 +20,9 @@ namespace BeastHunter
         public Collider InteractiveTrigger { get; private set; }
         public Rigidbody[] Rigidbodies { get; private set; }
         public Collider[] Colliders { get; private set; }
-        public ProjectileBehavior[] Behaviours { get; set; }
+        public ProjectileBehavior[] Behaviours { get; private set; }
+        public InteractableObjectBehavior ActiveObject { get; private set; }
         public float Timer { get; set; }
-        public InteractableObjectBehavior ActiveObject { get; }
 
         #endregion
 
@@ -78,6 +78,43 @@ namespace BeastHunter
         }
 
         #endregion
+
+        public void Clean()
+        {
+            _data = null;
+
+            if (InteractiveTrigger != null)
+            {
+                Object.Destroy(InteractiveTrigger);
+            }
+
+            for (int i = 0; i< _interactableObjects.Length; i++)
+            {
+                if (_interactableObjects[i] != null)
+                {
+                    Object.Destroy(_interactableObjects[i]);
+                }
+            }
+            _interactableObjects = null;
+
+            for (int i = 0; i < Rigidbodies.Length; i++)
+            {
+                if (Rigidbodies[i] != null)
+                {
+                    Object.Destroy(Rigidbodies[i]);
+                }
+            }
+            Rigidbodies = null;
+
+            for (int i = 0; i < Behaviours.Length; i++)
+            {
+                if (Behaviours[i] != null)
+                {
+                    Object.Destroy(Behaviours[i]);
+                }
+            }
+            Behaviours = null;
+        }
 
     }
 }
