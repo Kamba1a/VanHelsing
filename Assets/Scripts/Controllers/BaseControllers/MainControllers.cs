@@ -24,7 +24,7 @@ namespace BeastHunter
         {
             Add(new UIBestiarylInitializeController(context));
             Add(new CharacterInitializeController(context));
-            Add(new BossInitializeController(context));
+            //Add(new BossInitializeController(context));
             Add(new LocationInitializeController(context));
             //Add(new GiantMudCrabInitilizeController(context));
             //Add(new DialogueSystemInitializeController(context));
