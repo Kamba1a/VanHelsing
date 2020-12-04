@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 975073170758819736}
   m_LocalRotation: {x: -0, y: -0, z: 0.26932377, w: 0.9630497}
-  m_LocalPosition: {x: -0.304, y: 0.521, z: -0.304}
+  m_LocalPosition: {x: -0.239, y: 0.51, z: -0.304}
   m_LocalScale: {x: 0.45, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 6543618462936840098}
@@ -105,9 +105,9 @@ Rigidbody:
   m_Drag: 0.1
   m_AngularDrag: 0.75
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &3983749878243940048
 MonoBehaviour:
@@ -151,7 +151,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2293194659254143052}
   m_LocalRotation: {x: -0.072005324, y: -0.35263953, z: -0.25030103, w: 0.89878255}
-  m_LocalPosition: {x: 0.06, y: 0.028, z: -0.624}
+  m_LocalPosition: {x: 0.06, y: 0, z: -0.624}
   m_LocalScale: {x: 0.45, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 6543618462936840098}
@@ -227,9 +227,9 @@ Rigidbody:
   m_Drag: 0.1
   m_AngularDrag: 0.75
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &4670374891693769840
 MonoBehaviour:
@@ -428,9 +428,9 @@ Rigidbody:
   m_Drag: 0.1
   m_AngularDrag: 0.75
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &1691499442909089052
 MonoBehaviour:
@@ -787,9 +787,9 @@ Rigidbody:
   m_Drag: 0.1
   m_AngularDrag: 0.75
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &7051206205188399202
 MonoBehaviour:

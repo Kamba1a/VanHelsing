@@ -33,6 +33,9 @@ namespace BeastHunter
         {
             _data = data;
 
+            Services.SharedInstance.PhysicsService.FindGround(Prefab.transform.position, out Vector3 groundPosition);
+            Prefab.transform.position = new Vector3(groundPosition.x, groundPosition.y+_data.OffsetY, groundPosition.z);
+
             Rigidbodies = prefab.GetComponentsInChildren<Rigidbody>();
             for (int i = 0; i < Rigidbodies.Length; i++)
             {
@@ -56,7 +59,6 @@ namespace BeastHunter
             _activeObject = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject);
             InteractiveTrigger = _activeObject.GetComponent<CapsuleCollider>();
             BoulderBehaviours = _interactableObjects.GetInteractableObjectsByType(InteractableObjectType.HitBox);
-            //todo: groundcheck?
         }
 
         #endregion

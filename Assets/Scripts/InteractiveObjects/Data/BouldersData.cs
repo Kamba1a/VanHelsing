@@ -12,6 +12,7 @@ namespace BeastHunter
 
         [SerializeField] private Vector3 _prefabPosition;
         [SerializeField] private Vector3 _prefabEulers;
+        [SerializeField] private float _offsetY;
         [SerializeField] private float _pushingForce;
         [SerializeField] private float _timeToDeactivate;
         [SerializeField] private float _timeToDestroyAfterHit;
@@ -41,6 +42,7 @@ namespace BeastHunter
         public float Drag => _drag;
         public float AngularDrag => _angularDrag;
         public float Bounciness => _bounciness;
+        public float OffsetY => _offsetY;
 
         #endregion
 
@@ -60,6 +62,7 @@ namespace BeastHunter
             _timeToDeactivate = 30.0f;
             _timeToDestroyAfterHit = 1.0f;
             _hitSpeed = 2;
+            _offsetY = 0.3f;
         }
 
         #endregion
@@ -117,7 +120,7 @@ namespace BeastHunter
 
             for (int i = 0; i < model.Rigidbodies.Length; i++)
             {
-                model.Rigidbodies[i].constraints = RigidbodyConstraints.None;
+                model.Rigidbodies[i].isKinematic = false;
                 model.Rigidbodies[i].AddForce(model.Prefab.transform.forward * PushingForce, ForceMode.Impulse);
             }
 
