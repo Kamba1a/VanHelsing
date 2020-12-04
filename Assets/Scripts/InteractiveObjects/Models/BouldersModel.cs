@@ -10,7 +10,9 @@ namespace BeastHunter
         #region Fields
 
         private BouldersData _data;
+        private Collider[] _colliders;
         private InteractableObjectBehavior[] _interactableObjects;
+        private InteractableObjectBehavior _activeObject;
 
         #endregion
 
@@ -19,9 +21,7 @@ namespace BeastHunter
 
         public Collider InteractiveTrigger { get; private set; }
         public Rigidbody[] Rigidbodies { get; private set; }
-        public Collider[] Colliders { get; private set; }
-        public ProjectileBehavior[] Behaviours { get; private set; }
-        public InteractableObjectBehavior ActiveObject { get; private set; }
+        public List<InteractableObjectBehavior> BoulderBehaviours { get; private set; }
         public float Timer { get; set; }
 
         #endregion
@@ -42,22 +42,21 @@ namespace BeastHunter
                 Rigidbodies[i].mass = data.Mass;
             }
 
-            Colliders = prefab.GetComponentsInChildren<SphereCollider>();
-            for (int i = 0; i < Colliders.Length; i++)
+            _colliders = prefab.GetComponentsInChildren<SphereCollider>();
+            for (int i = 0; i < _colliders.Length; i++)
             { 
-                if (!Colliders[i].isTrigger)
+                if (!_colliders[i].isTrigger)
                 {
-                    Colliders[i].material.bounciness = data.Bounciness;
+                    _colliders[i].material.bounciness = data.Bounciness;
                     break;
                 }
             }
 
-            Behaviours = prefab.GetComponentsInChildren<ProjectileBehavior>();
-            InteractiveTrigger = prefab.GetComponent<CapsuleCollider>();
-
             _interactableObjects = prefab.GetComponentsInChildren<InteractableObjectBehavior>();
-            ActiveObject = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject);
-            InteractiveTrigger = ActiveObject.gameObject.GetComponent<CapsuleCollider>();
+            _activeObject = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject);
+            InteractiveTrigger = _activeObject.GetComponent<CapsuleCollider>();
+
+            BoulderBehaviours = _interactableObjects.GetInteractableObjectsByType(InteractableObjectType.HitBox);
         }
 
         #endregion
@@ -79,9 +78,17 @@ namespace BeastHunter
 
         #endregion
 
+
+        #region Methods
+
         public void Clean()
         {
             _data = null;
+
+            if (CanvasObject != null)
+            {
+                Object.Destroy(CanvasObject);
+            }
 
             if (InteractiveTrigger != null)
             {
@@ -105,17 +112,9 @@ namespace BeastHunter
                 }
             }
             Rigidbodies = null;
-
-            for (int i = 0; i < Behaviours.Length; i++)
-            {
-                if (Behaviours[i] != null)
-                {
-                    Object.Destroy(Behaviours[i]);
-                }
-            }
-            Behaviours = null;
         }
 
+        #endregion
     }
 }
 

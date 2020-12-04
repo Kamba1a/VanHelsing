@@ -18,6 +18,11 @@ MonoBehaviour:
   _prefabPosition: {x: 514.99, y: 14.172, z: 764.55}
   _prefabEulers: {x: 0, y: 0, z: 0}
   _pushingForce: 100
+  _timeToDeactivate: 30
+  _timeToDestroyAfterHit: 1
+  _hitSpeed: 2
+  _physicalDamage: 0
+  _stunProbability: 0
   _mass: 40
   _drag: 0.1
   _angularDrag: 0.75

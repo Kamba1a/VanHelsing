@@ -372,7 +372,7 @@ namespace Extensions
             return null;
         }
 
-        private static List<InteractableObjectBehavior> GetInteractableObjectsByType(this InteractableObjectBehavior[] IOBehaviors, InteractableObjectType type)
+        public static List<InteractableObjectBehavior> GetInteractableObjectsByType(this InteractableObjectBehavior[] IOBehaviors, InteractableObjectType type)
         {
             List<InteractableObjectBehavior> result = new List<InteractableObjectBehavior>();
             for (int i = 0; i < IOBehaviors.Length; i++)

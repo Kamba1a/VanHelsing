@@ -13,13 +13,21 @@ namespace BeastHunter
         [SerializeField] private Vector3 _prefabPosition;
         [SerializeField] private Vector3 _prefabEulers;
         [SerializeField] private float _pushingForce;
-        [SerializeField] private float _timeToDestroy;
+        [SerializeField] private float _timeToDeactivate;
+        [SerializeField] private float _timeToDestroyAfterHit;
+        [SerializeField] private float _hitSpeed;
+
+        [Header("Damage")]
+        [SerializeField] private float _physicalDamage;
+        [SerializeField] private float _stunProbability;
 
         [Header("Rigidbody")]
         [SerializeField] private float _mass;
         [SerializeField] private float _drag;
         [SerializeField] private float _angularDrag;
         [SerializeField] private float _bounciness;
+
+        private float sqrHitSpeed;
 
         #endregion
 
@@ -49,13 +57,25 @@ namespace BeastHunter
             _drag = 0.1f;
             _angularDrag = 0.75f;
             _bounciness = 0.1f;
-            _timeToDestroy = 30.0f;
+            _timeToDeactivate = 30.0f;
+            _timeToDestroyAfterHit = 1.0f;
+            _hitSpeed = 2;
         }
 
         #endregion
 
 
-        #region Methods
+        #region UnityMethods
+
+        private void OnEnable()
+        {
+            sqrHitSpeed = _hitSpeed * _hitSpeed;
+        }
+
+        #endregion
+
+
+        #region SimpleInteractiveObjectData
 
         //shows the canvas when entering the boulder trigger
         public override void MakeInteractive(BaseInteractiveObjectModel interactiveObjectModel, 
@@ -90,6 +110,10 @@ namespace BeastHunter
             Debug.Log("Boulders activate");
 
             BouldersModel model = interactiveObjectModel as BouldersModel;
+            model.IsInteractive = false;
+            Destroy(model.InteractiveTrigger);
+            Destroy(model.CanvasObject.gameObject);
+            model.Timer = _timeToDeactivate;
 
             Vector3 force = new Vector3(0, 0, PushingForce);
             for (int i = 0; i < model.Rigidbodies.Length; i++)
@@ -98,10 +122,11 @@ namespace BeastHunter
                 model.Rigidbodies[i].AddRelativeForce(force, ForceMode.Impulse);
             }
 
-            Destroy(model.InteractiveTrigger);
-            Destroy(model.CanvasObject.gameObject);
-            model.IsInteractive = false;
-            model.Timer = _timeToDestroy;
+            for (int i = 0; i < model.BoulderBehaviours.Count; i++)
+            { 
+                model.BoulderBehaviours[i].OnFilterHandler += CollisionFilter;
+                model.BoulderBehaviours[i].OnCollisionEnterHandler += CollisionEnter;
+            }
         }
 
         //what happens when deactivated
@@ -112,9 +137,14 @@ namespace BeastHunter
             model.Clean();
         }
 
+        #endregion
+
+
+        #region BouldersModel
+
         public void Act(BouldersModel model)
         {
-            if (_timeToDestroy - model.Timer > CHECK_VELOCITY_TIME)
+            if (_timeToDeactivate - model.Timer > CHECK_VELOCITY_TIME)
             {
                 for (int i = 0; i < model.Rigidbodies.Length; i++)
                 {
@@ -131,6 +161,44 @@ namespace BeastHunter
             {
                 model.IsActivated = false;
                 Deactivate(model);
+            }
+        }
+
+        public bool CollisionFilter(Collider collider)
+        {
+            InteractableObjectBehavior objectBehavior = collider.GetComponentInChildren<InteractableObjectBehavior>();
+            return objectBehavior != null && !collider.isTrigger
+                && (objectBehavior.Type == InteractableObjectType.Enemy
+                || objectBehavior.Type == InteractableObjectType.Player);
+        }
+
+        public void CollisionEnter(InteractableObjectBehavior objectBehavior, Collision collision)
+        {
+            if (collision.relativeVelocity.sqrMagnitude > sqrHitSpeed)
+            {
+                Damage damage = new Damage()
+                {
+                    PhysicalDamage = _physicalDamage,
+                    StunProbability = _stunProbability
+                };
+
+                InteractableObjectBehavior enemy = collision.collider.gameObject.GetComponent<InteractableObjectBehavior>();
+
+                if (enemy != null)
+                {
+                    enemy.TakeDamageEvent(damage);
+                    Debug.Log("Boulder deal damage to " + enemy);
+                }
+                else
+                {
+                    Debug.LogError(this + " not found enemy InteractableObjectBehavior");
+                }
+
+                Rigidbody rigidbody = objectBehavior.GetComponentInChildren<Rigidbody>();
+                rigidbody.isKinematic = true;
+                rigidbody.detectCollisions = false;
+                //...destroy animation...
+                Destroy(objectBehavior.gameObject, _timeToDestroyAfterHit);
             }
         }
 
