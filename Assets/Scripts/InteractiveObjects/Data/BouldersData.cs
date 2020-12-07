@@ -44,6 +44,8 @@ namespace BeastHunter
 
         /// <summary>gives the boulder time to accelerate before starting the stop check</summary>
         private const float CHECK_VELOCITY_TIME = 2.0f;
+        /// <summary>protects the player from taking damage when boulders activated</summary>
+        private const float CHECK_COLLISION_TIME = 1.0f;
 
         #endregion
 
@@ -54,7 +56,9 @@ namespace BeastHunter
         private Action _activateMsg;
         private Action _deactivateMsg;
         private Action _destroyRigidbodyMsg;
-        private Action<InteractableObjectBehavior> _dealDamageMsg;
+        private Action<string> _dealDamageMsg;
+        private Action<string> _collisionMsg;
+        private Action _destroyAfterHitMsg;
 
         #endregion
 
@@ -152,7 +156,7 @@ namespace BeastHunter
             for (int i = 0; i < model.BoulderBehaviours.Count; i++)
             { 
                 model.BoulderBehaviours[i].OnFilterHandler += CollisionFilter;
-                model.BoulderBehaviours[i].OnCollisionEnterHandler += CollisionEnter;
+                model.BoulderBehaviours[i].OnCollisionEnterHandler += (p1,p2) => CollisionEnter(p1, p2, model.Timer);
             }
         }
 
@@ -201,33 +205,35 @@ namespace BeastHunter
                 || objectBehavior.Type == InteractableObjectType.Player);
         }
 
-        public void CollisionEnter(InteractableObjectBehavior objectBehavior, Collision collision)
+        public void CollisionEnter(InteractableObjectBehavior objectBehavior, Collision collision, float timer)
         {
-            if (collision.relativeVelocity.sqrMagnitude > _sqrHitSpeed)
+            _collisionMsg?.Invoke(collision.collider.gameObject.ToString());
+
+            if (collision.relativeVelocity.sqrMagnitude > _sqrHitSpeed && _timeToDeactivate - timer > CHECK_COLLISION_TIME)
             {
+                Rigidbody rigidbody = objectBehavior.GetComponentInChildren<Rigidbody>();
+                rigidbody.isKinematic = true;
+                rigidbody.detectCollisions = false;
+                //...destroy animation...
+                Destroy(objectBehavior.gameObject, _timeToDestroyAfterHit);
+                _destroyAfterHitMsg?.Invoke();
+
+                InteractableObjectBehavior enemy = collision.collider.gameObject.GetComponent<InteractableObjectBehavior>();
                 Damage damage = new Damage()
                 {
                     PhysicalDamage = _physicalDamage,
                     StunProbability = _stunProbability
                 };
 
-                InteractableObjectBehavior enemy = collision.collider.gameObject.GetComponent<InteractableObjectBehavior>();
-
                 if (enemy != null)
                 {
                     enemy.TakeDamageEvent(damage);
-                    _dealDamageMsg?.Invoke(enemy);
+                    _dealDamageMsg?.Invoke(enemy.ToString());
                 }
                 else
                 {
-                    Debug.LogError(this + " not found enemy InteractableObjectBehavior");
+                    Debug.LogError(this + " not found InteractableObjectBehavior at " + collision.gameObject);
                 }
-
-                Rigidbody rigidbody = objectBehavior.GetComponentInChildren<Rigidbody>();
-                rigidbody.isKinematic = true;
-                rigidbody.detectCollisions = false;
-                //...destroy animation...
-                Destroy(objectBehavior.gameObject, _timeToDestroyAfterHit);
             }
         }
 
@@ -246,6 +252,8 @@ namespace BeastHunter
                 _deactivateMsg = () => Debug.Log("Boulders deactivated");
                 _destroyRigidbodyMsg = () => Debug.Log("Destroy boulder rigidbody (velocity = 0,0,0)");
                 _dealDamageMsg = (enemy) => Debug.Log("Boulder deal damage to " + enemy);
+                _collisionMsg = (gameobject) => Debug.Log("Boulder collision with " + gameobject);
+                _destroyAfterHitMsg = () => Debug.Log("Boulder will destroy after " + _timeToDestroyAfterHit + " sec");
             }
         }
 

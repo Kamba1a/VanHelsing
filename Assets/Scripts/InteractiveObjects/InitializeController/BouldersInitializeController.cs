@@ -25,10 +25,10 @@ namespace BeastHunter
                 bouldersData.Prefab = Resources.Load<GameObject>("Boulders");
             }
 
+            //for Iogan blockout first test leveldesign:
             //GameObject gameobject = GameObject.Instantiate(Data.BoulderObjectData.Prefab,
             //    new Vector3(514.99f, 14.172f, 764.55f), Quaternion.identity);
             //_context.InteractableObjectModels.Add(gameobject.GetInstanceID(), new BouldersModel(gameobject, Data.BoulderObjectData));
-
 
 
             #region for BouldersTest Scene only:
@@ -37,8 +37,8 @@ namespace BeastHunter
                 new Vector3(-6.70f, 20.52f, 32.1f), Quaternion.Euler(new Vector3(0, -90, 0)));
             _context.InteractableObjectModels.Add(gameobject.GetInstanceID(), new BouldersModel(gameobject, Data.BoulderObjectData));
 
-            GameObject gameobject2 = GameObject.Instantiate(Data.BoulderObjectData.Prefab, 
-                new Vector3(-6.70f, 20.52f, 16.08f), Quaternion.Euler(new Vector3(0,-90,0)));
+            GameObject gameobject2 = GameObject.Instantiate(Data.BoulderObjectData.Prefab,
+                new Vector3(-6.70f, 20.52f, 16.08f), Quaternion.Euler(new Vector3(0, -90, 0)));
             _context.InteractableObjectModels.Add(gameobject2.GetInstanceID(), new BouldersModel(gameobject2, Data.BoulderObjectData));
 
             GameObject gameobject3 = GameObject.Instantiate(Data.BoulderObjectData.Prefab,
