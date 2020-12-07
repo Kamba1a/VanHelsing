@@ -10,9 +10,7 @@ namespace BeastHunter
         #region Fields
 
         private BouldersData _data;
-        private Collider[] _colliders;
         private InteractableObjectBehavior[] _interactableObjects;
-        private InteractableObjectBehavior _activeObject;
 
         #endregion
 
@@ -34,7 +32,7 @@ namespace BeastHunter
             _data = data;
 
             Services.SharedInstance.PhysicsService.FindGround(Prefab.transform.position, out Vector3 groundPosition);
-            Prefab.transform.position = new Vector3(groundPosition.x, groundPosition.y+_data.OffsetY, groundPosition.z);
+            Prefab.transform.position = new Vector3(groundPosition.x, groundPosition.y+_data.PrefabOffsetY, groundPosition.z);
 
             Rigidbodies = prefab.GetComponentsInChildren<Rigidbody>();
             for (int i = 0; i < Rigidbodies.Length; i++)
@@ -45,20 +43,15 @@ namespace BeastHunter
                 Rigidbodies[i].mass = data.Mass;
             }
 
-            _colliders = prefab.GetComponentsInChildren<SphereCollider>();
-            for (int i = 0; i < _colliders.Length; i++)
-            { 
-                if (!_colliders[i].isTrigger)
-                {
-                    _colliders[i].material.bounciness = data.Bounciness;
-                    break;
-                }
-            }
-
             _interactableObjects = prefab.GetComponentsInChildren<InteractableObjectBehavior>();
-            _activeObject = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject);
-            InteractiveTrigger = _activeObject.GetComponent<CapsuleCollider>();
+            InteractiveTrigger = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject).GetComponent<CapsuleCollider>();
+
             BoulderBehaviours = _interactableObjects.GetInteractableObjectsByType(InteractableObjectType.HitBox);
+            PhysicMaterial physicMaterial = new PhysicMaterial() { bounciness = data.Bounciness, dynamicFriction = 0, staticFriction = 0 };
+            for (int i = 0; i< BoulderBehaviours.Count; i++)
+            {
+                BoulderBehaviours[i].GetComponent<SphereCollider>().material = physicMaterial;
+            }
         }
 
         #endregion

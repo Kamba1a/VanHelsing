@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 
 namespace BeastHunter
@@ -6,16 +7,20 @@ namespace BeastHunter
     [CreateAssetMenu(fileName = "BouldersData", menuName = "CreateData/SimpleInteractiveObjects/BouldersData", order = 0)]
     public sealed class BouldersData : SimpleInteractiveObjectData
     {
-        private const float CHECK_VELOCITY_TIME = 2.0f;
+        #region SerializeFields
 
-        #region Fields
-
+        [Header("BouldersData")]
+        [SerializeField] private bool _debugMessages;
         [SerializeField] private Vector3 _prefabPosition;
         [SerializeField] private Vector3 _prefabEulers;
-        [SerializeField] private float _offsetY;
+        [SerializeField] private float _prefabOffsetY;
+        [Tooltip ("The force with which boulders move from place. Default: 100.0")]
         [SerializeField] private float _pushingForce;
+        [Tooltip("The time after which the physics is turned off for all boulders. Default: 30.0")]
         [SerializeField] private float _timeToDeactivate;
+        [Tooltip("Time after which the boulder disappears after collision and deal damage. Default: 1.0")]
         [SerializeField] private float _timeToDestroyAfterHit;
+        [Tooltip("The speed at which the boulder deals damage. Default: 2.0")]
         [SerializeField] private float _hitSpeed;
 
         [Header("Damage")]
@@ -23,12 +28,33 @@ namespace BeastHunter
         [SerializeField] private float _stunProbability;
 
         [Header("Rigidbody")]
+        [Tooltip("Default: 40.0")]
         [SerializeField] private float _mass;
+        [Tooltip("Default: 0.1")]
         [SerializeField] private float _drag;
+        [Tooltip("Default: 0.75")]
         [SerializeField] private float _angularDrag;
+        [Tooltip("Default: 0.1")]
         [SerializeField] private float _bounciness;
 
-        private float sqrHitSpeed;
+        #endregion
+
+
+        #region Сonstants
+
+        /// <summary>gives the boulder time to accelerate before starting the stop check</summary>
+        private const float CHECK_VELOCITY_TIME = 2.0f;
+
+        #endregion
+
+
+        #region Fields
+
+        private float _sqrHitSpeed;
+        private Action _activateMsg;
+        private Action _deactivateMsg;
+        private Action _destroyRigidbodyMsg;
+        private Action<InteractableObjectBehavior> _dealDamageMsg;
 
         #endregion
 
@@ -42,7 +68,7 @@ namespace BeastHunter
         public float Drag => _drag;
         public float AngularDrag => _angularDrag;
         public float Bounciness => _bounciness;
-        public float OffsetY => _offsetY;
+        public float PrefabOffsetY => _prefabOffsetY;
 
         #endregion
 
@@ -51,9 +77,6 @@ namespace BeastHunter
 
         public BouldersData()
         {
-            _prefabPosition = new Vector3(514.99f, 14.172f, 764.55f);
-            _prefabEulers = new Vector3();
-
             _pushingForce = 100.0f;
             _mass = 40.0f;
             _drag = 0.1f;
@@ -62,7 +85,7 @@ namespace BeastHunter
             _timeToDeactivate = 30.0f;
             _timeToDestroyAfterHit = 1.0f;
             _hitSpeed = 2;
-            _offsetY = 0.3f;
+            _prefabOffsetY = 0.3f;
         }
 
         #endregion
@@ -72,11 +95,11 @@ namespace BeastHunter
 
         private void OnEnable()
         {
-            sqrHitSpeed = _hitSpeed * _hitSpeed;
+            _sqrHitSpeed = _hitSpeed * _hitSpeed;
+            DebugMessages(_debugMessages);
         }
 
         #endregion
-
 
         #region SimpleInteractiveObjectData
 
@@ -96,6 +119,8 @@ namespace BeastHunter
             (interactiveObjectModel as BouldersModel).CanvasObject.gameObject.SetActive(false);
         }
 
+
+        //press key for activate
         public override void Interact(BaseInteractiveObjectModel interactiveObjectModel)
         {
             BouldersModel model = interactiveObjectModel as BouldersModel;
@@ -110,7 +135,7 @@ namespace BeastHunter
         //what happens when activated
         protected override void Activate(SimpleInteractiveObjectModel interactiveObjectModel)
         {
-            Debug.Log("Boulders activate");
+            _activateMsg?.Invoke();
 
             BouldersModel model = interactiveObjectModel as BouldersModel;
             model.IsInteractive = false;
@@ -134,7 +159,8 @@ namespace BeastHunter
         //what happens when deactivated
         protected override void Deactivate(SimpleInteractiveObjectModel interactiveObjectModel)
         {
-            Debug.Log("Boulders deactivate");
+            _deactivateMsg?.Invoke();
+
             BouldersModel model = interactiveObjectModel as BouldersModel;
             model.Clean();
         }
@@ -144,6 +170,7 @@ namespace BeastHunter
 
         #region BouldersModel
 
+        //update
         public void Act(BouldersModel model)
         {
             if (_timeToDeactivate - model.Timer > CHECK_VELOCITY_TIME)
@@ -152,8 +179,8 @@ namespace BeastHunter
                 {
                     if (model.Rigidbodies[i] != null && model.Rigidbodies[i].velocity == Vector3.zero)
                     {
-                        Debug.Log("Destroy boulder rigidbody (velocity = 0,0,0)");
                         Destroy(model.Rigidbodies[i]);
+                        _destroyRigidbodyMsg?.Invoke();
                     }
                 }
             }
@@ -176,7 +203,7 @@ namespace BeastHunter
 
         public void CollisionEnter(InteractableObjectBehavior objectBehavior, Collision collision)
         {
-            if (collision.relativeVelocity.sqrMagnitude > sqrHitSpeed)
+            if (collision.relativeVelocity.sqrMagnitude > _sqrHitSpeed)
             {
                 Damage damage = new Damage()
                 {
@@ -189,7 +216,7 @@ namespace BeastHunter
                 if (enemy != null)
                 {
                     enemy.TakeDamageEvent(damage);
-                    Debug.Log("Boulder deal damage to " + enemy);
+                    _dealDamageMsg?.Invoke(enemy);
                 }
                 else
                 {
@@ -201,6 +228,24 @@ namespace BeastHunter
                 rigidbody.detectCollisions = false;
                 //...destroy animation...
                 Destroy(objectBehavior.gameObject, _timeToDestroyAfterHit);
+            }
+        }
+
+        #endregion
+
+
+        #region Methods
+
+        /// <summary>Subscribes to debug message delegates</summary>
+        /// <param name="switcher">on/off debug messages</param>
+        private void DebugMessages(bool switcher)
+        {
+            if (switcher)
+            {
+                _activateMsg = () => Debug.Log("Boulders activated");
+                _deactivateMsg = () => Debug.Log("Boulders deactivated");
+                _destroyRigidbodyMsg = () => Debug.Log("Destroy boulder rigidbody (velocity = 0,0,0)");
+                _dealDamageMsg = (enemy) => Debug.Log("Boulder deal damage to " + enemy);
             }
         }
 

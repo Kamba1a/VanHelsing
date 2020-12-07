@@ -15,8 +15,10 @@ MonoBehaviour:
   Prefab: {fileID: 3821023361300054295, guid: 00b8e29ef790ade468d9939de1ffd372, type: 3}
   _isActivated: 0
   _canvasObjectName: CanvasObject
+  _debugMessages: 0
   _prefabPosition: {x: 514.99, y: 14.172, z: 764.55}
   _prefabEulers: {x: 0, y: 0, z: 0}
+  _prefabOffsetY: 0.3
   _pushingForce: 100
   _timeToDeactivate: 30
   _timeToDestroyAfterHit: 1

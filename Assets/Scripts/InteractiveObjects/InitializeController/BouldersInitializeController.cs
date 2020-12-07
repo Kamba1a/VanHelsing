@@ -26,8 +26,8 @@ namespace BeastHunter
             }
 
             //GameObject gameobject = GameObject.Instantiate(Data.BoulderObjectData.Prefab,
-            //    Data.BoulderObjectData.PrefabPosition, Quaternion.Euler(Data.BoulderObjectData.PrefabEulers));
-            //_context.InteractableObjectModels.Add(gameobject.GetInstanceID(), new BoulderModel(gameobject, Data.BoulderObjectData));
+            //    new Vector3(514.99f, 14.172f, 764.55f), Quaternion.identity);
+            //_context.InteractableObjectModels.Add(gameobject.GetInstanceID(), new BouldersModel(gameobject, Data.BoulderObjectData));
 
 
 
