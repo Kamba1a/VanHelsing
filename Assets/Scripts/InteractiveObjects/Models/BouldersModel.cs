@@ -17,10 +17,12 @@ namespace BeastHunter
 
         #region Properties
 
-        public Collider InteractiveTrigger { get; private set; }
+        public Collider InteractiveTrigger { get; }
         public Rigidbody[] Rigidbodies { get; private set; }
-        public List<InteractableObjectBehavior> BoulderBehaviours { get; private set; }
+        public List<InteractableObjectBehavior> BoulderBehaviours { get; }
         public float Timer { get; set; }
+        /// <summary>contains boolean values of boulders that contains information about whether the boulder has been added to the destroy queue</summary>
+        public Dictionary<int, bool> DestroyInfoDictionary { get; private set; }
 
         #endregion
 
@@ -30,6 +32,7 @@ namespace BeastHunter
         public BouldersModel(GameObject prefab, BouldersData data) : base(prefab, data)
         {
             _data = data;
+            DestroyInfoDictionary = new Dictionary<int, bool>();
 
             Services.SharedInstance.PhysicsService.FindGround(Prefab.transform.position, out Vector3 groundPosition);
             Prefab.transform.position = new Vector3(groundPosition.x, groundPosition.y+_data.PrefabOffsetY, groundPosition.z);
@@ -51,6 +54,7 @@ namespace BeastHunter
             for (int i = 0; i< BoulderBehaviours.Count; i++)
             {
                 BoulderBehaviours[i].GetComponent<SphereCollider>().material = physicMaterial;
+                DestroyInfoDictionary.Add(BoulderBehaviours[i].GetInstanceID(), false);
             }
         }
 
@@ -79,6 +83,7 @@ namespace BeastHunter
         public void Clean()
         {
             _data = null;
+            DestroyInfoDictionary = null;
 
             if (CanvasObject != null)
             {

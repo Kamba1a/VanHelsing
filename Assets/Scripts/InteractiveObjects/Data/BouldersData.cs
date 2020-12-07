@@ -154,9 +154,9 @@ namespace BeastHunter
             }
 
             for (int i = 0; i < model.BoulderBehaviours.Count; i++)
-            { 
+            {
                 model.BoulderBehaviours[i].OnFilterHandler += CollisionFilter;
-                model.BoulderBehaviours[i].OnCollisionEnterHandler += (p1,p2) => CollisionEnter(p1, p2, model.Timer);
+                model.BoulderBehaviours[i].OnCollisionEnterHandler += (p1,p2) => CollisionEnter(p1, p2, model);
             }
         }
 
@@ -205,34 +205,40 @@ namespace BeastHunter
                 || objectBehavior.Type == InteractableObjectType.Player);
         }
 
-        public void CollisionEnter(InteractableObjectBehavior objectBehavior, Collision collision, float timer)
+        public void CollisionEnter(InteractableObjectBehavior objectBehavior, Collision collision, BouldersModel model)
         {
-            _collisionMsg?.Invoke(collision.collider.gameObject.ToString());
-
-            if (collision.relativeVelocity.sqrMagnitude > _sqrHitSpeed && _timeToDeactivate - timer > CHECK_COLLISION_TIME)
+            int objectBehaviorID = objectBehavior.GetInstanceID();
+            if (!model.DestroyInfoDictionary[objectBehaviorID])
             {
-                Rigidbody rigidbody = objectBehavior.GetComponentInChildren<Rigidbody>();
-                rigidbody.isKinematic = true;
-                rigidbody.detectCollisions = false;
-                //...destroy animation...
-                Destroy(objectBehavior.gameObject, _timeToDestroyAfterHit);
-                _destroyAfterHitMsg?.Invoke();
+                _collisionMsg?.Invoke(collision.collider.gameObject.ToString());
 
-                InteractableObjectBehavior enemy = collision.collider.gameObject.GetComponent<InteractableObjectBehavior>();
-                Damage damage = new Damage()
+                if (collision.relativeVelocity.sqrMagnitude > _sqrHitSpeed && _timeToDeactivate - model.Timer > CHECK_COLLISION_TIME)
                 {
-                    PhysicalDamage = _physicalDamage,
-                    StunProbability = _stunProbability
-                };
+                    model.DestroyInfoDictionary[objectBehaviorID] = true;
 
-                if (enemy != null)
-                {
-                    enemy.TakeDamageEvent(damage);
-                    _dealDamageMsg?.Invoke(enemy.ToString());
-                }
-                else
-                {
-                    Debug.LogError(this + " not found InteractableObjectBehavior at " + collision.gameObject);
+                    InteractableObjectBehavior enemy = collision.collider.gameObject.GetComponent<InteractableObjectBehavior>();
+                    Damage damage = new Damage()
+                    {
+                        PhysicalDamage = _physicalDamage,
+                        StunProbability = _stunProbability
+                    };
+
+                    if (enemy != null)
+                    {
+                        enemy.TakeDamageEvent(damage);
+                        _dealDamageMsg?.Invoke(enemy.ToString());
+                    }
+                    else
+                    {
+                        Debug.LogError(this + " not found InteractableObjectBehavior at " + collision.gameObject);
+                    }
+
+                    Rigidbody rigidbody = objectBehavior.GetComponentInChildren<Rigidbody>();
+                    rigidbody.isKinematic = true;
+                    rigidbody.detectCollisions = false;
+                    //...destroy animation...
+                    Destroy(objectBehavior.gameObject, _timeToDestroyAfterHit);
+                    _destroyAfterHitMsg?.Invoke();
                 }
             }
         }
