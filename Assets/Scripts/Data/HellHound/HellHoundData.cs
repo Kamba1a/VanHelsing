@@ -21,7 +21,8 @@ namespace BeastHunter
             BattleCircling,
             Escaping,
             Resting,
-            Searching
+            Searching,
+            JumpingAttack,
         }
 
         #endregion
@@ -93,8 +94,10 @@ namespace BeastHunter
             Stats.BackJumpDistance = 1.0f;
             Stats.AttackDirectDistance = 1.5f;
             Stats.AttackBottomDistance = 1.25f;
-            Stats.AttackJumpMaxDistance = 3.0f;
+            Stats.AttackJumpMaxDistance = 3.5f;
             Stats.AttackJumpMinDistance = 2.5f;
+            Stats.AttackJumpSpeed = 10.0f;
+            Stats.AttackJumpCooldown = 2.0f;
             Stats.AttacksTurnSpeed = 0.5f;
             Stats.BattleCirclingRadius = 3.0f;
             Stats.BattleCirclingSpeed = 3.0f;
@@ -203,6 +206,7 @@ namespace BeastHunter
             float rotateDirection = GetRotateDirection(model.Transform, ref model.RotatePosition1, ref model.RotatePosition2);
             model.Animator.SetFloat("RotateDirection", rotateDirection);
             model.Animator.SetFloat("MovementSpeed", model.NavMeshAgent.velocity.sqrMagnitude);
+            if (model.JumpingAttackTimer > 0) model.JumpingAttackTimer -= Time.deltaTime;
 
             switch (model.BehaviourState)
             {
@@ -297,12 +301,23 @@ namespace BeastHunter
                                 {
                                     AttackDirect(model.Animator);
                                 }
-                                else if (sqrDistanceToEnemy < sqrAttackJumpMaxDistance && sqrDistanceToEnemy > sqrAttackJumpMinDistance)
+                                else if (model.JumpingAttackTimer <= 0 && 
+                                    sqrDistanceToEnemy < sqrAttackJumpMaxDistance && sqrDistanceToEnemy > sqrAttackJumpMinDistance)
                                 {
-                                    AttackJump(model.Animator);
+                                    model.BehaviourState = ChangeState(BehaviourState.JumpingAttack, model);
                                 }
                             }
                         }
+                    }
+
+                    break;
+
+                case BehaviourState.JumpingAttack:
+
+                    if (!model.IsAttacking)
+                    { 
+                        model.BehaviourState = ChangeState(BehaviourState.Chasing, model);
+                        model.JumpingAttackTimer = Stats.AttackJumpCooldown;
                     }
 
                     break;
@@ -468,6 +483,9 @@ namespace BeastHunter
 
                 case BehaviourState.Searching:
                     break;
+
+                case BehaviourState.JumpingAttack:
+                    break;
             }
 
             //enter to new state
@@ -499,6 +517,9 @@ namespace BeastHunter
 
                 case BehaviourState.Searching:
                     return SetSearchingState(model.NavMeshAgent, model.SpawnPoint, ref model.Timer);
+
+                case BehaviourState.JumpingAttack:
+                    return SetJumpingAttackState(model, model.ChasingTarget.position);
 
                 default: return newState;
             }
@@ -682,17 +703,24 @@ namespace BeastHunter
 
             return BehaviourState.Searching;
         }
-    
+
+        private BehaviourState SetJumpingAttackState(HellHoundModel model, Vector3 targetPosition)
+        {
+            AttackJumpingMsg?.Invoke();
+
+            model.NavMeshAgent.speed = Stats.AttackJumpSpeed;
+            model.NavMeshAgent.acceleration = Stats.AttackJumpSpeed * 10;
+            model.NavMeshAgent.SetDestination(targetPosition);
+            model.Animator.Play("AttackJump");
+            model.IsAttacking = true;
+
+            return BehaviourState.JumpingAttack;
+        }
+
         private void Jump(Animator animator)
         {
             JumpingMsg?.Invoke();
             animator.Play("Jump");
-        }
-
-        private void AttackJump(Animator animator)
-        {
-            AttackJumpingMsg?.Invoke();
-            animator.Play("AttackJump");
         }
 
         private void AttackDirect(Animator animator)

@@ -31,10 +31,14 @@ namespace BeastHunter
         public float AttackDirectDistance;
         [Tooltip("The maximum distance from which the dog will try to attack bottom. Default: 1.25")]
         public float AttackBottomDistance;
-        [Tooltip ("The maximum distance from which the dog will conduct an attacking jump. Default: 3.0")]
+        [Tooltip ("The maximum distance from which the dog will conduct an attacking jump. Default: 3.5")]
         public float AttackJumpMaxDistance;
         [Tooltip ("The minimum distance from which the dog will conduct an attacking jump. Default: 2.5")]
         public float AttackJumpMinDistance;
+        [Tooltip("Jumping speed during attack. Default: 10.0")]
+        public float AttackJumpSpeed;
+        [Tooltip("Jumping attack cooldown. Default: 2.0")]
+        public float AttackJumpCooldown;
 
         [Header("Idling")]
         [Tooltip ("Default: 5.0")]

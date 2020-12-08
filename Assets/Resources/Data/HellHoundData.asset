@@ -37,8 +37,10 @@ MonoBehaviour:
     AttacksTurnSpeed: 0.5
     AttackDirectDistance: 1.5
     AttackBottomDistance: 1.25
-    AttackJumpMaxDistance: 3
+    AttackJumpMaxDistance: 3.5
     AttackJumpMinDistance: 2.5
+    AttackJumpSpeed: 10
+    AttackJumpCooldown: 2
     IdlingMinTime: 5
     IdlingMaxTime: 10
     RestingChance: 20
