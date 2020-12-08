@@ -191,7 +191,7 @@ namespace BeastHunter
             MovementCheck();
             SpeedCheck();
             ControlWeaponWheel();
-            //Debug.Log(_stateMachine.CurrentState);
+            Debug.Log(_stateMachine.CurrentState);
         }
 
         #endregion
