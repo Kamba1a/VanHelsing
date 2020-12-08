@@ -9,19 +9,13 @@ namespace BeastHunter
     {
         #region Fields
 
-        private HellHoundData hellHoundData;
-        private InteractableObjectBehavior[] InteractableObjects;
-        private InteractableObjectBehavior detectionSphereIO;
-        private SphereCollider detectionSphere;
-        private HellHoundAttackStateBehaviour[] attackStates;
+        private HellHoundData _hellHoundData;
+        private InteractableObjectBehavior[] _interactableObjects;
+        private InteractableObjectBehavior _detectionSphereIO;
+        private SphereCollider _detectionSphere;
+        private HellHoundAttackStateBehaviour[] _attackStates;
 
-        public HellHoundData.BehaviourState BehaviourState;
-        public Vector3 SpawnPoint;
-        public Transform ChasingTarget;
-        public bool IsAttacking;
         public float Timer;
-        public float JumpingAttackTimer;
-
         public float RotatePosition1;
         public float RotatePosition2;
 
@@ -37,6 +31,11 @@ namespace BeastHunter
         public Transform Transform { get; }
         public Collider AttackCollider { get; }
         public InteractableObjectBehavior WeaponIO { get; }
+        public float JumpingAttackTimer { get; set; }
+        public HellHoundData.BehaviourState BehaviourState { get; set; }
+        public Vector3 SpawnPoint { get; }
+        public Transform ChasingTarget { get; set; }
+        public bool IsAttacking { get; set; }
 
         #endregion
 
@@ -45,7 +44,7 @@ namespace BeastHunter
 
         public HellHoundModel(GameObject gameObject, HellHoundData hellHoundData)
         {
-            this.hellHoundData = hellHoundData;
+            _hellHoundData = hellHoundData;
             HellHound = gameObject;
 
             Transform = HellHound.transform;
@@ -59,16 +58,16 @@ namespace BeastHunter
             Animator.SetFloat("JumpBackSpeedRate", hellHoundData.Stats.BackJumpAnimationSpeedRate);
             Animator.SetFloat("JumpBackIntensity", hellHoundData.Stats.BackJumpAnimationIntensity);
 
-            InteractableObjects = HellHound.GetComponentsInChildren<InteractableObjectBehavior>();
+            _interactableObjects = HellHound.GetComponentsInChildren<InteractableObjectBehavior>();
 
-            detectionSphereIO = InteractableObjects.GetInteractableObjectByType(InteractableObjectType.Sphere);
-            detectionSphereIO.OnFilterHandler = Filter;
-            detectionSphereIO.OnTriggerEnterHandler = OnDetectionEnemy;
-            detectionSphereIO.OnTriggerExitHandler = OnLostEnemy;
+            _detectionSphereIO = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.Sphere);
+            _detectionSphereIO.OnFilterHandler = Filter;
+            _detectionSphereIO.OnTriggerEnterHandler = OnDetectionEnemy;
+            _detectionSphereIO.OnTriggerExitHandler = OnLostEnemy;
 
-            detectionSphere = detectionSphereIO.GetComponent<SphereCollider>();
-            if (detectionSphere == null) Debug.LogError(this + " not found SphereCollider in DetectionSphere gameobject");
-            else detectionSphere.radius = hellHoundData.Stats.DetectionRadius;
+            _detectionSphere = _detectionSphereIO.GetComponent<SphereCollider>();
+            if (_detectionSphere == null) Debug.LogError(this + " not found SphereCollider in DetectionSphere gameobject");
+            else _detectionSphere.radius = hellHoundData.Stats.DetectionRadius;
 
             WeaponIO = HellHound.GetComponentInChildren<WeaponHitBoxBehavior>();
             WeaponIO.OnFilterHandler = Filter;
@@ -83,14 +82,14 @@ namespace BeastHunter
             NavMeshAgent.stoppingDistance = hellHoundData.Stats.StoppingDistance;
             NavMeshAgent.baseOffset = hellHoundData.Stats.BaseOffsetByY;
 
-            attackStates = Animator.GetBehaviours<HellHoundAttackStateBehaviour>();
-            for (int i = 0; i < attackStates.Length; i++)
+            _attackStates = Animator.GetBehaviours<HellHoundAttackStateBehaviour>();
+            for (int i = 0; i < _attackStates.Length; i++)
             {
-                attackStates[i].OnStateEnterHandler += OnAttackStateEnter;
-                attackStates[i].OnStateExitHandler += OnAttackStateExit;
+                _attackStates[i].OnStateEnterHandler += OnAttackStateEnter;
+                _attackStates[i].OnStateExitHandler += OnAttackStateExit;
             }
 
-            CurrentHealth = this.hellHoundData.BaseStats.MainStats.MaxHealth;
+            CurrentHealth = _hellHoundData.BaseStats.MainStats.MaxHealth;
             IsDead = false;
         }
 
@@ -99,12 +98,12 @@ namespace BeastHunter
 
         #region Methods
 
-        private bool Filter(Collider collider) => hellHoundData.Filter(collider);
-        private void OnDetectionEnemy(ITrigger trigger, Collider collider) => hellHoundData.OnDetectionEnemy(collider, this);
-        private void OnLostEnemy(ITrigger trigger, Collider collider) => hellHoundData.OnLostEnemy(collider, this);
-        private void OnHitEnemy(ITrigger trigger, Collider collider) => hellHoundData.OnHitEnemy(collider, this);
-        private void OnAttackStateEnter() => hellHoundData.OnAttackStateEnter(this);
-        private void OnAttackStateExit() => hellHoundData.OnAttackStateExit(this);
+        private bool Filter(Collider collider) => _hellHoundData.Filter(collider);
+        private void OnDetectionEnemy(ITrigger trigger, Collider collider) => _hellHoundData.OnDetectionEnemy(collider, this);
+        private void OnLostEnemy(ITrigger trigger, Collider collider) => _hellHoundData.OnLostEnemy(collider, this);
+        private void OnHitEnemy(ITrigger trigger, Collider collider) => _hellHoundData.OnHitEnemy(collider, this);
+        private void OnAttackStateEnter() => _hellHoundData.OnAttackStateEnter(this);
+        private void OnAttackStateExit() => _hellHoundData.OnAttackStateExit(this);
 
         #endregion
 
@@ -115,13 +114,13 @@ namespace BeastHunter
         {
             if (!IsDead)
             {
-                hellHoundData.Act(this);
+                _hellHoundData.Act(this);
             }
         }
 
         public override EnemyStats GetStats()
         {
-            return hellHoundData.BaseStats;
+            return _hellHoundData.BaseStats;
         }
 
         public override void OnAwake()
@@ -138,7 +137,7 @@ namespace BeastHunter
         {
             if (!IsDead)
             {
-                hellHoundData.TakeDamage(this, damage);
+                _hellHoundData.TakeDamage(this, damage);
             }
         }
 
