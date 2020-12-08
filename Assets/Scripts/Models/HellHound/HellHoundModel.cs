@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
+using Extensions;
 
 
 namespace BeastHunter
@@ -60,7 +60,7 @@ namespace BeastHunter
 
             InteractableObjects = HellHound.GetComponentsInChildren<InteractableObjectBehavior>();
 
-            detectionSphereIO = GetInteractableObject(InteractableObjectType.Sphere);
+            detectionSphereIO = InteractableObjects.GetInteractableObjectByType(InteractableObjectType.Sphere);
             detectionSphereIO.OnFilterHandler = Filter;
             detectionSphereIO.OnTriggerEnterHandler = OnDetectionEnemy;
             detectionSphereIO.OnTriggerExitHandler = OnLostEnemy;
@@ -97,33 +97,13 @@ namespace BeastHunter
 
 
         #region Methods
+
         private bool Filter(Collider collider) => hellHoundData.Filter(collider);
         private void OnDetectionEnemy(ITrigger trigger, Collider collider) => hellHoundData.OnDetectionEnemy(collider, this);
         private void OnLostEnemy(ITrigger trigger, Collider collider) => hellHoundData.OnLostEnemy(collider, this);
         private void OnHitEnemy(ITrigger trigger, Collider collider) => hellHoundData.OnHitEnemy(collider, this);
         private void OnAttackStateEnter() => hellHoundData.OnAttackStateEnter(this);
         private void OnAttackStateExit() => hellHoundData.OnAttackStateExit(this);
-
-        private InteractableObjectBehavior GetInteractableObject(InteractableObjectType type)
-        {
-            for (int i =0; i< InteractableObjects.Length; i++)
-            {
-                if (InteractableObjects[i].Type == type) return InteractableObjects[i];
-            }
-            Debug.LogWarning(this + "  not found InteractableObject of type " + type);
-            return null;
-        }
-
-        private List<InteractableObjectBehavior> GetInteractableObjects(InteractableObjectType type)
-        {
-            List<InteractableObjectBehavior> result = new List<InteractableObjectBehavior>();
-            for (int i = 0; i < InteractableObjects.Length; i++)
-            {
-                if (InteractableObjects[i].Type == type) result.Add(InteractableObjects[i]);
-            }
-            if (result.Count == 0) Debug.LogWarning(this + " not found InteractableObjects of type " + type);
-            return result;
-        }
 
         #endregion
 
