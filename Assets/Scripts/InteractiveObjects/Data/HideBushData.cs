@@ -43,7 +43,7 @@ namespace BeastHunter
 
         public HideBushData()
         {
-            _burningTime = 30.0f;
+            _burningTime = 20.0f;
             _dealDamageCooldown = 1.5f;
             _fireDamage = 1.0f;
         }
@@ -85,8 +85,8 @@ namespace BeastHunter
                 case BehaviourState.None:
 
                     return behaviorIO != null
-                    && behaviorIO.Type == InteractableObjectType.Fire
-                    && behaviorIO.IsInteractable;
+                    && behaviorIO.Type == InteractableObjectType.Fire;
+                    //&& behaviorIO.IsInteractable;     //fire arrows don't work
 
                 case BehaviourState.Burning:
 
@@ -102,7 +102,7 @@ namespace BeastHunter
             }
         }
 
-        public void OnTriggerEnter(ITrigger trigger, Collider collider, HideBushModel model)
+        public void TriggerEnter(ITrigger trigger, Collider collider, HideBushModel model)
         {
             InteractableObjectBehavior behaviorIO = collider.GetComponent<InteractableObjectBehavior>();
 
@@ -116,7 +116,7 @@ namespace BeastHunter
             }
         }
 
-        public void OnTriggerExit(ITrigger trigger, Collider collider, HideBushModel model)
+        public void TriggerExit(ITrigger trigger, Collider collider, HideBushModel model)
         {
             InteractableObjectBehavior behaviorIO = collider.GetComponent<InteractableObjectBehavior>();
             if (behaviorIO.Type != InteractableObjectType.Fire)

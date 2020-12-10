@@ -37,8 +37,8 @@ namespace BeastHunter
         #region Methods
 
         private bool FilterCollision(Collider collider) => _data.FilterCollision(collider, this);
-        private void OnTriggerEnter(ITrigger trigger, Collider collider) => _data.OnTriggerEnter(trigger, collider, this);
-        private void OnTriggerExit(ITrigger trigger, Collider collider) => _data.OnTriggerExit(trigger, collider, this);
+        private void OnTriggerEnter(ITrigger trigger, Collider collider) => _data.TriggerEnter(trigger, collider, this);
+        private void OnTriggerExit(ITrigger trigger, Collider collider) => _data.TriggerExit(trigger, collider, this);
         public override void Updating() => _data.Act(this);
 
         #endregion
