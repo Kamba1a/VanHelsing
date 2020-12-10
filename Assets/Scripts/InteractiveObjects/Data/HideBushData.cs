@@ -125,41 +125,27 @@ namespace BeastHunter
             }
         }
 
-        public void Act(HideBushModel model)
+        public void Burning(HideBushModel model)
         {
-            switch (model.State)
+            if (model.BurningTimer <= 0)
             {
-                case BehaviourState.None:
-                    break;
-
-                case BehaviourState.Burning:
-
-                    if (model.BurningTimer <= 0)
-                    {
-                        model.DamageObjects = null;
-                        model.State = BehaviourState.Burned;
-                    }
-
-                    if (model.DealDamageCooldownTimer <= 0)
-                    {
-                        Debug.Log("Fire damage tick");
-
-                        foreach (InteractableObjectBehavior behaviorIO in model.DamageObjects)
-                        {
-                            behaviorIO.TakeDamageEvent(new Damage() { PhysicalDamage = _fireDamage });    //TODO: FireDamage
-                        }
-
-                        model.DealDamageCooldownTimer = _dealDamageCooldown;
-                    }
-
-                    model.BurningTimer -= Time.deltaTime;
-                    model.DealDamageCooldownTimer -= Time.deltaTime;
-
-                    break;
-
-                case BehaviourState.Burned:
-                    break;
+                model.State = SetBurnedState(model); ;
             }
+
+            if (model.DealDamageCooldownTimer <= 0)
+            {
+                Debug.Log("Fire damage tick");
+
+                foreach (InteractableObjectBehavior behaviorIO in model.DamageObjects)
+                {
+                    behaviorIO.TakeDamageEvent(new Damage() { PhysicalDamage = _fireDamage });    //TODO: FireDamage
+                }
+
+                model.DealDamageCooldownTimer = _dealDamageCooldown;
+            }
+
+            model.BurningTimer -= Time.deltaTime;
+            model.DealDamageCooldownTimer -= Time.deltaTime;
         }
 
         private BehaviourState SetBurningState(HideBushModel model)
@@ -169,11 +155,23 @@ namespace BeastHunter
             model.BurningTimer = _burningTime;
             model.DealDamageCooldownTimer = _dealDamageCooldown;
             model.DamageObjects = new System.Collections.Generic.HashSet<InteractableObjectBehavior>();
+            model.Fire.SetActive(true);
 
             return BehaviourState.Burning;
         }
 
-        #endregion
+        private BehaviourState SetBurnedState(HideBushModel model)
+        {
+            Debug.Log("The bush burned");
+
+            model.DamageObjects = null;
+            model.Burnt.SetActive(true);
+            model.Clean();
+
+            return BehaviourState.Burned;
+        }
+
+            #endregion
     }
 }
 
