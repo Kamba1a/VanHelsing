@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UniRx;
 using System.Collections.Generic;
+using Extensions;
 
 namespace BeastHunter
 {
@@ -121,11 +122,16 @@ namespace BeastHunter
             {
                 Debug.Log("Fire damage tick");
 
+                HashSet<int> damageDone = new HashSet<int>();
                 foreach (InteractableObjectBehavior behaviorIO in model.DamageObjects)
                 {
-                    behaviorIO.TakeDamageEvent(new Damage() { PhysicalDamage = _fireDamage });    //TODO: FireDamage
+                    int gameObjectID = behaviorIO.transform.GetMainParent().GetInstanceID();
+                    if (!damageDone.Contains(gameObjectID)) //to avoid causing double damage to the object in the case of multiple colliders with behaviorIO
+                    {
+                        behaviorIO.TakeDamageEvent(new Damage() { PhysicalDamage = _fireDamage });    //TODO: FireDamage
+                        damageDone.Add(gameObjectID);
+                    }
                 }
-
                 model.DealDamageCooldownTimer = _dealDamageCooldown;
             }
 
