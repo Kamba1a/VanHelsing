@@ -9,13 +9,18 @@ namespace BeastHunter
         #region Fields
 
         private HideBushData _data;
-        public HideBushData.BehaviourState State;
-        public HashSet<InteractableObjectBehavior> DamageObjects;
-        public float BurningTimer;
-        public float DealDamageCooldownTimer;
-        public GameObject Leaves;
-        public GameObject Fire;
-        public GameObject Burnt;
+
+        #endregion
+
+
+        #region Properties
+
+        public bool IsBurning { get; set; }
+        public HashSet<InteractableObjectBehavior> DamageObjects { get; set; }
+        public float BurningTimer { get; set; }
+        public float DealDamageCooldownTimer { get; set; }
+        public GameObject Fire { get; }
+        public GameObject Burnt { get; }
 
         #endregion
 
@@ -32,7 +37,6 @@ namespace BeastHunter
             bushColliderIO.OnTriggerExitHandler += OnTriggerExit;
             Collider bushCollider = bushColliderIO.GetComponent<SphereCollider>();
 
-            Leaves = prefab.transform.Find("Leaves").gameObject;
             Fire = prefab.transform.Find("Fire").gameObject;
             Burnt = prefab.transform.Find("Burnt").gameObject;
         }
@@ -42,13 +46,13 @@ namespace BeastHunter
 
         #region Methods
 
-        private bool FilterCollision(Collider collider) => _data.FilterCollision(collider, this);
-        private void OnTriggerEnter(ITrigger trigger, Collider collider) => _data.TriggerEnter(trigger, collider, this);
-        private void OnTriggerExit(ITrigger trigger, Collider collider) => _data.TriggerExit(trigger, collider, this);
+        private bool FilterCollision(Collider collider) => _data.FilterCollision(collider, IsBurning);
+        private void OnTriggerEnter(ITrigger trigger, Collider collider) => _data.TriggerEnter(collider, this);
+        private void OnTriggerExit(ITrigger trigger, Collider collider) => _data.TriggerExit(collider, DamageObjects);
 
         public override void Updating()
         {
-            if (State == HideBushData.BehaviourState.Burning)
+            if (IsBurning)
             {
                 _data.Burning(this);
             }
@@ -56,11 +60,12 @@ namespace BeastHunter
 
         public void Clean()
         {
-            Object.Destroy(Leaves);
-            Object.Destroy(Fire);
+            DamageObjects = null;
             Object.Destroy(Prefab.transform.Find("Collider").gameObject);
-            Object.Destroy(Prefab.GetComponent<InteractableObjectBehavior>());
             Object.Destroy(Prefab.GetComponent<SphereCollider>());
+            Object.Destroy(Prefab.GetComponent<InteractableObjectBehavior>());
+            Object.Destroy(Prefab.transform.Find("Leaves").gameObject);
+            Object.Destroy(Fire);
         }
 
         #endregion

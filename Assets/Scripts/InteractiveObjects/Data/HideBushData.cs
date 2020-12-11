@@ -1,24 +1,12 @@
 ﻿using UnityEngine;
 using UniRx;
-
+using System.Collections.Generic;
 
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HideBushData", menuName = "CreateData/SimpleInteractiveObjects/HideBushData", order = 0)]
     public sealed class HideBushData : SimpleInteractiveObjectData
     {
-        #region PrivateData
-
-        public enum BehaviourState
-        {
-            None,
-            Burning,
-            Burned,
-        }
-
-        #endregion
-
-
         #region Fields
 
         [SerializeField] private Vector3 _prefabPosition;
@@ -76,39 +64,31 @@ namespace BeastHunter
             // TODO
         }
 
-        public bool FilterCollision(Collider collider, HideBushModel model)
+        public bool FilterCollision(Collider collider, bool isBurning)
         {
             InteractableObjectBehavior behaviorIO = collider.GetComponent<InteractableObjectBehavior>();
 
-            switch (model.State)
+            if (!isBurning)
             {
-                case BehaviourState.None:
-
-                    return behaviorIO != null
+                return behaviorIO != null
                     && behaviorIO.Type == InteractableObjectType.Fire;
                     //&& behaviorIO.IsInteractable;     //fire arrows don't work
-
-                case BehaviourState.Burning:
-
-                    return behaviorIO != null
-                 && (behaviorIO.Type == InteractableObjectType.Player
-                 || behaviorIO.Type == InteractableObjectType.Enemy);
-
-                case BehaviourState.Burned:
-                    return false;
-
-                default:
-                    return false;
+            }
+            else
+            {
+                return behaviorIO != null
+                    && (behaviorIO.Type == InteractableObjectType.Player
+                    || behaviorIO.Type == InteractableObjectType.Enemy);
             }
         }
 
-        public void TriggerEnter(ITrigger trigger, Collider collider, HideBushModel model)
+        public void TriggerEnter(Collider collider, HideBushModel model)
         {
             InteractableObjectBehavior behaviorIO = collider.GetComponent<InteractableObjectBehavior>();
 
             if (behaviorIO.Type == InteractableObjectType.Fire)
             {
-                model.State = SetBurningState(model);
+                SetBurningState(model);
             }
             else
             {
@@ -116,12 +96,12 @@ namespace BeastHunter
             }
         }
 
-        public void TriggerExit(ITrigger trigger, Collider collider, HideBushModel model)
+        public void TriggerExit(Collider collider, HashSet<InteractableObjectBehavior> damageObjects)
         {
             InteractableObjectBehavior behaviorIO = collider.GetComponent<InteractableObjectBehavior>();
             if (behaviorIO.Type != InteractableObjectType.Fire)
             {
-                model.DamageObjects.Remove(behaviorIO);
+                damageObjects.Remove(behaviorIO);
             }
         }
 
@@ -129,7 +109,12 @@ namespace BeastHunter
         {
             if (model.BurningTimer <= 0)
             {
-                model.State = SetBurnedState(model); ;
+                Debug.Log("The bush burned");
+
+                model.IsBurning = false;
+                model.DamageObjects.Clear();
+                model.Burnt.SetActive(true);
+                model.Clean();
             }
 
             if (model.DealDamageCooldownTimer <= 0)
@@ -148,29 +133,16 @@ namespace BeastHunter
             model.DealDamageCooldownTimer -= Time.deltaTime;
         }
 
-        private BehaviourState SetBurningState(HideBushModel model)
+        private void SetBurningState(HideBushModel model)
         {
             Debug.Log("The bush caught fire");
 
+            model.DamageObjects = new HashSet<InteractableObjectBehavior>();
+            model.Fire.SetActive(true);
             model.BurningTimer = _burningTime;
             model.DealDamageCooldownTimer = _dealDamageCooldown;
-            model.DamageObjects = new System.Collections.Generic.HashSet<InteractableObjectBehavior>();
-            model.Fire.SetActive(true);
-
-            return BehaviourState.Burning;
+            model.IsBurning = true;
         }
-
-        private BehaviourState SetBurnedState(HideBushModel model)
-        {
-            Debug.Log("The bush burned");
-
-            model.DamageObjects = null;
-            model.Burnt.SetActive(true);
-            model.Clean();
-
-            return BehaviourState.Burned;
-        }
-
             #endregion
     }
 }
