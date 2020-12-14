@@ -7,7 +7,7 @@ namespace BeastHunter
 {
 
     [CreateAssetMenu(fileName = "NewHellHound", menuName = "CreateData/HellHound", order = 2)]
-    public sealed class HellHoundData : EnemyData
+    public sealed class HellHoundData : EnemyData, IDealDamage
     {
         #region PrivateData
 
@@ -66,6 +66,7 @@ namespace BeastHunter
         private float _sqrChasingBrakingMaxDistance;
         private float _sqrBattleCirclingDistance;
         private float _sqrChasingTurnDistanceNearTarget;
+        private Damage _damage;
 
         public HellHoundStats Stats;
 
@@ -85,6 +86,12 @@ namespace BeastHunter
             _sqrChasingBrakingMaxDistance = Stats.ChasingBrakingMaxDistance * Stats.ChasingBrakingMaxDistance;
             _sqrBattleCirclingDistance = Stats.BattleCirclingMaxDistance * Stats.BattleCirclingMaxDistance;
             _sqrChasingTurnDistanceNearTarget = Stats.ChasingTurnDistanceNearTarget * Stats.ChasingTurnDistanceNearTarget;
+
+            _damage = new Damage()  //TODO: from BaseStats?
+            { 
+                PhysicalDamage = Stats.PhysicalDamage,
+                StunProbability = Stats.StunProbability,
+            };
 
             DebugMessages(Stats.DebugMessages);
     }
@@ -120,16 +127,10 @@ namespace BeastHunter
 
         public void OnHitEnemy(Collider collider, HellHoundModel model)
         {
-            Damage damage = new Damage()
-            {
-                PhysicalDamage = Stats.PhysicalDamage,
-                StunProbability = Stats.StunProbability
-            };
-
             InteractableObjectBehavior enemy = collider.gameObject.GetComponent<InteractableObjectBehavior>();
             _onHitEnemyMsg?.Invoke(enemy);
 
-            if (enemy != null) enemy.TakeDamageEvent(damage);
+            if (enemy != null) DealDamage(enemy, _damage);
             else Debug.LogError(this + " not found enemy InteractableObjectBehavior");
 
             model.AttackCollider.enabled = false;
@@ -847,6 +848,18 @@ namespace BeastHunter
             {
                 hellHoundModel.BehaviourState = SetState(BehaviourState.Searching, hellHoundModel);
             }
+        }
+
+        #endregion
+
+
+        #region IDealDamage
+
+        public void DealDamage(InteractableObjectBehavior enemy, Damage damage)
+        {
+            Damage countDamage = null; //TODO: Services.SharedInstance.AttackService.CountDamage(damage, BaseStats.MainStats, enemy.???);
+
+            enemy.TakeDamageEvent(countDamage);
         }
 
         #endregion
