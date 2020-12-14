@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4886122316485546587}
   m_Layer: 0
-  m_Name: Leaves
+  m_Name: NormalView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,7 +49,7 @@ GameObject:
   - component: {fileID: 7685952795130519321}
   - component: {fileID: 2420573448634427861}
   m_Layer: 0
-  m_Name: Collider
+  m_Name: MainCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,6 +164,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4886122316485546587}
     m_Modifications:
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_Name
+      value: SM_Plant_Bush_Leaves_01 (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4193215156309446, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.12601216
@@ -212,14 +220,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 0.87999994
       objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_Name
-      value: SM_Plant_Bush_Leaves_01 (7)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
     - target: {fileID: 1848687583247756, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
@@ -241,7 +241,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 6d7bcebe78eeff74daaa56ffe40b7b83, type: 3}
       propertyPath: m_Name
-      value: Burnt
+      value: BurnedView
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6d7bcebe78eeff74daaa56ffe40b7b83, type: 3}
       propertyPath: m_IsActive
@@ -322,6 +322,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3309181269326506077}
     m_Modifications:
+    - target: {fileID: 171966, guid: 67a85eac228b18b499329fd87f2a52c0, type: 3}
+      propertyPath: m_Name
+      value: FireView
+      objectReference: {fileID: 0}
+    - target: {fileID: 171966, guid: 67a85eac228b18b499329fd87f2a52c0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 471966, guid: 67a85eac228b18b499329fd87f2a52c0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -378,14 +386,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 171966, guid: 67a85eac228b18b499329fd87f2a52c0, type: 3}
-      propertyPath: m_Name
-      value: Fire
-      objectReference: {fileID: 0}
-    - target: {fileID: 171966, guid: 67a85eac228b18b499329fd87f2a52c0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67a85eac228b18b499329fd87f2a52c0, type: 3}
 --- !u!4 &4113043048798137635 stripped
@@ -401,6 +401,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4886122316485546587}
     m_Modifications:
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_Name
+      value: SM_Plant_Bush_Leaves_01 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4193215156309446, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.8210245
@@ -453,14 +461,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.1800014
       objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_Name
-      value: SM_Plant_Bush_Leaves_01 (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
     - target: {fileID: 1848687583247756, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
@@ -480,6 +480,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4886122316485546587}
     m_Modifications:
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_Name
+      value: SM_Plant_Bush_Leaves_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4193215156309446, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.42002356
@@ -528,14 +536,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 0.8800009
       objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_Name
-      value: SM_Plant_Bush_Leaves_01 (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
     - target: {fileID: 1848687583247756, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
@@ -555,6 +555,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4886122316485546587}
     m_Modifications:
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_Name
+      value: SM_Plant_Bush_Leaves_01 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4193215156309446, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.7789865
@@ -607,14 +615,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.1800008
       objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_Name
-      value: SM_Plant_Bush_Leaves_01 (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
     - target: {fileID: 1848687583247756, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
@@ -634,6 +634,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4886122316485546587}
     m_Modifications:
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_Name
+      value: SM_Plant_Bush_Leaves_01 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4193215156309446, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.50900775
@@ -682,14 +690,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 0.88000023
       objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_Name
-      value: SM_Plant_Bush_Leaves_01 (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
     - target: {fileID: 1848687583247756, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
@@ -709,6 +709,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4886122316485546587}
     m_Modifications:
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_Name
+      value: SM_Plant_Bush_Leaves_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4193215156309446, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.68600965
@@ -757,14 +765,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1.1999999
       objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_Name
-      value: SM_Plant_Bush_Leaves_01 (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
     - target: {fileID: 1848687583247756, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 4294967295
@@ -784,6 +784,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4886122316485546587}
     m_Modifications:
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_Name
+      value: SM_Plant_Bush_Leaves_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4193215156309446, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.38899735
@@ -827,14 +835,6 @@ PrefabInstance:
     - target: {fileID: 4193215156309446, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_Name
-      value: SM_Plant_Bush_Leaves_01 (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1937847600842644, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 1848687583247756, guid: 47d0da1ba5336ef4bb50355db2307fe0, type: 3}
       propertyPath: m_StaticEditorFlags

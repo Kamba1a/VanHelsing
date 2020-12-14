@@ -37,8 +37,8 @@ namespace BeastHunter
             bushColliderIO.OnTriggerExitHandler += OnTriggerExit;
             Collider bushCollider = bushColliderIO.GetComponent<SphereCollider>();
 
-            Fire = prefab.transform.Find("Fire").gameObject;
-            Burnt = prefab.transform.Find("Burnt").gameObject;
+            Fire = prefab.transform.Find(_data.FireViewName).gameObject;
+            Burnt = prefab.transform.Find(_data.BurnedViewName).gameObject;
         }
 
         #endregion
@@ -61,10 +61,10 @@ namespace BeastHunter
         public void Clean()
         {
             DamageObjects = null;
-            Object.Destroy(Prefab.transform.Find("Collider").gameObject);
+            Object.Destroy(Prefab.transform.Find(_data.MainColliderName).gameObject);
             Object.Destroy(Prefab.GetComponent<SphereCollider>());
             Object.Destroy(Prefab.GetComponent<InteractableObjectBehavior>());
-            Object.Destroy(Prefab.transform.Find("Leaves").gameObject);
+            Object.Destroy(Prefab.transform.Find(_data.NormalViewName).gameObject);
             Object.Destroy(Fire);
         }
 

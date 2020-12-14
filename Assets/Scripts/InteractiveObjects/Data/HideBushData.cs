@@ -2,6 +2,7 @@
 using UniRx;
 using System.Collections.Generic;
 using Extensions;
+using System;
 
 namespace BeastHunter
 {
@@ -10,12 +11,35 @@ namespace BeastHunter
     {
         #region Fields
 
+        [Header("HideBushData")]
+        [Tooltip("On/off hide bush debug messages")]
+        [SerializeField] private bool _debugMessages;
         [SerializeField] private Vector3 _prefabPosition;
         [SerializeField] private Vector3 _prefabEulers;
-
+        [Tooltip("Bush burning time. Default: 30.0")]
         [SerializeField] private float _burningTime;
+        [Tooltip("Damage cooldown when burning. Default: 1.0")]
         [SerializeField] private float _dealDamageCooldown;
+        [Tooltip("Damage for 1 tick when burning")]
         [SerializeField] private float _fireDamage;
+        [Header("Prefab child gameobject names")]
+        [Tooltip("Child gameobject containing main bush collider")]
+        [SerializeField] private string _mainColliderName;
+        [Tooltip("Child gameobject containing bush view in normal state")]
+        [SerializeField] private string _normalViewName;
+        [Tooltip("Child gameobject containing fire effect for burning state")]
+        [SerializeField] private string _fireViewName;
+        [Tooltip("Child gameobject containing bush view after burning")]
+        [SerializeField] private string _burnedViewName;
+
+        #endregion
+
+
+        #region Debug messages
+
+        private Action _startBurningMsg;
+        private Action _burnedMsg;
+        private Action _burningDamageTickMsg;
 
         #endregion
 
@@ -24,6 +48,10 @@ namespace BeastHunter
 
         public Vector3 PrefabPosition => _prefabPosition;
         public Vector3 PrefabEulers => _prefabEulers;
+        public string MainColliderName => _mainColliderName;
+        public string NormalViewName => _normalViewName;
+        public string FireViewName => _fireViewName;
+        public string BurnedViewName => _burnedViewName;
 
         #endregion
 
@@ -35,6 +63,20 @@ namespace BeastHunter
             _burningTime = 20.0f;
             _dealDamageCooldown = 1.5f;
             _fireDamage = 1.0f;
+            _mainColliderName = "MainCollider";
+            _normalViewName = "NormalView";
+            _fireViewName = "FireView";
+            _burnedViewName = "BurnedView";
+        }
+
+        #endregion
+
+
+        #region UnityMethods
+
+        private void OnEnable()
+        {
+            DebugMessages(_debugMessages);
         }
 
         #endregion
@@ -73,7 +115,7 @@ namespace BeastHunter
             {
                 return behaviorIO != null
                     && behaviorIO.Type == InteractableObjectType.Fire;
-                    //&& behaviorIO.IsInteractable;     //fire arrows don't work
+                    //&& behaviorIO.IsInteractable;     //OFF - only for test, if ON - crossbow bolt with fireIO don't work on test
             }
             else
             {
@@ -110,7 +152,7 @@ namespace BeastHunter
         {
             if (model.BurningTimer <= 0)
             {
-                Debug.Log("The bush burned");
+                _burnedMsg?.Invoke();
 
                 model.IsBurning = false;
                 model.DamageObjects.Clear();
@@ -120,7 +162,7 @@ namespace BeastHunter
 
             if (model.DealDamageCooldownTimer <= 0)
             {
-                Debug.Log("Fire damage tick");
+                _burningDamageTickMsg?.Invoke();
 
                 HashSet<int> damageDone = new HashSet<int>();
                 foreach (InteractableObjectBehavior behaviorIO in model.DamageObjects)
@@ -141,7 +183,7 @@ namespace BeastHunter
 
         private void SetBurningState(HideBushModel model)
         {
-            Debug.Log("The bush caught fire");
+            _startBurningMsg?.Invoke();
 
             model.DamageObjects = new HashSet<InteractableObjectBehavior>();
             model.Fire.SetActive(true);
@@ -149,7 +191,17 @@ namespace BeastHunter
             model.DealDamageCooldownTimer = _dealDamageCooldown;
             model.IsBurning = true;
         }
-            #endregion
+
+        private void DebugMessages(bool switcher)
+        {
+            if (switcher)
+            {
+                _startBurningMsg = () => Debug.Log("The bush caught fire");
+                _burnedMsg = () => Debug.Log("The bush burned");
+                _burningDamageTickMsg = () => Debug.Log("Fire damage tick");
+            }
+        }
+        #endregion
     }
 }
 
