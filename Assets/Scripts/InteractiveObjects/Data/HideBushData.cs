@@ -40,6 +40,9 @@ namespace BeastHunter
         private Action _startBurningMsg;
         private Action _burnedMsg;
         private Action _burningDamageTickMsg;
+        private Action<string> _addDamageListMsg;
+        private Action<string> _removeDamageListMsg;
+        private Action<string> _dealDamageMsg;
 
         #endregion
 
@@ -135,6 +138,7 @@ namespace BeastHunter
             }
             else
             {
+                _addDamageListMsg?.Invoke(behaviorIO.gameObject.ToString());
                 model.DamageObjects.Add(behaviorIO);
             }
         }
@@ -144,6 +148,7 @@ namespace BeastHunter
             InteractableObjectBehavior behaviorIO = collider.GetComponent<InteractableObjectBehavior>();
             if (behaviorIO.Type != InteractableObjectType.Fire)
             {
+                _removeDamageListMsg?.Invoke(behaviorIO.gameObject.ToString());
                 damageObjects.Remove(behaviorIO);
             }
         }
@@ -170,6 +175,7 @@ namespace BeastHunter
                     int gameObjectID = behaviorIO.transform.GetMainParent().GetInstanceID();
                     if (!damageDone.Contains(gameObjectID)) //to avoid causing double damage to the object in the case of multiple colliders with behaviorIO
                     {
+                        _dealDamageMsg?.Invoke(behaviorIO.gameObject.ToString());
                         behaviorIO.TakeDamageEvent(new Damage() { FireDamage = _fireDamage });  //TODO: use AttackService
                         damageDone.Add(gameObjectID);
                     }
@@ -199,6 +205,9 @@ namespace BeastHunter
                 _startBurningMsg = () => Debug.Log("The bush caught fire");
                 _burnedMsg = () => Debug.Log("The bush burned");
                 _burningDamageTickMsg = () => Debug.Log("Fire damage tick");
+                _addDamageListMsg = (entity) => Debug.Log(entity + " added to bush deal damage list");
+                _removeDamageListMsg = (entity) => Debug.Log(entity + " removed from bush deal damage list");
+                _dealDamageMsg = (entity) => Debug.Log("Burning bush deal damage to " + entity);
             }
         }
         #endregion
