@@ -170,7 +170,7 @@ namespace BeastHunter
                     int gameObjectID = behaviorIO.transform.GetMainParent().GetInstanceID();
                     if (!damageDone.Contains(gameObjectID)) //to avoid causing double damage to the object in the case of multiple colliders with behaviorIO
                     {
-                        behaviorIO.TakeDamageEvent(new Damage() { PhysicalDamage = _fireDamage });    //TODO: FireDamage
+                        behaviorIO.TakeDamageEvent(new Damage() { FireDamage = _fireDamage });  //TODO: use AttackService
                         damageDone.Add(gameObjectID);
                     }
                 }
