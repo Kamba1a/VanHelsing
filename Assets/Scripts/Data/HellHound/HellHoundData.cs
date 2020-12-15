@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Extensions;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -87,7 +88,7 @@ namespace BeastHunter
             _sqrBattleCirclingDistance = Stats.BattleCirclingMaxDistance * Stats.BattleCirclingMaxDistance;
             _sqrChasingTurnDistanceNearTarget = Stats.ChasingTurnDistanceNearTarget * Stats.ChasingTurnDistanceNearTarget;
 
-            _damage = new Damage()  //TODO: from BaseStats?
+            _damage = new Damage()
             { 
                 PhysicalDamage = Stats.PhysicalDamage,
                 StunProbability = Stats.StunProbability,
@@ -136,7 +137,6 @@ namespace BeastHunter
 
             if (enemy != null)
             {
-                _onHitEnemyMsg?.Invoke(enemy);
                 DealDamage(enemy, _damage);
             }
             else
@@ -868,8 +868,10 @@ namespace BeastHunter
 
         public void DealDamage(InteractableObjectBehavior enemy, Damage damage)
         {
-            Damage countDamage = damage; //TODO: Services.SharedInstance.AttackService.CountDamage(damage, BaseStats.MainStats, enemy.???);
+            Damage countDamage = Services.SharedInstance.AttackService
+                .CountDamage(damage, BaseStats.MainStats, enemy.transform.GetMainParent().gameObject.GetInstanceID());
 
+            _onHitEnemyMsg?.Invoke(enemy);
             enemy.TakeDamageEvent(countDamage);
         }
 

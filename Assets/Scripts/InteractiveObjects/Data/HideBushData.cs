@@ -7,9 +7,9 @@ using System;
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HideBushData", menuName = "CreateData/SimpleInteractiveObjects/HideBushData", order = 0)]
-    public sealed class HideBushData : SimpleInteractiveObjectData
+    public sealed class HideBushData : SimpleInteractiveObjectData, IDealDamage
     {
-        #region Fields
+        #region SerializeFields
 
         [Header("HideBushData")]
         [Tooltip("On/off hide bush debug messages")]
@@ -35,8 +35,9 @@ namespace BeastHunter
         #endregion
 
 
-        #region Debug messages
+        #region Fields
 
+        private Damage _damage;
         private Action _startBurningMsg;
         private Action _burnedMsg;
         private Action _burningDamageTickMsg;
@@ -79,6 +80,11 @@ namespace BeastHunter
 
         private void OnEnable()
         {
+            _damage = new Damage()
+            {
+                FireDamage = _fireDamage
+            };
+
             DebugMessages(_debugMessages);
         }
 
@@ -175,8 +181,7 @@ namespace BeastHunter
                     int gameObjectID = behaviorIO.transform.GetMainParent().GetInstanceID();
                     if (!damageDone.Contains(gameObjectID)) //to avoid causing double damage to the object in the case of multiple colliders with behaviorIO
                     {
-                        _dealDamageMsg?.Invoke(behaviorIO.gameObject.ToString());
-                        behaviorIO.TakeDamageEvent(new Damage() { FireDamage = _fireDamage });  //TODO: use AttackService
+                        DealDamage(behaviorIO, _damage);
                         damageDone.Add(gameObjectID);
                     }
                 }
@@ -210,6 +215,21 @@ namespace BeastHunter
                 _dealDamageMsg = (entity) => Debug.Log("Burning bush deal damage to " + entity);
             }
         }
+
+        #endregion
+
+
+        #region IDealDamage
+
+        public void DealDamage(InteractableObjectBehavior enemy, Damage damage)
+        {
+            Damage countDamage = Services.SharedInstance.AttackService
+                .CountDamage(damage, enemy.transform.GetMainParent().gameObject.GetInstanceID());
+
+            _dealDamageMsg?.Invoke(enemy.gameObject.ToString());
+            enemy.TakeDamageEvent(countDamage);
+        }
+
         #endregion
     }
 }
