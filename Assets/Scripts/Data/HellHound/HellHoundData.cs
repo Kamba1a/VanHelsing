@@ -105,8 +105,13 @@ namespace BeastHunter
 
         public bool Filter(Collider collider)
         {
-            return !collider.isTrigger
-                && collider.GetComponentInChildren<InteractableObjectBehavior>()?.Type == InteractableObjectType.Player;
+            if (!collider.isTrigger)
+            {
+                InteractableObjectBehavior behaviorIO = collider.GetComponent<InteractableObjectBehavior>();
+                return behaviorIO != null
+                    && (behaviorIO.Type == InteractableObjectType.Player || collider.CompareTag(TagManager.PLAYER));
+            }
+            return false;
         }
 
         public void OnDetectionEnemy(Collider collider, HellHoundModel model)
@@ -127,11 +132,17 @@ namespace BeastHunter
 
         public void OnHitEnemy(Collider collider, HellHoundModel model)
         {
-            InteractableObjectBehavior enemy = collider.gameObject.GetComponent<InteractableObjectBehavior>();
-            _onHitEnemyMsg?.Invoke(enemy);
+            InteractableObjectBehavior enemy = collider.GetComponent<InteractableObjectBehavior>();
 
-            if (enemy != null) DealDamage(enemy, _damage);
-            else Debug.LogError(this + " not found enemy InteractableObjectBehavior");
+            if (enemy != null)
+            {
+                _onHitEnemyMsg?.Invoke(enemy);
+                DealDamage(enemy, _damage);
+            }
+            else
+            {
+                Debug.LogError(this + " not found enemy InteractableObjectBehavior");
+            }
 
             model.AttackCollider.enabled = false;
         }
@@ -857,7 +868,7 @@ namespace BeastHunter
 
         public void DealDamage(InteractableObjectBehavior enemy, Damage damage)
         {
-            Damage countDamage = null; //TODO: Services.SharedInstance.AttackService.CountDamage(damage, BaseStats.MainStats, enemy.???);
+            Damage countDamage = damage; //TODO: Services.SharedInstance.AttackService.CountDamage(damage, BaseStats.MainStats, enemy.???);
 
             enemy.TakeDamageEvent(countDamage);
         }
