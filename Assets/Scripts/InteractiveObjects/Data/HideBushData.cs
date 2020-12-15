@@ -14,14 +14,15 @@ namespace BeastHunter
         [Header("HideBushData")]
         [Tooltip("On/off hide bush debug messages")]
         [SerializeField] private bool _debugMessages;
+        [Tooltip("Damage for 1 tick when burning")]
+        [SerializeField] private Damage _damage;
         [SerializeField] private Vector3 _prefabPosition;
         [SerializeField] private Vector3 _prefabEulers;
         [Tooltip("Bush burning time. Default: 30.0")]
         [SerializeField] private float _burningTime;
         [Tooltip("Damage cooldown when burning. Default: 1.0")]
         [SerializeField] private float _dealDamageCooldown;
-        [Tooltip("Damage for 1 tick when burning")]
-        [SerializeField] private float _fireDamage;
+
         [Header("Prefab child gameobject names")]
         [Tooltip("Child gameobject containing main bush collider")]
         [SerializeField] private string _mainColliderName;
@@ -37,7 +38,6 @@ namespace BeastHunter
 
         #region Fields
 
-        private Damage _damage;
         private Action _startBurningMsg;
         private Action _burnedMsg;
         private Action _burningDamageTickMsg;
@@ -66,7 +66,6 @@ namespace BeastHunter
         {
             _burningTime = 20.0f;
             _dealDamageCooldown = 1.5f;
-            _fireDamage = 1.0f;
             _mainColliderName = "MainCollider";
             _normalViewName = "NormalView";
             _fireViewName = "FireView";
@@ -80,11 +79,6 @@ namespace BeastHunter
 
         private void OnEnable()
         {
-            _damage = new Damage()
-            {
-                FireDamage = _fireDamage
-            };
-
             DebugMessages(_debugMessages);
         }
 

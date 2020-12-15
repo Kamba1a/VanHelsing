@@ -67,7 +67,6 @@ namespace BeastHunter
         private float _sqrChasingBrakingMaxDistance;
         private float _sqrBattleCirclingDistance;
         private float _sqrChasingTurnDistanceNearTarget;
-        private Damage _damage;
 
         public HellHoundStats Stats;
 
@@ -87,12 +86,6 @@ namespace BeastHunter
             _sqrChasingBrakingMaxDistance = Stats.ChasingBrakingMaxDistance * Stats.ChasingBrakingMaxDistance;
             _sqrBattleCirclingDistance = Stats.BattleCirclingMaxDistance * Stats.BattleCirclingMaxDistance;
             _sqrChasingTurnDistanceNearTarget = Stats.ChasingTurnDistanceNearTarget * Stats.ChasingTurnDistanceNearTarget;
-
-            _damage = new Damage()
-            { 
-                PhysicalDamage = Stats.PhysicalDamage,
-                StunProbability = Stats.StunProbability,
-            };
 
             DebugMessages(Stats.DebugMessages);
     }
@@ -137,7 +130,7 @@ namespace BeastHunter
 
             if (enemy != null)
             {
-                DealDamage(enemy, _damage);
+                DealDamage(enemy, Stats.Damage);
             }
             else
             {

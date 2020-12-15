@@ -16,11 +16,14 @@ MonoBehaviour:
   _isActivated: 0
   _canvasObjectName: 
   _debugMessages: 1
+  _damage:
+    PhysicalDamage: 0
+    StunProbability: 0
+    FireDamage: 10
   _prefabPosition: {x: 484, y: 1, z: 485}
   _prefabEulers: {x: 0, y: 0, z: 0}
   _burningTime: 25
   _dealDamageCooldown: 1
-  _fireDamage: 10
   _mainColliderName: MainCollider
   _normalViewName: NormalView
   _fireViewName: FireView

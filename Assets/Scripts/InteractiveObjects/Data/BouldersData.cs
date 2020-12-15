@@ -12,6 +12,7 @@ namespace BeastHunter
 
         [Header("BouldersData")]
         [SerializeField] private bool _debugMessages;
+        [SerializeField] private Damage _damage;
         [SerializeField] private Vector3 _prefabPosition;
         [SerializeField] private Vector3 _prefabEulers;
         [SerializeField] private float _prefabOffsetY;
@@ -23,10 +24,6 @@ namespace BeastHunter
         [SerializeField] private float _timeToDestroyAfterHit;
         [Tooltip("The speed at which the boulder deals damage. Default: 2.0")]
         [SerializeField] private float _hitSpeed;
-
-        [Header("Damage")]
-        [SerializeField] private float _physicalDamage;
-        [SerializeField] private float _stunProbability;
 
         [Header("Rigidbody")]
         [Tooltip("Default: 40.0")]
@@ -53,7 +50,6 @@ namespace BeastHunter
 
         #region Fields
 
-        private Damage _damage;
         private float _sqrHitSpeed;
         private Action _activateMsg;
         private Action _deactivateMsg;
@@ -101,12 +97,6 @@ namespace BeastHunter
 
         private void OnEnable()
         {
-            _damage = new Damage()
-            {
-                PhysicalDamage = _physicalDamage,
-                StunProbability = _stunProbability
-            };
-
             _sqrHitSpeed = _hitSpeed * _hitSpeed;
             DebugMessages(_debugMessages);
         }
