@@ -39,7 +39,7 @@ namespace BeastHunter
         private Action _battleCirclingStateMsg;
         private Action _searchingStateMsg;
         private Action _escapingStateMsg;
-        private Action _takingDamageMsg;
+        private Action<float> _takingDamageMsg;
         private Action _jumpingMsg;
         private Action _attackJumpingMsg;
         private Action _attackDirectMsg;
@@ -815,7 +815,7 @@ namespace BeastHunter
                 _battleCirclingStateMsg = () => Debug.Log("The dog is battle circling");
                 _searchingStateMsg = () => Debug.Log("The dog is searching");
                 _escapingStateMsg = () => Debug.Log("The dog is escaping");
-                _takingDamageMsg = () => Debug.Log("The dog is taking damage");
+                _takingDamageMsg = (health) => Debug.Log("The dog is taking damage. CurrentHealth = " + health);
                 _jumpingMsg = () => Debug.Log("The dog is jumping");
                 _attackJumpingMsg = () => Debug.Log("The dog is jumping attack");
                 _attackDirectMsg = () => Debug.Log("The dog is attacking direct");
@@ -842,7 +842,7 @@ namespace BeastHunter
             HellHoundModel hellHoundModel = model as HellHoundModel;
             base.TakeDamage(model, damage);
 
-            _takingDamageMsg?.Invoke();
+            _takingDamageMsg?.Invoke(model.CurrentHealth);
             hellHoundModel.Animator.SetTrigger("TakeDamage");
 
             if (model.IsDead)

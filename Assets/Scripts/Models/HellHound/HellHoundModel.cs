@@ -66,7 +66,7 @@ namespace BeastHunter
             if (_detectionSphere == null) Debug.LogError(this + " not found SphereCollider in DetectionSphere gameobject");
             else _detectionSphere.radius = hellHoundData.Stats.DetectionRadius;
 
-            WeaponIO = HellHound.GetComponentInChildren<WeaponHitBoxBehavior>();
+            WeaponIO = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.HitBox);
             WeaponIO.OnFilterHandler = Filter;
             WeaponIO.OnTriggerEnterHandler = OnHitEnemy;
 
