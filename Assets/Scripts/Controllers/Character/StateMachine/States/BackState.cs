@@ -64,6 +64,7 @@ namespace BeastHunter
 
         private GameObject _weaponWheelUI;
         private GameObject _buttonsInfoUI;
+        private GameObject _playerHealthBar;
 
         private WeaponCircle[] _weaponWheelItems;
         private WeaponCircle _closestWeaponOnWheel;
@@ -127,6 +128,8 @@ namespace BeastHunter
 
             _cameraTransform = _services.CameraService.CharacterCamera.transform;
             CloseWeaponWheel();
+
+            _playerHealthBar = GameObject.Instantiate(Data.UIElementsData.PlayerHealthBarPrefab);
         }
 
         #endregion

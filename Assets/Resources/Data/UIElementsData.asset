@@ -18,3 +18,5 @@ MonoBehaviour:
     type: 3}
   _buttonsInformationPrefab: {fileID: 83319439658842619, guid: 93544fcf1843f6d4c80332178dc7e5f5,
     type: 3}
+  _playerHealthBarPrefab: {fileID: 8723691949495083524, guid: e1e2c00393243ef4f9fe0d5150a1d2bd,
+    type: 3}

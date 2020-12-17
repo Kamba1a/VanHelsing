@@ -11,6 +11,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _timeSkipPrefab;
         [SerializeField] private GameObject _weaponWheelPrefab;
         [SerializeField] private GameObject _buttonsInformationPrefab;
+        [SerializeField] private GameObject _playerHealthBarPrefab;
 
         #endregion
 
@@ -20,6 +21,7 @@ namespace BeastHunter
         public GameObject TimeSkipPrefab => _timeSkipPrefab;
         public GameObject WeaponWheelPrefab => _weaponWheelPrefab;
         public GameObject ButtonsInformationPrefab => _buttonsInformationPrefab;
+        public GameObject PlayerHealthBarPrefab => _playerHealthBarPrefab;
 
         #endregion
     }
