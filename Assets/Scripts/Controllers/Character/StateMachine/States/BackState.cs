@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using RootMotion.Dynamics;
 using UniRx;
-
+using System.Collections.Generic;
 
 namespace BeastHunter
 {
@@ -90,6 +90,8 @@ namespace BeastHunter
         private bool _isWeaponWheelOpen;
         private bool _isCurrentWeaponWithProjectile;
 
+        Dictionary<Image, float> _healthBarSections;
+
         #endregion
 
 
@@ -130,6 +132,15 @@ namespace BeastHunter
             CloseWeaponWheel();
 
             _playerHealthBar = GameObject.Instantiate(Data.UIElementsData.PlayerHealthBarPrefab);
+            _healthBarSections = new Dictionary<Image, float>();
+            float healthStepPercent = 100 / Data.UIElementsData.SectionAmount;
+            for (int i = 0; i < Data.UIElementsData.SectionAmount; i++)
+            {
+                Transform newSection = GameObject.Instantiate(Data.UIElementsData.PlayerHealthSectionPrefab).transform;
+                newSection.parent = _playerHealthBar.transform.Find("Panel");
+                newSection.localScale = new Vector3(1, 1, 1);
+                _healthBarSections.Add(newSection.GetChild(0).GetComponent<Image>(), healthStepPercent * (i+1));
+            }
         }
 
         #endregion
@@ -195,6 +206,27 @@ namespace BeastHunter
             MovementCheck();
             SpeedCheck();
             ControlWeaponWheel();
+
+            KeyValuePair<Image, float> activeSection;
+            float valuePreviousSection = 0;
+            float percentCurrentHealth = _currentHealth * 100 / _characterModel.CharacterCommonSettings.HealthPoints;
+            foreach (KeyValuePair<Image, float> kvp in _healthBarSections)
+            {
+                if (percentCurrentHealth > kvp.Value)
+                {
+                    valuePreviousSection = kvp.Value;
+                    continue;
+                }
+                else
+                {
+                    if (activeSection.Key == null) activeSection = kvp;
+                    else kvp.Key.fillAmount = 0;
+                }
+            }
+            if (activeSection.Key == null) Debug.LogError("activeSection is null");
+            float currentSectionSize = 25; //activeSection.Value - valuePreviousSection;
+            float healthPercentForSection = percentCurrentHealth - valuePreviousSection;
+            activeSection.Key.fillAmount = healthPercentForSection / currentSectionSize;
         }
 
         #endregion
