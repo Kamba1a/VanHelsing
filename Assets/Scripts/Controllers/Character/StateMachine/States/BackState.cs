@@ -5,6 +5,7 @@ using System.Linq;
 using RootMotion.Dynamics;
 using UniRx;
 using System.Collections.Generic;
+using static BeastHunter.UIElementsData;
 
 namespace BeastHunter
 {
@@ -90,7 +91,8 @@ namespace BeastHunter
         private bool _isWeaponWheelOpen;
         private bool _isCurrentWeaponWithProjectile;
 
-        Dictionary<Image, float> _healthBarSections;
+        Dictionary<Image, float> _healthBarSectionsDic;
+        PlayerHealthBarData.PlayerSectionHealthBar[] _healthBarSections;
 
         #endregion
 
@@ -131,15 +133,21 @@ namespace BeastHunter
             _cameraTransform = _services.CameraService.CharacterCamera.transform;
             CloseWeaponWheel();
 
-            _playerHealthBar = GameObject.Instantiate(Data.UIElementsData.PlayerHealthBarPrefab);
-            _healthBarSections = new Dictionary<Image, float>();
-            float healthStepPercent = 100 / Data.UIElementsData.SectionAmount;
-            for (int i = 0; i < Data.UIElementsData.SectionAmount; i++)
+
+
+            _playerHealthBar = GameObject.Instantiate(Data.PlayerHealthBarData.PlayerHealthBarPrefab);
+            _healthBarSections = Data.PlayerHealthBarData.HealthSections;
+            _healthBarSectionsDic = new Dictionary<Image, float>(); //to delete
+            float healthStepPercent = 100 / Data.PlayerHealthBarData.SectionAmount; //to delete
+            for (int i = 0; i < _healthBarSections.Length; i++)
             {
-                Transform newSection = GameObject.Instantiate(Data.UIElementsData.PlayerHealthSectionPrefab).transform;
+                Transform newSection = GameObject.Instantiate(Data.PlayerHealthBarData.PlayerHealthSectionPrefab).transform;
                 newSection.parent = _playerHealthBar.transform.Find("Panel");
-                newSection.localScale = new Vector3(1, 1, 1);
-                _healthBarSections.Add(newSection.GetChild(0).GetComponent<Image>(), healthStepPercent * (i+1));
+
+                newSection.localScale = new Vector3(_healthBarSections[i].Scale, 1, 1);
+
+                _healthBarSections[i].Image = newSection.GetChild(0).GetComponent<Image>();
+                _healthBarSectionsDic.Add(newSection.GetChild(0).GetComponent<Image>(), healthStepPercent * (i+1)); //to delete
             }
         }
 
@@ -210,7 +218,7 @@ namespace BeastHunter
             KeyValuePair<Image, float> activeSection;
             float valuePreviousSection = 0;
             float percentCurrentHealth = _currentHealth * 100 / _characterModel.CharacterCommonSettings.HealthPoints;
-            foreach (KeyValuePair<Image, float> kvp in _healthBarSections)
+            foreach (KeyValuePair<Image, float> kvp in _healthBarSectionsDic)
             {
                 if (percentCurrentHealth > kvp.Value)
                 {

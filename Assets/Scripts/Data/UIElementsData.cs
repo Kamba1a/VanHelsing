@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "UIElementsData")]
@@ -12,12 +11,6 @@ namespace BeastHunter
         [SerializeField] private GameObject _weaponWheelPrefab;
         [SerializeField] private GameObject _buttonsInformationPrefab;
 
-        [Header("Player Health Bar")]
-        [SerializeField] private GameObject _playerHealthBarPrefab;
-        [SerializeField] private GameObject _playerHealthSectionPrefab;
-        [Range(1,100)]
-        [SerializeField] private int _sectionAmount = 4;
-
         #endregion
 
 
@@ -26,9 +19,6 @@ namespace BeastHunter
         public GameObject TimeSkipPrefab => _timeSkipPrefab;
         public GameObject WeaponWheelPrefab => _weaponWheelPrefab;
         public GameObject ButtonsInformationPrefab => _buttonsInformationPrefab;
-        public GameObject PlayerHealthBarPrefab => _playerHealthBarPrefab;
-        public GameObject PlayerHealthSectionPrefab => _playerHealthSectionPrefab;
-        public int SectionAmount => _sectionAmount;
 
         #endregion
     }
