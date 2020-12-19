@@ -17,6 +17,7 @@ namespace BeastHunter
         public InputModel InputModel;
 		public List<QuestIndicatorModel> QuestIndicatorModelList = new List<QuestIndicatorModel>();
         public QuestJournalModel QuestJournalModel;
+        public PlayerHealthBarModel PlayerHealthBarModel;
 
         public Dictionary<int, EnemyModel> NpcModels;
         public Dictionary<int, TrapModel> TrapModels;

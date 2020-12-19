@@ -16,9 +16,8 @@ MonoBehaviour:
     type: 3}
   _playerHealthSectionPrefab: {fileID: 8817392077854490855, guid: c65563f5baab9b0469f89b677ff5f87d,
     type: 3}
-  _sectionAmount: 4
-  _healthSections:
-  - PercentHealthThreshold: 35
-  - PercentHealthThreshold: 50
-  - PercentHealthThreshold: 85
-  - PercentHealthThreshold: 100
+  _healthSectionsPercentThresholds:
+  - 35
+  - 50
+  - 85
+  - 100

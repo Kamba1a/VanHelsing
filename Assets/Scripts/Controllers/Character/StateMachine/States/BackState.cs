@@ -65,7 +65,7 @@ namespace BeastHunter
 
         private GameObject _weaponWheelUI;
         private GameObject _buttonsInfoUI;
-        private GameObject _playerHealthBar;
+        //private GameObject _playerHealthBar;
 
         private WeaponCircle[] _weaponWheelItems;
         private WeaponCircle _closestWeaponOnWheel;
@@ -91,8 +91,8 @@ namespace BeastHunter
         private bool _isWeaponWheelOpen;
         private bool _isCurrentWeaponWithProjectile;
 
-        Dictionary<Image, float> _healthBarSectionsDic;
-        PlayerHealthBarData.PlayerSectionHealthBar[] _healthBarSections;
+        //Dictionary<Image, float> _healthBarSectionsDic;
+        //PlayerHealthBarData.PlayerSectionHealthBar[] _healthBarSections;
 
         #endregion
 
@@ -133,22 +133,20 @@ namespace BeastHunter
             _cameraTransform = _services.CameraService.CharacterCamera.transform;
             CloseWeaponWheel();
 
+            //_playerHealthBar = GameObject.Instantiate(Data.PlayerHealthBarData.PlayerHealthBarPrefab);
+            //_healthBarSections = Data.PlayerHealthBarData.HealthSections;
+            //_healthBarSectionsDic = new Dictionary<Image, float>(); //to delete
+            //float healthStepPercent = 100 / Data.PlayerHealthBarData.SectionAmount; //to delete
+            //for (int i = 0; i < _healthBarSections.Length; i++)
+            //{
+            //    Transform newSection = GameObject.Instantiate(Data.PlayerHealthBarData.PlayerHealthSectionPrefab).transform;
+            //    newSection.parent = _playerHealthBar.transform.Find("Panel");
 
+            //    newSection.localScale = new Vector3(_healthBarSections[i].Scale, 1, 1);
 
-            _playerHealthBar = GameObject.Instantiate(Data.PlayerHealthBarData.PlayerHealthBarPrefab);
-            _healthBarSections = Data.PlayerHealthBarData.HealthSections;
-            _healthBarSectionsDic = new Dictionary<Image, float>(); //to delete
-            float healthStepPercent = 100 / Data.PlayerHealthBarData.SectionAmount; //to delete
-            for (int i = 0; i < _healthBarSections.Length; i++)
-            {
-                Transform newSection = GameObject.Instantiate(Data.PlayerHealthBarData.PlayerHealthSectionPrefab).transform;
-                newSection.parent = _playerHealthBar.transform.Find("Panel");
-
-                newSection.localScale = new Vector3(_healthBarSections[i].Scale, 1, 1);
-
-                _healthBarSections[i].Image = newSection.GetChild(0).GetComponent<Image>();
-                _healthBarSectionsDic.Add(newSection.GetChild(0).GetComponent<Image>(), healthStepPercent * (i+1)); //to delete
-            }
+            //    _healthBarSections[i].UpdatingImage = newSection.GetChild(0).GetComponent<Image>();
+            //    _healthBarSectionsDic.Add(newSection.GetChild(0).GetComponent<Image>(), healthStepPercent * (i+1)); //to delete
+            //}
         }
 
         #endregion
@@ -215,26 +213,26 @@ namespace BeastHunter
             SpeedCheck();
             ControlWeaponWheel();
 
-            KeyValuePair<Image, float> activeSection;
-            float valuePreviousSection = 0;
-            float percentCurrentHealth = _currentHealth * 100 / _characterModel.CharacterCommonSettings.HealthPoints;
-            foreach (KeyValuePair<Image, float> kvp in _healthBarSectionsDic)
-            {
-                if (percentCurrentHealth > kvp.Value)
-                {
-                    valuePreviousSection = kvp.Value;
-                    continue;
-                }
-                else
-                {
-                    if (activeSection.Key == null) activeSection = kvp;
-                    else kvp.Key.fillAmount = 0;
-                }
-            }
-            if (activeSection.Key == null) Debug.LogError("activeSection is null");
-            float currentSectionSize = 25; //activeSection.Value - valuePreviousSection;
-            float healthPercentForSection = percentCurrentHealth - valuePreviousSection;
-            activeSection.Key.fillAmount = healthPercentForSection / currentSectionSize;
+            //KeyValuePair<Image, float> activeSection;
+            //float valuePreviousSection = 0;
+            //float percentCurrentHealth = _currentHealth * 100 / _characterModel.CharacterCommonSettings.HealthPoints;
+            //foreach (KeyValuePair<Image, float> kvp in _healthBarSectionsDic)
+            //{
+            //    if (percentCurrentHealth > kvp.Value)
+            //    {
+            //        valuePreviousSection = kvp.Value;
+            //        continue;
+            //    }
+            //    else
+            //    {
+            //        if (activeSection.Key == null) activeSection = kvp;
+            //        else kvp.Key.fillAmount = 0;
+            //    }
+            //}
+            //if (activeSection.Key == null) Debug.LogError("activeSection is null");
+            //float currentSectionSize = 25; //activeSection.Value - valuePreviousSection;
+            //float healthPercentForSection = percentCurrentHealth - valuePreviousSection;
+            //activeSection.Key.fillAmount = healthPercentForSection / currentSectionSize;
         }
 
         #endregion
@@ -296,6 +294,8 @@ namespace BeastHunter
             {
                 _currentHealth -= damage.PhysicalDamage;
                 _currentHealth -= damage.FireDamage;
+
+                _context.PlayerHealthBarModel.Update(_currentHealth * 100 / _characterModel.CharacterCommonSettings.HealthPoints);
 
                 float stunProbability = UnityEngine.Random.Range(0f, 1f);
 

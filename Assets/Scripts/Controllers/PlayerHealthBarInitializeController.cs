@@ -1,17 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UnityEngine;
 
 namespace BeastHunter
 {
     class PlayerHealthBarInitializeController : IAwake
     {
+        #region Fields
+
+        private GameContext _context;
+
+        #endregion
+
+
         #region ClassLifeCycles
 
         public PlayerHealthBarInitializeController(GameContext context)
-        { }
+        {
+            _context = context;
+        }
 
         #endregion
 
@@ -20,7 +25,8 @@ namespace BeastHunter
 
         public void OnAwake()
         {
-            throw new NotImplementedException();
+            GameObject playerHealthBar = GameObject.Instantiate(Data.PlayerHealthBarData.PlayerHealthBarPrefab);
+            _context.PlayerHealthBarModel = new PlayerHealthBarModel(playerHealthBar, Data.PlayerHealthBarData);
         }
 
         #endregion

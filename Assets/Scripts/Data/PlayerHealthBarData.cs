@@ -1,50 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "PlayerHealthBarData")]
     public class PlayerHealthBarData: ScriptableObject
     {
+        #region SerializedFields
+
         [SerializeField] private GameObject _playerHealthBarPrefab;
         [SerializeField] private GameObject _playerHealthSectionPrefab;
+        [Tooltip("Specify the number of sections in the health bar and set the maximum health threshold in percent for each section")]
         [Range(1, 100)]
-        [SerializeField] private int _sectionAmount;
-        [SerializeField] private PlayerSectionHealthBar[] _healthSections;
+        [SerializeField] private float[] _healthSectionsPercentThresholds;
 
+        #endregion
+
+
+        #region Properties
 
         public GameObject PlayerHealthBarPrefab => _playerHealthBarPrefab;
         public GameObject PlayerHealthSectionPrefab => _playerHealthSectionPrefab;
-        public int SectionAmount => _sectionAmount;
-        public PlayerSectionHealthBar[] HealthSections => _healthSections;
+        public float[] HealthSectionsPercentThresholds { get; private set; }
+
+        #endregion
+
+
+        #region UnityMethods
 
         private void OnEnable()
         {
-            float previousHealthThreshold = 0;
-            for (int i = 0; i < _healthSections.Length; i++)
+            HealthSectionsPercentThresholds = (float[])_healthSectionsPercentThresholds.Clone();
+            Array.Sort(HealthSectionsPercentThresholds);
+            for (int i = 1; i < HealthSectionsPercentThresholds.Length; i++)
             {
-                _healthSections[i].PercentSectionSize = _healthSections[i].PercentHealthThreshold - previousHealthThreshold;
-                _healthSections[i].Scale = _healthSections.Length / (100 / _healthSections[i].PercentSectionSize);
-                previousHealthThreshold = _healthSections[i].PercentHealthThreshold;
+                if (HealthSectionsPercentThresholds[i] == HealthSectionsPercentThresholds[i - 1])
+                {
+                    Debug.LogError(this + ": health sections thresholds do not have to match!");
+                }
             }
         }
 
-        [Serializable]
-        public class PlayerSectionHealthBar
-        {
-            [NonSerialized]
-            public Image Image;
-            [Range(1, 100)]
-            public float PercentHealthThreshold;
-            [NonSerialized]
-            public float PercentSectionSize;
-            [NonSerialized]
-            public float Scale;
-        }
+        #endregion
     }
 }
