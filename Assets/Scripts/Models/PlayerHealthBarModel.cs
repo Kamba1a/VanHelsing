@@ -50,14 +50,19 @@ namespace BeastHunter
 
         #region Methods
 
-        public void HealthFillUpdate(float currentHealthPercent)
+        /// <summary>Updates health bar sections filling</summary>
+        /// <param name="currentHealthPercent">Current health percentage</param>
+        /// <returns>Current maximum health threshold as a percentage</returns>
+        public float HealthFillUpdate(float currentHealthPercent)
         {
+            float currentHealthThreshold = 0;
             for (int i = 0; i < _healthSections.Length; i++)
             {
-                if (currentHealthPercent < _healthSections[i].UpperHealthTreshold && currentHealthPercent > _healthSections[i].LowerHealthTreshold)
+                if (currentHealthPercent <= _healthSections[i].UpperHealthTreshold && currentHealthPercent > _healthSections[i].LowerHealthTreshold)
                 {
                     float healthPercentForSection = currentHealthPercent - _healthSections[i].LowerHealthTreshold;
                     _healthSections[i].UpdatingImage.fillAmount = healthPercentForSection / _healthSections[i].PercentSectionSize;
+                    currentHealthThreshold = _healthSections[i].UpperHealthTreshold;
                 }
                 else if (currentHealthPercent < _healthSections[i].LowerHealthTreshold)
                 {
@@ -68,6 +73,7 @@ namespace BeastHunter
                     _healthSections[i].UpdatingImage.fillAmount = 1;
                 }
             }
+            return currentHealthThreshold;
         }
 
         #region PrivateData

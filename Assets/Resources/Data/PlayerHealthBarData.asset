@@ -20,7 +20,7 @@ MonoBehaviour:
     type: 3}
   _distanceBetweenSections: 30
   _healthSectionsPercentThresholds:
-  - 35
+  - 30
   - 50
-  - 85
+  - 80
   - 100

@@ -90,6 +90,7 @@ namespace BeastHunter
         private bool _isCurrentWeaponWithProjectile;
 
         private PlayerHealthBarModel _playerHealthBarModel;
+        private float _currentMaxHealthPercent;
 
         #endregion
 
@@ -200,13 +201,7 @@ namespace BeastHunter
             ControlWeaponWheel();
 
             //FOR DEBUG ONLY!
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                float restoredHP = 20.0f;
-                _currentHealth = Mathf.Clamp(_currentHealth + restoredHP, 0, _characterModel.CharacterCommonSettings.HealthPoints);
-                Debug.Log("Player is healing. CurrentHP: " + _currentHealth);
-                OnHealthChange?.Invoke();
-            }
+            if (Input.GetKeyDown(KeyCode.H)) TestingHealthRestoreToCurrentMaxHealthThreshold();
         }
 
         #endregion
@@ -322,6 +317,7 @@ namespace BeastHunter
             _lastPosition = _characterModel.CharacterTransform.position;
             _currentPosition = _lastPosition;
             _currentHealth = _characterModel.CharacterCommonSettings.HealthPoints; // TO REFACTOR
+            _currentMaxHealthPercent = _currentHealth * 100 / _characterModel.CharacterCommonSettings.HealthPoints;
             _currentBattleIgnoreTime = 0; // TO REFACTOR
         }
 
@@ -1034,10 +1030,24 @@ namespace BeastHunter
         #endregion
 
 
+        #region HealthBar
+
         private void HealthBarUpdate()
         {
-            _playerHealthBarModel.HealthFillUpdate(_currentHealth * 100 / _characterModel.CharacterCommonSettings.HealthPoints);
+            _currentMaxHealthPercent = _playerHealthBarModel.HealthFillUpdate(_currentHealth * 100 / _characterModel.CharacterCommonSettings.HealthPoints);
         }
+
+        /// <summary>Example method of implementing health restoration to the current max health threshold</summary>
+        private void TestingHealthRestoreToCurrentMaxHealthThreshold()
+        {
+            float restoredHP = 5.0f;
+            _currentHealth = Mathf.Clamp(_currentHealth + restoredHP, 0, _currentMaxHealthPercent);
+            Debug.Log(this + ": Player is healing by " + restoredHP + " HP. Current health = " + _currentHealth + " HP"
+                + "\nNote: \"H\"-button assigned for testing healing up to the current max health threshold");
+            OnHealthChange?.Invoke();
+        }
+
+        #endregion
     }
 }
 

@@ -62,6 +62,13 @@ namespace BeastHunter
         {
             HealthSectionsPercentThresholds = (float[])_healthSectionsPercentThresholds.Clone();
             Array.Sort(HealthSectionsPercentThresholds);
+
+            if (HealthSectionsPercentThresholds[HealthSectionsPercentThresholds.Length - 1] != 100)
+            {
+                Debug.LogError(this + ": the threshold of the last section must be 100 percent!");
+                HealthSectionsPercentThresholds[HealthSectionsPercentThresholds.Length - 1] = 100;
+            }
+
             for (int i = 1; i < HealthSectionsPercentThresholds.Length; i++)
             {
                 if (HealthSectionsPercentThresholds[i] == HealthSectionsPercentThresholds[i - 1])
