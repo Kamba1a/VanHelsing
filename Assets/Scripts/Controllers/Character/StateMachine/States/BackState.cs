@@ -131,7 +131,7 @@ namespace BeastHunter
             _cameraTransform = _services.CameraService.CharacterCamera.transform;
             CloseWeaponWheel();
 
-            GameObject playerHealthBar = GameObject.Instantiate(Data.PlayerHealthBarData.PlayerHealthBarPrefab);
+            GameObject playerHealthBar = GameObject.Instantiate(Data.PlayerHealthBarData.HealthBarPrefab);
             _playerHealthBarModel = new PlayerHealthBarModel(playerHealthBar, Data.PlayerHealthBarData);
         }
 

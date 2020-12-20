@@ -8,8 +8,15 @@ namespace BeastHunter
     {
         #region SerializedFields
 
-        [SerializeField] private GameObject _playerHealthBarPrefab;
-        [SerializeField] private GameObject _playerHealthSectionPrefab;
+        [Header("Player health bar")]
+        [SerializeField] private GameObject _healthBarPrefab;
+        [SerializeField] private Vector2 _healthBarPosition;
+        [SerializeField] private Vector2 _healthBarSize;
+        [SerializeField] private string _healthSectionsPanelName;
+
+        [Header("Player health bar sections")]
+        [SerializeField] private GameObject _healthSectionPrefab;
+        [SerializeField] private float _distanceBetweenSections;
         [Tooltip("Specify the number of sections in the health bar and set the maximum health threshold in percent for each section")]
         [Range(1, 100)]
         [SerializeField] private float[] _healthSectionsPercentThresholds;
@@ -19,9 +26,32 @@ namespace BeastHunter
 
         #region Properties
 
-        public GameObject PlayerHealthBarPrefab => _playerHealthBarPrefab;
-        public GameObject PlayerHealthSectionPrefab => _playerHealthSectionPrefab;
+        public GameObject HealthBarPrefab => _healthBarPrefab;
+        public Vector2 HealthBarPosition => _healthBarPosition;
+        public Vector2 HealthBarSize => _healthBarSize;
+        public string HealthSectionsPanelName => _healthSectionsPanelName;
+        public GameObject HealthSectionPrefab => _healthSectionPrefab;
+        public float DistanceBetweenSections => _distanceBetweenSections;
         public float[] HealthSectionsPercentThresholds { get; private set; }
+
+        #endregion
+
+
+        #region ClassLifeCycle
+
+        public PlayerHealthBarData()
+        {
+            _healthBarPosition = new Vector2(30.0f, 30.0f);
+            _healthBarSize = new Vector2(700.0f, 30.0f);
+            _healthSectionsPanelName = "HealthSectionsPanel";
+
+            _distanceBetweenSections = 30.0f;
+            _healthSectionsPercentThresholds = new float[4];
+            _healthSectionsPercentThresholds[0] = 25.0f;
+            _healthSectionsPercentThresholds[1] = 50.0f;
+            _healthSectionsPercentThresholds[2] = 75.0f;
+            _healthSectionsPercentThresholds[3] = 100.0f;
+        }
 
         #endregion
 

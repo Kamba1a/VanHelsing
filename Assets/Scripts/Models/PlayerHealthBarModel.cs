@@ -16,14 +16,21 @@ namespace BeastHunter
 
         public PlayerHealthBarModel(GameObject prefab, PlayerHealthBarData data)
         {
+            Transform healthBar = prefab.transform.Find(data.HealthSectionsPanelName);
+            healthBar.GetComponent<HorizontalLayoutGroup>().spacing = data.DistanceBetweenSections;
+
+            RectTransform rectTransform = healthBar.GetComponent<RectTransform>();
+            rectTransform.sizeDelta = new Vector3(data.HealthBarSize.x, data.HealthBarSize.y);
+            rectTransform.position = new Vector3(data.HealthBarPosition.x, data.HealthBarPosition.y, 0);
+
             int sectionsAmount = data.HealthSectionsPercentThresholds.Length;
             _healthSections = new PlayerSectionHealthBar[sectionsAmount];
 
             float previousHealthThreshold = 0;
             for (int i = 0; i < sectionsAmount; i++)
             {
-                Transform newSection = GameObject.Instantiate(Data.PlayerHealthBarData.PlayerHealthSectionPrefab).transform;
-                newSection.parent = prefab.transform.Find("Panel");
+                Transform newSection = GameObject.Instantiate(Data.PlayerHealthBarData.HealthSectionPrefab).transform;
+                newSection.parent = healthBar;
 
                 _healthSections[i] = new PlayerSectionHealthBar();
                 _healthSections[i].UpdatingImage = newSection.GetChild(0).GetComponent<Image>();
