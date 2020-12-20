@@ -16,7 +16,7 @@ namespace BeastHunter
 
         public PlayerHealthBarModel(GameObject prefab, PlayerHealthBarData data)
         {
-            Transform healthBar = prefab.transform.Find(data.HealthSectionsPanelName);
+            Transform healthBar = prefab.transform.GetChild(0);
             healthBar.GetComponent<HorizontalLayoutGroup>().spacing = data.DistanceBetweenSections;
 
             RectTransform rectTransform = healthBar.GetComponent<RectTransform>();
