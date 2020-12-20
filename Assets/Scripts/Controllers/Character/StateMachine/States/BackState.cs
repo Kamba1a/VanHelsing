@@ -4,8 +4,6 @@ using System;
 using System.Linq;
 using RootMotion.Dynamics;
 using UniRx;
-using System.Collections.Generic;
-using static BeastHunter.UIElementsData;
 
 namespace BeastHunter
 {
@@ -55,6 +53,7 @@ namespace BeastHunter
         public Action OnTimeSkipOpenClose;
         public Action OnButtonsInfoMenuOpenClose;
         public Action OnUse;
+        public Action OnHealthChange;
 
         private readonly GameContext _context;
         private readonly CharacterStateMachine _stateMachine;
@@ -171,6 +170,7 @@ namespace BeastHunter
             OnWeaponChange += _services.TrapService.RemoveTrap;
             OnTrapPlace += _services.TrapService.PlaceTrap;
             OnUse += UseInteractiveObject;
+            OnHealthChange += HealthBarUpdate;
 
             _characterModel.CurrentWeaponData.Subscribe(OnWeaponChangeHandler);
 
@@ -198,6 +198,15 @@ namespace BeastHunter
             MovementCheck();
             SpeedCheck();
             ControlWeaponWheel();
+
+            //FOR DEBUG ONLY!
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                float restoredHP = 20.0f;
+                _currentHealth = Mathf.Clamp(_currentHealth + restoredHP, 0, _characterModel.CharacterCommonSettings.HealthPoints);
+                Debug.Log("Player is healing. CurrentHP: " + _currentHealth);
+                OnHealthChange?.Invoke();
+            }
         }
 
         #endregion
@@ -234,6 +243,7 @@ namespace BeastHunter
             OnWeaponChange -= _services.TrapService.RemoveTrap;
             OnTrapPlace -= _services.TrapService.PlaceTrap;
             OnUse -= UseInteractiveObject;
+            OnHealthChange -= HealthBarUpdate;
 
             _characterModel.CurrentWeaponData.Dispose();
 
@@ -260,7 +270,7 @@ namespace BeastHunter
                 _currentHealth -= damage.PhysicalDamage;
                 _currentHealth -= damage.FireDamage;
 
-                _playerHealthBarModel.Update(_currentHealth * 100 / _characterModel.CharacterCommonSettings.HealthPoints);
+                OnHealthChange?.Invoke();
 
                 float stunProbability = UnityEngine.Random.Range(0f, 1f);
 
@@ -1022,6 +1032,12 @@ namespace BeastHunter
         }
 
         #endregion
+
+
+        private void HealthBarUpdate()
+        {
+            _playerHealthBarModel.HealthFillUpdate(_currentHealth * 100 / _characterModel.CharacterCommonSettings.HealthPoints);
+        }
     }
 }
 

@@ -50,7 +50,7 @@ namespace BeastHunter
 
         #region Methods
 
-        public void Update(float currentHealthPercent)
+        public void HealthFillUpdate(float currentHealthPercent)
         {
             for (int i = 0; i < _healthSections.Length; i++)
             {
