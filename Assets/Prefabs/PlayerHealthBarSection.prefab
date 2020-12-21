@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9106499901432919133}
   - component: {fileID: 6764021404775556137}
   m_Layer: 5
-  m_Name: ChangingSection
+  m_Name: UpdatableImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 8817392077854490856}
   - component: {fileID: 8817392077854490857}
   m_Layer: 5
-  m_Name: HealthSection
+  m_Name: PlayerHealthBarSection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
