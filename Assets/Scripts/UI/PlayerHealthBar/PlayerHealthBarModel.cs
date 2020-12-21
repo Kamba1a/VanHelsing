@@ -7,7 +7,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        private PlayerSectionHealthBar[] _healthSections;
+        private HealthSection[] _healthSections;
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace BeastHunter
             rectTransform.position = new Vector3(data.HealthBarPosition.x, data.HealthBarPosition.y, 0);
 
             int sectionsAmount = data.HealthSectionsPercentThresholds.Length;
-            _healthSections = new PlayerSectionHealthBar[sectionsAmount];
+            _healthSections = new HealthSection[sectionsAmount];
 
             float previousHealthThreshold = 0;
             for (int i = 0; i < sectionsAmount; i++)
@@ -32,16 +32,15 @@ namespace BeastHunter
                 Transform newSection = GameObject.Instantiate(Data.PlayerHealthBarData.HealthSectionPrefab).transform;
                 newSection.parent = healthBar;
 
-                _healthSections[i] = new PlayerSectionHealthBar();
-                _healthSections[i].UpdatingImage = newSection.GetChild(0).GetComponent<Image>();
-                _healthSections[i].UpperHealthTreshold = data.HealthSectionsPercentThresholds[i];
-                _healthSections[i].PercentSectionSize = _healthSections[i].UpperHealthTreshold - previousHealthThreshold;
-                _healthSections[i].LowerHealthTreshold = _healthSections[i].UpperHealthTreshold - _healthSections[i].PercentSectionSize;
+                Image updatableImage = newSection.GetChild(0).GetComponent<Image>();
+                float upperTresholdInPercent = data.HealthSectionsPercentThresholds[i];
+                float sectionSizeInPercent = upperTresholdInPercent - previousHealthThreshold;
+                _healthSections[i] = new HealthSection(updatableImage, upperTresholdInPercent, sectionSizeInPercent);
 
-                float sectionScale = sectionsAmount / (100 / _healthSections[i].PercentSectionSize);
+                float sectionScale = sectionsAmount / (100 / _healthSections[i].SectionSizeInPercent);
                 newSection.localScale = new Vector3(sectionScale, 1, 1);
 
-                previousHealthThreshold = _healthSections[i].UpperHealthTreshold;
+                previousHealthThreshold = upperTresholdInPercent;
             }
         }
 
@@ -58,36 +57,54 @@ namespace BeastHunter
             float currentHealthThreshold = 0;
             for (int i = 0; i < _healthSections.Length; i++)
             {
-                if (currentHealthPercent <= _healthSections[i].UpperHealthTreshold && currentHealthPercent > _healthSections[i].LowerHealthTreshold)
+                if (currentHealthPercent <= _healthSections[i].UpperTresholdInPercent && currentHealthPercent > _healthSections[i].LowerHTresholdInPercent)
                 {
-                    float healthPercentForSection = currentHealthPercent - _healthSections[i].LowerHealthTreshold;
-                    _healthSections[i].UpdatingImage.fillAmount = healthPercentForSection / _healthSections[i].PercentSectionSize;
-                    currentHealthThreshold = _healthSections[i].UpperHealthTreshold;
+                    float healthPercentForSection = currentHealthPercent - _healthSections[i].LowerHTresholdInPercent;
+                    _healthSections[i].UpdatableImage.fillAmount = healthPercentForSection / _healthSections[i].SectionSizeInPercent;
+                    currentHealthThreshold = _healthSections[i].UpperTresholdInPercent;
                 }
-                else if (currentHealthPercent < _healthSections[i].LowerHealthTreshold)
+                else if (currentHealthPercent < _healthSections[i].LowerHTresholdInPercent)
                 {
-                    _healthSections[i].UpdatingImage.fillAmount = 0;
+                    _healthSections[i].UpdatableImage.fillAmount = 0;
                 }
-                else if (currentHealthPercent > _healthSections[i].UpperHealthTreshold)
+                else if (currentHealthPercent > _healthSections[i].UpperTresholdInPercent)
                 {
-                    _healthSections[i].UpdatingImage.fillAmount = 1;
+                    _healthSections[i].UpdatableImage.fillAmount = 1;
                 }
             }
             return currentHealthThreshold;
         }
 
+        #endregion
+
+
         #region PrivateData
 
-        private class PlayerSectionHealthBar
+        private class HealthSection
         {
-            public Image UpdatingImage;
-            public float UpperHealthTreshold;
-            public float LowerHealthTreshold;
-            public float PercentSectionSize;
+            #region Properties
+
+            public Image UpdatableImage { get; private set; }
+            public float UpperTresholdInPercent { get; private set; }
+            public float LowerHTresholdInPercent { get; private set; }
+            public float SectionSizeInPercent { get; private set; }
+
+            #endregion
+
+
+            #region ClassLifeCycle
+
+            public HealthSection(Image updatableImage, float upperTresholdInPercent, float sectionSizeInPercent)
+            {
+                UpdatableImage = updatableImage;
+                UpperTresholdInPercent = upperTresholdInPercent;
+                SectionSizeInPercent = sectionSizeInPercent;
+                LowerHTresholdInPercent = upperTresholdInPercent - sectionSizeInPercent;
+            }
+
+            #endregion
         }
 
         #endregion
     }
-
-    #endregion
 }
