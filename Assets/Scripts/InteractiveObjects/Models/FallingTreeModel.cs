@@ -21,8 +21,6 @@ namespace BeastHunter
         public Rigidbody Rigidbody { get; private set; }
         public InteractableObjectBehavior FallingTreeBehaviour { get; }
         public float Timer { get; set; }
-        /// <summary>contains boolean values of boulders that contains information about whether the boulder has been added to the destroy queue</summary>
-        public Dictionary<int, bool> DestroyInfoDictionary { get; private set; }
 
         #endregion
 
@@ -32,7 +30,6 @@ namespace BeastHunter
         public FallingTreeModel(GameObject prefab, FallingTreeData data) : base(prefab, data)
         {
             _data = data;
-            DestroyInfoDictionary = new Dictionary<int, bool>();
 
             Services.SharedInstance.PhysicsService.FindGround(Prefab.transform.position, out Vector3 groundPosition);
             Prefab.transform.position = new Vector3(groundPosition.x, groundPosition.y+_data.PrefabOffsetY, groundPosition.z);
@@ -41,15 +38,10 @@ namespace BeastHunter
             Rigidbody.mass = data.Mass;
             Rigidbody.drag = data.Drag;
             Rigidbody.angularDrag = data.AngularDrag;
-            Rigidbody.mass = data.Mass;
 
             _interactableObjects = prefab.GetComponentsInChildren<InteractableObjectBehavior>();
-            InteractiveTrigger = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject).GetComponent<CapsuleCollider>();
-
+            InteractiveTrigger = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject).GetComponent<SphereCollider>();
             FallingTreeBehaviour = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.HitBox);
-            PhysicMaterial physicMaterial = new PhysicMaterial() { bounciness = data.Bounciness, dynamicFriction = 0, staticFriction = 0 };
-            FallingTreeBehaviour.GetComponent<SphereCollider>().material = physicMaterial;
-            DestroyInfoDictionary.Add(FallingTreeBehaviour.GetInstanceID(), false);
         }
 
         #endregion
@@ -77,7 +69,6 @@ namespace BeastHunter
         public void Clean()
         {
             _data = null;
-            DestroyInfoDictionary = null;
 
             if (CanvasObject != null)
             {
