@@ -24,6 +24,6 @@ MonoBehaviour:
   _prefabEulers: {x: 0, y: 0, z: 0}
   _prefabOffsetY: 0
   _timeToDeactivate: 20
-  _mass: 100
+  _mass: 1000
   _drag: 0
   _angularDrag: 0.05

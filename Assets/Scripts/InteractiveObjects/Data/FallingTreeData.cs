@@ -20,7 +20,7 @@ namespace BeastHunter
         [SerializeField] private float _timeToDeactivate;
 
         [Header("Rigidbody")]
-        [Tooltip("Default: 100.0")]
+        [Tooltip("Default: 1000.0")]
         [SerializeField] private float _mass;
         [Tooltip("Default: 0.0")]
         [SerializeField] private float _drag;
@@ -68,7 +68,7 @@ namespace BeastHunter
 
         public FallingTreeData()
         {
-            _mass = 100.0f;
+            _mass = 1000.0f;
             _drag = 0.0f;
             _angularDrag = 0.05f;
             _timeToDeactivate = 20.0f;
