@@ -1,5 +1,6 @@
 ﻿using Extensions;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -18,6 +19,7 @@ namespace BeastHunter
         [SerializeField] private float _prefabOffsetY;
         [Tooltip("The time after which the tree physics is turned off. Default: 20.0")]
         [SerializeField] private float _timeToDeactivate;
+        [Tooltip("Minimum speed at which the tree deals damage. Default: 3.0")]
         [SerializeField] private float _hitSpeed;
 
         [Header("Rigidbody")]
@@ -33,7 +35,7 @@ namespace BeastHunter
 
         #region Сonstants
 
-        /// <summary>gives the tree time to accelerate before starting the stop check</summary>
+        /// <summary>gives the time to accelerate before starting the deactivate check</summary>
         private const float CHECK_VELOCITY_TIME = 2.0f;
 
         #endregion
@@ -71,7 +73,7 @@ namespace BeastHunter
             _angularDrag = 0.05f;
             _timeToDeactivate = 20.0f;
             _prefabOffsetY = 0.0f;
-            _hitSpeed = 1.0f;
+            _hitSpeed = 3.0f;
         }
 
         #endregion
@@ -142,6 +144,7 @@ namespace BeastHunter
 
             model.DealDamageBehaviour.OnFilterHandler += CollisionFilter;
             model.DealDamageBehaviour.OnTriggerEnterHandler += (p1, p2) => TriggerEnter(p2, model);
+            model.DealDamageBehaviour.OnTriggerExitHandler += (p1, p2) => TriggerExit(p2, model);
             model.DealDamageCollider.enabled = true;
         }
 
@@ -171,6 +174,24 @@ namespace BeastHunter
                 }
             }
 
+            List<int> changingValues = new List<int>();
+            foreach(KeyValuePair<int, InteractableObjectBehavior> kvp in model.StayCollisionEntities)
+            {
+                if (kvp.Value != null && model.Rigidbody.velocity.sqrMagnitude > _sqrHitSpeed)
+                {
+                    DealDamage(kvp.Value, _damage);
+                    changingValues.Add(kvp.Key);
+                }
+            }
+
+            for (int i = 0; i < changingValues.Count; i++)
+            {
+                if (model.StayCollisionEntities.ContainsKey(changingValues[i]))
+                {
+                    model.StayCollisionEntities[changingValues[i]] = null;
+                }
+            }
+
             model.DeactivateTimer -= Time.deltaTime;
         }
 
@@ -190,10 +211,34 @@ namespace BeastHunter
         {
             _collisionMsg?.Invoke(collider.gameObject.ToString());
 
-            if (model.Rigidbody.velocity.sqrMagnitude > _sqrHitSpeed)
+            int entityID = collider.transform.GetMainParent().GetInstanceID();
+            InteractableObjectBehavior entityIO = collider.GetComponent<InteractableObjectBehavior>();
+
+            if (!model.StayCollisionEntities.ContainsKey(entityID))
             {
-                InteractableObjectBehavior enemy = collider.GetComponent<InteractableObjectBehavior>();
-                DealDamage(enemy, _damage);
+                model.StayCollisionEntities.Add(entityID, entityIO);
+            }
+            else if (model.StayCollisionEntities[entityID] != null)
+            {
+                //note: overwrite to the last IOBehavior, that touched the trigger
+                model.StayCollisionEntities[entityID] = entityIO;
+            }
+
+            if (model.Rigidbody.velocity.sqrMagnitude > _sqrHitSpeed && model.StayCollisionEntities[entityID] != null)
+            {
+                DealDamage(entityIO, _damage);
+                //note: set value as null that means the object has already taken damage
+                model.StayCollisionEntities[entityID] = null;
+            }
+        }
+
+        public void TriggerExit(Collider collider, FallingTreeModel model)
+        {
+            int entityID = collider.transform.GetMainParent().GetInstanceID();
+            if (model.StayCollisionEntities.ContainsKey(entityID) && model.StayCollisionEntities[entityID] != null)
+            {
+                //note: the entity is removed from the dictionary only if it has not yet taken damage
+                model.StayCollisionEntities.Remove(collider.transform.GetMainParent().GetInstanceID());
             }
         }
 
@@ -202,9 +247,9 @@ namespace BeastHunter
 
         #region Methods
 
-        /// <summary>Subscribes to debug message delegates</summary>
-        /// <param name="switcher">on/off debug messages</param>
-        private void DebugMessages(bool switcher)
+            /// <summary>Subscribes to debug message delegates</summary>
+            /// <param name="switcher">on/off debug messages</param>
+            private void DebugMessages(bool switcher)
         {
             if (switcher)
             {

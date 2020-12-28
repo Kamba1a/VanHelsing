@@ -22,6 +22,8 @@ namespace BeastHunter
         public InteractableObjectBehavior DealDamageBehaviour { get; }
         public Collider DealDamageCollider { get; }
         public float DeactivateTimer { get; set; }
+        /// <summary>Entities inside deal damage collider (Key: entity ID, value: entity IO)</summary>
+        public Dictionary<int, InteractableObjectBehavior> StayCollisionEntities { get; }
 
         #endregion
 
@@ -44,6 +46,8 @@ namespace BeastHunter
             InteractiveTrigger = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject).GetComponent<Collider>();
             DealDamageBehaviour = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.HitBox);
             DealDamageCollider = DealDamageBehaviour.GetComponent<Collider>();
+
+            StayCollisionEntities = new Dictionary<int, InteractableObjectBehavior>();
         }
 
         #endregion
