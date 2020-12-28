@@ -18,6 +18,7 @@ namespace BeastHunter
         [SerializeField] private float _prefabOffsetY;
         [Tooltip("The time after which the tree physics is turned off. Default: 20.0")]
         [SerializeField] private float _timeToDeactivate;
+        [SerializeField] private float _hitSpeed;
 
         [Header("Rigidbody")]
         [Tooltip("Default: 1000.0")]
@@ -34,9 +35,6 @@ namespace BeastHunter
 
         /// <summary>gives the tree time to accelerate before starting the stop check</summary>
         private const float CHECK_VELOCITY_TIME = 2.0f;
-        /// <summary>protects the player from taking damage when falling tree activated</summary>
-        private const float CHECK_COLLISION_TIME = 1.0f;
-        private const float CHECK_RELATIVE_VELOCITY = 0.1f;
 
         #endregion
 
@@ -73,6 +71,7 @@ namespace BeastHunter
             _angularDrag = 0.05f;
             _timeToDeactivate = 20.0f;
             _prefabOffsetY = 0.0f;
+            _hitSpeed = 1.0f;
         }
 
         #endregion
@@ -82,7 +81,7 @@ namespace BeastHunter
 
         private void OnEnable()
         {
-            _sqrHitSpeed = CHECK_RELATIVE_VELOCITY * CHECK_RELATIVE_VELOCITY;
+            _sqrHitSpeed = _hitSpeed * _hitSpeed;
             DebugMessages(_debugMessages);
         }
 
@@ -90,20 +89,28 @@ namespace BeastHunter
 
         #region SimpleInteractiveObjectData
 
-        //shows the canvas when entering the boulder trigger
+        //shows the canvas when entering the trigger
         public override void MakeInteractive(BaseInteractiveObjectModel interactiveObjectModel, 
             ITrigger interactiveTrigger, Collider enteredCollider)
         {
-            (interactiveObjectModel as FallingTreeModel).CanvasObject.gameObject.SetActive(true);
-            interactiveObjectModel.IsInteractive = true;
+            FallingTreeModel model = interactiveObjectModel as FallingTreeModel;
+            if (!model.IsActivated)
+            {
+                model.CanvasObject.gameObject.SetActive(true);
+                model.IsInteractive = true;
+            }
         }
 
-        //hides the canvas when exiting the boulder trigger
+        //hides the canvas when exiting the trigger
         public override void MakeNotInteractive(BaseInteractiveObjectModel interactiveObjectModel, 
             ITrigger interactiveTrigger, Collider exitedCollider)
         {
-            interactiveObjectModel.IsInteractive = false;
-            (interactiveObjectModel as FallingTreeModel).CanvasObject.gameObject.SetActive(false);
+            FallingTreeModel model = interactiveObjectModel as FallingTreeModel;
+            if (!model.IsActivated)
+            {
+                model.IsInteractive = false;
+                model.CanvasObject.gameObject.SetActive(false);
+            }
         }
 
 
@@ -115,6 +122,7 @@ namespace BeastHunter
             if (!model.IsActivated)
             {
                 model.IsActivated = true;
+                model.IsInteractive = false;
                 Activate(model);
             }
         }
@@ -126,15 +134,15 @@ namespace BeastHunter
 
             FallingTreeModel model = interactiveObjectModel as FallingTreeModel;
 
-            model.IsInteractive = false;
-            Destroy(model.InteractiveTrigger);
-            Destroy(model.CanvasObject.gameObject);
+            model.InteractiveTrigger.enabled = false;
+            model.CanvasObject.gameObject.SetActive(false);
 
-            model.Timer = _timeToDeactivate;
+            model.DeactivateTimer = _timeToDeactivate;
             model.Rigidbody.isKinematic = false;
 
-            model.FallingTreeBehaviour.OnFilterHandler += CollisionFilter;
-            model.FallingTreeBehaviour.OnCollisionEnterHandler += (p1,p2) => CollisionEnter(p1, p2, model);
+            model.DealDamageBehaviour.OnFilterHandler += CollisionFilter;
+            model.DealDamageBehaviour.OnTriggerEnterHandler += (p1, p2) => TriggerEnter(p2, model);
+            model.DealDamageCollider.enabled = true;
         }
 
         //what happens when deactivated
@@ -154,41 +162,38 @@ namespace BeastHunter
         //update
         public void Act(FallingTreeModel model)
         {
-            if (_timeToDeactivate - model.Timer > CHECK_VELOCITY_TIME)
+            if (_timeToDeactivate - model.DeactivateTimer > CHECK_VELOCITY_TIME)
             {
-                if (model.Timer <= 0 || model.Rigidbody.velocity == Vector3.zero)
+                if (model.DeactivateTimer <= 0 || model.Rigidbody.velocity == Vector3.zero)
                 {
                     model.IsActivated = false;
                     Deactivate(model);
                 }
             }
-            model.Timer -= Time.deltaTime;
+
+            model.DeactivateTimer -= Time.deltaTime;
         }
 
         public bool CollisionFilter(Collider collider)
         {
-            InteractableObjectBehavior objectBehavior = collider.GetComponentInChildren<InteractableObjectBehavior>();
-            return objectBehavior != null && !collider.isTrigger
-                && (objectBehavior.Type == InteractableObjectType.Enemy
-                || objectBehavior.Type == InteractableObjectType.Player);
+            if (!collider.isTrigger)
+            {
+                InteractableObjectBehavior objectBehavior = collider.GetComponentInChildren<InteractableObjectBehavior>();
+                return objectBehavior != null
+                    && (objectBehavior.Type == InteractableObjectType.Enemy
+                    || objectBehavior.Type == InteractableObjectType.Player);
+            }
+            return false;
         }
 
-        public void CollisionEnter(InteractableObjectBehavior objectBehavior, Collision collision, FallingTreeModel model)
+        public void TriggerEnter(Collider collider, FallingTreeModel model)
         {
-            _collisionMsg?.Invoke(collision.collider.gameObject.ToString());
+            _collisionMsg?.Invoke(collider.gameObject.ToString());
 
-            if (collision.relativeVelocity.sqrMagnitude > _sqrHitSpeed && _timeToDeactivate - model.Timer > CHECK_COLLISION_TIME)
+            if (model.Rigidbody.velocity.sqrMagnitude > _sqrHitSpeed)
             {
-                InteractableObjectBehavior enemy = collision.collider.GetComponent<InteractableObjectBehavior>();
-
-                if (enemy != null)
-                {
-                    DealDamage(enemy, _damage);
-                }
-                else
-                {
-                    Debug.LogError(this + " not found InteractableObjectBehavior at " + collision.gameObject);
-                }
+                InteractableObjectBehavior enemy = collider.GetComponent<InteractableObjectBehavior>();
+                DealDamage(enemy, _damage);
             }
         }
 

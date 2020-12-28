@@ -19,8 +19,9 @@ namespace BeastHunter
 
         public Collider InteractiveTrigger { get; }
         public Rigidbody Rigidbody { get; private set; }
-        public InteractableObjectBehavior FallingTreeBehaviour { get; }
-        public float Timer { get; set; }
+        public InteractableObjectBehavior DealDamageBehaviour { get; }
+        public Collider DealDamageCollider { get; }
+        public float DeactivateTimer { get; set; }
 
         #endregion
 
@@ -40,8 +41,9 @@ namespace BeastHunter
             Rigidbody.angularDrag = data.AngularDrag;
 
             _interactableObjects = prefab.GetComponentsInChildren<InteractableObjectBehavior>();
-            InteractiveTrigger = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject).GetComponent<SphereCollider>();
-            FallingTreeBehaviour = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.HitBox);
+            InteractiveTrigger = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.ActiveObject).GetComponent<Collider>();
+            DealDamageBehaviour = _interactableObjects.GetInteractableObjectByType(InteractableObjectType.HitBox);
+            DealDamageCollider = DealDamageBehaviour.GetComponent<Collider>();
         }
 
         #endregion
@@ -72,7 +74,7 @@ namespace BeastHunter
 
             if (CanvasObject != null)
             {
-                Object.Destroy(CanvasObject);
+                Object.Destroy(CanvasObject.gameObject);
             }
 
             if (InteractiveTrigger != null)
