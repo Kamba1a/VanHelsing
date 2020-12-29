@@ -20,11 +20,14 @@ MonoBehaviour:
     PhysicalDamage: 500
     StunProbability: 0
     FireDamage: 0
-  _prefabPosition: {x: 510, y: 0, z: 460}
-  _prefabEulers: {x: 0, y: 0, z: 0}
+  _prefabPosition: {x: 486, y: 0, z: 486}
+  _prefabEulers: {x: 0, y: 70, z: 0}
+  _treeSize: {x: 1.5, y: 3, z: 1.5}
+  _treeTilt: -25
   _prefabOffsetY: 0
   _timeToDeactivate: 20
   _hitSpeed: 3
+  _viewChildName: View
   _mass: 1000
   _drag: 0
   _angularDrag: 0.05

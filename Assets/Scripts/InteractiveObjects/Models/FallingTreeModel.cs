@@ -37,6 +37,10 @@ namespace BeastHunter
             Services.SharedInstance.PhysicsService.FindGround(Prefab.transform.position, out Vector3 groundPosition);
             Prefab.transform.position = new Vector3(groundPosition.x, groundPosition.y+_data.PrefabOffsetY, groundPosition.z);
 
+            Transform viewTransform = Prefab.transform.Find(data.ViewChildName);
+            viewTransform.localScale = data.TreeSize;
+            viewTransform.localRotation = Quaternion.Euler(new Vector3(0, -90.0f, data.TreeTilt));
+
             Rigidbody = prefab.GetComponentInChildren<Rigidbody>();
             Rigidbody.mass = data.Mass;
             Rigidbody.drag = data.Drag;
@@ -76,14 +80,14 @@ namespace BeastHunter
         {
             _data = null;
 
-            if (CanvasObject != null)
-            {
-                Object.Destroy(CanvasObject.gameObject);
-            }
-
             if (InteractiveTrigger != null)
             {
                 Object.Destroy(InteractiveTrigger);
+            }
+
+            if (CanvasObject != null)
+            {
+                Object.Destroy(CanvasObject.gameObject);
             }
 
             for (int i = 0; i< _interactableObjects.Length; i++)

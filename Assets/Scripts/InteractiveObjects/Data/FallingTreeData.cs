@@ -16,11 +16,17 @@ namespace BeastHunter
         [SerializeField] private Damage _damage;
         [SerializeField] private Vector3 _prefabPosition;
         [SerializeField] private Vector3 _prefabEulers;
+        [Tooltip("Default: (x: 1.5, y: 3.0, z: 1.5)")]
+        [SerializeField] private Vector3 _treeSize;
+        [Tooltip("Angle of inclination of the tree. Default: -25.0")]
+        [SerializeField] private float _treeTilt;
         [SerializeField] private float _prefabOffsetY;
         [Tooltip("The time after which the tree physics is turned off. Default: 20.0")]
         [SerializeField] private float _timeToDeactivate;
         [Tooltip("Minimum speed at which the tree deals damage. Default: 3.0")]
         [SerializeField] private float _hitSpeed;
+        [Tooltip("The name of prefab child gameobject containing the tree view")]
+        [SerializeField] private string _viewChildName;
 
         [Header("Rigidbody")]
         [Tooltip("Default: 1000.0")]
@@ -51,6 +57,9 @@ namespace BeastHunter
         public float Drag => _drag;
         public float AngularDrag => _angularDrag;
         public float PrefabOffsetY => _prefabOffsetY;
+        public string ViewChildName => _viewChildName;
+        public Vector3 TreeSize => _treeSize;
+        public float TreeTilt => _treeTilt;
 
         #endregion
 
@@ -65,6 +74,8 @@ namespace BeastHunter
             _timeToDeactivate = 20.0f;
             _prefabOffsetY = 0.0f;
             _hitSpeed = 3.0f;
+            _treeSize = new Vector3(1.5f , 3.0f, 1.5f);
+            _treeTilt = -25.0f;
         }
 
         #endregion
