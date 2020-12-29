@@ -35,7 +35,7 @@ MonoBehaviour:
       StunProbability: 0
       FireDamage: 0
     _wanderingRadius: 50
-    _detectionRadius: 1
+    _detectionRadius: 30
     _roamingChance: 75
     _jumpingSpeedRate: 1.2
     _attacksTurnSpeed: 0.5
@@ -73,7 +73,7 @@ MonoBehaviour:
     _chasingBrakingMaxDistance: 6
     _chasingBrakingMinDistance: 2
     _maxRoamingSpeed: 0
-    _maxChasingSpeed: 10
+    _maxChasingSpeed: 0
     _angularSpeed: 450
     _acceleration: 20
     _stoppingDistance: 1
