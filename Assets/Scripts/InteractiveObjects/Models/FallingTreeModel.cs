@@ -22,8 +22,8 @@ namespace BeastHunter
         public InteractableObjectBehavior DealDamageBehaviour { get; }
         public Collider DealDamageCollider { get; }
         public float DeactivateTimer { get; set; }
-        /// <summary>Entities inside deal damage collider (Key: entity ID, value: entity IO)</summary>
-        public Dictionary<int, InteractableObjectBehavior> StayCollisionEntities { get; }
+        /// <summary>Entities inside deal damage collider (Key: entity ID, value: entity last IOBehavior)</summary>
+        public Dictionary<int, InteractableObjectBehavior> StayCollisionEntities { get; private set; }
 
         #endregion
 
@@ -99,6 +99,14 @@ namespace BeastHunter
             {
                 Object.Destroy(Rigidbody);
             }
+
+            if (DealDamageCollider != null)
+            {
+                Object.Destroy(DealDamageCollider.gameObject);
+            }
+
+            StayCollisionEntities.Clear();
+            StayCollisionEntities = null;
         }
 
         #endregion

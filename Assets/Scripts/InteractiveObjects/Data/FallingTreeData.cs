@@ -33,21 +33,12 @@ namespace BeastHunter
         #endregion
 
 
-        #region Сonstants
-
-        /// <summary>gives the time to accelerate before starting the deactivate check</summary>
-        private const float CHECK_VELOCITY_TIME = 2.0f;
-
-        #endregion
-
-
         #region Fields
 
         private float _sqrHitSpeed;
         private Action _activateMsg;
         private Action _deactivateMsg;
         private Action<string> _dealDamageMsg;
-        private Action<string> _collisionMsg;
 
         #endregion
 
@@ -91,7 +82,6 @@ namespace BeastHunter
 
         #region SimpleInteractiveObjectData
 
-        //shows the canvas when entering the trigger
         public override void MakeInteractive(BaseInteractiveObjectModel interactiveObjectModel, 
             ITrigger interactiveTrigger, Collider enteredCollider)
         {
@@ -103,7 +93,6 @@ namespace BeastHunter
             }
         }
 
-        //hides the canvas when exiting the trigger
         public override void MakeNotInteractive(BaseInteractiveObjectModel interactiveObjectModel, 
             ITrigger interactiveTrigger, Collider exitedCollider)
         {
@@ -115,8 +104,6 @@ namespace BeastHunter
             }
         }
 
-
-        //press key for activate
         public override void Interact(BaseInteractiveObjectModel interactiveObjectModel)
         {
             FallingTreeModel model = interactiveObjectModel as FallingTreeModel;
@@ -129,7 +116,6 @@ namespace BeastHunter
             }
         }
 
-        //what happens when activated
         protected override void Activate(SimpleInteractiveObjectModel interactiveObjectModel)
         {
             _activateMsg?.Invoke();
@@ -148,13 +134,10 @@ namespace BeastHunter
             model.DealDamageCollider.enabled = true;
         }
 
-        //what happens when deactivated
         protected override void Deactivate(SimpleInteractiveObjectModel interactiveObjectModel)
         {
             _deactivateMsg?.Invoke();
-
-            FallingTreeModel model = interactiveObjectModel as FallingTreeModel;
-            model.Clean();
+            (interactiveObjectModel as FallingTreeModel).Clean();
         }
 
         #endregion
@@ -162,37 +145,35 @@ namespace BeastHunter
 
         #region FallingTreeModel
 
-        //update
         public void Act(FallingTreeModel model)
         {
-            if (_timeToDeactivate - model.DeactivateTimer > CHECK_VELOCITY_TIME)
-            {
-                if (model.DeactivateTimer <= 0 || model.Rigidbody.velocity == Vector3.zero)
-                {
-                    model.IsActivated = false;
-                    Deactivate(model);
-                }
-            }
+            //note: list for adding the dictionary values to be changed after foreach-cycle
+            List<int> changingDictionaryValues = new List<int>();
 
-            List<int> changingValues = new List<int>();
             foreach(KeyValuePair<int, InteractableObjectBehavior> kvp in model.StayCollisionEntities)
             {
                 if (kvp.Value != null && model.Rigidbody.velocity.sqrMagnitude > _sqrHitSpeed)
                 {
                     DealDamage(kvp.Value, _damage);
-                    changingValues.Add(kvp.Key);
+                    changingDictionaryValues.Add(kvp.Key);
                 }
             }
 
-            for (int i = 0; i < changingValues.Count; i++)
+            for (int i = 0; i < changingDictionaryValues.Count; i++)
             {
-                if (model.StayCollisionEntities.ContainsKey(changingValues[i]))
+                if (model.StayCollisionEntities.ContainsKey(changingDictionaryValues[i]))
                 {
-                    model.StayCollisionEntities[changingValues[i]] = null;
+                    //note: set value as null means the entity has already taken damage
+                    model.StayCollisionEntities[changingDictionaryValues[i]] = null;
                 }
             }
 
             model.DeactivateTimer -= Time.deltaTime;
+            if (model.DeactivateTimer <= 0)
+            {
+                model.IsActivated = false;
+                Deactivate(model);
+            }
         }
 
         public bool CollisionFilter(Collider collider)
@@ -209,8 +190,6 @@ namespace BeastHunter
 
         public void TriggerEnter(Collider collider, FallingTreeModel model)
         {
-            _collisionMsg?.Invoke(collider.gameObject.ToString());
-
             int entityID = collider.transform.GetMainParent().GetInstanceID();
             InteractableObjectBehavior entityIO = collider.GetComponent<InteractableObjectBehavior>();
 
@@ -220,14 +199,14 @@ namespace BeastHunter
             }
             else if (model.StayCollisionEntities[entityID] != null)
             {
-                //note: overwrite to the last IOBehavior, that touched the trigger
+                //note: overwrite to the last entity IOBehavior, that touched the trigger
                 model.StayCollisionEntities[entityID] = entityIO;
             }
 
             if (model.Rigidbody.velocity.sqrMagnitude > _sqrHitSpeed && model.StayCollisionEntities[entityID] != null)
             {
                 DealDamage(entityIO, _damage);
-                //note: set value as null that means the object has already taken damage
+                //note: set value as null means the entity has already taken damage
                 model.StayCollisionEntities[entityID] = null;
             }
         }
@@ -237,7 +216,7 @@ namespace BeastHunter
             int entityID = collider.transform.GetMainParent().GetInstanceID();
             if (model.StayCollisionEntities.ContainsKey(entityID) && model.StayCollisionEntities[entityID] != null)
             {
-                //note: the entity is removed from the dictionary only if it has not yet taken damage
+                //note: the entity is removed from the dictionary only if it has not yet taken damage (IOBehavior!=null)
                 model.StayCollisionEntities.Remove(collider.transform.GetMainParent().GetInstanceID());
             }
         }
@@ -247,8 +226,6 @@ namespace BeastHunter
 
         #region Methods
 
-            /// <summary>Subscribes to debug message delegates</summary>
-            /// <param name="switcher">on/off debug messages</param>
             private void DebugMessages(bool switcher)
         {
             if (switcher)
@@ -256,7 +233,6 @@ namespace BeastHunter
                 _activateMsg = () => Debug.Log("FallingTree activated");
                 _deactivateMsg = () => Debug.Log("FallingTree deactivated");
                 _dealDamageMsg = (enemy) => Debug.Log("FallingTree deal damage to " + enemy);
-                _collisionMsg = (gameobject) => Debug.Log("FallingTree collision with " + gameobject);
             }
         }
 
