@@ -350,7 +350,7 @@ namespace BeastHunter
 
                             if (!isSetDestination)
                             {
-                                Debug.LogError(this + ": impossible to reach the destination point in case BehaviourState.Escaping");
+                                Debug.LogWarning(this + ": impossible to reach the destination point in case BehaviourState.Escaping");
                                 model.BehaviourState = SetState(BehaviourState.Chasing, model);
                             }
                         }
@@ -390,7 +390,7 @@ namespace BeastHunter
 
                         if (!isSetDestination)
                         {
-                            Debug.LogError(this + ": impossible to reach the destination point in case BehaviourState.Searching");
+                            Debug.LogWarning(this + ": impossible to reach the destination point in case BehaviourState.Searching");
                             model.BehaviourState = SetState(BehaviourState.Idling, model);
                         }
                     }
@@ -521,7 +521,7 @@ namespace BeastHunter
 
             if (!isSetDestination)
             {
-                Debug.LogError(this + ": impossible to reach the destination point in SetRoamingState method");
+                Debug.LogWarning(this + ": impossible to reach the destination point in SetRoamingState method");
                 return SetIdlingState(ref timer);
             }
 
@@ -624,7 +624,7 @@ namespace BeastHunter
 
             if (!isSetDestination)
             {
-                Debug.LogError(this + ": impossible to reach the destination point in SetEscapingState method");
+                Debug.LogWarning(this + ": impossible to reach the destination point in SetEscapingState method");
                 return SetChasingState(navMeshAgent);
             }
 
@@ -658,7 +658,7 @@ namespace BeastHunter
 
             if (!isSetDestination)
             {
-                Debug.LogError(this + ": impossible to reach the destination point in SetSearchingState method");
+                Debug.LogWarning(this + ": impossible to reach the destination point in SetSearchingState method");
                 return SetIdlingState(ref timer);
             }
 
