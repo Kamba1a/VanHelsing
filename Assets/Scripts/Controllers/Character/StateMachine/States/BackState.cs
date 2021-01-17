@@ -950,7 +950,7 @@ namespace BeastHunter
         private void TestingHealthRestoreToCurrentMaxHealthThreshold()
         {
             float restoredHP = 5.0f;
-            _characterModel.CurrentStats.BaseStats.CurrentHealthPoints += restoredHP;
+            _characterModel.CurrentStats.BaseStats.CurrentHealthPoints = Mathf.Clamp(_characterModel.CurrentStats.BaseStats.CurrentHealthPoints + restoredHP, 0, _playerHealthBarModel.CurrentHealthThreshold);
             Debug.Log(this + ": Player is healing by " + restoredHP + " HP. Current health = " + _characterModel.
                 CurrentStats.BaseStats.CurrentHealthPoints + " HP"
                     + "\nNote: \"H\"-button assigned for testing healing up to the current max health threshold");

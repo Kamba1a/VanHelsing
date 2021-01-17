@@ -12,6 +12,13 @@ namespace BeastHunter
         #endregion
 
 
+        #region Properties
+
+        public float CurrentHealthThreshold { get; private set; }
+
+        #endregion
+
+
         #region ClassLifeCycle
 
         public PlayerHealthBarModel(GameObject prefab, PlayerHealthBarData data)
@@ -52,18 +59,17 @@ namespace BeastHunter
         /// <summary>Updates health bar sections filling</summary>
         /// <param name="currentHealthPercent">Current health percentage</param>
         /// <returns>Current maximum health threshold as a percentage</returns>
-        public float HealthFillUpdate(float currentHealthPercent)
+        public void HealthFillUpdate(float currentHealthPercent)
         {
-            float currentHealthThreshold = 0;
             for (int i = 0; i < _healthSections.Length; i++)
             {
-                if (currentHealthPercent <= _healthSections[i].UpperTresholdInPercent && currentHealthPercent > _healthSections[i].LowerHTresholdInPercent)
+                if (currentHealthPercent <= _healthSections[i].UpperTresholdInPercent && currentHealthPercent > _healthSections[i].LowerTresholdInPercent)
                 {
-                    float healthPercentForSection = currentHealthPercent - _healthSections[i].LowerHTresholdInPercent;
+                    float healthPercentForSection = currentHealthPercent - _healthSections[i].LowerTresholdInPercent;
                     _healthSections[i].UpdatableImage.fillAmount = healthPercentForSection / _healthSections[i].SectionSizeInPercent;
-                    currentHealthThreshold = _healthSections[i].UpperTresholdInPercent;
+                    CurrentHealthThreshold = _healthSections[i].UpperTresholdInPercent;
                 }
-                else if (currentHealthPercent < _healthSections[i].LowerHTresholdInPercent)
+                else if (currentHealthPercent <= _healthSections[i].LowerTresholdInPercent)
                 {
                     _healthSections[i].UpdatableImage.fillAmount = 0;
                 }
@@ -72,7 +78,6 @@ namespace BeastHunter
                     _healthSections[i].UpdatableImage.fillAmount = 1;
                 }
             }
-            return currentHealthThreshold;
         }
 
         #endregion
@@ -86,7 +91,7 @@ namespace BeastHunter
 
             public Image UpdatableImage { get; private set; }
             public float UpperTresholdInPercent { get; private set; }
-            public float LowerHTresholdInPercent { get; private set; }
+            public float LowerTresholdInPercent { get; private set; }
             public float SectionSizeInPercent { get; private set; }
 
             #endregion
@@ -99,7 +104,7 @@ namespace BeastHunter
                 UpdatableImage = updatableImage;
                 UpperTresholdInPercent = upperTresholdInPercent;
                 SectionSizeInPercent = sectionSizeInPercent;
-                LowerHTresholdInPercent = upperTresholdInPercent - sectionSizeInPercent;
+                LowerTresholdInPercent = upperTresholdInPercent - sectionSizeInPercent;
             }
 
             #endregion
