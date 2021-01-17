@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-
 namespace BeastHunter
 {
     public class PlayerHealthBarModel
@@ -27,21 +26,21 @@ namespace BeastHunter
             int sectionsAmount = data.HealthSectionsPercentThresholds.Length;
             _healthSections = new HealthSection[sectionsAmount];
 
-            float previousHealthThreshold = 0f;
+            float previousHealthThreshold = 0;
             for (int i = 0; i < sectionsAmount; i++)
             {
-                Transform newSection = GameObject.Instantiate(Data.PlayerHealthBarData.HealthSectionPrefab, healthBar).
-                    transform;
+                Transform newSection = GameObject.Instantiate(Data.PlayerHealthBarData.HealthSectionPrefab).transform;
+                newSection.parent = healthBar;
 
                 Image updatableImage = newSection.GetChild(0).GetComponent<Image>();
-                float upperTresholdPart = data.HealthSectionsPercentThresholds[i] / 100f;
-                float sectionSize = upperTresholdPart - previousHealthThreshold / 100f;
-                _healthSections[i] = new HealthSection(updatableImage, upperTresholdPart, sectionSize);
+                float upperTresholdInPercent = data.HealthSectionsPercentThresholds[i];
+                float sectionSizeInPercent = upperTresholdInPercent - previousHealthThreshold;
+                _healthSections[i] = new HealthSection(updatableImage, upperTresholdInPercent, sectionSizeInPercent);
 
-                float sectionScale = sectionsAmount / (100 / _healthSections[i].SectionSize);
+                float sectionScale = sectionsAmount / (100 / _healthSections[i].SectionSizeInPercent);
                 newSection.localScale = new Vector3(sectionScale, 1, 1);
 
-                previousHealthThreshold = upperTresholdPart;
+                previousHealthThreshold = upperTresholdInPercent;
             }
         }
 
@@ -51,30 +50,59 @@ namespace BeastHunter
         #region Methods
 
         /// <summary>Updates health bar sections filling</summary>
-        /// <param name="currentHealthPart">Current health percentage</param>
+        /// <param name="currentHealthPercent">Current health percentage</param>
         /// <returns>Current maximum health threshold as a percentage</returns>
-        public float HealthFillUpdate(float currentHealthPart)
+        public float HealthFillUpdate(float currentHealthPercent)
         {
             float currentHealthThreshold = 0;
-
             for (int i = 0; i < _healthSections.Length; i++)
             {
-                if (currentHealthPart <= _healthSections[i].UpperTresholdPart && currentHealthPart > _healthSections[i].LowerHTresholdPart)
+                if (currentHealthPercent <= _healthSections[i].UpperTresholdInPercent && currentHealthPercent > _healthSections[i].LowerHTresholdInPercent)
                 {
-                    float healthPercentForSection = currentHealthPart - _healthSections[i].LowerHTresholdPart;
-                    _healthSections[i].UpdatableImage.fillAmount = healthPercentForSection / _healthSections[i].SectionSize;
-                    currentHealthThreshold = _healthSections[i].UpperTresholdPart;
+                    float healthPercentForSection = currentHealthPercent - _healthSections[i].LowerHTresholdInPercent;
+                    _healthSections[i].UpdatableImage.fillAmount = healthPercentForSection / _healthSections[i].SectionSizeInPercent;
+                    currentHealthThreshold = _healthSections[i].UpperTresholdInPercent;
                 }
-                else if (currentHealthPart < _healthSections[i].LowerHTresholdPart)
+                else if (currentHealthPercent < _healthSections[i].LowerHTresholdInPercent)
                 {
                     _healthSections[i].UpdatableImage.fillAmount = 0;
                 }
-                else if (currentHealthPart > _healthSections[i].UpperTresholdPart)
+                else if (currentHealthPercent > _healthSections[i].UpperTresholdInPercent)
                 {
                     _healthSections[i].UpdatableImage.fillAmount = 1;
                 }
             }
             return currentHealthThreshold;
+        }
+
+        #endregion
+
+
+        #region PrivateData
+
+        private class HealthSection
+        {
+            #region Properties
+
+            public Image UpdatableImage { get; private set; }
+            public float UpperTresholdInPercent { get; private set; }
+            public float LowerHTresholdInPercent { get; private set; }
+            public float SectionSizeInPercent { get; private set; }
+
+            #endregion
+
+
+            #region ClassLifeCycle
+
+            public HealthSection(Image updatableImage, float upperTresholdInPercent, float sectionSizeInPercent)
+            {
+                UpdatableImage = updatableImage;
+                UpperTresholdInPercent = upperTresholdInPercent;
+                SectionSizeInPercent = sectionSizeInPercent;
+                LowerHTresholdInPercent = upperTresholdInPercent - sectionSizeInPercent;
+            }
+
+            #endregion
         }
 
         #endregion
