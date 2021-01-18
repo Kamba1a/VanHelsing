@@ -943,7 +943,8 @@ namespace BeastHunter
 
         private void HealthBarUpdate()
         {
-            _playerHealthBarModel.HealthFillUpdate(_characterModel.CurrentStats.BaseStats.CurrentHealthPart * 100);
+            //_playerHealthBarModel.HealthFillUpdate(_characterModel.CurrentStats.BaseStats.CurrentHealthPart * 100); //like that don't work correct for an unknown reason
+            _playerHealthBarModel.HealthFillUpdate(_characterModel.CurrentStats.BaseStats.CurrentHealthPoints * 100 / _characterModel.CurrentStats.BaseStats.MaximalHealthPoints);
         }
 
         /// <summary>Example method of implementing health restoration to the current max health threshold</summary>
