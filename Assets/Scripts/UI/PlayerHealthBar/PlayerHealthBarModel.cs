@@ -49,6 +49,8 @@ namespace BeastHunter
 
                 previousHealthThreshold = upperTresholdInPercent;
             }
+
+            CurrentHealthThreshold = 100;
         }
 
         #endregion
@@ -63,17 +65,17 @@ namespace BeastHunter
         {
             for (int i = 0; i < _healthSections.Length; i++)
             {
-                if (currentHealthPercent <= _healthSections[i].UpperTresholdInPercent && currentHealthPercent > _healthSections[i].LowerTresholdInPercent)
+                if (currentHealthPercent <= _healthSections[i].UpperThresholdInPercent && currentHealthPercent > _healthSections[i].LowerThresholdInPercent)
                 {
-                    float healthPercentForSection = currentHealthPercent - _healthSections[i].LowerTresholdInPercent;
+                    float healthPercentForSection = currentHealthPercent - _healthSections[i].LowerThresholdInPercent;
                     _healthSections[i].UpdatableImage.fillAmount = healthPercentForSection / _healthSections[i].SectionSizeInPercent;
-                    CurrentHealthThreshold = _healthSections[i].UpperTresholdInPercent;
+                    CurrentHealthThreshold = _healthSections[i].UpperThresholdInPercent;
                 }
-                else if (currentHealthPercent <= _healthSections[i].LowerTresholdInPercent)
+                else if (currentHealthPercent <= _healthSections[i].LowerThresholdInPercent)
                 {
                     _healthSections[i].UpdatableImage.fillAmount = 0;
                 }
-                else if (currentHealthPercent > _healthSections[i].UpperTresholdInPercent)
+                else if (currentHealthPercent > _healthSections[i].UpperThresholdInPercent)
                 {
                     _healthSections[i].UpdatableImage.fillAmount = 1;
                 }
@@ -90,8 +92,8 @@ namespace BeastHunter
             #region Properties
 
             public Image UpdatableImage { get; private set; }
-            public float UpperTresholdInPercent { get; private set; }
-            public float LowerTresholdInPercent { get; private set; }
+            public float UpperThresholdInPercent { get; private set; }
+            public float LowerThresholdInPercent { get; private set; }
             public float SectionSizeInPercent { get; private set; }
 
             #endregion
@@ -102,9 +104,9 @@ namespace BeastHunter
             public HealthSection(Image updatableImage, float upperTresholdInPercent, float sectionSizeInPercent)
             {
                 UpdatableImage = updatableImage;
-                UpperTresholdInPercent = upperTresholdInPercent;
+                UpperThresholdInPercent = upperTresholdInPercent;
                 SectionSizeInPercent = sectionSizeInPercent;
-                LowerTresholdInPercent = upperTresholdInPercent - sectionSizeInPercent;
+                LowerThresholdInPercent = upperTresholdInPercent - sectionSizeInPercent;
             }
 
             #endregion
