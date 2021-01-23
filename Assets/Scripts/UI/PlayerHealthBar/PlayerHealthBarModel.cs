@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace BeastHunter
@@ -63,19 +64,20 @@ namespace BeastHunter
         /// <returns>Current maximum health threshold as a percentage</returns>
         public void HealthFillUpdate(float currentHealthPercent)
         {
+            float currentHealthPercentRound = (float)Math.Round(currentHealthPercent, 2);
             for (int i = 0; i < _healthSections.Length; i++)
             {
-                if (currentHealthPercent <= _healthSections[i].UpperThresholdInPercent && currentHealthPercent > _healthSections[i].LowerThresholdInPercent)
+                if (currentHealthPercentRound <= _healthSections[i].UpperThresholdInPercent && currentHealthPercentRound > _healthSections[i].LowerThresholdInPercent)
                 {
-                    float healthPercentForSection = currentHealthPercent - _healthSections[i].LowerThresholdInPercent;
+                    float healthPercentForSection = currentHealthPercentRound - _healthSections[i].LowerThresholdInPercent;
                     _healthSections[i].UpdatableImage.fillAmount = healthPercentForSection / _healthSections[i].SectionSizeInPercent;
                     CurrentHealthThreshold = _healthSections[i].UpperThresholdInPercent;
                 }
-                else if (currentHealthPercent <= _healthSections[i].LowerThresholdInPercent)
+                else if (currentHealthPercentRound <= _healthSections[i].LowerThresholdInPercent)
                 {
                     _healthSections[i].UpdatableImage.fillAmount = 0;
                 }
-                else if (currentHealthPercent > _healthSections[i].UpperThresholdInPercent)
+                else if (currentHealthPercentRound > _healthSections[i].UpperThresholdInPercent)
                 {
                     _healthSections[i].UpdatableImage.fillAmount = 1;
                 }
