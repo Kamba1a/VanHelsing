@@ -54,7 +54,6 @@ Registered in 0.006049 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
 Refreshing native plugins compatible for Editor in 1.52 ms, found 3 plugins.
-Preloading 1 native plugins for Editor in 0.04 ms.
 Invoked RoslynAnalysisRunner static constructor.
 RoslynAnalysisRunner will not be running.
 RoslynAnalysisRunner has terminated.
