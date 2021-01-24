@@ -9,8 +9,7 @@ namespace BeastHunter
 
         [SerializeField] private bool _mapOnStartEnabled;
         [SerializeField] private string _mainPanelName;
-        [SerializeField] private string _hubButtonName;
-        [SerializeField] private string _mapButtonName;
+        [SerializeField] private string _infoPanelName;
 
         #endregion
 
@@ -25,21 +24,19 @@ namespace BeastHunter
 
         #region Methods
 
-        public void HubButton_OnClick(GameObject button, HubMapModel model)
-        {
-            if (button.name == _hubButtonName)
-            {
-                model.MainPanel.SetActive(false);
-            }
-            else if (button.name == _mapButtonName)
-            {
-                model.MainPanel.SetActive(true);
-            }
-        }
-
         public void Updating()
         {
             
+        }
+
+        public void HubButton_OnClick(GameObject mainPanel)
+        {
+            mainPanel.SetActive(false);
+        }
+
+        public void MapButton_OnClick(GameObject mainPanel)
+        {
+            mainPanel.SetActive(true);
         }
 
         #endregion

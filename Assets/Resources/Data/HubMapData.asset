@@ -14,5 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mapOnStartEnabled: 0
   _mainPanelName: Main_panel
-  _hubButtonName: Hub_btn
-  _mapButtonName: Map_btn
+  _infoPanelName: Info_panel
