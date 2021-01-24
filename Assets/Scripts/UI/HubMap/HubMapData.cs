@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace BeastHunter
 {
@@ -18,6 +19,7 @@ namespace BeastHunter
 
         public bool MapOnStartEnabled => _mapOnStartEnabled;
         public string MainPanelName => _mainPanelName;
+        public string InfoPanelName => _infoPanelName;
 
         #endregion
 
@@ -37,6 +39,11 @@ namespace BeastHunter
         public void MapButton_OnClick(GameObject mainPanel)
         {
             mainPanel.SetActive(true);
+        }
+
+        public void CityButton_OnClick(GameObject infoPanel)
+        {
+            infoPanel.SetActive(true);
         }
 
         #endregion
