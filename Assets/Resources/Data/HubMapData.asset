@@ -12,3 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdc4f56eb8b4c2742b1415abd0385973, type: 3}
   m_Name: HubMapData
   m_EditorClassIdentifier: 
+  _mapOnStartEnabled: 0
+  _mainPanelName: Main_panel
+  _hubButtonName: Hub_btn
+  _mapButtonName: Map_btn

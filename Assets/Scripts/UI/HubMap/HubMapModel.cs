@@ -11,8 +11,14 @@ namespace BeastHunter
 
         private GameObject _objectOnScene;
         private HubMapData _hubMapData;
-        HubMapBehaviour _hubMapBehaviour;
-        bool _mainPanelSwitcher;
+        private HubMapBehaviour _hubMapBehaviour;
+
+        #endregion
+
+
+        #region Properties
+
+        public GameObject MainPanel { get; set; }
 
         #endregion
 
@@ -25,9 +31,10 @@ namespace BeastHunter
             _hubMapData = hubMapData;
 
             _hubMapBehaviour = _objectOnScene.GetComponent<HubMapBehaviour>();
-            _hubMapBehaviour.OnHubButton_OnClickHandler = OnHubButton_OnClick;
+            _hubMapBehaviour.HubButton_OnClickHandler = HubButton_OnClick;
 
-            _mainPanelSwitcher = _hubMapData.MapOnStartEnabled;
+            MainPanel = objectOnScene.transform.FindDeep(_hubMapData.MainPanelName).gameObject;
+            MainPanel.SetActive(_hubMapData.MapOnStartEnabled);
         }
 
         #endregion
@@ -35,20 +42,7 @@ namespace BeastHunter
 
         #region Methods
 
-        private void OnHubButton_OnClick(GameObject buttonText, GameObject mainPanel)
-        {
-            if (_mainPanelSwitcher)
-            {
-                mainPanel.SetActive(false);
-                buttonText.GetComponent<Text>().text = "Карта";
-            }
-            else
-            {
-                mainPanel.SetActive(true);
-                buttonText.GetComponent<Text>().text = "Хаб";
-            }
-            _mainPanelSwitcher = !_mainPanelSwitcher;
-        }
+        private void HubButton_OnClick(GameObject button) => _hubMapData.HubButton_OnClick(button, this);
 
         #endregion
     }
