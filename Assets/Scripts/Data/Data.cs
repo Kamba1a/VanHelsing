@@ -46,6 +46,7 @@ namespace BeastHunter
         [SerializeField] private string _playerHealthBarDataPath;
         [SerializeField] private string _fallingTreeDataPath;
         [SerializeField] private string _enemyHealthBarDataPath;
+        [SerializeField] private string _hubMapDataPath;
 
         private static Data _instance;
         private static LocationData _locationData;
@@ -83,6 +84,7 @@ namespace BeastHunter
         private static PlayerHealthBarData _playerHealthBarData;
         private static FallingTreeData _fallingTreeData;
         private static EnemyHealthBarData _enemyHealthBarData;
+        private static HubMapData _hubMapData;
 
         #endregion
 
@@ -502,6 +504,18 @@ namespace BeastHunter
                     _enemyHealthBarData = Resources.Load<EnemyHealthBarData>("Data/" + Instance._enemyHealthBarDataPath);
                 }
                 return _enemyHealthBarData;
+            }
+        }
+
+        public static HubMapData HubMapData
+        {
+            get
+            {
+                if (_hubMapData == null)
+                {
+                    _hubMapData = Resources.Load<HubMapData>("Data/" + Instance._hubMapDataPath);
+                }
+                return _hubMapData;
             }
         }
 

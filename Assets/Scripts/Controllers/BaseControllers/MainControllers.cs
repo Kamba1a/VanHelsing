@@ -35,6 +35,7 @@ namespace BeastHunter
             //Add(new HellHoundInitializeController(context));
             //Add(new BouldersInitializeController(context));
             //Add(new FallingTreeInitializeController(context));
+            Add(new HubMapInitializeController(context));
         }
 
         private void AddControllers(GameContext context)
@@ -54,6 +55,7 @@ namespace BeastHunter
             //Add(new DialogueTriggerController(context));
             //Add(new QuestController(context));
             Add(new UIBestiaryController(context));
+            Add(new HubMapController(context));
         }
 
         #endregion
