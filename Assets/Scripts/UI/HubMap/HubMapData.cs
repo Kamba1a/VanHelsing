@@ -8,6 +8,8 @@ namespace BeastHunter
     {
         #region SerializeFields
 
+        [SerializeField] private GameObject _cityPanelPrefab;
+        [SerializeField] private GameObject _citizenPrefab;
         [SerializeField] private bool _mapOnStartEnabled;
         [SerializeField] private string _mainPanelName;
         [SerializeField] private string _infoPanelName;
@@ -41,14 +43,19 @@ namespace BeastHunter
             mainPanel.SetActive(true);
         }
 
-        public void CityButton_OnClick(GameObject infoPanel)
+        public void CityButton_OnClick(GameObject infoPanel, GameObject currentInfoObject)
         {
+            currentInfoObject = GameObject.Instantiate(_cityPanelPrefab);
+            currentInfoObject.transform.parent = infoPanel.transform;
+            currentInfoObject.transform.localScale = new Vector3(3, 1, 1);
             infoPanel.SetActive(true);
         }
 
-        public void CloseInfoButton_OnClick(GameObject infoPanel)
+        public void CloseInfoButton_OnClick(GameObject infoPanel, GameObject currentInfoObject)
         {
+            Debug.Log(this+"CloseInfoButton_OnClick");
             infoPanel.SetActive(false);
+            Destroy(currentInfoObject);
         }
 
         #endregion
