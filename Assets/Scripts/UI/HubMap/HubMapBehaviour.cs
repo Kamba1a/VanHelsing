@@ -11,6 +11,7 @@ namespace BeastHunter
         public Action HubButton_OnClickHandler { get; set; }
         public Action MapButton_OnClickHandler { get; set; }
         public Action CityButton_OnClickHandler { get; set; }
+        public Action CloseInfoButton_OnClickHandler { get; set; }
 
         #endregion
 
@@ -20,6 +21,7 @@ namespace BeastHunter
         public void HubButton_OnClick() => HubButton_OnClickHandler?.Invoke();
         public void MapButton_OnClick() => MapButton_OnClickHandler?.Invoke();
         public void CityButton_OnClick() => CityButton_OnClickHandler?.Invoke();
+        public void CloseInfoButton_OnClick() => CloseInfoButton_OnClickHandler?.Invoke();
 
         #endregion
     }

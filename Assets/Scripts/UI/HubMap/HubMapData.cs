@@ -46,6 +46,11 @@ namespace BeastHunter
             infoPanel.SetActive(true);
         }
 
+        public void CloseInfoButton_OnClick(GameObject infoPanel)
+        {
+            infoPanel.SetActive(false);
+        }
+
         #endregion
     }
 }

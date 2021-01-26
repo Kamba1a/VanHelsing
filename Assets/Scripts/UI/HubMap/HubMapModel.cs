@@ -29,6 +29,7 @@ namespace BeastHunter
             _hubMapBehaviour.HubButton_OnClickHandler = HubButton_OnClick;
             _hubMapBehaviour.MapButton_OnClickHandler = MapButton_OnClick;
             _hubMapBehaviour.CityButton_OnClickHandler = CityButton_OnClick;
+            _hubMapBehaviour.CloseInfoButton_OnClickHandler = CloseInfoButton_OnClick;
 
             _mainPanel = objectOnScene.transform.FindDeep(_hubMapData.MainPanelName).gameObject;
             _mainPanel.SetActive(_hubMapData.MapOnStartEnabled);
@@ -45,6 +46,7 @@ namespace BeastHunter
         private void HubButton_OnClick() => _hubMapData.HubButton_OnClick(_mainPanel);
         private void MapButton_OnClick() => _hubMapData.MapButton_OnClick(_mainPanel);
         private void CityButton_OnClick() => _hubMapData.CityButton_OnClick(_infoPanel);
+        private void CloseInfoButton_OnClick() => _hubMapData.CloseInfoButton_OnClick(_infoPanel);
 
         #endregion
     }
