@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Extensions;
+using System.Collections.Generic;
 
 namespace BeastHunter
 {
@@ -13,15 +14,15 @@ namespace BeastHunter
         private HubMapData _hubMapData;
         private HubMapBehaviour _hubMapBehaviour;
         private GameObject _mainPanel;
-        private GameObject _infoPanel;
-        private GameObject _currentInfoObject;
 
         #endregion
 
 
         #region Properties
 
-        
+        public GameObject InfoPanel { get; set; }
+        public GameObject CurrentInfoObject { get; set; }
+        public TemporaryDataForHubMap TempData { get; set; }
 
         #endregion
 
@@ -42,8 +43,10 @@ namespace BeastHunter
             _mainPanel = objectOnScene.transform.FindDeep(_hubMapData.MainPanelName).gameObject;
             _mainPanel.SetActive(_hubMapData.MapOnStartEnabled);
 
-            _infoPanel = objectOnScene.transform.FindDeep(_hubMapData.InfoPanelName).gameObject;
-            _infoPanel.SetActive(false);
+            InfoPanel = objectOnScene.transform.FindDeep(_hubMapData.InfoPanelName).gameObject;
+            InfoPanel.SetActive(false);
+
+            TempData = new TemporaryDataForHubMap();
         }
 
         #endregion
@@ -53,8 +56,8 @@ namespace BeastHunter
 
         private void HubButton_OnClick() => _hubMapData.HubButton_OnClick(_mainPanel);
         private void MapButton_OnClick() => _hubMapData.MapButton_OnClick(_mainPanel);
-        private void CityButton_OnClick() => _hubMapData.CityButton_OnClick(_infoPanel, ref _currentInfoObject);
-        private void CloseInfoButton_OnClick() => _hubMapData.CloseInfoButton_OnClick(_infoPanel, _currentInfoObject);
+        private void CityButton_OnClick(string cityId) => _hubMapData.CityButton_OnClick(cityId, this);
+        private void CloseInfoButton_OnClick() => _hubMapData.CloseInfoButton_OnClick(InfoPanel, CurrentInfoObject);
 
         #endregion
     }

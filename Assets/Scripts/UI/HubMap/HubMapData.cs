@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Extensions;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BeastHunter
 {
@@ -8,11 +10,20 @@ namespace BeastHunter
     {
         #region SerializeFields
 
-        [SerializeField] private GameObject _cityPanelPrefab;
-        [SerializeField] private GameObject _citizenPrefab;
+        [Header("Hub map")]
         [SerializeField] private bool _mapOnStartEnabled;
         [SerializeField] private string _mainPanelName;
         [SerializeField] private string _infoPanelName;
+
+        [Header("City panel")]
+        [SerializeField] private GameObject _cityPanelPrefab;
+        [SerializeField] private string _cityNamePanelName;
+        [SerializeField] private string _cityDescriptionPanelName;
+        [SerializeField] private string _citizenPanelName;
+
+        [Header("Citizen panel")]
+        [SerializeField] private GameObject _citizenPrefab;
+        [SerializeField] private string _citizenNamePanelName;
 
         #endregion
 
@@ -43,13 +54,17 @@ namespace BeastHunter
             mainPanel.SetActive(true);
         }
 
-        public void CityButton_OnClick(GameObject infoPanel, ref GameObject currentInfoObject)
+        public void CityButton_OnClick(string cityId, HubMapModel model)
         {
-            Destroy(currentInfoObject);
-            currentInfoObject = GameObject.Instantiate(_cityPanelPrefab);
-            currentInfoObject.transform.SetParent(infoPanel.transform, false);
-            currentInfoObject.transform.localScale = new Vector3(3, 1, 1);
-            infoPanel.SetActive(true);
+            Destroy(model.CurrentInfoObject);
+
+            model.CurrentInfoObject = GameObject.Instantiate(_cityPanelPrefab);
+            model.CurrentInfoObject.transform.SetParent(model.InfoPanel.transform, false);
+            model.CurrentInfoObject.transform.localScale = new Vector3(3, 1, 1);
+
+            FillCityPrefab(cityId, model);
+
+            model.InfoPanel.SetActive(true);
         }
 
         public void CloseInfoButton_OnClick(GameObject infoPanel, GameObject currentInfoObject)
@@ -57,6 +72,22 @@ namespace BeastHunter
             Debug.Log(this+"CloseInfoButton_OnClick");
             infoPanel.SetActive(false);
             Destroy(currentInfoObject);
+        }
+
+        private void FillCityPrefab(string cityId, HubMapModel model)
+        {
+            model.CurrentInfoObject.transform.FindDeep(_cityNamePanelName).gameObject.GetComponent<Text>().text = model.TempData.CitiesDic[cityId].Name;
+            model.CurrentInfoObject.transform.FindDeep(_cityDescriptionPanelName).gameObject.GetComponent<Text>().text = model.TempData.CitiesDic[cityId].Description;
+
+            Transform citizenPanelTransform = model.CurrentInfoObject.transform.FindDeep(_citizenPanelName);
+            for (int i = 0; i < model.TempData.CitiesDic[cityId].QuestGivers.Count; i++)
+            {
+                GameObject citizen = GameObject.Instantiate(_citizenPrefab);
+                citizen.transform.SetParent(citizenPanelTransform, false);
+                citizen.transform.localScale = new Vector3(1, 1, 1);
+                citizen.transform.FindDeep(_citizenNamePanelName).GetComponent<Text>().text = model.TempData.CitiesDic[cityId].QuestGivers[i].Name;
+
+            }
         }
 
         #endregion
