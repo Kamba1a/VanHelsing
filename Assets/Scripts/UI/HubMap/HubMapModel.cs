@@ -53,7 +53,7 @@ namespace BeastHunter
 
         private void HubButton_OnClick() => _hubMapData.HubButton_OnClick(_mainPanel);
         private void MapButton_OnClick() => _hubMapData.MapButton_OnClick(_mainPanel);
-        private void CityButton_OnClick() => _hubMapData.CityButton_OnClick(_infoPanel, _currentInfoObject);
+        private void CityButton_OnClick() => _hubMapData.CityButton_OnClick(_infoPanel, ref _currentInfoObject);
         private void CloseInfoButton_OnClick() => _hubMapData.CloseInfoButton_OnClick(_infoPanel, _currentInfoObject);
 
         #endregion

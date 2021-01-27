@@ -43,10 +43,11 @@ namespace BeastHunter
             mainPanel.SetActive(true);
         }
 
-        public void CityButton_OnClick(GameObject infoPanel, GameObject currentInfoObject)
+        public void CityButton_OnClick(GameObject infoPanel, ref GameObject currentInfoObject)
         {
+            Destroy(currentInfoObject);
             currentInfoObject = GameObject.Instantiate(_cityPanelPrefab);
-            currentInfoObject.transform.parent = infoPanel.transform;
+            currentInfoObject.transform.SetParent(infoPanel.transform, false);
             currentInfoObject.transform.localScale = new Vector3(3, 1, 1);
             infoPanel.SetActive(true);
         }
