@@ -60,8 +60,9 @@ namespace BeastHunter
             Destroy(model.CurrentInfoObject);
 
             model.CurrentInfoObject = GameObject.Instantiate(_cityPanelPrefab);
-            model.CurrentInfoObject.transform.SetParent(model.InfoPanel.transform, false);
+            model.CurrentInfoObject.transform.SetParent(model.InfoPanel.transform.FindDeep("Viewport"), false);
             model.CurrentInfoObject.transform.localScale = new Vector3(3, 1, 1);
+            model.InfoPanel.GetComponentInChildren<ScrollRect>().content = model.CurrentInfoObject.GetComponent<RectTransform>();
 
             FillCityPrefab(cityId, model);
 
