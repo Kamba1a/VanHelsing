@@ -71,7 +71,6 @@ namespace BeastHunter
 
         public void CloseInfoButton_OnClick(GameObject infoPanel, GameObject currentInfoObject)
         {
-            Debug.Log(this+"CloseInfoButton_OnClick");
             infoPanel.SetActive(false);
             Destroy(currentInfoObject);
         }

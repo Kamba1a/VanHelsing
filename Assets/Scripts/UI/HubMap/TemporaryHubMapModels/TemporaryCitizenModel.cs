@@ -2,7 +2,7 @@
 
 namespace BeastHunter
 {
-    public class QuestGiverModel
+    public class TemporaryCitizenModel
     {
         public string Name;
         public Image Portrait;
