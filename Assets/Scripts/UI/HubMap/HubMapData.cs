@@ -24,6 +24,7 @@ namespace BeastHunter
         [Header("Citizen panel")]
         [SerializeField] private GameObject _citizenPrefab;
         [SerializeField] private string _citizenNamePanelName;
+        [SerializeField] private string _exclamationImgName;
 
         #endregion
 
@@ -82,12 +83,21 @@ namespace BeastHunter
             Transform citizenPanelTransform = model.CurrentInfoObject.transform.FindDeep(_citizenPanelName);
             for (int i = 0; i < model.TempData.CitiesDic[cityId].QuestGivers.Count; i++)
             {
-                GameObject citizen = GameObject.Instantiate(_citizenPrefab);
-                citizen.transform.SetParent(citizenPanelTransform, false);
-                citizen.transform.localScale = new Vector3(1, 1, 1);
-                citizen.transform.FindDeep(_citizenNamePanelName).GetComponent<Text>().text = model.TempData.CitiesDic[cityId].QuestGivers[i].Name;
-
+                Transform citizen = GameObject.Instantiate(_citizenPrefab).transform;
+                citizen.SetParent(citizenPanelTransform, false);
+                citizen.localScale = new Vector3(1, 1, 1);
+                citizen.FindDeep(_citizenNamePanelName).GetComponent<Text>().text = model.TempData.CitiesDic[cityId].QuestGivers[i].Name;
+                if (model.TempData.CitiesDic[cityId].QuestGivers[i].IsHaveQuest)
+                {
+                    citizen.FindDeep(_exclamationImgName).gameObject.SetActive(true);
+                    citizen.gameObject.GetComponent<Button>().onClick.AddListener(CitizenButton_onClick);
+                }
             }
+        }
+
+        private void CitizenButton_onClick()
+        {
+            Debug.Log("Open dialog window");
         }
 
         #endregion

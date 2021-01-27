@@ -35,6 +35,20 @@ namespace BeastHunter
                 IsHaveQuest = true,
                 QuestDescription = "описание квеста описание квеста описание квеста описание квеста описание квеста описание квеста описание квеста"
             });
+
+            QuestGiversDic.Add("3", new QuestGiverModel()
+            {
+                Name = "AAA",
+                IsHaveQuest = false,
+                QuestDescription = "AAA"
+            });
+
+            QuestGiversDic.Add("4", new QuestGiverModel()
+            {
+                Name = "Шани",
+                IsHaveQuest = false,
+                QuestDescription = "AAA"
+            });
         }
 
         private void CreateCitiesData()
@@ -48,7 +62,8 @@ namespace BeastHunter
                 QuestGivers = new List<QuestGiverModel>()
                 {
                     QuestGiversDic["1"],
-                    QuestGiversDic["2"]
+                    QuestGiversDic["2"],
+                    QuestGiversDic["4"]
                 }
             });
         }

@@ -23,3 +23,5 @@ MonoBehaviour:
   _citizenPrefab: {fileID: 5311113231720852829, guid: a9a2ad70cde8fd5409f8b95ef49c4e33,
     type: 3}
   _citizenNamePanelName: Name
+  _exclamationImgName: Exclamation_img
+  _citizenButtonName: Citizen
