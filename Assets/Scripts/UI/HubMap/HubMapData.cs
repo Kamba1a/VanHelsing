@@ -45,17 +45,17 @@ namespace BeastHunter
             
         }
 
-        public void HubButton_OnClick(GameObject mainPanel)
+        public void OnClick_HubButton(GameObject mainPanel)
         {
             mainPanel.SetActive(false);
         }
 
-        public void MapButton_OnClick(GameObject mainPanel)
+        public void OnClick_MapButton(GameObject mainPanel)
         {
             mainPanel.SetActive(true);
         }
 
-        public void CityButton_OnClick(string cityId, HubMapModel model)
+        public void OnClick_CityButton(string cityId, HubMapModel model)
         {
             Destroy(model.CurrentInfoObject);
 
@@ -69,7 +69,7 @@ namespace BeastHunter
             model.InfoPanel.SetActive(true);
         }
 
-        public void CloseInfoButton_OnClick(GameObject infoPanel, GameObject currentInfoObject)
+        public void OnClick_CloseInfoButton(GameObject infoPanel, GameObject currentInfoObject)
         {
             infoPanel.SetActive(false);
             Destroy(currentInfoObject);
@@ -90,12 +90,12 @@ namespace BeastHunter
                 if (model.TempData.CitiesDic[cityId].QuestGivers[i].IsHaveQuest)
                 {
                     citizen.FindDeep(_exclamationImgName).gameObject.SetActive(true);
-                    citizen.gameObject.GetComponent<Button>().onClick.AddListener(CitizenButton_onClick);
+                    citizen.gameObject.GetComponent<Button>().onClick.AddListener(OnClick_CitizenButton);
                 }
             }
         }
 
-        private void CitizenButton_onClick()
+        private void OnClick_CitizenButton()
         {
             Debug.Log("Open dialog window");
         }

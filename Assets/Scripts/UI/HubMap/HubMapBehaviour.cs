@@ -8,20 +8,20 @@ namespace BeastHunter
     {
         #region Properties
 
-        public Action HubButton_OnClickHandler { get; set; }
-        public Action MapButton_OnClickHandler { get; set; }
-        public Action<string> CityButton_OnClickHandler { get; set; }
-        public Action CloseInfoButton_OnClickHandler { get; set; }
+        public Action OnClick_HubButtonHandler { get; set; }
+        public Action OnClick_MapButtonHandler { get; set; }
+        public Action<string> OnClick_CityButtonHandler { get; set; }
+        public Action OnClick_CloseInfoButtonHandler { get; set; }
 
         #endregion
 
 
         #region Methods
 
-        public void HubButton_OnClick() => HubButton_OnClickHandler?.Invoke();
-        public void MapButton_OnClick() => MapButton_OnClickHandler?.Invoke();
-        public void CityButton_OnClick(string cityId) => CityButton_OnClickHandler?.Invoke(cityId);
-        public void CloseInfoButton_OnClick() => CloseInfoButton_OnClickHandler?.Invoke();
+        public void OnClick_HubButton() => OnClick_HubButtonHandler?.Invoke();
+        public void OnClick_MapButton() => OnClick_MapButtonHandler?.Invoke();
+        public void OnClick_CityButton(string cityId) => OnClick_CityButtonHandler?.Invoke(cityId);
+        public void OnClick_CloseInfoButton() => OnClick_CloseInfoButtonHandler?.Invoke();
 
         #endregion
     }

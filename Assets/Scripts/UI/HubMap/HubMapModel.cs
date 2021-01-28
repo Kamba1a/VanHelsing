@@ -35,10 +35,10 @@ namespace BeastHunter
             _hubMapData = hubMapData;
 
             _hubMapBehaviour = _objectOnScene.GetComponent<HubMapBehaviour>();
-            _hubMapBehaviour.HubButton_OnClickHandler = HubButton_OnClick;
-            _hubMapBehaviour.MapButton_OnClickHandler = MapButton_OnClick;
-            _hubMapBehaviour.CityButton_OnClickHandler = CityButton_OnClick;
-            _hubMapBehaviour.CloseInfoButton_OnClickHandler = CloseInfoButton_OnClick;
+            _hubMapBehaviour.OnClick_HubButtonHandler = OnClick_HubButton;
+            _hubMapBehaviour.OnClick_MapButtonHandler = OnClick_MapButton;
+            _hubMapBehaviour.OnClick_CityButtonHandler = OnClick_CityButton;
+            _hubMapBehaviour.OnClick_CloseInfoButtonHandler = OnClick_CloseInfoButton;
 
             _mainPanel = objectOnScene.transform.FindDeep(_hubMapData.MainPanelName).gameObject;
             _mainPanel.SetActive(_hubMapData.MapOnStartEnabled);
@@ -54,10 +54,10 @@ namespace BeastHunter
 
         #region Methods
 
-        private void HubButton_OnClick() => _hubMapData.HubButton_OnClick(_mainPanel);
-        private void MapButton_OnClick() => _hubMapData.MapButton_OnClick(_mainPanel);
-        private void CityButton_OnClick(string cityId) => _hubMapData.CityButton_OnClick(cityId, this);
-        private void CloseInfoButton_OnClick() => _hubMapData.CloseInfoButton_OnClick(InfoPanel, CurrentInfoObject);
+        private void OnClick_HubButton() => _hubMapData.OnClick_HubButton(_mainPanel);
+        private void OnClick_MapButton() => _hubMapData.OnClick_MapButton(_mainPanel);
+        private void OnClick_CityButton(string cityId) => _hubMapData.OnClick_CityButton(cityId, this);
+        private void OnClick_CloseInfoButton() => _hubMapData.OnClick_CloseInfoButton(InfoPanel, CurrentInfoObject);
 
         #endregion
     }
