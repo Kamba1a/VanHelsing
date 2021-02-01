@@ -8,7 +8,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _citizenNamePanel;
         [SerializeField] private GameObject _exclamationImg;
 
-        public void Initialize(TemporaryCitizenModel citizen)
+        public void Initialize(ICitizenInfo citizen)
         {
             _citizenNamePanel.GetComponent<Text>().text = citizen.Name;
 

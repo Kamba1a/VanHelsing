@@ -9,17 +9,17 @@ namespace BeastHunter
         [SerializeField] private GameObject _cityDescription;
         [SerializeField] private GameObject _citizenPanel;
 
-        public void Initialize(TemporaryCityModel city)
+        public void Initialize(ICityInfo city)
         {
             _cityName.GetComponent<Text>().text = city.Name;
             _cityDescription.GetComponent<Text>().text = city.Description;
 
-            for (int i = 0; i < city.QuestGivers.Count; i++)
+            for (int i = 0; i < city.Citizens.Count; i++)
             {
                 Transform citizen = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab).transform;
                 citizen.SetParent(_citizenPanel.transform, false);
                 citizen.localScale = new Vector3(1, 1, 1);
-                citizen.GetComponentInChildren<CitizenBehaviour>().Initialize(city.QuestGivers[i]);
+                citizen.GetComponentInChildren<CitizenBehaviour>().Initialize(city.Citizens[i]);
             }
         }
     }
