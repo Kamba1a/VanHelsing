@@ -10,6 +10,7 @@ namespace BeastHunter
 
         #endregion
 
+
         #region ClassLifeCycle
 
         public HubMapInitializeController(GameContext context)
@@ -19,13 +20,12 @@ namespace BeastHunter
 
         #endregion
 
+
         #region Methods
 
         public void OnAwake()
         {
-            //GameObject instance = GameObject.Instantiate(Data.HubMapData.Prefab);
-            GameObject objectOnScene = GameObject.Find("HubMap");
-            HubMapModel model = new HubMapModel(objectOnScene, Data.HubMapData);
+            //GameObject instance = GameObject.Instantiate(Data.HubMapData.HubMapPrefab);
         }
 
         #endregion

@@ -10,95 +10,20 @@ namespace BeastHunter
     {
         #region SerializeFields
 
-        [Header("Hub map")]
+        [SerializeField] private GameObject _hubMapUIPrefab;
+        [SerializeField] private GameObject _cityInfoUIPrefab;
+        [SerializeField] private GameObject _citizenUIPrefab;
         [SerializeField] private bool _mapOnStartEnabled;
-        [SerializeField] private string _mainPanelName;
-        [SerializeField] private string _infoPanelName;
-
-        [Header("City panel")]
-        [SerializeField] private GameObject _cityPanelPrefab;
-        [SerializeField] private string _cityNamePanelName;
-        [SerializeField] private string _cityDescriptionPanelName;
-        [SerializeField] private string _citizenPanelName;
-
-        [Header("Citizen panel")]
-        [SerializeField] private GameObject _citizenPrefab;
-        [SerializeField] private string _citizenNamePanelName;
-        [SerializeField] private string _exclamationImgName;
 
         #endregion
 
 
         #region Properties
 
+        public GameObject HubMapUIPrefab => _hubMapUIPrefab;
+        public GameObject CityInfoUIPrefab => _cityInfoUIPrefab;
+        public GameObject CitizenUIPrefab => _citizenUIPrefab;
         public bool MapOnStartEnabled => _mapOnStartEnabled;
-        public string MainPanelName => _mainPanelName;
-        public string InfoPanelName => _infoPanelName;
-
-        #endregion
-
-
-        #region Methods
-
-        public void Updating()
-        {
-            
-        }
-
-        public void OnClick_HubButton(GameObject mainPanel)
-        {
-            mainPanel.SetActive(false);
-        }
-
-        public void OnClick_MapButton(GameObject mainPanel)
-        {
-            mainPanel.SetActive(true);
-        }
-
-        public void OnClick_CityButton(string cityId, HubMapModel model)
-        {
-            Destroy(model.CurrentInfoObject);
-
-            model.CurrentInfoObject = GameObject.Instantiate(_cityPanelPrefab);
-            model.CurrentInfoObject.transform.SetParent(model.InfoPanel.transform.FindDeep("Viewport"), false);
-            model.CurrentInfoObject.transform.localScale = new Vector3(3, 1, 1);
-            model.InfoPanel.GetComponentInChildren<ScrollRect>().content = model.CurrentInfoObject.GetComponent<RectTransform>();
-
-            FillCityPrefab(cityId, model);
-
-            model.InfoPanel.SetActive(true);
-        }
-
-        public void OnClick_CloseInfoButton(GameObject infoPanel, GameObject currentInfoObject)
-        {
-            infoPanel.SetActive(false);
-            Destroy(currentInfoObject);
-        }
-
-        private void FillCityPrefab(string cityId, HubMapModel model)
-        {
-            model.CurrentInfoObject.transform.FindDeep(_cityNamePanelName).gameObject.GetComponent<Text>().text = model.TempData.CitiesDic[cityId].Name;
-            model.CurrentInfoObject.transform.FindDeep(_cityDescriptionPanelName).gameObject.GetComponent<Text>().text = model.TempData.CitiesDic[cityId].Description;
-
-            Transform citizenPanelTransform = model.CurrentInfoObject.transform.FindDeep(_citizenPanelName);
-            for (int i = 0; i < model.TempData.CitiesDic[cityId].QuestGivers.Count; i++)
-            {
-                Transform citizen = GameObject.Instantiate(_citizenPrefab).transform;
-                citizen.SetParent(citizenPanelTransform, false);
-                citizen.localScale = new Vector3(1, 1, 1);
-                citizen.FindDeep(_citizenNamePanelName).GetComponent<Text>().text = model.TempData.CitiesDic[cityId].QuestGivers[i].Name;
-                if (model.TempData.CitiesDic[cityId].QuestGivers[i].IsHaveQuest)
-                {
-                    citizen.FindDeep(_exclamationImgName).gameObject.SetActive(true);
-                    citizen.gameObject.GetComponent<Button>().onClick.AddListener(OnClick_CitizenButton);
-                }
-            }
-        }
-
-        private void OnClick_CitizenButton()
-        {
-            Debug.Log("Open dialog window");
-        }
 
         #endregion
     }

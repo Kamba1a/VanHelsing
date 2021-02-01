@@ -55,7 +55,6 @@ namespace BeastHunter
             //Add(new DialogueTriggerController(context));
             //Add(new QuestController(context));
             Add(new UIBestiaryController(context));
-            Add(new HubMapController(context));
         }
 
         #endregion

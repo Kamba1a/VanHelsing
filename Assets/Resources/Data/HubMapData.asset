@@ -12,16 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdc4f56eb8b4c2742b1415abd0385973, type: 3}
   m_Name: HubMapData
   m_EditorClassIdentifier: 
+  _hubMapUIPrefab: {fileID: 0}
+  _cityInfoUIPrefab: {fileID: 4946205248823330611, guid: 3ca824d308c9a9342a6f410106aa76d0,
+    type: 3}
+  _citizenUIPrefab: {fileID: 5311113231720852829, guid: a9a2ad70cde8fd5409f8b95ef49c4e33,
+    type: 3}
   _mapOnStartEnabled: 0
-  _mainPanelName: Main_panel
-  _infoPanelName: Info_panel
-  _cityPanelPrefab: {fileID: 4946205248823330611, guid: 3ca824d308c9a9342a6f410106aa76d0,
-    type: 3}
-  _cityNamePanelName: CityName
-  _cityDescriptionPanelName: CityDescription
-  _citizenPanelName: Citizen_panel
-  _citizenPrefab: {fileID: 5311113231720852829, guid: a9a2ad70cde8fd5409f8b95ef49c4e33,
-    type: 3}
-  _citizenNamePanelName: Name
-  _exclamationImgName: Exclamation_img
-  _citizenButtonName: Citizen
