@@ -19,7 +19,7 @@ namespace BeastHunter
                 Transform citizen = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab).transform;
                 citizen.SetParent(_citizenPanel.transform, false);
                 citizen.localScale = new Vector3(1, 1, 1);
-                citizen.GetComponentInChildren<CitizenBehaviour>().Initialize(city.Citizens[i]);
+                citizen.GetComponentInChildren<CitizenInfoBehaviour>().Initialize(city.Citizens[i]);
             }
         }
     }
