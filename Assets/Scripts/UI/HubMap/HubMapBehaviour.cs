@@ -9,7 +9,6 @@ namespace BeastHunter
     {
         #region SerializeFields
 
-        [Header("Hub map")]
         [SerializeField] private GameObject _mainPanel;
         [SerializeField] private GameObject _infoPanel;
 
@@ -19,17 +18,11 @@ namespace BeastHunter
         #region Fields
 
         private GameObject _currentInfoObject;
-        private TemporaryDataForHubMap _tempData;
 
         #endregion
 
 
         #region UnityMethods
-
-        private void Awake()
-        {
-            _tempData = new TemporaryDataForHubMap();
-        }
 
         private void Start()
         {
@@ -52,7 +45,7 @@ namespace BeastHunter
             _mainPanel.SetActive(true);
         }
 
-        public void OnClick_CityButton(string cityId)
+        public void OnClick_CityButton(int cityId)
         {
             Destroy(_currentInfoObject);
 
@@ -61,7 +54,7 @@ namespace BeastHunter
             _currentInfoObject.transform.localScale = new Vector3(3, 1, 1);
             _infoPanel.GetComponentInChildren<ScrollRect>().content = _currentInfoObject.GetComponent<RectTransform>();
 
-            _currentInfoObject.GetComponentInChildren<CityInfoPanelBehaviour>().Initialize(_tempData.CitiesDic[cityId]);
+            _currentInfoObject.GetComponentInChildren<CityInfoPanelBehaviour>().Initialize(Data.HubMapData.Cities[cityId]);
 
             _infoPanel.SetActive(true);
         }

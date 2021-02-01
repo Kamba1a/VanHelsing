@@ -1,15 +1,18 @@
 ﻿using UnityEngine.UI;
+using System;
+using UnityEngine;
 
 namespace BeastHunter
 {
+    [Serializable]
     public class TemporaryCitizenInfoModel : ICitizenInfo
     {
         #region Fields
 
-        private string _name;
-        private Image _portrait;
-        private bool _isHaveQuest;
-        private string _questDescription;
+        [SerializeField] private string _name;
+        [SerializeField] private Image _portrait;
+        [SerializeField] private bool _isHaveQuest;
+        [SerializeField] private string _questDescription;
 
         #endregion
 

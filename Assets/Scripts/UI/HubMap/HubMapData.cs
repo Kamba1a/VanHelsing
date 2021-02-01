@@ -1,7 +1,4 @@
-﻿using Extensions;
-using System;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace BeastHunter
 {
@@ -14,6 +11,9 @@ namespace BeastHunter
         [SerializeField] private GameObject _cityInfoUIPrefab;
         [SerializeField] private GameObject _citizenUIPrefab;
         [SerializeField] private bool _mapOnStartEnabled;
+
+        [Header("TEMPORARY FIELD FOR DEBUG")]
+        [SerializeField] public TemporaryCityInfoModel[] Cities;    //TEMPORARY FIELD FOR TESTING HUB MAP
 
         #endregion
 

@@ -18,3 +18,17 @@ MonoBehaviour:
   _citizenUIPrefab: {fileID: 5311113231720852829, guid: a9a2ad70cde8fd5409f8b95ef49c4e33,
     type: 3}
   _mapOnStartEnabled: 0
+  Cities:
+  - _name: Moscow
+    _description: AAA
+    _fraction: {fileID: 0}
+    _questGivers:
+    - _name: Ivan Pupkin
+      _portrait: {fileID: 0}
+      _isHaveQuest: 0
+      _questDescription: 
+    - _name: Volodya
+      _portrait: {fileID: 0}
+      _isHaveQuest: 1
+      _questDescription: AAA
+    _reputation: 0
