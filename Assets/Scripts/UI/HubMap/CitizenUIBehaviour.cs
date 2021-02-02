@@ -16,7 +16,7 @@ namespace BeastHunter
         {
             _citizenNamePanel.GetComponent<Text>().text = citizen.Name;
             _citizenPortrait.GetComponent<Image>().sprite = citizen.Portrait;
-            _exclamationImg.SetActive(citizen.IsHaveQuest);
+            _exclamationImg.SetActive(Data.HubMapData.Dialogs[citizen.DialogId].IsQuest);
             GetComponent<Button>().onClick.AddListener(() => OnClick_CitizenButton(citizen.Id));
         }
 

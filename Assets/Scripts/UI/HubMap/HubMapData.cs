@@ -14,6 +14,7 @@ namespace BeastHunter
 
         [Header("TEMPORARY FOR DEBUG")] //TEMPORARY FIELDS FOR TESTING HUB MAP
         [SerializeField] public TemporarySellingItemModel[] Items;
+        [SerializeField] public TemporaryDialogModel[] Dialogs;
         [SerializeField] public TemporaryCitizenInfoModel[] Citizens;
         [SerializeField] public TemporaryCityInfoModel[] Cities;
 

@@ -61,7 +61,8 @@ namespace BeastHunter
         public void OnClick_MapButton() => ShowUI();
         public void OnClick_CityButton(int cityId) => ShowCityInfoPanel(cityId);
         public void OnClick_CloseInfoButton() => HideInfoPanel();
-        public void OnClick_QuestButton(bool isPositive) => DialogResponse(isPositive);
+        public void OnClick_QuestDeclineButton() => HideQuestPanel();
+        public void OnClick_QuestApplyButton(int citizenId) => QuestApply(citizenId);
 
         #endregion
 
@@ -135,12 +136,9 @@ namespace BeastHunter
             _questPanel.SetActive(true);
         }
 
-        private void DialogResponse(bool isPositive)
+        private void QuestApply(int citizenId)
         {
-            if (isPositive)
-            {
-                Debug.Log("Quest apply");
-            }
+            Debug.Log("Quest apply");
             HideQuestPanel();
         }
 
@@ -151,12 +149,13 @@ namespace BeastHunter
 
         private void FillQuestPanel(ICitizenInfo citizen)
         {
+            IDialog currentDialog = Data.HubMapData.Dialogs[citizen.DialogId];
             _questGiverName.GetComponent<Text>().text = citizen.Name;
             _questGiverPortrait.GetComponent<Image>().sprite = citizen.Portrait;
-            _questDescription.GetComponent<Text>().text = citizen.QuestDescription;
-            _questDeclineButton.GetComponentInChildren<Text>().text = citizen.DeclineQuestAnswer;
-            _questApplyButton.GetComponentInChildren<Text>().text = citizen.ApplyQuestAnswer;
-            _questApplyButton.SetActive(citizen.IsHaveQuest);
+            _questDescription.GetComponent<Text>().text = currentDialog.DialogText;
+            _questDeclineButton.GetComponentInChildren<Text>().text = currentDialog.NegativeAnswer;
+            _questApplyButton.GetComponentInChildren<Text>().text = currentDialog.PositiveAnswer;
+            _questApplyButton.SetActive(currentDialog.IsQuest);
         }
 
         #endregion

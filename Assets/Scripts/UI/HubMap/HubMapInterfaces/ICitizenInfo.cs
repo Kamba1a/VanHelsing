@@ -7,9 +7,6 @@ namespace BeastHunter
         public int Id { get; }
         public string Name { get; }
         public Sprite Portrait { get; }
-        public bool IsHaveQuest { get; }
-        public string QuestDescription { get; }
-        public string ApplyQuestAnswer { get; }
-        public string DeclineQuestAnswer { get; }
+        public int DialogId { get; }
     }
 }
