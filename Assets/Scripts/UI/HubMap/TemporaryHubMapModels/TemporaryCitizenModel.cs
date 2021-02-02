@@ -13,6 +13,8 @@ namespace BeastHunter
         [SerializeField] private Sprite _portrait;
         [SerializeField] private bool _isHaveQuest;
         [SerializeField] private string _questDescription;
+        [SerializeField] private string _applyQuestAnswer;
+        [SerializeField] private string _declineQuestAnswer;
 
         #endregion
 
@@ -24,6 +26,8 @@ namespace BeastHunter
         public Sprite Portrait => _portrait;
         public bool IsHaveQuest => _isHaveQuest;
         public string QuestDescription => _questDescription;
+        public string ApplyQuestAnswer => _applyQuestAnswer;
+        public string DeclineQuestAnswer => _declineQuestAnswer;
 
         #endregion
     }

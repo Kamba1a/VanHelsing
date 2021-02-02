@@ -154,9 +154,9 @@ namespace BeastHunter
             _questGiverName.GetComponent<Text>().text = citizen.Name;
             _questGiverPortrait.GetComponent<Image>().sprite = citizen.Portrait;
             _questDescription.GetComponent<Text>().text = citizen.QuestDescription;
+            _questDeclineButton.GetComponentInChildren<Text>().text = citizen.DeclineQuestAnswer;
+            _questApplyButton.GetComponentInChildren<Text>().text = citizen.ApplyQuestAnswer;
             _questApplyButton.SetActive(citizen.IsHaveQuest);
-            //_questApplyButton.GetComponent<Text>().text = "AAA";
-            //_questDeclineButton.GetComponent<Text>().text = "OOO";
         }
 
         #endregion
