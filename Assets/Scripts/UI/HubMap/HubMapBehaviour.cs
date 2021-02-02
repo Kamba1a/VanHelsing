@@ -61,6 +61,7 @@ namespace BeastHunter
         public void OnClick_MapButton() => ShowUI();
         public void OnClick_CityButton(int cityId) => ShowCityInfoPanel(cityId);
         public void OnClick_CloseInfoButton() => HideInfoPanel();
+        public void OnClick_QuestButton(bool isPositive) => DialogResponse(isPositive);
 
         #endregion
 
@@ -130,13 +131,32 @@ namespace BeastHunter
 
         private void ShowQuestPanel(int citizenId)
         {
-            FillQuestPanel(citizenId);
+            FillQuestPanel(Data.HubMapData.Citizens[citizenId]);
             _questPanel.SetActive(true);
         }
 
-        private void FillQuestPanel(int citizenId)
+        private void DialogResponse(bool isPositive)
         {
-            //fill window
+            if (isPositive)
+            {
+                Debug.Log("Quest apply");
+            }
+            HideQuestPanel();
+        }
+
+        private void HideQuestPanel()
+        {
+            _questPanel.SetActive(false);
+        }
+
+        private void FillQuestPanel(ICitizenInfo citizen)
+        {
+            _questGiverName.GetComponent<Text>().text = citizen.Name;
+            _questGiverPortrait.GetComponent<Image>().sprite = citizen.Portrait;
+            _questDescription.GetComponent<Text>().text = citizen.QuestDescription;
+            _questApplyButton.SetActive(citizen.IsHaveQuest);
+            //_questApplyButton.GetComponent<Text>().text = "AAA";
+            //_questDeclineButton.GetComponent<Text>().text = "OOO";
         }
 
         #endregion

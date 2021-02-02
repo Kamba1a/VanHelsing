@@ -20,10 +20,6 @@ namespace BeastHunter
             GetComponent<Button>().onClick.AddListener(() => OnClick_CitizenButton(citizen.Id));
         }
 
-        public void OnClick_CitizenButton(int citizenId)
-        {
-            Debug.Log("OnClick_CitizenButton");
-            OnClick_CitizenButtonHandler?.Invoke(citizenId);
-        }
+        public void OnClick_CitizenButton(int citizenId) => OnClick_CitizenButtonHandler?.Invoke(citizenId);
     }
 }
