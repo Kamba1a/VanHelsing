@@ -5,11 +5,12 @@ namespace BeastHunter
 {
     public interface ICityInfo
     {
+        public int Id { get; }
         public string Name { get; }
         public string Description { get; }
         public Sprite Fraction { get; }
-        public List<ICitizenInfo> Citizens { get; }
+        public int[] CitizensId { get; }
         public float Reputation { get; }
-        public List<ISellingItem> SellingItems { get; }
+        public int[] SellingItemsId { get; }
     }
 }

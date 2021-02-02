@@ -8,6 +8,7 @@ namespace BeastHunter
     {
         #region Fields
 
+        [SerializeField] private int _id;
         [SerializeField] private string _name;
         [SerializeField] private Sprite _portrait;
         [SerializeField] private bool _isHaveQuest;
@@ -18,6 +19,7 @@ namespace BeastHunter
 
         #region Properties
 
+        public int Id => _id;
         public string Name => _name;
         public Sprite Portrait => _portrait;
         public bool IsHaveQuest => _isHaveQuest;

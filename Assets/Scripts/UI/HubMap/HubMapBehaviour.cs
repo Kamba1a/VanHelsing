@@ -99,23 +99,23 @@ namespace BeastHunter
             _cityDescription.GetComponent<Text>().text = city.Description;
             _cityReputation.GetComponent<Text>().text = city.Reputation.ToString();
 
-            for (int i = 0; i < city.Citizens.Count; i++)
+            for (int i = 0; i < city.CitizensId.Length; i++)
             {
                 GameObject citizen = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab);
                 _clearInfoPanelList.Add(citizen);
                 citizen.transform.SetParent(_citizenPanel.transform, false);
                 citizen.transform.localScale = new Vector3(1, 1, 1);
-                citizen.GetComponentInChildren<CitizenUIBehaviour>().Initialize(city.Citizens[i]);
+                citizen.GetComponentInChildren<CitizenUIBehaviour>().Initialize(Data.HubMapData.Citizens[city.CitizensId[i]]);
                 citizen.GetComponentInChildren<CitizenUIBehaviour>().OnClick_CitizenButtonHandler = ShowQuestPanel;
             }
 
-            for (int i = 0; i < city.SellingItems.Count; i++)
+            for (int i = 0; i < city.SellingItemsId.Length; i++)
             {
                 GameObject item = GameObject.Instantiate(Data.HubMapData.SellingItemUIPrefab);
                 _clearInfoPanelList.Add(item);
                 item.transform.SetParent(_citySellingPanel.transform, false);
                 item.transform.localScale = new Vector3(1, 1, 1);
-                item.GetComponentInChildren<SellingItemUIBehaviour>().Initialize(city.SellingItems[i]);
+                item.GetComponentInChildren<SellingItemUIBehaviour>().Initialize(Data.HubMapData.Items[city.SellingItemsId[i]]);
             }
         }
 
