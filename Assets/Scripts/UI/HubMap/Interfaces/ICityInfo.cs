@@ -10,6 +10,6 @@ namespace BeastHunter
         public Sprite Fraction { get; }
         public List<ICitizenInfo> Citizens { get; }
         public float Reputation { get; }
-        //public List<ItemForSaleModel> ItemsForSale { get; }
+        public List<ISellingItem> SellingItems { get; }
     }
 }

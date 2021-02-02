@@ -8,8 +8,8 @@ namespace BeastHunter
         #region SerializeFields
 
         [SerializeField] private GameObject _hubMapUIPrefab;
-        [SerializeField] private GameObject _cityInfoUIPrefab;
         [SerializeField] private GameObject _citizenUIPrefab;
+        [SerializeField] private GameObject _sellingItemUIPrefab;
         [SerializeField] private bool _mapOnStartEnabled;
 
         [Header("TEMPORARY FOR DEBUG")]
@@ -21,8 +21,8 @@ namespace BeastHunter
         #region Properties
 
         public GameObject HubMapUIPrefab => _hubMapUIPrefab;
-        public GameObject CityInfoUIPrefab => _cityInfoUIPrefab;
         public GameObject CitizenUIPrefab => _citizenUIPrefab;
+        public GameObject SellingItemUIPrefab => _sellingItemUIPrefab;
         public bool MapOnStartEnabled => _mapOnStartEnabled;
 
         #endregion

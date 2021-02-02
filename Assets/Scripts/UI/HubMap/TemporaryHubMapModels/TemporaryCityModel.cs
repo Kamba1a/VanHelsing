@@ -15,6 +15,7 @@ namespace BeastHunter
         [SerializeField] private Sprite _fraction;
         [SerializeField] private List<TemporaryCitizenInfoModel> _questGivers;
         [SerializeField] private float _reputation;
+        [SerializeField] private List<TemporarySellingItemModel> _sellingItems;
 
         #endregion
 
@@ -26,6 +27,7 @@ namespace BeastHunter
         public Sprite Fraction => _fraction;
         public List<ICitizenInfo> Citizens => _questGivers.ToList<ICitizenInfo>();
         public float Reputation => _reputation;
+        public List<ISellingItem> SellingItems => _sellingItems.ToList<ISellingItem>();
 
         #endregion
     }

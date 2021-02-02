@@ -86,7 +86,16 @@ namespace BeastHunter
                 _clearInfoPanelList.Add(citizen);
                 citizen.transform.SetParent(_citizenPanel.transform, false);
                 citizen.transform.localScale = new Vector3(1, 1, 1);
-                citizen.GetComponentInChildren<CitizenInfoBehaviour>().Initialize(city.Citizens[i]);
+                citizen.GetComponentInChildren<CitizenUIBehaviour>().Initialize(city.Citizens[i]);
+            }
+
+            for (int i = 0; i < city.SellingItems.Count; i++)
+            {
+                GameObject item = GameObject.Instantiate(Data.HubMapData.SellingItemUIPrefab);
+                _clearInfoPanelList.Add(item);
+                item.transform.SetParent(_citySellingPanel.transform, false);
+                item.transform.localScale = new Vector3(1, 1, 1);
+                item.GetComponentInChildren<SellingItemUIBehaviour>().Initialize(city.SellingItems[i]);
             }
         }
 
