@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace BeastHunter
 {
-    class CitizenInfoBehaviour : MonoBehaviour
+    class CitizenUIBehaviour : MonoBehaviour
     {
         [SerializeField] private GameObject _citizenNamePanel;
         [SerializeField] private GameObject _citizenPortrait;
