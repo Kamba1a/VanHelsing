@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using UnityEngine.UI;
+using UnityEngine;
 
 namespace BeastHunter
 {
@@ -7,7 +7,7 @@ namespace BeastHunter
     {
         public string Name { get; }
         public string Description { get; }
-        public Image Fraction { get; }
+        public Sprite Fraction { get; }
         public List<ICitizenInfo> Citizens { get; }
         public float Reputation { get; }
         //public List<ItemForSaleModel> ItemsForSale { get; }

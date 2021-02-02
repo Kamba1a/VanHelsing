@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3bc785be1a57e734da4c10d1c4cbaa9c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 62ee6c0ec23b6184b98d7c511bd12d05, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -442,4 +442,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _citizenNamePanel: {fileID: 5311113231050807610}
+  _citizenPortrait: {fileID: 5311113231001966784}
   _exclamationImg: {fileID: 5311113231621336350}

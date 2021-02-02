@@ -10,14 +10,18 @@ namespace BeastHunter
     {
         #region SerializeFields
 
+        [Header("Hub map")]
         [SerializeField] private GameObject _mainPanel;
         [SerializeField] private GameObject _infoPanel;
 
         [Header("City info panel")]
         [SerializeField] private GameObject _cityInfoPanel;
+        [SerializeField] private GameObject _cityFraction;
         [SerializeField] private GameObject _cityName;
         [SerializeField] private GameObject _cityDescription;
         [SerializeField] private GameObject _citizenPanel;
+        [SerializeField] private GameObject _cityReputation;
+        [SerializeField] private GameObject _citySellingPanel;
 
         #endregion
 
@@ -71,8 +75,10 @@ namespace BeastHunter
 
         private void FillCityInfo(ICityInfo city)
         {
+            _cityFraction.GetComponent<Image>().sprite = city.Fraction;
             _cityName.GetComponent<Text>().text = city.Name;
             _cityDescription.GetComponent<Text>().text = city.Description;
+            _cityReputation.GetComponent<Text>().text = city.Reputation.ToString();
 
             for (int i = 0; i < city.Citizens.Count; i++)
             {

@@ -12,7 +12,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _citizenUIPrefab;
         [SerializeField] private bool _mapOnStartEnabled;
 
-        [Header("TEMPORARY FIELD FOR DEBUG")]
+        [Header("TEMPORARY FOR DEBUG")]
         [SerializeField] public TemporaryCityInfoModel[] Cities;    //TEMPORARY FIELD FOR TESTING HUB MAP
 
         #endregion
