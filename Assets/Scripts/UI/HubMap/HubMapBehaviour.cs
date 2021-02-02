@@ -23,6 +23,14 @@ namespace BeastHunter
         [SerializeField] private GameObject _cityReputation;
         [SerializeField] private GameObject _citySellingPanel;
 
+        [Header("Quest panel")]
+        [SerializeField] private GameObject _questPanel;
+        [SerializeField] private GameObject _questGiverPortrait;
+        [SerializeField] private GameObject _questGiverName;
+        [SerializeField] private GameObject _questDescription;
+        [SerializeField] private GameObject _questApplyButton;
+        [SerializeField] private GameObject _questDeclineButton;
+
         #endregion
 
 
@@ -41,24 +49,35 @@ namespace BeastHunter
             _mainPanel.SetActive(Data.HubMapData.MapOnStartEnabled);
             _infoPanel.SetActive(false);
             _cityInfoPanel.SetActive(false);
+            _questPanel.SetActive(false);
         }
+
+        #endregion
+
+
+        #region TriggerEvents
+
+        public void OnClick_HubButton() => HideUI();
+        public void OnClick_MapButton() => ShowUI();
+        public void OnClick_CityButton(int cityId) => ShowCityInfoPanel(cityId);
+        public void OnClick_CloseInfoButton() => HideInfoPanel();
 
         #endregion
 
 
         #region Methods
 
-        public void OnClick_HubButton()
-        {
-            _mainPanel.SetActive(false);
-        }
-
-        public void OnClick_MapButton()
+        private void ShowUI()
         {
             _mainPanel.SetActive(true);
         }
 
-        public void OnClick_CityButton(int cityId)
+        private void HideUI()
+        {
+            _mainPanel.SetActive(false);
+        }
+
+        private void ShowCityInfoPanel(int cityId)
         {
             ClearInfoPanel();
             FillCityInfo(Data.HubMapData.Cities[cityId]);
@@ -67,7 +86,7 @@ namespace BeastHunter
             _cityInfoPanel.SetActive(true);
         }
 
-        public void OnClick_CloseInfoButton()
+        private void HideInfoPanel()
         {
             _cityInfoPanel.SetActive(false);
             _infoPanel.SetActive(false);
@@ -87,6 +106,7 @@ namespace BeastHunter
                 citizen.transform.SetParent(_citizenPanel.transform, false);
                 citizen.transform.localScale = new Vector3(1, 1, 1);
                 citizen.GetComponentInChildren<CitizenUIBehaviour>().Initialize(city.Citizens[i]);
+                citizen.GetComponentInChildren<CitizenUIBehaviour>().OnClick_CitizenButtonHandler = ShowQuestPanel;
             }
 
             for (int i = 0; i < city.SellingItems.Count; i++)
@@ -106,6 +126,17 @@ namespace BeastHunter
                 Destroy(_clearInfoPanelList[i]);
             }
             _clearInfoPanelList.Clear();
+        }
+
+        private void ShowQuestPanel(int citizenId)
+        {
+            FillQuestPanel(citizenId);
+            _questPanel.SetActive(true);
+        }
+
+        private void FillQuestPanel(int citizenId)
+        {
+            //fill window
         }
 
         #endregion
