@@ -2,7 +2,7 @@
 
 namespace BeastHunter
 {
-    public interface ISellingItem
+    public interface ISellingItemInfo
     {
         public int Id { get; }
         public string Name { get; }
