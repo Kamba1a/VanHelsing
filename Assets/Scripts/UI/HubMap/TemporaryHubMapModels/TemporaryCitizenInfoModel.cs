@@ -11,7 +11,7 @@ namespace BeastHunter
         [SerializeField] private int _id;
         [SerializeField] private string _name;
         [SerializeField] private Sprite _portrait;
-        [SerializeField] private int _dialogId;
+        [SerializeField] private int _currentDialogId;
 
         #endregion
 
@@ -21,7 +21,17 @@ namespace BeastHunter
         public int Id => _id;
         public string Name => _name;
         public Sprite Portrait => _portrait;
-        public int DialogId => _dialogId;
+        public int CurrentDialogId => _currentDialogId;
+
+        #endregion
+
+
+        #region Methods
+
+        public void NextDialog(int nextDialogId)
+        {
+            _currentDialogId = nextDialogId;
+        }
 
         #endregion
     }

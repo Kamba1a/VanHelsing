@@ -7,6 +7,7 @@ namespace BeastHunter
         public int Id { get; }
         public string Name { get; }
         public Sprite Portrait { get; }
-        public int DialogId { get; }
+        public int CurrentDialogId { get; }
+        public void NextDialog(int dialogId);
     }
 }

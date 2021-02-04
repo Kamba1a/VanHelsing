@@ -24,12 +24,12 @@ namespace BeastHunter
         [SerializeField] private GameObject _citySellingPanel;
 
         [Header("Quest panel")]
-        [SerializeField] private GameObject _questPanel;
-        [SerializeField] private GameObject _questGiverPortrait;
-        [SerializeField] private GameObject _questGiverName;
-        [SerializeField] private GameObject _questDescription;
-        [SerializeField] private GameObject _questApplyButton;
-        [SerializeField] private GameObject _questDeclineButton;
+        [SerializeField] private GameObject _dialogPanel;
+        [SerializeField] private GameObject _citizenPortrait;
+        [SerializeField] private GameObject _citizenName;
+        [SerializeField] private GameObject _dialogText;
+        [SerializeField] private GameObject _acceptButton;
+        [SerializeField] private GameObject _declineButton;
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace BeastHunter
             _mainPanel.SetActive(Data.HubMapData.MapOnStartEnabled);
             _infoPanel.SetActive(false);
             _cityInfoPanel.SetActive(false);
-            _questPanel.SetActive(false);
+            _dialogPanel.SetActive(false);
         }
 
         #endregion
@@ -61,8 +61,19 @@ namespace BeastHunter
         public void OnClick_MapButton() => ShowUI();
         public void OnClick_CityButton(int cityId) => ShowCityInfoPanel(cityId);
         public void OnClick_CloseInfoButton() => HideInfoPanel();
-        public void OnClick_QuestDeclineButton() => HideQuestPanel();
-        public void OnClick_QuestApplyButton(int citizenId) => QuestApply(citizenId);
+        private void OnClick_QuestButton(ICitizenInfo citizen, IDialogAnswer dialogAnswer)
+        {
+            citizen.NextDialog(dialogAnswer.NextDialogNodeId);
+
+            if (dialogAnswer.IsDialogEnd)
+            {
+                HideQuestPanel();
+            }
+            else
+            {
+                FillQuestPanel(citizen);
+            }
+        }
 
         #endregion
 
@@ -133,29 +144,33 @@ namespace BeastHunter
         private void ShowQuestPanel(int citizenId)
         {
             FillQuestPanel(Data.HubMapData.Citizens[citizenId]);
-            _questPanel.SetActive(true);
-        }
-
-        private void QuestApply(int citizenId)
-        {
-            Debug.Log("Quest apply");
-            HideQuestPanel();
+            _dialogPanel.SetActive(true);
         }
 
         private void HideQuestPanel()
         {
-            _questPanel.SetActive(false);
+            _dialogPanel.SetActive(false);
         }
 
         private void FillQuestPanel(ICitizenInfo citizen)
         {
-            IDialog currentDialog = Data.HubMapData.Dialogs[citizen.DialogId];
-            _questGiverName.GetComponent<Text>().text = citizen.Name;
-            _questGiverPortrait.GetComponent<Image>().sprite = citizen.Portrait;
-            _questDescription.GetComponent<Text>().text = currentDialog.DialogText;
-            _questDeclineButton.GetComponentInChildren<Text>().text = currentDialog.NegativeAnswer;
-            _questApplyButton.GetComponentInChildren<Text>().text = currentDialog.PositiveAnswer;
-            _questApplyButton.SetActive(currentDialog.IsQuest);
+            IDialog currentDialog = Data.HubMapData.Dialogs[citizen.CurrentDialogId];
+            _citizenName.GetComponent<Text>().text = citizen.Name;
+            _citizenPortrait.GetComponent<Image>().sprite = citizen.Portrait;
+            _dialogText.GetComponent<Text>().text = currentDialog.Text;
+            _declineButton.GetComponentInChildren<Text>().text = currentDialog.NegativeAnswer.Text;
+            _declineButton.GetComponent<Button>().onClick.AddListener(() => OnClick_QuestButton(citizen, currentDialog.NegativeAnswer));
+
+            if (currentDialog.PositiveAnswer.Text != "")
+            {
+                _acceptButton.GetComponentInChildren<Text>().text = currentDialog.PositiveAnswer.Text;
+                _acceptButton.GetComponent<Button>().onClick.AddListener(() => OnClick_QuestButton(citizen, currentDialog.PositiveAnswer));
+                _acceptButton.SetActive(true);
+            }
+            else
+            {
+                _acceptButton.SetActive(false);
+            }
         }
 
         #endregion

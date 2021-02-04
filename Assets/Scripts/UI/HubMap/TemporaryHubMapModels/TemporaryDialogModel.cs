@@ -9,10 +9,10 @@ namespace BeastHunter
         #region Fields
 
         [SerializeField] private int _id;
-        [SerializeField] private string _dialogText;
-        [SerializeField] private string _positiveAnswer;
-        [SerializeField] private string _negativeAnswer;
+        [SerializeField] private string _text;
         [SerializeField] private bool _isQuest;
+        [SerializeField] private TemporaryDialogAnswerModel _positiveAnswer;
+        [SerializeField] private TemporaryDialogAnswerModel _negativeAnswer;
 
         #endregion
 
@@ -20,10 +20,10 @@ namespace BeastHunter
         #region Properties
 
         public int Id => _id;
-        public string DialogText => _dialogText;
-        public string PositiveAnswer => _positiveAnswer;
-        public string NegativeAnswer => _negativeAnswer;
+        public string Text => _text;
         public bool IsQuest => _isQuest;
+        public IDialogAnswer PositiveAnswer => _positiveAnswer;
+        public IDialogAnswer NegativeAnswer => _negativeAnswer;
 
         #endregion
     }

@@ -3,9 +3,9 @@
     public interface IDialog
     {
         public int Id { get; }
-        public string DialogText { get; }
-        public string PositiveAnswer { get; }
-        public string NegativeAnswer { get; }
+        public string Text { get; }
         public bool IsQuest { get; }
+        public IDialogAnswer PositiveAnswer { get; }
+        public IDialogAnswer NegativeAnswer { get; }
     }
 }
