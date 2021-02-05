@@ -13,7 +13,7 @@ namespace BeastHunter
         [SerializeField] private string _name;
         [SerializeField] private string _description;
         [SerializeField] private Sprite _fraction;
-        [SerializeField] private int[] _questGiversId;
+        [SerializeField] private int[] _citizensId;
         [SerializeField] private float _reputation;
         [SerializeField] private int[] _sellingItemsId;
 
@@ -26,7 +26,7 @@ namespace BeastHunter
         public string Name => _name;
         public string Description => _description;
         public Sprite Fraction => _fraction;
-        public int[] CitizensId => _questGiversId;
+        public int[] CitizensId => _citizensId;
         public float Reputation => _reputation;
         public int[] SellingItemsId => _sellingItemsId;
 

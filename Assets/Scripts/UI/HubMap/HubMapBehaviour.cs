@@ -23,7 +23,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _cityReputation;
         [SerializeField] private GameObject _citySellingPanel;
 
-        [Header("Quest panel")]
+        [Header("Dialog panel")]
         [SerializeField] private GameObject _dialogPanel;
         [SerializeField] private GameObject _citizenPortrait;
         [SerializeField] private GameObject _citizenName;
@@ -61,19 +61,6 @@ namespace BeastHunter
         public void OnClick_MapButton() => ShowUI();
         public void OnClick_CityButton(int cityId) => ShowCityInfoPanel(cityId);
         public void OnClick_CloseInfoButton() => HideInfoPanel();
-        private void OnClick_QuestButton(ICitizenInfo citizen, IDialogAnswer dialogAnswer)
-        {
-            citizen.NextDialog(dialogAnswer.NextDialogNodeId);
-
-            if (dialogAnswer.IsDialogEnd)
-            {
-                HideQuestPanel();
-            }
-            else
-            {
-                FillQuestPanel(citizen);
-            }
-        }
 
         #endregion
 
@@ -150,6 +137,22 @@ namespace BeastHunter
         private void HideQuestPanel()
         {
             _dialogPanel.SetActive(false);
+        }
+
+        private void OnClick_QuestButton(ICitizenInfo citizen, IDialogAnswer dialogAnswer)
+        {
+            citizen.NextDialog(dialogAnswer.NextDialogNodeId);
+
+            if (dialogAnswer.IsDialogEnd)
+            {
+                HideQuestPanel();
+            }
+            else
+            {
+                FillQuestPanel(citizen);
+            }
+
+
         }
 
         private void FillQuestPanel(ICitizenInfo citizen)

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace BeastHunter
 {
@@ -12,11 +13,20 @@ namespace BeastHunter
         [SerializeField] private GameObject _sellingItemUIPrefab;
         [SerializeField] private bool _mapOnStartEnabled;
 
-        [Header("TEMPORARY FOR DEBUG")] //TEMPORARY FIELDS FOR TESTING HUB MAP
-        [SerializeField] public TemporarySellingItemModel[] Items;
-        [SerializeField] public TemporaryDialogModel[] Dialogs;
-        [SerializeField] public TemporaryCitizenInfoModel[] Citizens;
-        [SerializeField] public TemporaryCityInfoModel[] Cities;
+        #endregion
+
+
+        # region TEMPORARY DATA FOR TESTING HUB MAP
+
+        [Header("TEMPORARY FOR DEBUG")]
+        [SerializeField] private TemporarySellingItemModel[] _items;
+        [SerializeField] private TemporaryDialogModel[] _dialogs;
+        [SerializeField] private TemporaryCitizenInfoModel[] _citizens;
+        [SerializeField] private TemporaryCityInfoModel[] _cities;
+        public TemporarySellingItemModel[] Items => _items;
+        public TemporaryDialogModel[] Dialogs => _dialogs;
+        public TemporaryCitizenInfoModel[] Citizens => _citizens;
+        public TemporaryCityInfoModel[] Cities => _cities;
 
         #endregion
 
