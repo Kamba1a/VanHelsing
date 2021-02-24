@@ -37,6 +37,7 @@ namespace BeastHunter
         #region Fields
 
         private List<GameObject> _clearInfoPanelList;
+        private List<GameObject> _currentCitizensList;
 
         #endregion
 
@@ -45,6 +46,7 @@ namespace BeastHunter
 
         private void Start()
         {
+            _currentCitizensList = new List<GameObject>();
             _clearInfoPanelList = new List<GameObject>();
             _mainPanel.SetActive(Data.HubMapData.MapOnStartEnabled);
             _infoPanel.SetActive(false);
@@ -103,6 +105,7 @@ namespace BeastHunter
             {
                 GameObject citizen = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab);
                 _clearInfoPanelList.Add(citizen);
+                _currentCitizensList.Add(citizen);
                 citizen.transform.SetParent(_citizenPanel.transform, false);
                 citizen.transform.localScale = new Vector3(1, 1, 1);
                 citizen.GetComponentInChildren<CitizenUIBehaviour>().Initialize(Data.HubMapData.Citizens[city.CitizensId[i]]);
@@ -126,6 +129,7 @@ namespace BeastHunter
                 Destroy(_clearInfoPanelList[i]);
             }
             _clearInfoPanelList.Clear();
+            _currentCitizensList.Clear();
         }
 
         private void ShowQuestPanel(int citizenId)
@@ -146,13 +150,23 @@ namespace BeastHunter
             if (dialogAnswer.IsDialogEnd)
             {
                 HideQuestPanel();
+                UpdateCitizenInfo(citizen.Id);
             }
             else
             {
                 FillQuestPanel(citizen);
             }
+        }
 
-
+        private void UpdateCitizenInfo(int citizenId)
+        {
+            for (int i = 0; i < _currentCitizensList.Count; i++)
+            {
+                if (_currentCitizensList[i].GetComponentInChildren<CitizenUIBehaviour>().Id == citizenId)
+                {
+                    _currentCitizensList[i].GetComponentInChildren<CitizenUIBehaviour>().Initialize(Data.HubMapData.Citizens[citizenId]);
+                }
+            }
         }
 
         private void FillQuestPanel(ICitizenInfo citizen)

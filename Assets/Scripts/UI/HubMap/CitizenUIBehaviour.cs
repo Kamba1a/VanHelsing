@@ -18,6 +18,7 @@ namespace BeastHunter
         #region Properties
 
         public Action<int> OnClick_CitizenButtonHandler { get; set; }
+        public int Id { get; private set; }
 
         #endregion
 
@@ -26,6 +27,7 @@ namespace BeastHunter
 
         public void Initialize(ICitizenInfo citizen)
         {
+            Id = citizen.Id;
             _citizenNamePanel.GetComponent<Text>().text = citizen.Name;
             _citizenPortrait.GetComponent<Image>().sprite = citizen.Portrait;
             _exclamationImg.SetActive(Data.HubMapData.Dialogs[citizen.CurrentDialogId].IsQuest);
