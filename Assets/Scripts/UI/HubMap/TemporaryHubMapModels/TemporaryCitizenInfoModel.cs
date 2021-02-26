@@ -26,6 +26,19 @@ namespace BeastHunter
         #endregion
 
 
+        #region ClassLifeCyrcle
+
+        public TemporaryCitizenInfoModel(TemporaryCitizenInfoModel citizen)
+        {
+            _id = citizen.Id;
+            _name = citizen.Name;
+            _portrait = citizen.Portrait;
+            _currentDialogId = citizen.CurrentDialogId;
+        }
+
+        #endregion
+
+
         #region Methods
 
         public void NextDialog(int nextDialogId)
