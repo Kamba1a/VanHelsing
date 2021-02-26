@@ -418,8 +418,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6060609144777481652}
-        m_TargetAssemblyTypeName: BeastHunter.CitizenBehaviour, Assembly-CSharp
-        m_MethodName: OnClick_CitizenButton
+        m_TargetAssemblyTypeName: BeastHunter.CitizenUIBehaviour, Assembly-CSharp
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

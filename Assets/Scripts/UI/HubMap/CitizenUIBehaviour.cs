@@ -39,6 +39,11 @@ namespace BeastHunter
             OnClick_CitizenButtonHandler?.Invoke(citizenId);
         }
 
+        public void UpdateInfo(ICitizenInfo citizen)
+        {
+            _exclamationImg.SetActive(Data.HubMapData.Dialogs[citizen.CurrentDialogId].IsQuest);
+        }
+
         #endregion
     }
 }

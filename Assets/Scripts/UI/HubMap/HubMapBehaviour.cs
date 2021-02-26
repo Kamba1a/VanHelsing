@@ -145,6 +145,9 @@ namespace BeastHunter
 
         private void OnClick_QuestButton(ICitizenInfo citizen, IDialogAnswer dialogAnswer)
         {
+            _acceptButton.GetComponent<Button>().onClick.RemoveAllListeners();
+            _declineButton.GetComponent<Button>().onClick.RemoveAllListeners();
+
             citizen.NextDialog(dialogAnswer.NextDialogNodeId);
 
             if (dialogAnswer.IsDialogEnd)
@@ -164,7 +167,7 @@ namespace BeastHunter
             {
                 if (_currentCitizensList[i].GetComponentInChildren<CitizenUIBehaviour>().Id == citizenId)
                 {
-                    _currentCitizensList[i].GetComponentInChildren<CitizenUIBehaviour>().Initialize(Data.HubMapData.Citizens[citizenId]);
+                    _currentCitizensList[i].GetComponentInChildren<CitizenUIBehaviour>().UpdateInfo(Data.HubMapData.Citizens[citizenId]);
                 }
             }
         }
