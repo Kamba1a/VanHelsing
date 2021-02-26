@@ -22,77 +22,77 @@ MonoBehaviour:
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: f82344fe789b37545906ac6a10354216, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 0
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: eb30ddda20b252d43bf48e22a42dccf8, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 0
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: bfa2df0a734b58c45b8359c66868dbfd, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 1
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: 040ffae9e9db5784da5b6a740807d127, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 1
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: bd65735d676f7a440a06fee6633d284c, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 1
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: fff6f4db7e9ad874d8ba024d5ea7469d, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 1
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: 58ac4331c120c5740938347bd5ed3611, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 1
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: 6f82c769d51ea504083832377e952d62, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 1
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: 03e92acfa9936644eae9672db29b795b, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 0
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: 035fbc8a5734c4348a2f9a2bca6fb93c, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 1
   - _id: 0
     _name: 
     _description: 
-    _image: {fileID: 0}
+    _image: {fileID: 21300000, guid: 95187df84f56c4247a4cf20c453fc85c, type: 3}
     _cost: 0
     _requiredReputation: 0
     _isEnoughReputation: 1
