@@ -109,7 +109,7 @@ namespace BeastHunter
                 citizen.transform.SetParent(_citizenPanel.transform, false);
                 citizen.transform.localScale = new Vector3(1, 1, 1);
                 citizen.GetComponentInChildren<CitizenUIBehaviour>().Initialize(Data.HubMapData.Citizens[city.CitizensId[i]]);
-                citizen.GetComponentInChildren<CitizenUIBehaviour>().OnClick_CitizenButtonHandler = ShowQuestPanel;
+                citizen.GetComponentInChildren<CitizenUIBehaviour>().OnClick_CitizenButtonHandler = ShowDialogPanel;
             }
 
             for (int i = 0; i < city.SellingItemsId.Length; i++)
@@ -132,18 +132,18 @@ namespace BeastHunter
             _currentCitizensList.Clear();
         }
 
-        private void ShowQuestPanel(int citizenId)
+        private void ShowDialogPanel(int citizenId)
         {
-            FillQuestPanel(Data.HubMapData.Citizens[citizenId]);
+            FillDialogPanel(Data.HubMapData.Citizens[citizenId]);
             _dialogPanel.SetActive(true);
         }
 
-        private void HideQuestPanel()
+        private void HideDialogPanel()
         {
             _dialogPanel.SetActive(false);
         }
 
-        private void OnClick_QuestButton(ICitizenInfo citizen, IDialogAnswer dialogAnswer)
+        private void OnClick_DialogButton(ICitizenInfo citizen, IDialogAnswer dialogAnswer)
         {
             _acceptButton.GetComponent<Button>().onClick.RemoveAllListeners();
             _declineButton.GetComponent<Button>().onClick.RemoveAllListeners();
@@ -152,12 +152,12 @@ namespace BeastHunter
 
             if (dialogAnswer.IsDialogEnd)
             {
-                HideQuestPanel();
+                HideDialogPanel();
                 UpdateCitizenInfo(citizen.Id);
             }
             else
             {
-                FillQuestPanel(citizen);
+                FillDialogPanel(citizen);
             }
         }
 
@@ -172,19 +172,19 @@ namespace BeastHunter
             }
         }
 
-        private void FillQuestPanel(ICitizenInfo citizen)
+        private void FillDialogPanel(ICitizenInfo citizen)
         {
             IDialog currentDialog = Data.HubMapData.Dialogs[citizen.CurrentDialogId];
             _citizenName.GetComponent<Text>().text = citizen.Name;
             _citizenPortrait.GetComponent<Image>().sprite = citizen.Portrait;
             _dialogText.GetComponent<Text>().text = currentDialog.Text;
             _declineButton.GetComponentInChildren<Text>().text = currentDialog.NegativeAnswer.Text;
-            _declineButton.GetComponent<Button>().onClick.AddListener(() => OnClick_QuestButton(citizen, currentDialog.NegativeAnswer));
+            _declineButton.GetComponent<Button>().onClick.AddListener(() => OnClick_DialogButton(citizen, currentDialog.NegativeAnswer));
 
             if (currentDialog.PositiveAnswer.Text != "")
             {
                 _acceptButton.GetComponentInChildren<Text>().text = currentDialog.PositiveAnswer.Text;
-                _acceptButton.GetComponent<Button>().onClick.AddListener(() => OnClick_QuestButton(citizen, currentDialog.PositiveAnswer));
+                _acceptButton.GetComponent<Button>().onClick.AddListener(() => OnClick_DialogButton(citizen, currentDialog.PositiveAnswer));
                 _acceptButton.SetActive(true);
             }
             else
