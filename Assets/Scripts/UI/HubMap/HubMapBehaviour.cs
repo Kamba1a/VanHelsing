@@ -92,6 +92,7 @@ namespace BeastHunter
 
         private void ShowCityInfoPanel(int cityId)
         {
+            HideInfoPanel();
             ClearInfoPanel();
             FillCityInfo(Data.HubMapData.Cities[cityId]);
             _infoPanel.GetComponent<ScrollRect>().content = _cityInfoPanel.GetComponent<RectTransform>();
@@ -101,6 +102,7 @@ namespace BeastHunter
 
         private void ShowLocationInfoPanel(int locationId)
         {
+            HideInfoPanel();
             ClearInfoPanel();
             FillLocationInfo(Data.HubMapData.Locations[locationId]);
             _infoPanel.GetComponent<ScrollRect>().content = _locationInfoPanel.GetComponent<RectTransform>();
@@ -111,6 +113,7 @@ namespace BeastHunter
         private void HideInfoPanel()
         {
             _cityInfoPanel.SetActive(false);
+            _locationInfoPanel.SetActive(false);
             _infoPanel.SetActive(false);
         }
 
