@@ -17,6 +17,8 @@ MonoBehaviour:
     type: 3}
   _sellingItemUIPrefab: {fileID: 6062753379447882041, guid: 1edea349712c2eb448e6e5caa33b4599,
     type: 3}
+  _locationTextUIPrefab: {fileID: 4845705783241596257, guid: a6b652d58e47e6b48807f69de54a5709,
+    type: 3}
   _mapOnStartEnabled: 0
   _items:
   - _id: 0
@@ -208,3 +210,19 @@ MonoBehaviour:
     _citizensId: 000000000100000002000000
     _reputation: 20
     _sellingItemsId: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
+  _locations:
+  - _id: 0
+    _name: "\u041F\u0435\u0440\u0432\u0430\u044F \u043B\u043E\u043A\u0430\u0446\u0438\u044F"
+    _description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+      non efficitur diam, iaculis imperdiet ante. Nunc quis ante molestie, mollis
+      purus eu, posuere dui. Duis tempus tellus ac ex ultrices, non consectetur felis
+      molestie. Nulla facilisi. Cras euismod eros ac congue malesuada. Ut et mattis
+      justo, vitae scelerisque orci. Maecenas vitae dictum nunc. Quisque pulvinar
+      purus eu diam sollicitudin pharetra. Donec lacus tellus, commodo sed orci et,
+      pulvinar rhoncus ex. Fusce ut nisl mattis, eleifend justo non, molestie felis.
+      Aenean vel elit nec sem faucibus vulputate. Praesent posuere, magna ut euismod
+      fermentum, leo magna pretium nunc, ut tincidunt metus velit sit amet nulla.
+      Morbi sit amet tellus in ex efficitur vulputate eu quis nibh. '
+    _screenshot: {fileID: 21300000, guid: a93de9becdfd7454cb14729a3061c233, type: 3}
+    _dwellersId: 00000000000000000000000000000000
+    _ingredientsId: 00000000000000000000000000000000

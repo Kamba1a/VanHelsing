@@ -31,6 +31,15 @@ namespace BeastHunter
         [SerializeField] private GameObject _acceptButton;
         [SerializeField] private GameObject _declineButton;
 
+        [Header("Location info panel")]
+        [SerializeField] private GameObject _locationInfoPanel;
+        [SerializeField] private GameObject _locationName;
+        [SerializeField] private GameObject _locationDescription;
+        [SerializeField] private GameObject _dwellersPanel;
+        [SerializeField] private GameObject _ingredientsPanel;
+        [SerializeField] private GameObject _locationScreen;
+        [SerializeField] private GameObject _hikeButton;
+
         #endregion
 
 
@@ -52,6 +61,7 @@ namespace BeastHunter
             _infoPanel.SetActive(false);
             _cityInfoPanel.SetActive(false);
             _dialogPanel.SetActive(false);
+            _locationInfoPanel.SetActive(false);
         }
 
         #endregion
@@ -63,6 +73,7 @@ namespace BeastHunter
         public void OnClick_MapButton() => ShowUI();
         public void OnClick_CityButton(int cityId) => ShowCityInfoPanel(cityId);
         public void OnClick_CloseInfoButton() => HideInfoPanel();
+        public void OnClick_LocationButton(int locationId) => ShowLocationInfoPanel(locationId);
 
         #endregion
 
@@ -86,6 +97,15 @@ namespace BeastHunter
             _infoPanel.GetComponent<ScrollRect>().content = _cityInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
             _cityInfoPanel.SetActive(true);
+        }
+
+        private void ShowLocationInfoPanel(int locationId)
+        {
+            ClearInfoPanel();
+            FillLocationInfo(Data.HubMapData.Locations[locationId]);
+            _infoPanel.GetComponent<ScrollRect>().content = _locationInfoPanel.GetComponent<RectTransform>();
+            _infoPanel.SetActive(true);
+            _locationInfoPanel.SetActive(true);
         }
 
         private void HideInfoPanel()
@@ -119,6 +139,31 @@ namespace BeastHunter
                 item.transform.SetParent(_citySellingPanel.transform, false);
                 item.transform.localScale = new Vector3(1, 1, 1);
                 item.GetComponentInChildren<SellingItemUIBehaviour>().Initialize(Data.HubMapData.Items[city.SellingItemsId[i]]);
+            }
+        }
+
+        private void FillLocationInfo(ILocationInfo location)
+        {
+            _locationScreen.GetComponent<Image>().sprite = location.Screenshot;
+            _locationName.GetComponent<Text>().text = location.Name;
+            _locationDescription.GetComponent<Text>().text = location.Description;
+
+            for (int i = 0; i < location.DwellersId.Length; i++)
+            {
+                GameObject dweller = GameObject.Instantiate(Data.HubMapData.LocationTextUIPrefab);
+                _clearInfoPanelList.Add(dweller);
+                dweller.transform.SetParent(_dwellersPanel.transform, false);
+                dweller.transform.localScale = new Vector3(1, 1, 1);
+                //dweller.GetComponentInChildren<DwellerUIBehaviour>().Initialize(Data.HubMapData.Dwellers[location.DwellersId[i]]);
+            }
+
+            for (int i = 0; i < location.IngredientsId.Length; i++)
+            {
+                GameObject ingredient = GameObject.Instantiate(Data.HubMapData.LocationTextUIPrefab);
+                _clearInfoPanelList.Add(ingredient);
+                ingredient.transform.SetParent(_ingredientsPanel.transform, false);
+                ingredient.transform.localScale = new Vector3(1, 1, 1);
+                //ingredient.GetComponentInChildren<IngredientUIBehaviour>().Initialize(Data.HubMapData.Ingredients[location.IngredientsId[i]]);
             }
         }
 
