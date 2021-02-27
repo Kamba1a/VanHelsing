@@ -16,29 +16,29 @@ namespace BeastHunter
 
         [Header("City info panel")]
         [SerializeField] private GameObject _cityInfoPanel;
-        [SerializeField] private GameObject _cityFraction;
-        [SerializeField] private GameObject _cityName;
-        [SerializeField] private GameObject _cityDescription;
         [SerializeField] private GameObject _citizenPanel;
-        [SerializeField] private GameObject _cityReputation;
         [SerializeField] private GameObject _citySellingPanel;
+        [SerializeField] private Image _cityFraction;
+        [SerializeField] private Text _cityName;
+        [SerializeField] private Text _cityDescription;
+        [SerializeField] private Text _cityReputation;
 
         [Header("Dialog panel")]
         [SerializeField] private GameObject _dialogPanel;
-        [SerializeField] private GameObject _citizenPortrait;
-        [SerializeField] private GameObject _citizenName;
-        [SerializeField] private GameObject _dialogText;
-        [SerializeField] private GameObject _acceptButton;
-        [SerializeField] private GameObject _declineButton;
+        [SerializeField] private Image _citizenPortrait;
+        [SerializeField] private Text _citizenName;
+        [SerializeField] private Text _dialogText;
+        [SerializeField] private Button _acceptButton;
+        [SerializeField] private Button _declineButton;
 
         [Header("Location info panel")]
         [SerializeField] private GameObject _locationInfoPanel;
-        [SerializeField] private GameObject _locationName;
-        [SerializeField] private GameObject _locationDescription;
         [SerializeField] private GameObject _dwellersPanel;
         [SerializeField] private GameObject _ingredientsPanel;
-        [SerializeField] private GameObject _locationScreen;
-        [SerializeField] private GameObject _hikeButton;
+        [SerializeField] private Text _locationName;
+        [SerializeField] private Text _locationDescription;
+        [SerializeField] private Image _locationScreen;
+        [SerializeField] private Button _hikeButton;
 
         [Header("Hike panel")]
         [SerializeField] private GameObject _hikePanel;
@@ -143,10 +143,10 @@ namespace BeastHunter
 
         private void FillCityInfo(ICityInfo city)
         {
-            _cityFraction.GetComponent<Image>().sprite = city.Fraction;
-            _cityName.GetComponent<Text>().text = city.Name;
-            _cityDescription.GetComponent<Text>().text = city.Description;
-            _cityReputation.GetComponent<Text>().text = city.Reputation.ToString();
+            _cityFraction.sprite = city.Fraction;
+            _cityName.text = city.Name;
+            _cityDescription.text = city.Description;
+            _cityReputation.text = city.Reputation.ToString();
 
             for (int i = 0; i < city.CitizensId.Length; i++)
             {
@@ -171,9 +171,9 @@ namespace BeastHunter
 
         private void FillLocationInfo(ILocationInfo location)
         {
-            _locationScreen.GetComponent<Image>().sprite = location.Screenshot;
-            _locationName.GetComponent<Text>().text = location.Name;
-            _locationDescription.GetComponent<Text>().text = location.Description;
+            _locationScreen.sprite = location.Screenshot;
+            _locationName.text = location.Name;
+            _locationDescription.text = location.Description;
 
             for (int i = 0; i < location.DwellersId.Length; i++)
             {
@@ -217,8 +217,8 @@ namespace BeastHunter
 
         private void OnClick_DialogButton(ICitizenInfo citizen, IDialogAnswer dialogAnswer)
         {
-            _acceptButton.GetComponent<Button>().onClick.RemoveAllListeners();
-            _declineButton.GetComponent<Button>().onClick.RemoveAllListeners();
+            _acceptButton.onClick.RemoveAllListeners();
+            _declineButton.onClick.RemoveAllListeners();
 
             citizen.NextDialog(dialogAnswer.NextDialogNodeId);
 
@@ -247,21 +247,21 @@ namespace BeastHunter
         private void FillDialogPanel(ICitizenInfo citizen)
         {
             IDialog currentDialog = Data.HubMapData.Dialogs[citizen.CurrentDialogId];
-            _citizenName.GetComponent<Text>().text = citizen.Name;
-            _citizenPortrait.GetComponent<Image>().sprite = citizen.Portrait;
-            _dialogText.GetComponent<Text>().text = currentDialog.Text;
+            _citizenName.text = citizen.Name;
+            _citizenPortrait.sprite = citizen.Portrait;
+            _dialogText.text = currentDialog.Text;
             _declineButton.GetComponentInChildren<Text>().text = currentDialog.NegativeAnswer.Text;
-            _declineButton.GetComponent<Button>().onClick.AddListener(() => OnClick_DialogButton(citizen, currentDialog.NegativeAnswer));
+            _declineButton.onClick.AddListener(() => OnClick_DialogButton(citizen, currentDialog.NegativeAnswer));
 
             if (currentDialog.PositiveAnswer.Text != "")
             {
                 _acceptButton.GetComponentInChildren<Text>().text = currentDialog.PositiveAnswer.Text;
-                _acceptButton.GetComponent<Button>().onClick.AddListener(() => OnClick_DialogButton(citizen, currentDialog.PositiveAnswer));
-                _acceptButton.SetActive(true);
+                _acceptButton.onClick.AddListener(() => OnClick_DialogButton(citizen, currentDialog.PositiveAnswer));
+                _acceptButton.gameObject.SetActive(true);
             }
             else
             {
-                _acceptButton.SetActive(false);
+                _acceptButton.gameObject.SetActive(false);
             }
         }
 
