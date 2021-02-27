@@ -19,6 +19,8 @@ MonoBehaviour:
     type: 3}
   _locationTextUIPrefab: {fileID: 4845705783241596257, guid: a6b652d58e47e6b48807f69de54a5709,
     type: 3}
+  _characterUIPrefab: {fileID: 3663167388749810844, guid: d76eafa59c0177848b959baa6daa5a28,
+    type: 3}
   _mapOnStartEnabled: 0
   _items:
   - _id: 0
@@ -271,3 +273,12 @@ MonoBehaviour:
     _screenshot: {fileID: 21300000, guid: 5b7b78978133bde4b9032529f4582846, type: 3}
     _dwellersId: 00000000
     _ingredientsId: 00000000
+  _characters:
+  - _id: 0
+    _portrait: {fileID: 21300000, guid: 298b8b86ad23542439b8608724e35925, type: 3}
+  - _id: 1
+    _portrait: {fileID: 21300000, guid: bd65735d676f7a440a06fee6633d284c, type: 3}
+  - _id: 2
+    _portrait: {fileID: 21300000, guid: 6b22d44cbc5bf8045bbaea2cd873aa2c, type: 3}
+  - _id: 3
+    _portrait: {fileID: 21300000, guid: 3bf854bf2bc26094d86801b40d9b7279, type: 3}

@@ -11,6 +11,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _citizenUIPrefab;
         [SerializeField] private GameObject _sellingItemUIPrefab;
         [SerializeField] private GameObject _locationTextUIPrefab;
+        [SerializeField] private GameObject _characterUIPrefab;
         [SerializeField] private bool _mapOnStartEnabled;
 
         #endregion
@@ -24,6 +25,7 @@ namespace BeastHunter
         [SerializeField] private TemporaryCitizenInfoModel[] _citizens;
         [SerializeField] private TemporaryCityInfoModel[] _cities;
         [SerializeField] private TemporaryLocationInfoModel[] _locations;
+        [SerializeField] private TemporaryCharacterModel[] _characters;
         private TemporaryCitizenInfoModel[] _citizensCopy;
 
         public TemporarySellingItemModel[] Items => _items;
@@ -31,6 +33,7 @@ namespace BeastHunter
         public TemporaryCitizenInfoModel[] Citizens => _citizensCopy;
         public TemporaryCityInfoModel[] Cities => _cities;
         public TemporaryLocationInfoModel[] Locations => _locations;
+        public TemporaryCharacterModel[] Characters => _characters;
 
         #endregion
 
@@ -55,6 +58,7 @@ namespace BeastHunter
         public GameObject CitizenUIPrefab => _citizenUIPrefab;
         public GameObject SellingItemUIPrefab => _sellingItemUIPrefab;
         public GameObject LocationTextUIPrefab => _locationTextUIPrefab;
+        public GameObject CharacterUIPrefab => _characterUIPrefab;
         public bool MapOnStartEnabled => _mapOnStartEnabled;
 
         #endregion
