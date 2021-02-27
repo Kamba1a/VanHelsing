@@ -8,9 +8,9 @@ namespace BeastHunter
     {
         #region Fields
 
-        [SerializeField] private GameObject _citizenNamePanel;
-        [SerializeField] private GameObject _citizenPortrait;
-        [SerializeField] private GameObject _exclamationImg;
+        [SerializeField] private Text _citizenNamePanel;
+        [SerializeField] private Image _citizenPortrait;
+        [SerializeField] private GameObject _exclamationImage;
 
         #endregion
 
@@ -28,9 +28,9 @@ namespace BeastHunter
         public void Initialize(ICitizenInfo citizen)
         {
             Id = citizen.Id;
-            _citizenNamePanel.GetComponent<Text>().text = citizen.Name;
-            _citizenPortrait.GetComponent<Image>().sprite = citizen.Portrait;
-            _exclamationImg.SetActive(Data.HubMapData.Dialogs[citizen.CurrentDialogId].IsQuest);
+            _citizenNamePanel.text = citizen.Name;
+            _citizenPortrait.sprite = citizen.Portrait;
+            _exclamationImage.SetActive(Data.HubMapData.Dialogs[citizen.CurrentDialogId].IsQuest);
             GetComponent<Button>().onClick.AddListener(() => OnClick_CitizenButton(citizen.Id));
         }
 
@@ -41,7 +41,7 @@ namespace BeastHunter
 
         public void UpdateInfo(ICitizenInfo citizen)
         {
-            _exclamationImg.SetActive(Data.HubMapData.Dialogs[citizen.CurrentDialogId].IsQuest);
+            _exclamationImage.SetActive(Data.HubMapData.Dialogs[citizen.CurrentDialogId].IsQuest);
         }
 
         #endregion

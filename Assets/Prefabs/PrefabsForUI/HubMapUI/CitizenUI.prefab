@@ -429,6 +429,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3da3cbd444d75a24f8f5fd499813ee6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _citizenNamePanel: {fileID: 5311113231050807610}
-  _citizenPortrait: {fileID: 5311113231001966784}
-  _exclamationImg: {fileID: 5311113231621336350}
+  _citizenNamePanel: {fileID: 5311113231050807612}
+  _citizenPortrait: {fileID: 5311113231001966786}
+  _exclamationImage: {fileID: 5311113231621336350}
