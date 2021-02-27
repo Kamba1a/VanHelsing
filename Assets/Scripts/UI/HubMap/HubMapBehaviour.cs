@@ -40,6 +40,12 @@ namespace BeastHunter
         [SerializeField] private GameObject _locationScreen;
         [SerializeField] private GameObject _hikeButton;
 
+        [Header("Hike panel")]
+        [SerializeField] private GameObject _hikePanel;
+        [SerializeField] private GameObject _hikePreparePanel;
+        [SerializeField] private Scrollbar _charactersPanelScrollbar;
+
+
         #endregion
 
 
@@ -47,6 +53,7 @@ namespace BeastHunter
 
         private List<GameObject> _clearInfoPanelList;
         private List<GameObject> _currentCitizensList;
+        private int _currentLocationId;
 
         #endregion
 
@@ -62,6 +69,8 @@ namespace BeastHunter
             _cityInfoPanel.SetActive(false);
             _dialogPanel.SetActive(false);
             _locationInfoPanel.SetActive(false);
+            _hikePanel.SetActive(false);
+            _hikePreparePanel.SetActive(true);
         }
 
         #endregion
@@ -72,8 +81,12 @@ namespace BeastHunter
         public void OnClick_HubButton() => HideUI();
         public void OnClick_MapButton() => ShowUI();
         public void OnClick_CityButton(int cityId) => ShowCityInfoPanel(cityId);
-        public void OnClick_CloseInfoButton() => HideInfoPanel();
+        public void OnClick_CloseInfoButton() => HideAllInfoPanels();
         public void OnClick_LocationButton(int locationId) => ShowLocationInfoPanel(locationId);
+        public void OnClick_HikeButton() => ShowHikePanel();
+        public void OnClick_HikeAcceptButton() => LocationLoad();
+        public void OnClick_CloseHikeButton() => CloseHikePanel();
+        public void OnClick_CharactersPanelButton(float step) => MoveCharactersPanelScrollbar(step);
 
         #endregion
 
@@ -90,9 +103,19 @@ namespace BeastHunter
             _mainPanel.SetActive(false);
         }
 
+        private void ShowHikePanel()
+        {
+            _hikePanel.SetActive(true);
+        }
+
+        private void CloseHikePanel()
+        {
+            _hikePanel.SetActive(false);
+        }
+
         private void ShowCityInfoPanel(int cityId)
         {
-            HideInfoPanel();
+            HideAllInfoPanels();
             ClearInfoPanel();
             FillCityInfo(Data.HubMapData.Cities[cityId]);
             _infoPanel.GetComponent<ScrollRect>().content = _cityInfoPanel.GetComponent<RectTransform>();
@@ -102,7 +125,8 @@ namespace BeastHunter
 
         private void ShowLocationInfoPanel(int locationId)
         {
-            HideInfoPanel();
+            _currentLocationId = locationId;
+            HideAllInfoPanels();
             ClearInfoPanel();
             FillLocationInfo(Data.HubMapData.Locations[locationId]);
             _infoPanel.GetComponent<ScrollRect>().content = _locationInfoPanel.GetComponent<RectTransform>();
@@ -110,7 +134,7 @@ namespace BeastHunter
             _locationInfoPanel.SetActive(true);
         }
 
-        private void HideInfoPanel()
+        private void HideAllInfoPanels()
         {
             _cityInfoPanel.SetActive(false);
             _locationInfoPanel.SetActive(false);
@@ -239,6 +263,16 @@ namespace BeastHunter
             {
                 _acceptButton.SetActive(false);
             }
+        }
+
+        private void MoveCharactersPanelScrollbar(float step)
+        {
+            _charactersPanelScrollbar.value += step;
+        }
+
+        private void LocationLoad()
+        {
+            Debug.Log("Load location. Location id: " + _currentLocationId);
         }
 
         #endregion
