@@ -8,7 +8,7 @@ namespace BeastHunter
     {
         #region Properties
 
-        public Action OnClick_CharacterButtonHandler { get; set; }
+        public Action<int?[]> OnClick_CharacterButtonHandler { get; set; }
 
         #endregion
 
@@ -18,12 +18,12 @@ namespace BeastHunter
         public void Initialize(ICharacter character)
         {
             GetComponent<Image>().sprite = character.Portrait;
-            GetComponent<Button>().onClick.AddListener(() => OnClick_CharacterButton());
+            GetComponent<Button>().onClick.AddListener(() => OnClick_CharacterButton(character.ItemsId));
         }
 
-        public void OnClick_CharacterButton()
+        public void OnClick_CharacterButton(int?[] items)
         {
-            OnClick_CharacterButtonHandler?.Invoke();
+            OnClick_CharacterButtonHandler?.Invoke(items);
         }
 
         #endregion

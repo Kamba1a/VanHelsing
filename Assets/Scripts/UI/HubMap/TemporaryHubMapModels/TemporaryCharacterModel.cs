@@ -22,5 +22,15 @@ namespace BeastHunter
         public int?[] ItemsId => _itemsId;
 
         #endregion
+
+
+        #region Methods
+
+        public void SetItems(int?[] itemsId)
+        {
+            _itemsId = itemsId;
+        }
+
+        #endregion
     }
 }

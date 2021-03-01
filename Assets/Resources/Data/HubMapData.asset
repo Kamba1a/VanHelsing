@@ -21,6 +21,9 @@ MonoBehaviour:
     type: 3}
   _characterUIPrefab: {fileID: 3663167388749810844, guid: d76eafa59c0177848b959baa6daa5a28,
     type: 3}
+  _hikeEquipmentSellPrefab: {fileID: 5851760581249830909, guid: 7899f865f88bda740864b45d02cbea24,
+    type: 3}
+  _hikeEquipmentPanelSellAmount: 6
   _mapOnStartEnabled: 0
   _items:
   - _id: 0

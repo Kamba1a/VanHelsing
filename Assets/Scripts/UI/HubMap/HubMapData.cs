@@ -12,6 +12,8 @@ namespace BeastHunter
         [SerializeField] private GameObject _sellingItemUIPrefab;
         [SerializeField] private GameObject _locationTextUIPrefab;
         [SerializeField] private GameObject _characterUIPrefab;
+        [SerializeField] private GameObject _hikeEquipmentSellPrefab;
+        [SerializeField] private int _hikeEquipmentPanelSellAmount;
         [SerializeField] private bool _mapOnStartEnabled;
 
         #endregion
@@ -43,9 +45,20 @@ namespace BeastHunter
         private void OnEnable()
         {
             _citizensCopy = new TemporaryCitizenInfoModel[_citizens.Length];
-            for (int i = 0; i < _citizensCopy.Length; i++)
+            for (int i = 0; i < _citizensCopy.Length; i++) //for debug only
             {
                 _citizensCopy[i] = new TemporaryCitizenInfoModel(_citizens[i]);
+            }
+
+            for (int i = 0; i < _characters.Length; i++) //for debug only
+            {
+                int?[] items = new int?[_hikeEquipmentPanelSellAmount];
+                for (int j = 0; j < items.Length; j++)
+                {
+                    if (Random.Range(1, 100) <= 60) items[j] = Random.Range(0, _items.Length);
+                    else items[i] = null;
+                }
+                _characters[i].SetItems(items);
             }
         }
 
@@ -59,7 +72,9 @@ namespace BeastHunter
         public GameObject SellingItemUIPrefab => _sellingItemUIPrefab;
         public GameObject LocationTextUIPrefab => _locationTextUIPrefab;
         public GameObject CharacterUIPrefab => _characterUIPrefab;
+        public GameObject HikeEquipmentSellPrefab => _hikeEquipmentSellPrefab;
         public bool MapOnStartEnabled => _mapOnStartEnabled;
+        public int HikeEquipmentPanelSellAmount => _hikeEquipmentPanelSellAmount;
 
         #endregion
     }

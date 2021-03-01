@@ -44,8 +44,8 @@ namespace BeastHunter
         [SerializeField] private GameObject _hikePanel;
         [SerializeField] private GameObject _hikePreparePanel;
         [SerializeField] private GameObject _charactersPanel;
+        [SerializeField] private GameObject _equipmentPanel;
         [SerializeField] private Scrollbar _charactersPanelScrollbar;
-
 
         #endregion
 
@@ -54,6 +54,7 @@ namespace BeastHunter
 
         private List<GameObject> _clearInfoPanelList;
         private List<GameObject> _currentCitizensList;
+        private List<Image> _hikeEquipmentSells;
         private int _currentLocationId;
 
         #endregion
@@ -81,6 +82,16 @@ namespace BeastHunter
                 character.GetComponentInChildren<CharacterUIBehaviour>().Initialize(Data.HubMapData.Characters[i]);
                 character.GetComponentInChildren<CharacterUIBehaviour>().OnClick_CharacterButtonHandler = FillEquipmentPanel;
             }
+
+            _hikeEquipmentSells = new List<Image>();
+            for (int i = 0; i < Data.HubMapData.HikeEquipmentPanelSellAmount; i++)
+            {
+                GameObject equipSell = GameObject.Instantiate(Data.HubMapData.HikeEquipmentSellPrefab);
+                equipSell.transform.SetParent(_equipmentPanel.transform, false);
+                equipSell.transform.localScale = new Vector3(1, 1, 1);
+                _hikeEquipmentSells.Add(equipSell.transform.GetChild(0).GetComponent<Image>());
+                equipSell.GetComponent<Button>().onClick.AddListener(ShowInventoryPanel);
+            }
         }
 
         #endregion
@@ -97,7 +108,6 @@ namespace BeastHunter
         public void OnClick_HikeAcceptButton() => LocationLoad();
         public void OnClick_CloseHikeButton() => CloseHikePanel();
         public void OnClick_CharactersPanelButton(float step) => MoveCharactersPanelScrollbar(step);
-        public void OnClick_EquipmentButton() => ShowInventoryPanel();
 
         #endregion
 
@@ -157,9 +167,21 @@ namespace BeastHunter
             _infoPanel.SetActive(false);
         }
 
-        private void FillEquipmentPanel()
+        private void FillEquipmentPanel(int?[] items)
         {
-            Debug.Log("FillEquipmentPanel");
+            for (int i = 0; i < _hikeEquipmentSells.Count; i++)
+            {
+                if (items[i].HasValue)
+                {
+                    _hikeEquipmentSells[i].sprite = Data.HubMapData.Items[items[i].Value].Image;
+                    _hikeEquipmentSells[i].color = ChangeColorOpacity(_hikeEquipmentSells[i].color, 255);
+                }
+                else
+                {
+                    _hikeEquipmentSells[i].sprite = null;
+                    _hikeEquipmentSells[i].color = ChangeColorOpacity(_hikeEquipmentSells[i].color, 0);
+                }
+            }
         }
 
         private void FillCityInfo(ICityInfo city)
@@ -294,6 +316,12 @@ namespace BeastHunter
         private void LocationLoad()
         {
             Debug.Log("Load location. Location id: " + _currentLocationId);
+        }
+
+        private Color ChangeColorOpacity(Color color, float num)
+        {
+            color.a = Mathf.Clamp(num, 0, 255);
+            return color;
         }
 
         #endregion
