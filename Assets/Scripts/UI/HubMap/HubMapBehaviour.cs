@@ -45,6 +45,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _hikePreparePanel;
         [SerializeField] private GameObject _charactersPanel;
         [SerializeField] private GameObject _equipmentPanel;
+        [SerializeField] private GameObject _inventoryPanel;
         [SerializeField] private Scrollbar _charactersPanelScrollbar;
 
         #endregion
@@ -73,6 +74,7 @@ namespace BeastHunter
             _locationInfoPanel.SetActive(false);
             _hikePanel.SetActive(false);
             _hikePreparePanel.SetActive(true);
+            _inventoryPanel.SetActive(false);
 
             for (int i = 0; i < Data.HubMapData.Characters.Length; i++)
             {
@@ -108,6 +110,7 @@ namespace BeastHunter
         public void OnClick_HikeAcceptButton() => LocationLoad();
         public void OnClick_CloseHikeButton() => CloseHikePanel();
         public void OnClick_CharactersPanelButton(float step) => MoveCharactersPanelScrollbar(step);
+        public void OnClick_CloseInventoryButton() => CloseInventoryPanel();
 
         #endregion
 
@@ -126,7 +129,12 @@ namespace BeastHunter
 
         private void ShowInventoryPanel()
         {
-            Debug.Log("Show inventory panel");
+            _inventoryPanel.SetActive(true);
+        }
+
+        private void CloseInventoryPanel()
+        {
+            _inventoryPanel.SetActive(false);
         }
 
         private void ShowHikePanel()
@@ -142,7 +150,7 @@ namespace BeastHunter
         private void ShowCityInfoPanel(int cityId)
         {
             HideRightInfoPanels();
-            ClearInfoPanel();
+            ClearRightInfoPanel();
             FillCityInfo(Data.HubMapData.Cities[cityId]);
             _infoPanel.GetComponent<ScrollRect>().content = _cityInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
@@ -153,7 +161,7 @@ namespace BeastHunter
         {
             _currentLocationId = locationId;
             HideRightInfoPanels();
-            ClearInfoPanel();
+            ClearRightInfoPanel();
             FillLocationInfo(Data.HubMapData.Locations[locationId]);
             _infoPanel.GetComponent<ScrollRect>().content = _locationInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
@@ -237,7 +245,7 @@ namespace BeastHunter
             }
         }
 
-        private void ClearInfoPanel()
+        private void ClearRightInfoPanel()
         {
             for (int i=0; i< _clearInfoPanelList.Count; i++)
             {
