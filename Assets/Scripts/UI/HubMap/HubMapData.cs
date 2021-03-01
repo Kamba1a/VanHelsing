@@ -55,7 +55,7 @@ namespace BeastHunter
                 int?[] items = new int?[_hikeEquipmentPanelSellAmount];
                 for (int j = 0; j < items.Length; j++)
                 {
-                    if (Random.Range(1, 100) <= 60) items[j] = Random.Range(0, _items.Length);
+                    if (Random.Range(1, 100) <= 55) items[j] = Random.Range(0, _items.Length);
                     else items[i] = null;
                 }
                 _characters[i].SetItems(items);
