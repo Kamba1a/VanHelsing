@@ -56,7 +56,7 @@ namespace BeastHunter
 
         private List<GameObject> _clearInfoPanelList;
         private List<GameObject> _currentCitizensList;
-        private List<EquipmentItemHubMapUIBehaviour> _hikeEquipmentItemsCells;
+        private List<EquipmentItemHubMapUIBehaviour> _hikeEquipmentItemCells;
         private int _currentLocationId;
 
         #endregion
@@ -87,13 +87,13 @@ namespace BeastHunter
                 character.GetComponentInChildren<CharacterUIBehaviour>().OnClick_CharacterButtonHandler = FillEquipmentPanel;
             }
 
-            _hikeEquipmentItemsCells = new List<EquipmentItemHubMapUIBehaviour>();
+            _hikeEquipmentItemCells = new List<EquipmentItemHubMapUIBehaviour>();
             for (int i = 0; i < Data.HubMapData.HikeEquipmentPanelSellAmount; i++)
             {
                 GameObject equipCell = GameObject.Instantiate(Data.HubMapData.EquipmentItemUIPrefab);
                 equipCell.transform.SetParent(_equipmentPanel.transform, false);
                 equipCell.transform.localScale = new Vector3(1, 1, 1);
-                _hikeEquipmentItemsCells.Add(equipCell.GetComponent<EquipmentItemHubMapUIBehaviour>());
+                _hikeEquipmentItemCells.Add(equipCell.GetComponent<EquipmentItemHubMapUIBehaviour>());
                 equipCell.GetComponent<Button>().onClick.AddListener(ShowInventoryPanel);
             }
         }
@@ -141,10 +141,10 @@ namespace BeastHunter
 
         private void ShowHikePanel()
         {
-            for (int i = 0; i < _hikeEquipmentItemsCells.Count; i++)
+            for (int i = 0; i < _hikeEquipmentItemCells.Count; i++)
             {
-                _hikeEquipmentItemsCells[i].SetImage(null);
-                _hikeEquipmentItemsCells[i].SetInteractable(false);
+                _hikeEquipmentItemCells[i].SetImage(null);
+                _hikeEquipmentItemCells[i].SetInteractable(false);
             }
             _hikePanel.SetActive(true);
         }
@@ -197,17 +197,17 @@ namespace BeastHunter
 
         private void FillEquipmentPanel(int?[] itemsId)
         {
-            for (int i = 0; i < _hikeEquipmentItemsCells.Count; i++)
+            for (int i = 0; i < _hikeEquipmentItemCells.Count; i++)
             {
                 if (itemsId[i].HasValue)
                 {
-                    _hikeEquipmentItemsCells[i].SetImage(Data.HubMapData.Items[itemsId[i].Value].Image);
+                    _hikeEquipmentItemCells[i].SetImage(Data.HubMapData.Items[itemsId[i].Value].Image);
                 }
                 else
                 {
-                    _hikeEquipmentItemsCells[i].SetImage(null);
+                    _hikeEquipmentItemCells[i].SetImage(null);
                 }
-                _hikeEquipmentItemsCells[i].SetInteractable(true);
+                _hikeEquipmentItemCells[i].SetInteractable(true);
             }
         }
 
