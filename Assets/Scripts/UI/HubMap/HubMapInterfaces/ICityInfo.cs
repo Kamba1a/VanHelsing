@@ -9,7 +9,7 @@ namespace BeastHunter
         public string Description { get; }
         public Sprite Fraction { get; }
         public int[] CitizensId { get; }
-        public float Reputation { get; }
+        public float CurrentPlayerReputation { get; }
         public int[] SellingItemsId { get; }
     }
 }

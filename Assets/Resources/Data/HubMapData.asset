@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdc4f56eb8b4c2742b1415abd0385973, type: 3}
   m_Name: HubMapData
   m_EditorClassIdentifier: 
-  _hubMapUIPrefab: {fileID: 0}
   _citizenUIPrefab: {fileID: 5311113231720852829, guid: a9a2ad70cde8fd5409f8b95ef49c4e33,
     type: 3}
   _sellingItemUIPrefab: {fileID: 6062753379447882041, guid: 1edea349712c2eb448e6e5caa33b4599,
@@ -21,88 +20,46 @@ MonoBehaviour:
     type: 3}
   _characterUIPrefab: {fileID: 3663167388749810844, guid: d76eafa59c0177848b959baa6daa5a28,
     type: 3}
-  _hikeEquipmentSellPrefab: {fileID: 5851760581249830909, guid: 7899f865f88bda740864b45d02cbea24,
+  _equipmentItemUIPrefab: {fileID: 5851760581249830909, guid: 7899f865f88bda740864b45d02cbea24,
+    type: 3}
+  _inventoryItemUIPrefab: {fileID: 4453913233983459706, guid: 30984c6c07d235c459e8e3c072b4a15c,
     type: 3}
   _hikeEquipmentPanelSellAmount: 6
   _mapOnStartEnabled: 0
   _items:
   - _id: 0
-    _name: 
-    _description: 
     _image: {fileID: 21300000, guid: f82344fe789b37545906ac6a10354216, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 0
-  - _id: 0
-    _name: 
-    _description: 
+    _requiredReputationForSale: 0
+  - _id: 1
     _image: {fileID: 21300000, guid: eb30ddda20b252d43bf48e22a42dccf8, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 0
-  - _id: 0
-    _name: 
-    _description: 
+    _requiredReputationForSale: 75
+  - _id: 2
     _image: {fileID: 21300000, guid: bfa2df0a734b58c45b8359c66868dbfd, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 1
-  - _id: 0
-    _name: 
-    _description: 
+    _requiredReputationForSale: 75
+  - _id: 3
     _image: {fileID: 21300000, guid: 040ffae9e9db5784da5b6a740807d127, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 1
-  - _id: 0
-    _name: 
-    _description: 
+    _requiredReputationForSale: 0
+  - _id: 4
     _image: {fileID: 21300000, guid: bd65735d676f7a440a06fee6633d284c, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 1
-  - _id: 0
-    _name: 
-    _description: 
+    _requiredReputationForSale: 0
+  - _id: 5
     _image: {fileID: 21300000, guid: fff6f4db7e9ad874d8ba024d5ea7469d, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 1
-  - _id: 0
-    _name: 
-    _description: 
+    _requiredReputationForSale: 0
+  - _id: 6
     _image: {fileID: 21300000, guid: 58ac4331c120c5740938347bd5ed3611, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 1
-  - _id: 0
-    _name: 
-    _description: 
+    _requiredReputationForSale: 0
+  - _id: 7
     _image: {fileID: 21300000, guid: 6f82c769d51ea504083832377e952d62, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 1
-  - _id: 0
-    _name: 
-    _description: 
+    _requiredReputationForSale: 0
+  - _id: 8
     _image: {fileID: 21300000, guid: 03e92acfa9936644eae9672db29b795b, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 0
-  - _id: 0
-    _name: 
-    _description: 
+    _requiredReputationForSale: 75
+  - _id: 9
     _image: {fileID: 21300000, guid: 035fbc8a5734c4348a2f9a2bca6fb93c, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 1
-  - _id: 0
-    _name: 
-    _description: 
+    _requiredReputationForSale: 0
+  - _id: 10
     _image: {fileID: 21300000, guid: 95187df84f56c4247a4cf20c453fc85c, type: 3}
-    _cost: 0
-    _requiredReputation: 0
-    _isEnoughReputation: 1
+    _requiredReputationForSale: 0
   _dialogs:
   - _id: 0
     _text: "\u041F\u0440\u0438\u0432\u0435\u0442, \u043A\u0430\u043A \u0434\u0435\u043B\u0430?"
@@ -213,7 +170,7 @@ MonoBehaviour:
       Morbi sit amet tellus in ex efficitur vulputate eu quis nibh. '
     _fraction: {fileID: 21300000, guid: 97e8c2f487b3d2244929d96565fee5fd, type: 3}
     _citizensId: 000000000100000002000000
-    _reputation: 20
+    _playerReputation: 50
     _sellingItemsId: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
   _locations:
   - _id: 0
@@ -285,3 +242,4 @@ MonoBehaviour:
     _portrait: {fileID: 21300000, guid: 6b22d44cbc5bf8045bbaea2cd873aa2c, type: 3}
   - _id: 3
     _portrait: {fileID: 21300000, guid: 3bf854bf2bc26094d86801b40d9b7279, type: 3}
+  _inventoryItemsId: 0000000001000000020000000300000004000000

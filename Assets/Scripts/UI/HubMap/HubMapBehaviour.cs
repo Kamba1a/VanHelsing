@@ -46,6 +46,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _charactersPanel;
         [SerializeField] private GameObject _equipmentPanel;
         [SerializeField] private GameObject _inventoryPanel;
+        [SerializeField] private GameObject _inventoryItemsPanel;
         [SerializeField] private Scrollbar _charactersPanelScrollbar;
 
         #endregion
@@ -55,7 +56,7 @@ namespace BeastHunter
 
         private List<GameObject> _clearInfoPanelList;
         private List<GameObject> _currentCitizensList;
-        private List<Image> _hikeEquipmentSells;
+        private List<Image> _hikeEquipmentCells;
         private int _currentLocationId;
 
         #endregion
@@ -75,6 +76,7 @@ namespace BeastHunter
             _hikePanel.SetActive(false);
             _hikePreparePanel.SetActive(true);
             _inventoryPanel.SetActive(false);
+            FillInventoryPanel(Data.HubMapData.InventoryItemsId);
 
             for (int i = 0; i < Data.HubMapData.Characters.Length; i++)
             {
@@ -85,14 +87,15 @@ namespace BeastHunter
                 character.GetComponentInChildren<CharacterUIBehaviour>().OnClick_CharacterButtonHandler = FillEquipmentPanel;
             }
 
-            _hikeEquipmentSells = new List<Image>();
+            _hikeEquipmentCells = new List<Image>();
             for (int i = 0; i < Data.HubMapData.HikeEquipmentPanelSellAmount; i++)
             {
-                GameObject equipSell = GameObject.Instantiate(Data.HubMapData.HikeEquipmentSellPrefab);
-                equipSell.transform.SetParent(_equipmentPanel.transform, false);
-                equipSell.transform.localScale = new Vector3(1, 1, 1);
-                _hikeEquipmentSells.Add(equipSell.transform.GetChild(0).GetComponent<Image>());
-                equipSell.GetComponent<Button>().onClick.AddListener(ShowInventoryPanel);
+                GameObject equipCell = GameObject.Instantiate(Data.HubMapData.EquipmentItemUIPrefab);
+                equipCell.transform.SetParent(_equipmentPanel.transform, false);
+                equipCell.transform.localScale = new Vector3(1, 1, 1);
+                _hikeEquipmentCells.Add(equipCell.transform.GetChild(0).GetComponent<Image>());
+                equipCell.GetComponent<Button>().onClick.AddListener(ShowInventoryPanel);
+                //equipCell.GetComponent<Button>().interactable = false;
             }
         }
 
@@ -139,11 +142,18 @@ namespace BeastHunter
 
         private void ShowHikePanel()
         {
+            for (int i = 0; i < _hikeEquipmentCells.Count; i++)
+            {
+                _hikeEquipmentCells[i].sprite = null;
+                _hikeEquipmentCells[i].color = ChangeColorOpacity(_hikeEquipmentCells[i].color, 0);
+                _hikeEquipmentCells[i].transform.parent.GetComponent<Button>().interactable = false;
+            }
             _hikePanel.SetActive(true);
         }
 
         private void CloseHikePanel()
         {
+            _inventoryPanel.SetActive(false);
             _hikePanel.SetActive(false);
         }
 
@@ -175,20 +185,33 @@ namespace BeastHunter
             _infoPanel.SetActive(false);
         }
 
-        private void FillEquipmentPanel(int?[] items)
+        private void FillInventoryPanel(List<int> itemsId)
         {
-            for (int i = 0; i < _hikeEquipmentSells.Count; i++)
+            for (int i = 0; i < itemsId.Count; i++)
             {
-                if (items[i].HasValue)
+                GameObject item = GameObject.Instantiate(Data.HubMapData.InventoryItemUIPrefab);
+                item.transform.SetParent(_inventoryItemsPanel.transform, false);
+                item.transform.localScale = new Vector3(1, 1, 1);
+                item.GetComponent<Image>().sprite = Data.HubMapData.Items[itemsId[i]].Image;
+                //item.GetComponent<Button>()
+            }
+        }
+
+        private void FillEquipmentPanel(int?[] itemsId)
+        {
+            for (int i = 0; i < _hikeEquipmentCells.Count; i++)
+            {
+                if (itemsId[i].HasValue)
                 {
-                    _hikeEquipmentSells[i].sprite = Data.HubMapData.Items[items[i].Value].Image;
-                    _hikeEquipmentSells[i].color = ChangeColorOpacity(_hikeEquipmentSells[i].color, 255);
+                    _hikeEquipmentCells[i].sprite = Data.HubMapData.Items[itemsId[i].Value].Image;
+                    _hikeEquipmentCells[i].color = ChangeColorOpacity(_hikeEquipmentCells[i].color, 255);
                 }
                 else
                 {
-                    _hikeEquipmentSells[i].sprite = null;
-                    _hikeEquipmentSells[i].color = ChangeColorOpacity(_hikeEquipmentSells[i].color, 0);
+                    _hikeEquipmentCells[i].sprite = null;
+                    _hikeEquipmentCells[i].color = ChangeColorOpacity(_hikeEquipmentCells[i].color, 0);
                 }
+                _hikeEquipmentCells[i].transform.parent.GetComponent<Button>().interactable = true;
             }
         }
 
@@ -197,7 +220,7 @@ namespace BeastHunter
             _cityFraction.sprite = city.Fraction;
             _cityName.text = city.Name;
             _cityDescription.text = city.Description;
-            _cityReputation.text = city.Reputation.ToString();
+            _cityReputation.text = city.CurrentPlayerReputation.ToString();
 
             for (int i = 0; i < city.CitizensId.Length; i++)
             {
@@ -216,7 +239,8 @@ namespace BeastHunter
                 _clearInfoPanelList.Add(item);
                 item.transform.SetParent(_citySellingPanel.transform, false);
                 item.transform.localScale = new Vector3(1, 1, 1);
-                item.GetComponentInChildren<SellingItemUIBehaviour>().Initialize(Data.HubMapData.Items[city.SellingItemsId[i]]);
+                IItemInfo itemInfo = Data.HubMapData.Items[city.SellingItemsId[i]];
+                item.GetComponentInChildren<SellingItemUIBehaviour>().Initialize(itemInfo, city.CurrentPlayerReputation > itemInfo.RequiredReputationForSale);
             }
         }
 

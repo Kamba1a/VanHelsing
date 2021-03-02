@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace BeastHunter
 {
@@ -7,12 +8,12 @@ namespace BeastHunter
     {
         #region SerializeFields
 
-        [SerializeField] private GameObject _hubMapUIPrefab;
         [SerializeField] private GameObject _citizenUIPrefab;
         [SerializeField] private GameObject _sellingItemUIPrefab;
         [SerializeField] private GameObject _locationTextUIPrefab;
         [SerializeField] private GameObject _characterUIPrefab;
-        [SerializeField] private GameObject _hikeEquipmentSellPrefab;
+        [SerializeField] private GameObject _equipmentItemUIPrefab;
+        [SerializeField] private GameObject _inventoryItemUIPrefab;
         [SerializeField] private int _hikeEquipmentPanelSellAmount;
         [SerializeField] private bool _mapOnStartEnabled;
 
@@ -22,20 +23,22 @@ namespace BeastHunter
         # region TEMPORARY DATA FOR TESTING HUB MAP
 
         [Header("TEMPORARY FOR DEBUG")]
-        [SerializeField] private TemporarySellingItemModel[] _items;
+        [SerializeField] private TemporaryItemModel[] _items;
         [SerializeField] private TemporaryDialogModel[] _dialogs;
         [SerializeField] private TemporaryCitizenInfoModel[] _citizens;
         [SerializeField] private TemporaryCityInfoModel[] _cities;
         [SerializeField] private TemporaryLocationInfoModel[] _locations;
         [SerializeField] private TemporaryCharacterModel[] _characters;
+        [SerializeField] private List<int> _inventoryItemsId;
         private TemporaryCitizenInfoModel[] _citizensCopy;
 
-        public TemporarySellingItemModel[] Items => _items;
+        public TemporaryItemModel[] Items => _items;
         public TemporaryDialogModel[] Dialogs => _dialogs;
         public TemporaryCitizenInfoModel[] Citizens => _citizensCopy;
         public TemporaryCityInfoModel[] Cities => _cities;
         public TemporaryLocationInfoModel[] Locations => _locations;
         public TemporaryCharacterModel[] Characters => _characters;
+        public List<int> InventoryItemsId => _inventoryItemsId;
 
         #endregion
 
@@ -67,12 +70,12 @@ namespace BeastHunter
 
         #region Properties
 
-        public GameObject HubMapUIPrefab => _hubMapUIPrefab;
         public GameObject CitizenUIPrefab => _citizenUIPrefab;
         public GameObject SellingItemUIPrefab => _sellingItemUIPrefab;
         public GameObject LocationTextUIPrefab => _locationTextUIPrefab;
         public GameObject CharacterUIPrefab => _characterUIPrefab;
-        public GameObject HikeEquipmentSellPrefab => _hikeEquipmentSellPrefab;
+        public GameObject EquipmentItemUIPrefab => _equipmentItemUIPrefab;
+        public GameObject InventoryItemUIPrefab => _inventoryItemUIPrefab;
         public bool MapOnStartEnabled => _mapOnStartEnabled;
         public int HikeEquipmentPanelSellAmount => _hikeEquipmentPanelSellAmount;
 
