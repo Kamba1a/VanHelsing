@@ -56,7 +56,7 @@ namespace BeastHunter
 
         private List<GameObject> _clearInfoPanelList;
         private List<GameObject> _currentCitizensList;
-        private List<Image> _hikeEquipmentCells;
+        private List<EquipmentItemHubMapUIBehaviour> _hikeEquipmentItemsCells;
         private int _currentLocationId;
 
         #endregion
@@ -87,15 +87,14 @@ namespace BeastHunter
                 character.GetComponentInChildren<CharacterUIBehaviour>().OnClick_CharacterButtonHandler = FillEquipmentPanel;
             }
 
-            _hikeEquipmentCells = new List<Image>();
+            _hikeEquipmentItemsCells = new List<EquipmentItemHubMapUIBehaviour>();
             for (int i = 0; i < Data.HubMapData.HikeEquipmentPanelSellAmount; i++)
             {
                 GameObject equipCell = GameObject.Instantiate(Data.HubMapData.EquipmentItemUIPrefab);
                 equipCell.transform.SetParent(_equipmentPanel.transform, false);
                 equipCell.transform.localScale = new Vector3(1, 1, 1);
-                _hikeEquipmentCells.Add(equipCell.transform.GetChild(0).GetComponent<Image>());
+                _hikeEquipmentItemsCells.Add(equipCell.GetComponent<EquipmentItemHubMapUIBehaviour>());
                 equipCell.GetComponent<Button>().onClick.AddListener(ShowInventoryPanel);
-                //equipCell.GetComponent<Button>().interactable = false;
             }
         }
 
@@ -142,11 +141,10 @@ namespace BeastHunter
 
         private void ShowHikePanel()
         {
-            for (int i = 0; i < _hikeEquipmentCells.Count; i++)
+            for (int i = 0; i < _hikeEquipmentItemsCells.Count; i++)
             {
-                _hikeEquipmentCells[i].sprite = null;
-                _hikeEquipmentCells[i].color = ChangeColorOpacity(_hikeEquipmentCells[i].color, 0);
-                _hikeEquipmentCells[i].transform.parent.GetComponent<Button>().interactable = false;
+                _hikeEquipmentItemsCells[i].SetImage(null);
+                _hikeEquipmentItemsCells[i].SetInteractable(false);
             }
             _hikePanel.SetActive(true);
         }
@@ -199,19 +197,17 @@ namespace BeastHunter
 
         private void FillEquipmentPanel(int?[] itemsId)
         {
-            for (int i = 0; i < _hikeEquipmentCells.Count; i++)
+            for (int i = 0; i < _hikeEquipmentItemsCells.Count; i++)
             {
                 if (itemsId[i].HasValue)
                 {
-                    _hikeEquipmentCells[i].sprite = Data.HubMapData.Items[itemsId[i].Value].Image;
-                    _hikeEquipmentCells[i].color = ChangeColorOpacity(_hikeEquipmentCells[i].color, 255);
+                    _hikeEquipmentItemsCells[i].SetImage(Data.HubMapData.Items[itemsId[i].Value].Image);
                 }
                 else
                 {
-                    _hikeEquipmentCells[i].sprite = null;
-                    _hikeEquipmentCells[i].color = ChangeColorOpacity(_hikeEquipmentCells[i].color, 0);
+                    _hikeEquipmentItemsCells[i].SetImage(null);
                 }
-                _hikeEquipmentCells[i].transform.parent.GetComponent<Button>().interactable = true;
+                _hikeEquipmentItemsCells[i].SetInteractable(true);
             }
         }
 
@@ -348,12 +344,6 @@ namespace BeastHunter
         private void LocationLoad()
         {
             Debug.Log("Load location. Location id: " + _currentLocationId);
-        }
-
-        private Color ChangeColorOpacity(Color color, float num)
-        {
-            color.a = Mathf.Clamp(num, 0, 255);
-            return color;
         }
 
         #endregion
