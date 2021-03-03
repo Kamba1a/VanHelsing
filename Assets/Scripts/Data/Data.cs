@@ -4,10 +4,10 @@ using System.IO;
 using UnityEngine;
 
 
-namespace BeastHunter 
+namespace BeastHunter
 {
     [CreateAssetMenu (fileName = "Data", menuName = "MainData/Data")]
-    public sealed class Data : ScriptableObject 
+    public sealed class Data : ScriptableObject
     {
         #region Fields
 
@@ -47,6 +47,7 @@ namespace BeastHunter
         [SerializeField] private string _fallingTreeDataPath;
         [SerializeField] private string _enemyHealthBarDataPath;
         [SerializeField] private string _spawnpointsDataPath;
+        [SerializeField] private string _hubMapDataPath;
 
         private static Data _instance;
         private static LocationData _locationData;
@@ -85,6 +86,7 @@ namespace BeastHunter
         private static FallingTreeData _fallingTreeData;
         private static EnemyHealthBarData _enemyHealthBarData;
         private static SpawnpointsData _spawnpointsData;
+        private static HubMapData _hubMapData;
 
         #endregion
 
@@ -166,7 +168,7 @@ namespace BeastHunter
         public static WeaponItem Feast {
             get {
                 if (_feast == null) {
-                    _feast = Resources.Load<WeaponItem> ("Data/" + Instance._feastPath); 
+                    _feast = Resources.Load<WeaponItem> ("Data/" + Instance._feastPath);
                 }
                 return _feast;
             }
@@ -516,6 +518,18 @@ namespace BeastHunter
                     _spawnpointsData = Resources.Load<SpawnpointsData>("Data/" + Instance._spawnpointsDataPath);
                 }
                 return _spawnpointsData;
+            }
+        }
+        
+        public static HubMapData HubMapData
+        {
+            get
+            {
+                if (_hubMapData == null)
+                {
+                    _hubMapData = Resources.Load<HubMapData>("Data/" + Instance._hubMapDataPath);
+                }
+                return _hubMapData;
             }
         }
 
