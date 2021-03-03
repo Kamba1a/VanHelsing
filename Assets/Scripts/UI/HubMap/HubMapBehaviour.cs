@@ -1,5 +1,3 @@
-using Extensions;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -103,6 +101,7 @@ namespace BeastHunter
 
         #region TriggerEvents
 
+        //TODO?: replace obscure event subscription to OnEnable()/OnDisable methods with explicit subscription
         public void OnClick_HubButton() => HideUI();
         public void OnClick_MapButton() => ShowUI();
         public void OnClick_CityButton(int cityId) => ShowCityInfoPanel(cityId);
@@ -143,7 +142,7 @@ namespace BeastHunter
         {
             for (int i = 0; i < _hikeEquipmentItemCells.Count; i++)
             {
-                _hikeEquipmentItemCells[i].SetImage(null);
+                _hikeEquipmentItemCells[i].ClearCell();
                 _hikeEquipmentItemCells[i].SetInteractable(false);
             }
             _hikePanel.SetActive(true);
@@ -191,23 +190,48 @@ namespace BeastHunter
                 item.transform.SetParent(_inventoryItemsPanel.transform, false);
                 item.transform.localScale = new Vector3(1, 1, 1);
                 item.GetComponent<Image>().sprite = Data.HubMapData.Items[itemsId[i]].Image;
-                //item.GetComponent<Button>()
+                //item.GetComponent<Button>().onClick.AddListener(TEMPmethod);
             }
+        }
+
+        //WIP
+        private void TEMPmethod()
+        {
+            ICharacter currentCharacter = new TemporaryCharacterModel();
+
+            int? equipItemIdInCell = 0; //currentCharacter.ItemsId
+            int inventoryItemId = 0;    //Data.HubMapData.InventoryItemsId
+
+            int currentEquipCellNumber = 0;
+            int currentInventoryCellNumber = 0;
+
+            if (currentCharacter.ItemsId[currentEquipCellNumber].HasValue)
+            {
+                Data.HubMapData.InventoryItemsId[currentInventoryCellNumber] = equipItemIdInCell.Value;
+            }
+            else
+            {
+                Data.HubMapData.InventoryItemsId.Remove(inventoryItemId);
+            }
+            currentCharacter.ItemsId[currentEquipCellNumber] = inventoryItemId;
+
+            //update inventory
+            //update equipment
         }
 
         private void FillEquipmentPanel(int?[] itemsId)
         {
             for (int i = 0; i < _hikeEquipmentItemCells.Count; i++)
             {
+                _hikeEquipmentItemCells[i].SetInteractable(true);
                 if (itemsId[i].HasValue)
                 {
-                    _hikeEquipmentItemCells[i].SetImage(Data.HubMapData.Items[itemsId[i].Value].Image);
+                    _hikeEquipmentItemCells[i].PutItemInCell(Data.HubMapData.Items[itemsId[i].Value]);
                 }
                 else
                 {
-                    _hikeEquipmentItemCells[i].SetImage(null);
+                    _hikeEquipmentItemCells[i].ClearCell();
                 }
-                _hikeEquipmentItemCells[i].SetInteractable(true);
             }
         }
 

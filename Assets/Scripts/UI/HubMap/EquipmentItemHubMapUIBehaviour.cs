@@ -14,9 +14,33 @@ namespace BeastHunter
         #endregion
 
 
+        #region Properties
+
+        public int? CurrentItemId { get; private set; }
+
+        #endregion
+
+
         #region Methods
 
-        public void SetImage(Sprite image)
+        public void SetInteractable(bool flag)
+        {
+            _itemButton.interactable = flag;
+        }
+
+        public void PutItemInCell(IItemInfo item)
+        {
+            CurrentItemId = item.Id;
+            SetImage(item.Image);
+        }
+
+        public void ClearCell()
+        {
+            CurrentItemId = null;
+            SetImage(null);
+        }
+
+        private void SetImage(Sprite image)
         {
             if (image != null)
             {
@@ -31,11 +55,6 @@ namespace BeastHunter
                 _itemImage.color = color;
             }
             _itemImage.sprite = image;
-        }
-
-        public void SetInteractable(bool flag)
-        {
-            _itemButton.interactable = flag;
         }
 
         #endregion
