@@ -47,6 +47,13 @@ namespace BeastHunter
 
         private void OnEnable()
         {
+            for (int i = 0; i < _items.Length; i++) _items[i].SetId(i);
+            for (int i = 0; i < _dialogs.Length; i++) _dialogs[i].SetId(i);
+            for (int i = 0; i < _citizens.Length; i++) _citizens[i].SetId(i);
+            for (int i = 0; i < _cities.Length; i++) _cities[i].SetId(i);
+            for (int i = 0; i < _locations.Length; i++) _locations[i].SetId(i);
+            for (int i = 0; i < _characters.Length; i++) _characters[i].SetId(i);
+
             _citizensCopy = new TemporaryCitizenInfoModel[_citizens.Length];
             for (int i = 0; i < _citizensCopy.Length; i++) //for debug only
             {

@@ -8,7 +8,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        [SerializeField] private string _text;
+        [SerializeField] [TextArea(3, 10)] private string _text;
         [SerializeField] private bool _isDialogEnd;
         [SerializeField] private int _nextDialogId;
 

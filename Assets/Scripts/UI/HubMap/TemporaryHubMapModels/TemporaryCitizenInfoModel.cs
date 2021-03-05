@@ -8,7 +8,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        [SerializeField] private int _id;
+        private int _id;
         [SerializeField] private string _name;
         [SerializeField] private Sprite _portrait;
         [SerializeField] private int _currentDialogId;
@@ -40,6 +40,11 @@ namespace BeastHunter
 
 
         #region Methods
+
+        public void SetId(int id)
+        {
+            _id = id;
+        }
 
         public void NextDialog(int nextDialogId)
         {

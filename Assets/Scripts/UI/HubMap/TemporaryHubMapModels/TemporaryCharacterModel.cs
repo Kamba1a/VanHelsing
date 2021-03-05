@@ -8,7 +8,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        [SerializeField] private int _id;
+        private int _id;
         [SerializeField] private Sprite _portrait;
         [SerializeField] private int?[] _itemsId;
 
@@ -25,6 +25,11 @@ namespace BeastHunter
 
 
         #region Methods
+
+        public void SetId(int id)
+        {
+            _id = id;
+        }
 
         public void SetItems(int?[] itemsId)
         {
