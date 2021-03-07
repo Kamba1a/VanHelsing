@@ -315,7 +315,7 @@ namespace BeastHunter
             _acceptButton.onClick.RemoveAllListeners();
             _declineButton.onClick.RemoveAllListeners();
 
-            citizen.NextDialog(dialogAnswer.NextDialogNodeId);
+            Data.HubMapData.CurrentDialogsNumbers[citizen.Id] = dialogAnswer.NextDialogNumber;
 
             if (dialogAnswer.IsDialogEnd)
             {
@@ -341,7 +341,7 @@ namespace BeastHunter
 
         private void FillDialogPanel(ICitizenInfo citizen)
         {
-            IDialog currentDialog = Data.HubMapData.Dialogs[citizen.CurrentDialogId];
+            IDialog currentDialog = citizen.Dialogs[Data.HubMapData.CurrentDialogsNumbers[citizen.Id]];
             _citizenName.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
             _dialogText.text = currentDialog.Text;

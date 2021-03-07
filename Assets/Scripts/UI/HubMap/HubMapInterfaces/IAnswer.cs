@@ -4,6 +4,6 @@
     {
         public string Text { get; }
         public bool IsDialogEnd { get; }
-        public int NextDialogNodeId { get; }
+        public int NextDialogNumber { get; }
     }
 }

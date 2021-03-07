@@ -11,7 +11,7 @@ namespace BeastHunter
         [SerializeField] [ReadOnlyInUnityInspector] private int _id;
         [SerializeField] private string _name;
         [SerializeField] private Sprite _portrait;
-        [SerializeField] private int _currentDialogId;
+        [SerializeField] private TemporaryDialogModel[] _dialogs;
 
         #endregion
 
@@ -21,20 +21,7 @@ namespace BeastHunter
         public int Id => _id;
         public string Name => _name;
         public Sprite Portrait => _portrait;
-        public int CurrentDialogId => _currentDialogId;
-
-        #endregion
-
-
-        #region ClassLifeCyrcle
-
-        public TemporaryCitizenInfoModel(TemporaryCitizenInfoModel citizen)
-        {
-            _id = citizen.Id;
-            _name = citizen.Name;
-            _portrait = citizen.Portrait;
-            _currentDialogId = citizen.CurrentDialogId;
-        }
+        public IDialog[] Dialogs => _dialogs;
 
         #endregion
 
@@ -44,11 +31,6 @@ namespace BeastHunter
         public void SetId(int id)
         {
             _id = id;
-        }
-
-        public void NextDialog(int nextDialogId)
-        {
-            _currentDialogId = nextDialogId;
         }
 
         #endregion

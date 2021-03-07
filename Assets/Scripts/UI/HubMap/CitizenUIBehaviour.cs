@@ -30,7 +30,7 @@ namespace BeastHunter
             Id = citizen.Id;
             _citizenNamePanel.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
-            _exclamationImage.SetActive(Data.HubMapData.Dialogs[citizen.CurrentDialogId].IsQuest);
+            _exclamationImage.SetActive(citizen.Dialogs[Data.HubMapData.CurrentDialogsNumbers[citizen.Id]].IsQuest);
             GetComponent<Button>().onClick.AddListener(() => OnClick_CitizenButton(citizen.Id));
         }
 
@@ -41,7 +41,7 @@ namespace BeastHunter
 
         public void UpdateInfo(ICitizenInfo citizen)
         {
-            _exclamationImage.SetActive(Data.HubMapData.Dialogs[citizen.CurrentDialogId].IsQuest);
+            _exclamationImage.SetActive(citizen.Dialogs[Data.HubMapData.CurrentDialogsNumbers[citizen.Id]].IsQuest);
         }
 
         #endregion

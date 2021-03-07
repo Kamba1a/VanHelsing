@@ -8,7 +8,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        [SerializeField] [ReadOnlyInUnityInspector] private int _id;
+        [SerializeField] private int _number;
         [SerializeField][TextArea(3, 10)] private string _text;
         [SerializeField] private bool _isQuest;
         [SerializeField] private TemporaryDialogAnswerModel _positiveAnswer;
@@ -19,21 +19,11 @@ namespace BeastHunter
 
         #region Properties
 
-        public int Id => _id;
+        public int Number => _number;
         public string Text => _text;
         public bool IsQuest => _isQuest;
         public IDialogAnswer PositiveAnswer => _positiveAnswer;
         public IDialogAnswer NegativeAnswer => _negativeAnswer;
-
-        #endregion
-
-
-        #region Methods
-
-        public void SetId(int id)
-        {
-            _id = id;
-        }
 
         #endregion
     }

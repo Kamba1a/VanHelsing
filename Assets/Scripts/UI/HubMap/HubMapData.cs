@@ -29,18 +29,14 @@ namespace BeastHunter
 
         [Header("TEMPORARY CONTENT FOR TESTING HUB MAP")]
         [SerializeField] private TemporaryItemModel[] _items;
-        [SerializeField] private TemporaryDialogModel[] _dialogs;
         [SerializeField] private TemporaryCitizenInfoModel[] _citizens;
         [SerializeField] private TemporaryCityInfoModel[] _cities;
         [SerializeField] private TemporaryLocationInfoModel[] _locations;
         [SerializeField] private TemporaryCharacterModel[] _characters;
         [SerializeField] private List<int> _inventoryItemsId;
 
-        private TemporaryCitizenInfoModel[] _citizensCopy;  //TODO: изменить переход по диалогам так, чтобы не затрагивать данные самих жителей в SO
-
         public TemporaryItemModel[] Items => _items;
-        public TemporaryDialogModel[] Dialogs => _dialogs;
-        public TemporaryCitizenInfoModel[] Citizens => _citizensCopy;
+        public TemporaryCitizenInfoModel[] Citizens => _citizens;
         public TemporaryCityInfoModel[] Cities => _cities;
         public TemporaryLocationInfoModel[] Locations => _locations;
         public TemporaryCharacterModel[] Characters => _characters;
@@ -48,7 +44,6 @@ namespace BeastHunter
 
         #if UNITY_EDITOR
         private int _itemsLength;
-        private int _dialogsLength;
         private int _citizensLength;
         private int _citiesLength;
         private int _locationsLength;
@@ -61,12 +56,6 @@ namespace BeastHunter
                 if (_itemsLength < _items.Length)
                 for (int i = 0; i < _items.Length; i++) _items[i].SetId(i);
                 _itemsLength = _items.Length;
-            }
-
-            if (_dialogsLength != _dialogs.Length)
-            {
-                for (int i = 0; i < _dialogs.Length; i++) _dialogs[i].SetId(i);
-                _dialogsLength = _dialogs.Length;
             }
 
             if (_citizensLength != _citizens.Length)
@@ -103,13 +92,14 @@ namespace BeastHunter
         }
         #endif
 
+        public Dictionary<int, int> CurrentDialogsNumbers { get; set; }
+
         private void OnEnable()
         {
-            //временная заглушка, чтобы не менялись данные массива _citizens в SO
-            _citizensCopy = new TemporaryCitizenInfoModel[_citizens.Length];
-            for (int i = 0; i < _citizensCopy.Length; i++)
+            CurrentDialogsNumbers = new Dictionary<int, int>();
+            for (int i = 0; i< _characters.Length; i++)
             {
-                _citizensCopy[i] = new TemporaryCitizenInfoModel(_citizens[i]);
+                CurrentDialogsNumbers.Add(_characters[i].Id, 0);
             }
         }
 
