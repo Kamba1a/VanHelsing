@@ -8,9 +8,9 @@ namespace BeastHunter
     {
         #region Fields
 
-        private int _id;
+        [SerializeField] [ReadOnlyInUnityInspector] private int _id;
         [SerializeField] private Sprite _portrait;
-        [SerializeField] private int?[] _itemsId;
+        [SerializeField] private int[] _itemsId;
 
         #endregion
 
@@ -19,7 +19,7 @@ namespace BeastHunter
 
         public int Id => _id;
         public Sprite Portrait => _portrait;
-        public int?[] ItemsId => _itemsId;
+        public int[] ItemsId => _itemsId;
 
         #endregion
 
@@ -31,9 +31,9 @@ namespace BeastHunter
             _id = id;
         }
 
-        public void SetItems(int?[] itemsId)
+        public void SetEquipmentsSize(int size)
         {
-            _itemsId = itemsId;
+            Array.Resize(ref _itemsId, size);
         }
 
         #endregion

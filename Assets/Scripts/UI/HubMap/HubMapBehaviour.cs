@@ -86,7 +86,7 @@ namespace BeastHunter
             }
 
             _hikeEquipmentItemCells = new List<EquipmentItemHubMapUIBehaviour>();
-            for (int i = 0; i < Data.HubMapData.HikeEquipmentPanelSellAmount; i++)
+            for (int i = 0; i < Data.HubMapData.HikeEquipmentPanelCellAmount; i++)
             {
                 GameObject equipCell = GameObject.Instantiate(Data.HubMapData.EquipmentItemUIPrefab);
                 equipCell.transform.SetParent(_equipmentPanel.transform, false);
@@ -205,7 +205,7 @@ namespace BeastHunter
             int currentEquipCellNumber = 0;
             int currentInventoryCellNumber = 0;
 
-            if (currentCharacter.ItemsId[currentEquipCellNumber].HasValue)
+            if (currentCharacter.ItemsId[currentEquipCellNumber] != 0)
             {
                 Data.HubMapData.InventoryItemsId[currentInventoryCellNumber] = equipItemIdInCell.Value;
             }
@@ -219,14 +219,14 @@ namespace BeastHunter
             //update equipment
         }
 
-        private void FillEquipmentPanel(int?[] itemsId)
+        private void FillEquipmentPanel(int[] itemsId)
         {
             for (int i = 0; i < _hikeEquipmentItemCells.Count; i++)
             {
                 _hikeEquipmentItemCells[i].SetInteractable(true);
-                if (itemsId[i].HasValue)
+                if (itemsId[i] != 0)
                 {
-                    _hikeEquipmentItemCells[i].PutItemInCell(Data.HubMapData.Items[itemsId[i].Value]);
+                    _hikeEquipmentItemCells[i].PutItemInCell(Data.HubMapData.Items[itemsId[i]]);
                 }
                 else
                 {

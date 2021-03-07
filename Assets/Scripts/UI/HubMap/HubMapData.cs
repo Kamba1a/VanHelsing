@@ -12,7 +12,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _characterUIPrefab;
         [SerializeField] private GameObject _equipmentItemUIPrefab;
         [SerializeField] private GameObject _inventoryItemUIPrefab;
-        [SerializeField] private int _hikeEquipmentPanelSellAmount;
+        [SerializeField] private int _hikeEquipmentPanelCellAmount;
         [SerializeField] private bool _mapOnStartEnabled;
 
         public GameObject CitizenUIPrefab => _citizenUIPrefab;
@@ -22,7 +22,7 @@ namespace BeastHunter
         public GameObject EquipmentItemUIPrefab => _equipmentItemUIPrefab;
         public GameObject InventoryItemUIPrefab => _inventoryItemUIPrefab;
         public bool MapOnStartEnabled => _mapOnStartEnabled;
-        public int HikeEquipmentPanelSellAmount => _hikeEquipmentPanelSellAmount;
+        public int HikeEquipmentPanelCellAmount => _hikeEquipmentPanelCellAmount;
 
 
         #region TEMPORARY CONTENT FOR TESTING HUB MAP
@@ -59,55 +59,46 @@ namespace BeastHunter
             if (_itemsLength != _items.Length)
             {
                 if (_itemsLength < _items.Length)
-                {
-                    for (int i = 0; i < _items.Length; i++) _items[i].SetId(i);
-                }
+                for (int i = 0; i < _items.Length; i++) _items[i].SetId(i);
                 _itemsLength = _items.Length;
             }
 
             if (_dialogsLength != _dialogs.Length)
             {
-                if (_dialogsLength < _dialogs.Length)
-                {
-                    for (int i = 0; i < _dialogs.Length; i++) _dialogs[i].SetId(i);
-                }
+                for (int i = 0; i < _dialogs.Length; i++) _dialogs[i].SetId(i);
                 _dialogsLength = _dialogs.Length;
             }
 
             if (_citizensLength != _citizens.Length)
             {
-                if (_citizensLength < _citizens.Length)
-                {
-                    for (int i = 0; i < _citizens.Length; i++) _citizens[i].SetId(i);
-                }
+                for (int i = 0; i < _citizens.Length; i++) _citizens[i].SetId(i);
                 _citizensLength = _citizens.Length;
             }
 
             if (_citiesLength != _cities.Length)
             {
-                if (_citiesLength < _cities.Length)
-                {
-                    for (int i = 0; i < _cities.Length; i++) _items[i].SetId(i);
-                }
+                for (int i = 0; i < _cities.Length; i++) _cities[i].SetId(i);
                 _citiesLength = _cities.Length;
             }
 
             if (_locationsLength != _locations.Length)
             {
-                if (_locationsLength < _locations.Length)
-                {
-                    for (int i = 0; i < _locations.Length; i++) _items[i].SetId(i);
-                }
+                for (int i = 0; i < _locations.Length; i++) _locations[i].SetId(i);
                 _locationsLength = _locations.Length;
             }
 
             if (_charactersLength != _characters.Length)
             {
-                if (_charactersLength < _characters.Length)
-                {
-                    for (int i = 0; i < _characters.Length; i++) _items[i].SetId(i);
-                }
+                for (int i = 0; i < _characters.Length; i++) _characters[i].SetId(i);
                 _charactersLength = _characters.Length;
+            }
+
+            for (int i = 0; i < _characters.Length; i++)
+            {
+                if (_characters[i].ItemsId.Length != _hikeEquipmentPanelCellAmount)
+                {
+                    _characters[i].SetEquipmentsSize(_hikeEquipmentPanelCellAmount);
+                }
             }
         }
         #endif
@@ -119,18 +110,6 @@ namespace BeastHunter
             for (int i = 0; i < _citizensCopy.Length; i++)
             {
                 _citizensCopy[i] = new TemporaryCitizenInfoModel(_citizens[i]);
-            }
-
-            //установка первоначального снаряжения персонажей для дебага
-            for (int i = 0; i < _characters.Length; i++)
-            {
-                int?[] items = new int?[_hikeEquipmentPanelSellAmount];
-                for (int j = 0; j < items.Length; j++)
-                {
-                    if (Random.Range(1, 100) <= 55) items[j] = Random.Range(0, _items.Length);
-                    else items[i] = null;
-                }
-                _characters[i].SetItems(items);
             }
         }
 

@@ -6,6 +6,6 @@ namespace BeastHunter
     {
         public int Id { get; }
         public Sprite Portrait { get; }
-        public int?[] ItemsId { get; }
+        public int[] ItemsId { get; }
     }
 }
