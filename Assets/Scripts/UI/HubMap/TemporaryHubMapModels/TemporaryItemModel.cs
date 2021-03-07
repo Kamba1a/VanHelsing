@@ -8,7 +8,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        private int _id;
+        [SerializeField] [ReadOnlyInUnityInspector] private int _id;
         [SerializeField] private Sprite _image;
         [SerializeField] private float _requiredReputationForSale;
 

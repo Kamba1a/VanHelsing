@@ -8,7 +8,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        private int _id;
+        [SerializeField] [ReadOnlyInUnityInspector] private int _id;
         [SerializeField][TextArea(3, 10)] private string _text;
         [SerializeField] private bool _isQuest;
         [SerializeField] private TemporaryDialogAnswerModel _positiveAnswer;
