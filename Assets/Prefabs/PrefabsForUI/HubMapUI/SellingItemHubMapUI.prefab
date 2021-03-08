@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 4697338729617819512}
   - component: {fileID: 5739010556028723715}
   m_Layer: 0
-  m_Name: NotSellingMask
+  m_Name: NotSelling_img
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 6062753379447882043}
   - component: {fileID: 6707553309795632914}
   m_Layer: 0
-  m_Name: SellingItemUI
+  m_Name: SellingItemHubMapUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6062753379447882041}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fab421dd0be8fc4083fab145f76b7a0, type: 3}
+  m_Script: {fileID: 11500000, guid: adf00601172ad734985e2b93548f4f99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _itemImage: {fileID: 354419430015155449}
