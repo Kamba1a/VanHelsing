@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f59f3ad9970ee8a468cda68b65f7adee, type: 3}
+  m_Name: Moscow
+  m_EditorClassIdentifier: 
+  _name: Moscow
+  _description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+    dapibus odio ac dolor congue, sed placerat magna gravida. Nunc facilisis elementum
+    vulputate. Pellentesque bibendum turpis justo, non ullamcorper est porttitor
+    ut. Integer tincidunt quis dui at vehicula. Nunc ut tortor sit amet lorem pharetra
+    efficitur nec nec libero.
+  _fraction: {fileID: 21300000, guid: 97e8c2f487b3d2244929d96565fee5fd, type: 3}
+  _citizens:
+  - {fileID: 11400000, guid: 043277f7263d8f0449d2bf624618af31, type: 2}
+  - {fileID: 11400000, guid: fe905a53db33ce94f909d4cb86b77925, type: 2}
+  - {fileID: 11400000, guid: f1d60151829001b44a63d424877726b7, type: 2}
+  _playerReputation: 50
+  _sellingItems:
+  - {fileID: 11400000, guid: e8d0bc2a26238534182182c71b7beeb1, type: 2}
+  - {fileID: 11400000, guid: 591feebfd81169b488ce53cd23010ab7, type: 2}
+  - {fileID: 11400000, guid: bd23a9ab296b0fd4499aa9c19f3cdf02, type: 2}
+  - {fileID: 11400000, guid: 5254f0bdaca88804688cae37a127fa26, type: 2}
+  - {fileID: 11400000, guid: f99dbe3557bf16d46a414baa8295ef7c, type: 2}
+  - {fileID: 11400000, guid: 7f9bdd97e0e5aa94c8f13d5cbc721188, type: 2}
+  - {fileID: 11400000, guid: d0be98e77b1efa54d9c9c965cb149163, type: 2}
+  - {fileID: 11400000, guid: 7db3f11164896144ca8cdc7b85a7d966, type: 2}
+  - {fileID: 11400000, guid: 42ef4ae7278aa9140ad9dae1e4c2edc8, type: 2}
+  - {fileID: 11400000, guid: 81958ece7954e9e43aed1ec73bcb0f22, type: 2}
+  - {fileID: 11400000, guid: be23910a22bf5b74bb6269f724e5178e, type: 2}
+  - {fileID: 11400000, guid: f7c4ec97e6c467f4d81772e224d82949, type: 2}
