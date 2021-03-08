@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BeastHunter
 {
     [Serializable]
-    public class TemporaryLocationInfoModel : ILocationInfo
+    public class TemporaryLocationInfoModel : IHubMapLocation
     {
         #region Fields
 

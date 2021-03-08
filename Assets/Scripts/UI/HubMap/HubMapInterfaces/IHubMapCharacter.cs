@@ -2,7 +2,7 @@
 
 namespace BeastHunter
 {
-    public interface ICharacter
+    public interface IHubMapCharacter
     {
         public int Id { get; }
         public Sprite Portrait { get; }

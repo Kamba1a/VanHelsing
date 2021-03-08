@@ -197,7 +197,7 @@ namespace BeastHunter
         //WIP
         private void TEMPmethod()
         {
-            ICharacter currentCharacter = new TemporaryCharacterModel();
+            IHubMapCharacter currentCharacter = new TemporaryCharacterModel();
 
             int? equipItemIdInCell = 0; //currentCharacter.ItemsId
             int inventoryItemId = 0;    //Data.HubMapData.InventoryItemsId
@@ -235,7 +235,7 @@ namespace BeastHunter
             }
         }
 
-        private void FillCityInfo(ICityInfo city)
+        private void FillCityInfo(IHubMapCity city)
         {
             _cityFraction.sprite = city.Fraction;
             _cityName.text = city.Name;
@@ -259,12 +259,12 @@ namespace BeastHunter
                 _clearInfoPanelList.Add(item);
                 item.transform.SetParent(_citySellingPanel.transform, false);
                 item.transform.localScale = new Vector3(1, 1, 1);
-                IItemInfo itemInfo = Data.HubMapUIData.Items[city.SellingItemsId[i]];
+                IHubMapItem itemInfo = Data.HubMapUIData.Items[city.SellingItemsId[i]];
                 item.GetComponentInChildren<SellingItemHubMapUIBehaviour>().Initialize(itemInfo, city.CurrentPlayerReputation > itemInfo.RequiredReputationForSale);
             }
         }
 
-        private void FillLocationInfo(ILocationInfo location)
+        private void FillLocationInfo(IHubMapLocation location)
         {
             _locationScreen.sprite = location.Screenshot;
             _locationName.text = location.Name;
@@ -310,7 +310,7 @@ namespace BeastHunter
             _dialogPanel.SetActive(false);
         }
 
-        private void OnClick_DialogButton(ICitizenInfo citizen, IDialogAnswer dialogAnswer)
+        private void OnClick_DialogButton(IHubMapCitizen citizen, IHubMapDialogAnswer dialogAnswer)
         {
             _acceptButton.onClick.RemoveAllListeners();
             _declineButton.onClick.RemoveAllListeners();
@@ -339,9 +339,9 @@ namespace BeastHunter
             }
         }
 
-        private void FillDialogPanel(ICitizenInfo citizen)
+        private void FillDialogPanel(IHubMapCitizen citizen)
         {
-            IDialog currentDialog = citizen.Dialogs[Data.HubMapUIData.CurrentDialogsNumbers[citizen.Id]];
+            IHubMapDialog currentDialog = citizen.Dialogs[Data.HubMapUIData.CurrentDialogsNumbers[citizen.Id]];
             _citizenName.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
             _dialogText.text = currentDialog.Text;

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BeastHunter
 {
     [Serializable]
-    public class TemporaryCitizenInfoModel : ICitizenInfo
+    public class TemporaryCitizenInfoModel : IHubMapCitizen
     {
         #region Fields
 
@@ -21,7 +21,7 @@ namespace BeastHunter
         public int Id => _id;
         public string Name => _name;
         public Sprite Portrait => _portrait;
-        public IDialog[] Dialogs => _dialogs;
+        public IHubMapDialog[] Dialogs => _dialogs;
 
         #endregion
 

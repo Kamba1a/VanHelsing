@@ -15,7 +15,7 @@ namespace BeastHunter
 
         #region Methods
 
-        public void Initialize(ICharacter character)
+        public void Initialize(IHubMapCharacter character)
         {
             GetComponent<Image>().sprite = character.Portrait;
             GetComponent<Button>().onClick.AddListener(() => OnClick_CharacterButton(character.ItemsId));

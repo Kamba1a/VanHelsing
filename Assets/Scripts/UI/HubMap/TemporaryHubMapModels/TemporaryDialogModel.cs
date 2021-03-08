@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BeastHunter
 {
     [Serializable]
-    public class TemporaryDialogModel : IDialog
+    public class TemporaryDialogModel : IHubMapDialog
     {
         #region Fields
 
@@ -22,8 +22,8 @@ namespace BeastHunter
         public int Number => _number;
         public string Text => _text;
         public bool IsQuest => _isQuest;
-        public IDialogAnswer PositiveAnswer => _positiveAnswer;
-        public IDialogAnswer NegativeAnswer => _negativeAnswer;
+        public IHubMapDialogAnswer PositiveAnswer => _positiveAnswer;
+        public IHubMapDialogAnswer NegativeAnswer => _negativeAnswer;
 
         #endregion
     }

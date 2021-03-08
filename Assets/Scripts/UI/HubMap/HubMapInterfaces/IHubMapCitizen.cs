@@ -2,11 +2,11 @@
 
 namespace BeastHunter
 {
-    public interface ICitizenInfo
+    public interface IHubMapCitizen
     {
         public int Id { get; }
         public string Name { get; }
         public Sprite Portrait { get; }
-        public IDialog[] Dialogs { get; }
+        public IHubMapDialog[] Dialogs { get; }
     }
 }

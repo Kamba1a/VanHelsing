@@ -25,7 +25,7 @@ namespace BeastHunter
 
         #region Methods
 
-        public void Initialize(ICitizenInfo citizen)
+        public void Initialize(IHubMapCitizen citizen)
         {
             Id = citizen.Id;
             _citizenNamePanel.text = citizen.Name;
@@ -39,7 +39,7 @@ namespace BeastHunter
             OnClick_CitizenButtonHandler?.Invoke(citizenId);
         }
 
-        public void UpdateInfo(ICitizenInfo citizen)
+        public void UpdateInfo(IHubMapCitizen citizen)
         {
             _exclamationImage.SetActive(citizen.Dialogs[Data.HubMapUIData.CurrentDialogsNumbers[citizen.Id]].IsQuest);
         }

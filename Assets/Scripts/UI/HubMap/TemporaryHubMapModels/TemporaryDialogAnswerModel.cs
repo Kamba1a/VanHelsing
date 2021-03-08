@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BeastHunter
 {
     [Serializable]
-    public class TemporaryDialogAnswerModel : IDialogAnswer
+    public class TemporaryDialogAnswerModel : IHubMapDialogAnswer
     {
         #region Fields
 
