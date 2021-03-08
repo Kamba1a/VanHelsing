@@ -25,9 +25,26 @@ namespace BeastHunter
         public int HikeEquipmentPanelCellAmount => _hikeEquipmentPanelCellAmount;
 
 
-        #region TEMPORARY CONTENT FOR TESTING HUB MAP
+        #region TEMPORARY CONTENT FOR TESTING HUB MAP, version 2
 
-        [Header("TEMPORARY CONTENT FOR TESTING HUB MAP")]
+        [Header("TEMPORARY CONTENT FOR TESTING HUB MAP, version 2")]
+        [SerializeField] private TempCityData _mapCity;
+        public TempCityData MapCity => _mapCity;
+
+        public Dictionary<TempCitizenData, int> CurrentDialogsNumbers2 { get; set; }
+
+        public void AddCitizenInDic(TempCitizenData citizen)
+        {
+            if (CurrentDialogsNumbers2.ContainsKey(citizen)) return;
+            CurrentDialogsNumbers2.Add(citizen,0);
+        }
+
+        #endregion
+
+
+        #region TEMPORARY CONTENT FOR TESTING HUB MAP, version 1
+
+        [Header("TEMPORARY DATA FOR TESTING HUB MAP, version 1")]
         [SerializeField] private TemporaryItemModel[] _items;
         [SerializeField] private TemporaryCitizenInfoModel[] _citizens;
         [SerializeField] private TemporaryCityInfoModel[] _cities;
@@ -96,7 +113,8 @@ namespace BeastHunter
         private void OnEnable()
         {
             CurrentDialogsNumbers = new Dictionary<int, int>();
-            for (int i = 0; i< _characters.Length; i++)
+            CurrentDialogsNumbers2 = new Dictionary<TempCitizenData, int>();
+            for (int i = 0; i < _characters.Length; i++)
             {
                 CurrentDialogsNumbers.Add(_characters[i].Id, 0);
             }

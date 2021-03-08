@@ -14,6 +14,12 @@ namespace BeastHunter
             SetAvailability(isAvailableForSale);
         }
 
+        public void Initialize(TempItemData item, bool isAvailableForSale)
+        {
+            _itemImage.sprite = item.Image;
+            SetAvailability(isAvailableForSale);
+        }
+
         public void SetAvailability(bool isAvailableForSale)
         {
             _itemNotSellingImage.SetActive(!isAvailableForSale);

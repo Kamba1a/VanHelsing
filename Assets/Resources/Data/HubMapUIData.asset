@@ -26,6 +26,7 @@ MonoBehaviour:
     type: 3}
   _hikeEquipmentPanelCellAmount: 6
   _mapOnStartEnabled: 0
+  _mapCity: {fileID: 11400000, guid: 7ee72968695498843b11dcb71525d8c6, type: 2}
   _items:
   - _id: 0
     _image: {fileID: 0}

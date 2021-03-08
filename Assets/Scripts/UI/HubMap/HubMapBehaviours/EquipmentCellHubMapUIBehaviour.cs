@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace BeastHunter
 {
-    class EquipmentItemHubMapUIBehaviour: MonoBehaviour
+    class EquipmentCellHubMapUIBehaviour: MonoBehaviour
     {
         #region Fields
 
@@ -15,7 +15,7 @@ namespace BeastHunter
 
         #region Properties
 
-        public int? CurrentItemId { get; private set; }
+        public IHubMapItem CurrentItem { get; private set; }
 
         #endregion
 
@@ -29,13 +29,13 @@ namespace BeastHunter
 
         public void PutItemInCell(IHubMapItem item)
         {
-            CurrentItemId = item.Id;
+            CurrentItem = item;
             SetImage(item.Image);
         }
 
         public void ClearCell()
         {
-            CurrentItemId = null;
+            CurrentItem = null;
             SetImage(null);
         }
 
