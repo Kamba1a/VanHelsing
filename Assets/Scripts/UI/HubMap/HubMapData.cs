@@ -53,7 +53,6 @@ namespace BeastHunter
         {
             if (_itemsLength != _items.Length)
             {
-                if (_itemsLength < _items.Length)
                 for (int i = 0; i < _items.Length; i++) _items[i].SetId(i);
                 _itemsLength = _items.Length;
             }
