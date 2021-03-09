@@ -67,6 +67,7 @@ namespace BeastHunter
         {
             _currentCitizensList = new List<GameObject>();
             _clearInfoPanelList = new List<GameObject>();
+
             _mainPanel.SetActive(Data.HubMapData.MapOnStartEnabled);
             _infoPanel.SetActive(false);
             _cityInfoPanel.SetActive(false);
@@ -75,25 +76,26 @@ namespace BeastHunter
             _hikePanel.SetActive(false);
             _hikePreparePanel.SetActive(true);
             _inventoryPanel.SetActive(false);
+
             FillInventoryPanel(Data.HubMapData.InventoryItemsId);
 
             for (int i = 0; i < Data.HubMapData.Characters.Length; i++)
             {
-                GameObject character = GameObject.Instantiate(Data.HubMapData.CharacterUIPrefab);
-                character.transform.SetParent(_charactersPanel.transform, false);
-                character.transform.localScale = new Vector3(1, 1, 1);
-                character.GetComponentInChildren<HubMapUICharacterBehaviour>().Initialize(Data.HubMapData.Characters[i]);
-                character.GetComponentInChildren<HubMapUICharacterBehaviour>().OnClick_CharacterButtonHandler = FillEquipmentPanel;
+                GameObject characterUI = GameObject.Instantiate(Data.HubMapData.CharacterUIPrefab);
+                characterUI.transform.SetParent(_charactersPanel.transform, false);
+                characterUI.transform.localScale = new Vector3(1, 1, 1);
+                characterUI.GetComponentInChildren<HubMapUICharacterBehaviour>().Initialize(Data.HubMapData.Characters[i]);
+                characterUI.GetComponentInChildren<HubMapUICharacterBehaviour>().OnClick_CharacterButtonHandler = FillEquipmentPanel;
             }
 
             _hikeEquipmentItemCells = new List<HubMapUIEquipmentCellBehaviour>();
             for (int i = 0; i < Data.HubMapData.HikeEquipmentPanelCellAmount; i++)
             {
-                GameObject equipCell = GameObject.Instantiate(Data.HubMapData.EquipmentItemUIPrefab);
-                equipCell.transform.SetParent(_equipmentPanel.transform, false);
-                equipCell.transform.localScale = new Vector3(1, 1, 1);
-                _hikeEquipmentItemCells.Add(equipCell.GetComponent<HubMapUIEquipmentCellBehaviour>());
-                equipCell.GetComponent<Button>().onClick.AddListener(ShowInventoryPanel);
+                GameObject equipCellUI = GameObject.Instantiate(Data.HubMapData.EquipmentItemUIPrefab);
+                equipCellUI.transform.SetParent(_equipmentPanel.transform, false);
+                equipCellUI.transform.localScale = new Vector3(1, 1, 1);
+                _hikeEquipmentItemCells.Add(equipCellUI.GetComponent<HubMapUIEquipmentCellBehaviour>());
+                equipCellUI.GetComponent<Button>().onClick.AddListener(ShowInventoryPanel);
             }
         }
 
