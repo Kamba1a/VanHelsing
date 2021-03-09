@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -102,8 +103,8 @@ namespace BeastHunter
         #region TriggerEvents
 
         //TODO?: replace obscure event subscription to OnEnable()/OnDisable methods with explicit subscription
-        public void OnClick_HubButton() => HideUI();
-        public void OnClick_MapButton() => ShowUI();
+        public void OnClick_HubButton() => HideMap();
+        public void OnClick_MapButton() => ShowMap();
         public void OnClick_CityButton(int cityId) => ShowCityInfoPanel(cityId);
         public void OnClick_CloseInfoButton() => HideRightInfoPanels();
         public void OnClick_LocationButton(int locationId) => ShowLocationInfoPanel(locationId);
@@ -118,12 +119,12 @@ namespace BeastHunter
 
         #region Methods
 
-        private void ShowUI()
+        private void ShowMap()
         {
             _mainPanel.SetActive(true);
         }
 
-        private void HideUI()
+        private void HideMap()
         {
             _mainPanel.SetActive(false);
         }
@@ -158,7 +159,7 @@ namespace BeastHunter
         {
             HideRightInfoPanels();
             ClearRightInfoPanel();
-            FillCityInfo(Data.HubMapData.Cities[cityId]);
+            FillCityInfo(Array.Find(Data.HubMapData.Cities, city => city.Id == cityId));
             _infoPanel.GetComponent<ScrollRect>().content = _cityInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
             _cityInfoPanel.SetActive(true);
@@ -169,7 +170,7 @@ namespace BeastHunter
             _currentLocationId = locationId;
             HideRightInfoPanels();
             ClearRightInfoPanel();
-            FillLocationInfo(Data.HubMapData.Locations[locationId]);
+            FillLocationInfo(Array.Find(Data.HubMapData.Locations, location => location.Id == locationId));
             _infoPanel.GetComponent<ScrollRect>().content = _locationInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
             _locationInfoPanel.SetActive(true);
@@ -182,21 +183,34 @@ namespace BeastHunter
             _infoPanel.SetActive(false);
         }
 
+        private void ShowDialogPanel(int citizenId)
+        {
+            FillDialogPanel(Array.Find(Data.HubMapData.Citizens, citizen => citizen.Id == citizenId));
+            _dialogPanel.SetActive(true);
+        }
+
+        private void HideDialogPanel()
+        {
+            _dialogPanel.SetActive(false);
+        }
+
         private void FillInventoryPanel(List<int> itemsId)
         {
             for (int i = 0; i < itemsId.Count; i++)
             {
-                GameObject item = GameObject.Instantiate(Data.HubMapData.InventoryItemUIPrefab);
-                item.transform.SetParent(_inventoryItemsPanel.transform, false);
-                item.transform.localScale = new Vector3(1, 1, 1);
-                item.GetComponent<Image>().sprite = Data.HubMapData.Items[itemsId[i]].Image;
-                //item.GetComponent<Button>().onClick.AddListener(TEMPmethod);
+                GameObject itemUI = GameObject.Instantiate(Data.HubMapData.InventoryItemUIPrefab);
+                itemUI.transform.SetParent(_inventoryItemsPanel.transform, false);
+                itemUI.transform.localScale = new Vector3(1, 1, 1);
+
+                itemUI.GetComponent<Image>().sprite = Array.Find(Data.HubMapData.Items, item => item.Id == itemsId[i]).Image;
+                //itemUI.GetComponent<Button>().onClick.AddListener(TEMPmethod);
             }
         }
 
         //WIP
         private void TEMPmethod()
         {
+            /*
             ICharacter currentCharacter = new TemporaryCharacterModel();
 
             int? equipItemIdInCell = 0; //currentCharacter.ItemsId
@@ -217,6 +231,7 @@ namespace BeastHunter
 
             //update inventory
             //update equipment
+            */
         }
 
         private void FillEquipmentPanel(int[] itemsId)
@@ -226,7 +241,7 @@ namespace BeastHunter
                 _hikeEquipmentItemCells[i].SetInteractable(true);
                 if (itemsId[i] != 0)
                 {
-                    _hikeEquipmentItemCells[i].PutItemInCell(Data.HubMapData.Items[itemsId[i]]);
+                    _hikeEquipmentItemCells[i].PutItemInCell(Array.Find(Data.HubMapData.Items, item => item.Id == itemsId[i]));
                 }
                 else
                 {
@@ -244,23 +259,23 @@ namespace BeastHunter
 
             for (int i = 0; i < city.CitizensId.Length; i++)
             {
-                GameObject citizen = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab);
-                _clearInfoPanelList.Add(citizen);
-                _currentCitizensList.Add(citizen);
-                citizen.transform.SetParent(_citizenPanel.transform, false);
-                citizen.transform.localScale = new Vector3(1, 1, 1);
-                citizen.GetComponentInChildren<CitizenUIBehaviour>().Initialize(Data.HubMapData.Citizens[city.CitizensId[i]]);
-                citizen.GetComponentInChildren<CitizenUIBehaviour>().OnClick_CitizenButtonHandler = ShowDialogPanel;
+                GameObject citizenUI = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab);
+                _clearInfoPanelList.Add(citizenUI);
+                _currentCitizensList.Add(citizenUI);
+                citizenUI.transform.SetParent(_citizenPanel.transform, false);
+                citizenUI.transform.localScale = new Vector3(1, 1, 1);
+                citizenUI.GetComponentInChildren<CitizenUIBehaviour>().Initialize(Array.Find(Data.HubMapData.Citizens, citizen => citizen.Id == city.CitizensId[i]));
+                citizenUI.GetComponentInChildren<CitizenUIBehaviour>().OnClick_CitizenButtonHandler = ShowDialogPanel;
             }
 
             for (int i = 0; i < city.SellingItemsId.Length; i++)
             {
-                GameObject item = GameObject.Instantiate(Data.HubMapData.SellingItemUIPrefab);
-                _clearInfoPanelList.Add(item);
-                item.transform.SetParent(_citySellingPanel.transform, false);
-                item.transform.localScale = new Vector3(1, 1, 1);
-                IItemInfo itemInfo = Data.HubMapData.Items[city.SellingItemsId[i]];
-                item.GetComponentInChildren<SellingItemUIBehaviour>().Initialize(itemInfo, city.CurrentPlayerReputation > itemInfo.RequiredReputationForSale);
+                GameObject itemUI = GameObject.Instantiate(Data.HubMapData.SellingItemUIPrefab);
+                _clearInfoPanelList.Add(itemUI);
+                itemUI.transform.SetParent(_citySellingPanel.transform, false);
+                itemUI.transform.localScale = new Vector3(1, 1, 1);
+                IItemInfo hubMapUIItem = Array.Find(Data.HubMapData.Items, item => item.Id == city.SellingItemsId[i]);
+                itemUI.GetComponentInChildren<SellingItemUIBehaviour>().Initialize(hubMapUIItem, city.CurrentPlayerReputation > hubMapUIItem.RequiredReputationForSale);
             }
         }
 
@@ -272,20 +287,20 @@ namespace BeastHunter
 
             for (int i = 0; i < location.DwellersId.Length; i++)
             {
-                GameObject dweller = GameObject.Instantiate(Data.HubMapData.LocationTextUIPrefab);
-                _clearInfoPanelList.Add(dweller);
-                dweller.transform.SetParent(_dwellersPanel.transform, false);
-                dweller.transform.localScale = new Vector3(1, 1, 1);
-                //dweller.GetComponentInChildren<DwellerUIBehaviour>().Initialize(Data.HubMapData.Dwellers[location.DwellersId[i]]);
+                GameObject dwellerUI = GameObject.Instantiate(Data.HubMapData.LocationTextUIPrefab);
+                _clearInfoPanelList.Add(dwellerUI);
+                dwellerUI.transform.SetParent(_dwellersPanel.transform, false);
+                dwellerUI.transform.localScale = new Vector3(1, 1, 1);
+                //dwellerUI.GetComponentInChildren<DwellerUIBehaviour>().Initialize(Array.Find(Data.HubMapData.Dwellers, dweller => dweller.Id == location.DwellersId[i]));
             }
 
             for (int i = 0; i < location.IngredientsId.Length; i++)
             {
-                GameObject ingredient = GameObject.Instantiate(Data.HubMapData.LocationTextUIPrefab);
-                _clearInfoPanelList.Add(ingredient);
-                ingredient.transform.SetParent(_ingredientsPanel.transform, false);
-                ingredient.transform.localScale = new Vector3(1, 1, 1);
-                //ingredient.GetComponentInChildren<IngredientUIBehaviour>().Initialize(Data.HubMapData.Ingredients[location.IngredientsId[i]]);
+                GameObject ingredientUI = GameObject.Instantiate(Data.HubMapData.LocationTextUIPrefab);
+                _clearInfoPanelList.Add(ingredientUI);
+                ingredientUI.transform.SetParent(_ingredientsPanel.transform, false);
+                ingredientUI.transform.localScale = new Vector3(1, 1, 1);
+                //ingredientUI.GetComponentInChildren<IngredientUIBehaviour>().Initialize(Array.Find(Data.HubMapData.Ingredients, ingredient => ingredient.Id == location.IngredientsId[i]));
             }
         }
 
@@ -297,17 +312,6 @@ namespace BeastHunter
             }
             _clearInfoPanelList.Clear();
             _currentCitizensList.Clear();
-        }
-
-        private void ShowDialogPanel(int citizenId)
-        {
-            FillDialogPanel(Data.HubMapData.Citizens[citizenId]);
-            _dialogPanel.SetActive(true);
-        }
-
-        private void HideDialogPanel()
-        {
-            _dialogPanel.SetActive(false);
         }
 
         private void OnClick_DialogButton(ICitizenInfo citizen, IDialogAnswer dialogAnswer)
