@@ -13,13 +13,6 @@ namespace BeastHunter
         #endregion
 
 
-        #region Properties
-
-        public int? CurrentItemId { get; private set; }
-
-        #endregion
-
-
         #region Methods
 
         public void SetInteractable(bool flag)
@@ -29,13 +22,11 @@ namespace BeastHunter
 
         public void PutItemInCell(IHubMapUIItem item)
         {
-            CurrentItemId = item.Id;
             SetImage(item.Image);
         }
 
         public void ClearCell()
         {
-            CurrentItemId = null;
             SetImage(null);
         }
 

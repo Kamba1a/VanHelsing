@@ -169,14 +169,14 @@ namespace BeastHunter
         }
         #endif
 
-        public Dictionary<int, int> CurrentDialogsNumbers { get; set; }
+        public Dictionary<IHubMapUICitizen, int> CurrentDialogsNumbers { get; set; }
 
         private void OnEnable()
         {
-            CurrentDialogsNumbers = new Dictionary<int, int>();
-            for (int i = 0; i< _characters.Length; i++)
+            CurrentDialogsNumbers = new Dictionary<IHubMapUICitizen, int>();
+            for (int i = 0; i< _citizens.Length; i++)
             {
-                CurrentDialogsNumbers.Add(_characters[i].Id, 0);
+                CurrentDialogsNumbers.Add(_citizens[i], 0);
             }
         }
 

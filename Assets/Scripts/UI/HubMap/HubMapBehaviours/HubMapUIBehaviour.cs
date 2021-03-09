@@ -54,7 +54,7 @@ namespace BeastHunter
         #region Fields
 
         private List<GameObject> _clearInfoPanelList;
-        private List<GameObject> _currentCitizensList;
+        private Dictionary<IHubMapUICitizen, GameObject> _currentCitizensList;
         private List<HubMapUIEquipmentCellBehaviour> _hikeEquipmentItemCells;
         private int _currentLocationId;
 
@@ -65,7 +65,7 @@ namespace BeastHunter
 
         private void Start()
         {
-            _currentCitizensList = new List<GameObject>();
+            _currentCitizensList = new Dictionary<IHubMapUICitizen, GameObject>();
             _clearInfoPanelList = new List<GameObject>();
 
             _mainPanel.SetActive(Data.HubMapData.MapOnStartEnabled);
@@ -185,9 +185,9 @@ namespace BeastHunter
             _infoPanel.SetActive(false);
         }
 
-        private void ShowDialogPanel(int citizenId)
+        private void ShowDialogPanel(IHubMapUICitizen citizen)
         {
-            FillDialogPanel(Array.Find(Data.HubMapData.Citizens, citizen => citizen.Id == citizenId));
+            FillDialogPanel(citizen);
             _dialogPanel.SetActive(true);
         }
 
@@ -262,11 +262,12 @@ namespace BeastHunter
             for (int i = 0; i < city.CitizensId.Length; i++)
             {
                 GameObject citizenUI = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab);
+                IHubMapUICitizen hubMapUICitizen = Array.Find(Data.HubMapData.Citizens, citizen => citizen.Id == city.CitizensId[i]);
                 _clearInfoPanelList.Add(citizenUI);
-                _currentCitizensList.Add(citizenUI);
+                _currentCitizensList.Add(hubMapUICitizen, citizenUI);
                 citizenUI.transform.SetParent(_citizenPanel.transform, false);
                 citizenUI.transform.localScale = new Vector3(1, 1, 1);
-                citizenUI.GetComponentInChildren<HubMapUICitizenBehaviour>().Initialize(Array.Find(Data.HubMapData.Citizens, citizen => citizen.Id == city.CitizensId[i]));
+                citizenUI.GetComponentInChildren<HubMapUICitizenBehaviour>().Initialize(hubMapUICitizen);
                 citizenUI.GetComponentInChildren<HubMapUICitizenBehaviour>().OnClick_CitizenButtonHandler = ShowDialogPanel;
             }
 
@@ -321,12 +322,12 @@ namespace BeastHunter
             _acceptButton.onClick.RemoveAllListeners();
             _declineButton.onClick.RemoveAllListeners();
 
-            Data.HubMapData.CurrentDialogsNumbers[citizen.Id] = dialogAnswer.NextDialogNumber;
+            Data.HubMapData.CurrentDialogsNumbers[citizen] = dialogAnswer.NextDialogNumber;
 
             if (dialogAnswer.IsDialogEnd)
             {
                 HideDialogPanel();
-                UpdateCitizenInfo(citizen.Id);
+                UpdateCitizenInfo(citizen);
             }
             else
             {
@@ -334,20 +335,21 @@ namespace BeastHunter
             }
         }
 
-        private void UpdateCitizenInfo(int citizenId)
+        private void UpdateCitizenInfo(IHubMapUICitizen citizen)
         {
-            for (int i = 0; i < _currentCitizensList.Count; i++)
-            {
-                if (_currentCitizensList[i].GetComponentInChildren<HubMapUICitizenBehaviour>().Id == citizenId)
-                {
-                    _currentCitizensList[i].GetComponentInChildren<HubMapUICitizenBehaviour>().UpdateInfo(Data.HubMapData.Citizens[citizenId]);
-                }
-            }
+            _currentCitizensList[citizen].GetComponentInChildren<HubMapUICitizenBehaviour>().UpdateInfo(citizen);
+            //for (int i = 0; i < _currentCitizensList.Count; i++)
+            //{
+            //    if (_currentCitizensList[i].GetComponentInChildren<HubMapUICitizenBehaviour>().Id == citizen.Id)
+            //    {
+            //        _currentCitizensList[i].GetComponentInChildren<HubMapUICitizenBehaviour>().UpdateInfo(Data.HubMapData.Citizens[citizen.Id]);
+            //    }
+            //}
         }
 
         private void FillDialogPanel(IHubMapUICitizen citizen)
         {
-            IHubMapUIDialog currentDialog = citizen.Dialogs[Data.HubMapData.CurrentDialogsNumbers[citizen.Id]];
+            IHubMapUIDialog currentDialog = citizen.Dialogs[Data.HubMapData.CurrentDialogsNumbers[citizen]];
             _citizenName.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
             _dialogText.text = currentDialog.Text;

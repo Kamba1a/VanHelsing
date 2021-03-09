@@ -4,11 +4,10 @@ using UnityEngine;
 namespace BeastHunter
 {
     [Serializable]
-    public class HubMapUICharacter : IHubMapUICharacter
+    public class HubMapUICharacter : HubMapUIBaseEntity, IHubMapUICharacter
     {
         #region Fields
 
-        [SerializeField] [ReadOnlyInUnityInspector] private int _id;
         [SerializeField] private Sprite _portrait;
         [SerializeField] private int[] _itemsId;
 
@@ -17,7 +16,6 @@ namespace BeastHunter
 
         #region Properties
 
-        public int Id => _id;
         public Sprite Portrait => _portrait;
         public int[] ItemsId => _itemsId;
 
@@ -25,11 +23,6 @@ namespace BeastHunter
 
 
         #region Methods
-
-        public void SetId(int id)
-        {
-            _id = id;
-        }
 
         public void SetEquipmentsSize(int size)
         {
