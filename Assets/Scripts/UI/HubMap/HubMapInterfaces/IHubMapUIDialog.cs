@@ -5,7 +5,7 @@
         public int Number { get; }
         public string Text { get; }
         public bool IsQuest { get; }
-        public IHubMapUIAnswer PositiveAnswer { get; }
-        public IHubMapUIAnswer NegativeAnswer { get; }
+        public IHubMapUIDialogAnswer PositiveAnswer { get; }
+        public IHubMapUIDialogAnswer NegativeAnswer { get; }
     }
 }

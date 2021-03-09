@@ -1,6 +1,6 @@
 ﻿namespace BeastHunter
 {
-    public interface IHubMapUIAnswer
+    public interface IHubMapUIDialogAnswer
     {
         public string Text { get; }
         public bool IsDialogEnd { get; }

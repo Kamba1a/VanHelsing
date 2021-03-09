@@ -314,7 +314,7 @@ namespace BeastHunter
             _currentCitizensList.Clear();
         }
 
-        private void OnClick_DialogButton(IHubMapUICitizen citizen, IHubMapUIAnswer dialogAnswer)
+        private void OnClick_DialogButton(IHubMapUICitizen citizen, IHubMapUIDialogAnswer dialogAnswer)
         {
             _acceptButton.onClick.RemoveAllListeners();
             _declineButton.onClick.RemoveAllListeners();

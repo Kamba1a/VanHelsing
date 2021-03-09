@@ -28,18 +28,18 @@ namespace BeastHunter
         #region TEMPORARY CONTENT FOR TESTING HUB MAP
 
         [Header("TEMPORARY CONTENT FOR TESTING HUB MAP")]
-        [SerializeField] private TemporaryItemModel[] _items;
-        [SerializeField] private TemporaryCitizenInfoModel[] _citizens;
-        [SerializeField] private TemporaryCityInfoModel[] _cities;
-        [SerializeField] private TemporaryLocationInfoModel[] _locations;
-        [SerializeField] private TemporaryCharacterModel[] _characters;
+        [SerializeField] private HubMapUIItem[] _items;
+        [SerializeField] private HubMapUICitizen[] _citizens;
+        [SerializeField] private HubMapUICity[] _cities;
+        [SerializeField] private HubMapUILocation[] _locations;
+        [SerializeField] private HubMapUICharacter[] _characters;
         [SerializeField] private List<int> _inventoryItemsId;
 
-        public TemporaryItemModel[] Items => _items;
-        public TemporaryCitizenInfoModel[] Citizens => _citizens;
-        public TemporaryCityInfoModel[] Cities => _cities;
-        public TemporaryLocationInfoModel[] Locations => _locations;
-        public TemporaryCharacterModel[] Characters => _characters;
+        public HubMapUIItem[] Items => _items;
+        public HubMapUICitizen[] Citizens => _citizens;
+        public HubMapUICity[] Cities => _cities;
+        public HubMapUILocation[] Locations => _locations;
+        public HubMapUICharacter[] Characters => _characters;
         public List<int> InventoryItemsId => _inventoryItemsId;
 
         #if UNITY_EDITOR

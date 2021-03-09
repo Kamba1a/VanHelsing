@@ -4,14 +4,13 @@ using UnityEngine;
 namespace BeastHunter
 {
     [Serializable]
-    public class TemporaryCitizenInfoModel : IHubMapUICitizen
+    public class HubMapUIItem : IHubMapUIItem
     {
         #region Fields
 
         [SerializeField] [ReadOnlyInUnityInspector] private int _id;
-        [SerializeField] private string _name;
-        [SerializeField] private Sprite _portrait;
-        [SerializeField] private TemporaryDialogModel[] _dialogs;
+        [SerializeField] private Sprite _image;
+        [SerializeField] private float _requiredReputationForSale;
 
         #endregion
 
@@ -19,9 +18,8 @@ namespace BeastHunter
         #region Properties
 
         public int Id => _id;
-        public string Name => _name;
-        public Sprite Portrait => _portrait;
-        public IHubMapUIDialog[] Dialogs => _dialogs;
+        public Sprite Image => _image;
+        public float RequiredReputationForSale => _requiredReputationForSale;
 
         #endregion
 
