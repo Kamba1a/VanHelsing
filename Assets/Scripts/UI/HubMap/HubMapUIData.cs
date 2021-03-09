@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HubMapData", menuName = "CreateData/HubMapData", order = 0)]
-    public class HubMapData: ScriptableObject
+    public class HubMapUIData: ScriptableObject
     {
         [SerializeField] private GameObject _citizenUIPrefab;
         [SerializeField] private GameObject _sellingItemUIPrefab;
