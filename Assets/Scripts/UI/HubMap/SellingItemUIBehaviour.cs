@@ -8,7 +8,7 @@ namespace BeastHunter
         [SerializeField] private Image _itemImage;
         [SerializeField] private GameObject _itemNotSellingImage;
 
-        public void Initialize(IItemInfo item, bool isAvailableForSale)
+        public void Initialize(IHubMapUIItem item, bool isAvailableForSale)
         {
             _itemImage.sprite = item.Image;
             SetAvailability(isAvailableForSale);

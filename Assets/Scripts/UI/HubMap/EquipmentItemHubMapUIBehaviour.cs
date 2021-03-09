@@ -28,7 +28,7 @@ namespace BeastHunter
             _itemButton.interactable = flag;
         }
 
-        public void PutItemInCell(IItemInfo item)
+        public void PutItemInCell(IHubMapUIItem item)
         {
             CurrentItemId = item.Id;
             SetImage(item.Image);

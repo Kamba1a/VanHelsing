@@ -2,7 +2,7 @@
 
 namespace BeastHunter
 {
-    public interface ICityInfo
+    public interface IHubMapUICity
     {
         public int Id { get; }
         public string Name { get; }

@@ -1,11 +1,11 @@
 ﻿namespace BeastHunter
 { 
-    public interface IDialog
+    public interface IHubMapUIDialog
     {
         public int Number { get; }
         public string Text { get; }
         public bool IsQuest { get; }
-        public IDialogAnswer PositiveAnswer { get; }
-        public IDialogAnswer NegativeAnswer { get; }
+        public IHubMapUIAnswer PositiveAnswer { get; }
+        public IHubMapUIAnswer NegativeAnswer { get; }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BeastHunter
 {
     [Serializable]
-    public class TemporaryCharacterModel : ICharacter
+    public class TemporaryCharacterModel : IHubMapUICharacter
     {
         #region Fields
 

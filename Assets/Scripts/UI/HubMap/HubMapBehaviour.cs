@@ -250,7 +250,7 @@ namespace BeastHunter
             }
         }
 
-        private void FillCityInfo(ICityInfo city)
+        private void FillCityInfo(IHubMapUICity city)
         {
             _cityFraction.sprite = city.Fraction;
             _cityName.text = city.Name;
@@ -274,12 +274,12 @@ namespace BeastHunter
                 _clearInfoPanelList.Add(itemUI);
                 itemUI.transform.SetParent(_citySellingPanel.transform, false);
                 itemUI.transform.localScale = new Vector3(1, 1, 1);
-                IItemInfo hubMapUIItem = Array.Find(Data.HubMapData.Items, item => item.Id == city.SellingItemsId[i]);
+                IHubMapUIItem hubMapUIItem = Array.Find(Data.HubMapData.Items, item => item.Id == city.SellingItemsId[i]);
                 itemUI.GetComponentInChildren<SellingItemUIBehaviour>().Initialize(hubMapUIItem, city.CurrentPlayerReputation > hubMapUIItem.RequiredReputationForSale);
             }
         }
 
-        private void FillLocationInfo(ILocationInfo location)
+        private void FillLocationInfo(IHubMapUILocation location)
         {
             _locationScreen.sprite = location.Screenshot;
             _locationName.text = location.Name;
@@ -314,7 +314,7 @@ namespace BeastHunter
             _currentCitizensList.Clear();
         }
 
-        private void OnClick_DialogButton(ICitizenInfo citizen, IDialogAnswer dialogAnswer)
+        private void OnClick_DialogButton(IHubMapUICitizen citizen, IHubMapUIAnswer dialogAnswer)
         {
             _acceptButton.onClick.RemoveAllListeners();
             _declineButton.onClick.RemoveAllListeners();
@@ -343,9 +343,9 @@ namespace BeastHunter
             }
         }
 
-        private void FillDialogPanel(ICitizenInfo citizen)
+        private void FillDialogPanel(IHubMapUICitizen citizen)
         {
-            IDialog currentDialog = citizen.Dialogs[Data.HubMapData.CurrentDialogsNumbers[citizen.Id]];
+            IHubMapUIDialog currentDialog = citizen.Dialogs[Data.HubMapData.CurrentDialogsNumbers[citizen.Id]];
             _citizenName.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
             _dialogText.text = currentDialog.Text;
