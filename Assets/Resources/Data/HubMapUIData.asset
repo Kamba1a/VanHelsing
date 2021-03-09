@@ -20,7 +20,7 @@ MonoBehaviour:
     type: 3}
   _characterUIPrefab: {fileID: 3663167388749810844, guid: d76eafa59c0177848b959baa6daa5a28,
     type: 3}
-  _equipmentItemUIPrefab: {fileID: 4649815293729276567, guid: 7899f865f88bda740864b45d02cbea24,
+  _equipmentCellUIPrefab: {fileID: 4649815293729276567, guid: 7899f865f88bda740864b45d02cbea24,
     type: 3}
   _inventoryItemUIPrefab: {fileID: 4453913233983459706, guid: 30984c6c07d235c459e8e3c072b4a15c,
     type: 3}

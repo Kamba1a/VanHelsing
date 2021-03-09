@@ -91,7 +91,7 @@ namespace BeastHunter
             _hikeEquipmentItemCells = new List<HubMapUIEquipmentCellBehaviour>();
             for (int i = 0; i < Data.HubMapData.HikeEquipmentPanelCellAmount; i++)
             {
-                GameObject equipCellUI = GameObject.Instantiate(Data.HubMapData.EquipmentItemUIPrefab);
+                GameObject equipCellUI = GameObject.Instantiate(Data.HubMapData.EquipmentCellUIPrefab);
                 equipCellUI.transform.SetParent(_equipmentPanel.transform, false);
                 equipCellUI.transform.localScale = new Vector3(1, 1, 1);
                 _hikeEquipmentItemCells.Add(equipCellUI.GetComponent<HubMapUIEquipmentCellBehaviour>());

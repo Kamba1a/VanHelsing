@@ -10,7 +10,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _sellingItemUIPrefab;
         [SerializeField] private GameObject _locationTextUIPrefab;
         [SerializeField] private GameObject _characterUIPrefab;
-        [SerializeField] private GameObject _equipmentItemUIPrefab;
+        [SerializeField] private GameObject _equipmentCellUIPrefab;
         [SerializeField] private GameObject _inventoryItemUIPrefab;
         [SerializeField] private int _hikeEquipmentPanelCellAmount;
         [SerializeField] private bool _mapOnStartEnabled;
@@ -19,7 +19,7 @@ namespace BeastHunter
         public GameObject SellingItemUIPrefab => _sellingItemUIPrefab;
         public GameObject LocationTextUIPrefab => _locationTextUIPrefab;
         public GameObject CharacterUIPrefab => _characterUIPrefab;
-        public GameObject EquipmentItemUIPrefab => _equipmentItemUIPrefab;
+        public GameObject EquipmentCellUIPrefab => _equipmentCellUIPrefab;
         public GameObject InventoryItemUIPrefab => _inventoryItemUIPrefab;
         public bool MapOnStartEnabled => _mapOnStartEnabled;
         public int HikeEquipmentPanelCellAmount => _hikeEquipmentPanelCellAmount;
