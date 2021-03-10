@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace BeastHunter
@@ -42,14 +41,8 @@ namespace BeastHunter
         [SerializeField]
         private List<int> _inventoryItemsId;
 
-        public List<HubMapUIItem> Items => _items;
-        public List<HubMapUICitizen> Citizens => _citizens;
-        public List<HubMapUICity> Cities => _cities;
-        public List<HubMapUILocation> Locations => _locations;
-        public List<HubMapUICharacter> Characters => _characters;
-        public List<int> InventoryItemsId => _inventoryItemsId;
+#if UNITY_EDITOR
 
-        #if UNITY_EDITOR
         private int _nextItemId;
         private int _nextCitizenId;
         private int _nextCityId;
@@ -62,6 +55,73 @@ namespace BeastHunter
         private int _locationsCount;
         private int _charactersCount;
 
+#endif
+
+        public List<HubMapUIItem> Items => _items;
+        public List<HubMapUICitizen> Citizens => _citizens;
+        public List<HubMapUICity> Cities => _cities;
+        public List<HubMapUILocation> Locations => _locations;
+        public List<HubMapUICharacter> Characters => _characters;
+        public List<int> InventoryItemsId => _inventoryItemsId;
+        public Dictionary<IHubMapUICitizen, int> CurrentDialogsNumbers { get; set; }
+
+        private void OnEnable()
+        {
+            CurrentDialogsNumbersDictionaryInitialize();
+
+#if UNITY_EDITOR
+
+            _itemsCount = _items.Count;
+            _nextItemId = NextId(_items);
+
+            _citizensCount = _citizens.Count;
+            _nextCitizenId = NextId(_citizens);
+
+            _citiesCount = _cities.Count;
+            _nextCityId = NextId(_cities);
+
+            _locationsCount = _locations.Count;
+            _nextLocationId = NextId(_locations);
+
+            _charactersCount = _characters.Count;
+            _nextCharacterId = NextId(_characters);
+
+#endif
+        }
+
+#if UNITY_EDITOR
+
+        private void OnValidate()
+        {
+            OnMovingFirstListItemValidate(_items);
+            OnAddNewItemInListValidate(_items, ref _itemsCount, ref _nextItemId);
+            OnAddNewItemInListValidate(_citizens, ref _citizensCount, ref _nextCitizenId);
+            OnAddNewItemInListValidate(_cities, ref _citiesCount, ref _nextCityId);
+            OnAddNewItemInListValidate(_locations, ref _locationsCount, ref _nextLocationId);
+            OnAddNewItemInListValidate(_characters, ref _charactersCount, ref _nextCharacterId);
+
+            for (int i = 0; i < _characters.Count; i++)
+            {
+                if (_characters[i].ItemsId.Length != _hikeEquipmentPanelCellAmount)
+                {
+                    _characters[i].SetEquipmentsSize(_hikeEquipmentPanelCellAmount);
+                }
+            }
+        }
+
+#endif
+
+        private void CurrentDialogsNumbersDictionaryInitialize()
+        {
+            CurrentDialogsNumbers = new Dictionary<IHubMapUICitizen, int>();
+            for (int i = 0; i < _citizens.Count; i++)
+            {
+                CurrentDialogsNumbers.Add(_citizens[i], 0);
+            }
+        }
+
+#if UNITY_EDITOR
+
         [ContextMenu("Reassign all lists ids in order")]
         private void ReassignAllListsIdsInOrder()
         {
@@ -73,34 +133,16 @@ namespace BeastHunter
             Debug.Log("All identifiers in all lists have been reassigned in order");
         }
 
-        private void ReassignItemsListIdsInOrder()
-        {
-            for (int i = 0; i < _items.Count; i++) _items[i].SetId(i);
-            _nextItemId = _items.Count;
-        }
+        private void ReassignItemsListIdsInOrder() => SeIdsToAllListElements(_items, ref _nextItemId);
+        private void ReassignCitizensListIdsInOrder() => SeIdsToAllListElements(_citizens, ref _nextCitizenId);
+        private void ReassignCitiesListIdsInOrder() => SeIdsToAllListElements(_cities, ref _nextCityId);
+        private void ReassignLocationsListIdsInOrder() => SeIdsToAllListElements(_locations, ref _nextLocationId);
+        private void ReassignCharactersListIdsInOrder() => SeIdsToAllListElements(_characters, ref _nextCharacterId);
 
-        private void ReassignCitizensListIdsInOrder()
+        private void SeIdsToAllListElements<T>(List<T> list, ref int nextId) where T : HubMapUIBaseEntity
         {
-            for (int i = 0; i < _citizens.Count; i++) _citizens[i].SetId(i);
-            _nextCitizenId = _citizens.Count;
-        }
-
-        private void ReassignCitiesListIdsInOrder()
-        {
-            for (int i = 0; i < _cities.Count; i++) _cities[i].SetId(i);
-            _nextCityId = _cities.Count;
-        }
-
-        private void ReassignLocationsListIdsInOrder()
-        {
-            for (int i = 0; i < _locations.Count; i++) _locations[i].SetId(i);
-            _nextLocationId = _locations.Count;
-        }
-
-        private void ReassignCharactersListIdsInOrder()
-        {
-            for (int i = 0; i < _characters.Count; i++) _characters[i].SetId(i);
-            _nextCharacterId = _characters.Count;
+            for (int i = 0; i < list.Count; i++) list[i].SetId(i);
+            nextId = list.Count;
         }
 
         private void OnMovingFirstListItemValidate<T>(List<T> list) where T : HubMapUIBaseEntity
@@ -141,101 +183,23 @@ namespace BeastHunter
                 }
                 else if (lastCount > list.Count)
                 {
-                    nextId = 0;
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        if (list[i].Id > nextId) nextId = list[i].Id;
-                    }
-                    nextId++;
+                    nextId = NextId(list);
                 }
                 lastCount = list.Count;
             }
         }
 
-        private void OnValidate()
+        private int NextId<T>(List<T> list) where T : HubMapUIBaseEntity
         {
-            OnMovingFirstListItemValidate(_items);
-            OnAddNewItemInListValidate(_items, ref _itemsCount, ref _nextItemId);
-
-            if (_citizensCount != _citizens.Count)
+            int nextId = 0;
+            for (int i = 0; i < list.Count; i++)
             {
-                _citizensCount = _citizens.Count;
+                if (list[i].Id > nextId) nextId = list[i].Id;
             }
-
-            if (_citiesCount != _cities.Count)
-            {
-                _citiesCount = _cities.Count;
-            }
-
-            if (_locationsCount != _locations.Count)
-            {
-                _locationsCount = _locations.Count;
-            }
-
-            if (_charactersCount != _characters.Count)
-            {
-                _charactersCount = _characters.Count;
-            }
-
-            for (int i = 0; i < _characters.Count; i++)
-            {
-                if (_characters[i].ItemsId.Length != _hikeEquipmentPanelCellAmount)
-                {
-                    _characters[i].SetEquipmentsSize(_hikeEquipmentPanelCellAmount);
-                }
-            }
+            return ++nextId;
         }
-        #endif
 
-        public Dictionary<IHubMapUICitizen, int> CurrentDialogsNumbers { get; set; }
-
-        private void OnEnable()
-        {
-            CurrentDialogsNumbers = new Dictionary<IHubMapUICitizen, int>();
-            for (int i = 0; i< _citizens.Count; i++)
-            {
-                CurrentDialogsNumbers.Add(_citizens[i], 0);
-            }
-
-            #if UNITY_EDITOR
-
-            _itemsCount = _items.Count;
-            for (int i = 0; i < _items.Count; i++)
-            {
-                if (_items[i].Id > _nextItemId) _nextItemId = _items[i].Id;
-            }
-            _nextItemId++;
-
-            _citizensCount = _citizens.Count;
-            for (int i = 0; i < _citizens.Count; i++)
-            {
-                if (_citizens[i].Id > _nextCitizenId) _nextCitizenId = _citizens[i].Id;
-            }
-            _nextCitizenId++;
-
-            _citiesCount = _cities.Count;
-            for (int i = 0; i < _cities.Count; i++)
-            {
-                if (_cities[i].Id > _nextCityId) _nextCityId = _cities[i].Id;
-            }
-            _nextCityId++;
-
-            _locationsCount = _locations.Count;
-            for (int i = 0; i < _locations.Count; i++)
-            {
-                if (_locations[i].Id > _nextLocationId) _nextLocationId = _locations[i].Id;
-            }
-            _nextLocationId++;
-
-            _charactersCount = _characters.Count;
-            for (int i = 0; i < _characters.Count; i++)
-            {
-                if (_characters[i].Id > _nextCharacterId) _nextCharacterId = _characters[i].Id;
-            }
-            _nextCharacterId++;
-            
-            #endif
-        }
+#endif
 
         #endregion
     }
