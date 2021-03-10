@@ -6,6 +6,8 @@ namespace BeastHunter
     [CreateAssetMenu(fileName = "HubMapData", menuName = "CreateData/HubMapData", order = 0)]
     public class HubMapUIData : ScriptableObject
     {
+        #region Fields
+
         [SerializeField] private GameObject _citizenUIPrefab;
         [SerializeField] private GameObject _sellingItemUIPrefab;
         [SerializeField] private GameObject _locationTextUIPrefab;
@@ -14,18 +16,6 @@ namespace BeastHunter
         [SerializeField] private GameObject _inventoryItemUIPrefab;
         [SerializeField] private int _hikeEquipmentPanelCellAmount;
         [SerializeField] private bool _mapOnStartEnabled;
-
-        public GameObject CitizenUIPrefab => _citizenUIPrefab;
-        public GameObject SellingItemUIPrefab => _sellingItemUIPrefab;
-        public GameObject LocationTextUIPrefab => _locationTextUIPrefab;
-        public GameObject CharacterUIPrefab => _characterUIPrefab;
-        public GameObject EquipmentCellUIPrefab => _equipmentCellUIPrefab;
-        public GameObject InventoryItemUIPrefab => _inventoryItemUIPrefab;
-        public bool MapOnStartEnabled => _mapOnStartEnabled;
-        public int HikeEquipmentPanelCellAmount => _hikeEquipmentPanelCellAmount;
-
-
-        #region TEMPORARY CONTENT FOR TESTING HUB MAP
 
         [Header("TEMPORARY CONTENT FOR TESTING HUB MAP")]
         [SerializeField, ContextMenuItem("Reassign list ids in order", "ReassignItemsListIdsInOrder")]
@@ -57,6 +47,20 @@ namespace BeastHunter
 
 #endif
 
+        #endregion
+
+
+        #region Properties
+
+        public GameObject CitizenUIPrefab => _citizenUIPrefab;
+        public GameObject SellingItemUIPrefab => _sellingItemUIPrefab;
+        public GameObject LocationTextUIPrefab => _locationTextUIPrefab;
+        public GameObject CharacterUIPrefab => _characterUIPrefab;
+        public GameObject EquipmentCellUIPrefab => _equipmentCellUIPrefab;
+        public GameObject InventoryItemUIPrefab => _inventoryItemUIPrefab;
+        public bool MapOnStartEnabled => _mapOnStartEnabled;
+        public int HikeEquipmentPanelCellAmount => _hikeEquipmentPanelCellAmount;
+
         public List<HubMapUIItem> Items => _items;
         public List<HubMapUICitizen> Citizens => _citizens;
         public List<HubMapUICity> Cities => _cities;
@@ -64,6 +68,11 @@ namespace BeastHunter
         public List<HubMapUICharacter> Characters => _characters;
         public List<int> InventoryItemsId => _inventoryItemsId;
         public Dictionary<IHubMapUICitizen, int> CurrentDialogsNumbers { get; set; }
+
+        #endregion
+
+
+        #region UnityMethods
 
         private void OnEnable()
         {
@@ -110,6 +119,11 @@ namespace BeastHunter
         }
 
 #endif
+
+        #endregion
+
+
+        #region Methods
 
         private void CurrentDialogsNumbersDictionaryInitialize()
         {
