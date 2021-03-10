@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HubMapData", menuName = "CreateData/HubMapData", order = 0)]
-    public class HubMapUIData: ScriptableObject
+    public class HubMapUIData : ScriptableObject
     {
         [SerializeField] private GameObject _citizenUIPrefab;
         [SerializeField] private GameObject _sellingItemUIPrefab;
@@ -50,17 +50,17 @@ namespace BeastHunter
         public List<int> InventoryItemsId => _inventoryItemsId;
 
         #if UNITY_EDITOR
-        [HideInInspector] private int _nextItemId;
-        [HideInInspector] private int _nextCitizenId;
-        [HideInInspector] private int _nextCityId;
-        [HideInInspector] private int _nextLocationId;
-        [HideInInspector] private int _nextCharacterId;
+        private int _nextItemId;
+        private int _nextCitizenId;
+        private int _nextCityId;
+        private int _nextLocationId;
+        private int _nextCharacterId;
 
-        private int _itemsLength;
-        private int _citizensLength;
-        private int _citiesLength;
-        private int _locationsLength;
-        private int _charactersLength;
+        private int _itemsCount;
+        private int _citizensCount;
+        private int _citiesCount;
+        private int _locationsCount;
+        private int _charactersCount;
 
         [ContextMenu("Reassign all lists ids in order")]
         private void ReassignAllListsIdsInOrder()
@@ -103,100 +103,78 @@ namespace BeastHunter
             _nextCharacterId = _characters.Count;
         }
 
-        //private void MovingListItemsValidate(List<HubMapUIBaseEntity> list)
-        //{
-        //    if (list[0].Id != 0)
-        //    {
-        //        Debug.LogWarning("The first element of the list must be null and have a null ID!");
-        //        bool isItemRemoved = true;
-        //        for (int i = 1; i < list.Count; i++)
-        //        {
-        //            if (list[i].Id == 0)
-        //            {
-        //                list[i] = list[0];
-        //                list[0] = null;
-        //                isItemRemoved = false;
-        //            }
-        //            if (isItemRemoved)
-        //            {
-        //                list.Insert(0, new HubMapUIItem());
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private void ListValidate2(List<HubMapUIBaseEntity> list)
-        //{
-        //    if (_itemsLength != list.Count)
-        //    {
-        //        if (_itemsLength < list.Count)
-        //        {
-        //            for (int i = 1; i < list.Count; i++)
-        //            {
-        //                if (list[i].Id == list[i - 1].Id)
-        //                {
-        //                    list[i].SetId(_nextItemId++);
-        //                }
-        //            }
-        //        }
-        //        _itemsLength = list.Count;
-        //    }
-        //}
-
-        private void OnValidate()
+        private void OnMovingFirstListItemValidate<T>(List<T> list) where T : HubMapUIBaseEntity
         {
-            if (_items[0].Id != 0)
+            if (list[0].Id != 0)
             {
                 Debug.LogWarning("The first element of the list must be null and have a null ID!");
                 bool isItemRemoved = true;
-                for (int i = 1; i < _items.Count; i++)
+                for (int i = 1; i < list.Count; i++)
                 {
-                    if (_items[i].Id == 0)
+                    if (list[i].Id == 0)
                     {
-                        _items[i] = _items[0];
-                        _items[0] = null;
+                        list[i] = list[0];
+                        list[0] = null;
                         isItemRemoved = false;
                     }
                 }
                 if (isItemRemoved)
                 {
-                    _items.Insert(0, new HubMapUIItem());
+                    list.Insert(0, null);
                 }
             }
+        }
 
-            if (_itemsLength != _items.Count)
+        private void OnAddNewItemInListValidate<T>(List<T> list, ref int lastCount, ref int nextId) where T : HubMapUIBaseEntity
+        {
+            if (lastCount != list.Count)
             {
-                if (_itemsLength < _items.Count)
+                if (lastCount < list.Count)
                 {
-                    for (int i = 1; i < _items.Count; i++)
+                    for (int i = 1; i < list.Count; i++)
                     {
-                        if (_items[i].Id == _items[i - 1].Id)
+                        if (list[i].Id == list[i - 1].Id)
                         {
-                            _items[i].SetId(_nextItemId++);
+                            list[i].SetId(nextId++);
                         }
                     }
                 }
-                _itemsLength = _items.Count;
+                else if (lastCount > list.Count)
+                {
+                    nextId = 0;
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        if (list[i].Id > nextId) nextId = list[i].Id;
+                    }
+                    nextId++;
+                }
+                lastCount = list.Count;
+            }
+        }
+
+        private void OnValidate()
+        {
+            OnMovingFirstListItemValidate(_items);
+            OnAddNewItemInListValidate(_items, ref _itemsCount, ref _nextItemId);
+
+            if (_citizensCount != _citizens.Count)
+            {
+                _citizensCount = _citizens.Count;
             }
 
-            if (_citizensLength != _citizens.Count)
+            if (_citiesCount != _cities.Count)
             {
-                _citizensLength = _citizens.Count;
+                _citiesCount = _cities.Count;
             }
 
-            if (_citiesLength != _cities.Count)
+            if (_locationsCount != _locations.Count)
             {
-                _citiesLength = _cities.Count;
+                _locationsCount = _locations.Count;
             }
 
-            if (_locationsLength != _locations.Count)
+            if (_charactersCount != _characters.Count)
             {
-                _locationsLength = _locations.Count;
-            }
-
-            if (_charactersLength != _characters.Count)
-            {
-                _charactersLength = _characters.Count;
+                _charactersCount = _characters.Count;
             }
 
             for (int i = 0; i < _characters.Count; i++)
@@ -218,6 +196,45 @@ namespace BeastHunter
             {
                 CurrentDialogsNumbers.Add(_citizens[i], 0);
             }
+
+            #if UNITY_EDITOR
+
+            _itemsCount = _items.Count;
+            for (int i = 0; i < _items.Count; i++)
+            {
+                if (_items[i].Id > _nextItemId) _nextItemId = _items[i].Id;
+            }
+            _nextItemId++;
+
+            _citizensCount = _citizens.Count;
+            for (int i = 0; i < _citizens.Count; i++)
+            {
+                if (_citizens[i].Id > _nextCitizenId) _nextCitizenId = _citizens[i].Id;
+            }
+            _nextCitizenId++;
+
+            _citiesCount = _cities.Count;
+            for (int i = 0; i < _cities.Count; i++)
+            {
+                if (_cities[i].Id > _nextCityId) _nextCityId = _cities[i].Id;
+            }
+            _nextCityId++;
+
+            _locationsCount = _locations.Count;
+            for (int i = 0; i < _locations.Count; i++)
+            {
+                if (_locations[i].Id > _nextLocationId) _nextLocationId = _locations[i].Id;
+            }
+            _nextLocationId++;
+
+            _charactersCount = _characters.Count;
+            for (int i = 0; i < _characters.Count; i++)
+            {
+                if (_characters[i].Id > _nextCharacterId) _nextCharacterId = _characters[i].Id;
+            }
+            _nextCharacterId++;
+            
+            #endif
         }
 
         #endregion
