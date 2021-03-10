@@ -147,23 +147,30 @@ namespace BeastHunter
 
         private void OnMovingFirstListItemValidate<T>(List<T> list) where T : HubMapUIBaseEntity
         {
-            if (list[0].Id != 0)
+            if (list.Count > 0)
             {
-                Debug.LogWarning("The first element of the list must be null and have a null ID!");
-                bool isItemRemoved = true;
-                for (int i = 1; i < list.Count; i++)
+                if (list[0].Id != 0)
                 {
-                    if (list[i].Id == 0)
+                    Debug.LogWarning("The first element of the list must be null and have a null ID!");
+                    bool isItemRemoved = true;
+                    for (int i = 1; i < list.Count; i++)
                     {
-                        list[i] = list[0];
-                        list[0] = null;
-                        isItemRemoved = false;
+                        if (list[i].Id == 0)
+                        {
+                            list[i] = list[0];
+                            list[0] = null;
+                            isItemRemoved = false;
+                        }
+                    }
+                    if (isItemRemoved)
+                    {
+                        list.Insert(0, null);
                     }
                 }
-                if (isItemRemoved)
-                {
-                    list.Insert(0, null);
-                }
+            }
+            else
+            {
+                list.Add(null);
             }
         }
 
