@@ -79,7 +79,7 @@ namespace BeastHunter
 
             FillInventoryPanel(Data.HubMapData.InventoryItemsId);
 
-            for (int i = 0; i < Data.HubMapData.Characters.Length; i++)
+            for (int i = 0; i < Data.HubMapData.Characters.Count; i++)
             {
                 GameObject characterUI = GameObject.Instantiate(Data.HubMapData.CharacterUIPrefab);
                 characterUI.transform.SetParent(_charactersPanel.transform, false);
@@ -161,7 +161,7 @@ namespace BeastHunter
         {
             HideRightInfoPanels();
             ClearRightInfoPanel();
-            FillCityInfo(Array.Find(Data.HubMapData.Cities, city => city.Id == cityId));
+            FillCityInfo(Data.HubMapData.Cities.Find(city => city.Id == cityId));
             _infoPanel.GetComponent<ScrollRect>().content = _cityInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
             _cityInfoPanel.SetActive(true);
@@ -172,7 +172,7 @@ namespace BeastHunter
             _currentLocationId = locationId;
             HideRightInfoPanels();
             ClearRightInfoPanel();
-            FillLocationInfo(Array.Find(Data.HubMapData.Locations, location => location.Id == locationId));
+            FillLocationInfo(Data.HubMapData.Locations.Find(location => location.Id == locationId));
             _infoPanel.GetComponent<ScrollRect>().content = _locationInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
             _locationInfoPanel.SetActive(true);
@@ -204,7 +204,7 @@ namespace BeastHunter
                 itemUI.transform.SetParent(_inventoryItemsPanel.transform, false);
                 itemUI.transform.localScale = new Vector3(1, 1, 1);
 
-                itemUI.GetComponent<Image>().sprite = Array.Find(Data.HubMapData.Items, item => item.Id == itemsId[i]).Image;
+                itemUI.GetComponent<Image>().sprite = Data.HubMapData.Items.Find(item => item.Id == itemsId[i]).Image;
                 //itemUI.GetComponent<Button>().onClick.AddListener(TEMPmethod);
             }
         }
@@ -243,7 +243,7 @@ namespace BeastHunter
                 _hikeEquipmentItemCells[i].SetInteractable(true);
                 if (itemsId[i] != 0)
                 {
-                    _hikeEquipmentItemCells[i].PutItemInCell(Array.Find(Data.HubMapData.Items, item => item.Id == itemsId[i]));
+                    _hikeEquipmentItemCells[i].PutItemInCell(Data.HubMapData.Items.Find(item => item.Id == itemsId[i]));
                 }
                 else
                 {
@@ -262,7 +262,7 @@ namespace BeastHunter
             for (int i = 0; i < city.CitizensId.Length; i++)
             {
                 GameObject citizenUI = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab);
-                IHubMapUICitizen hubMapUICitizen = Array.Find(Data.HubMapData.Citizens, citizen => citizen.Id == city.CitizensId[i]);
+                IHubMapUICitizen hubMapUICitizen = Data.HubMapData.Citizens.Find(citizen => citizen.Id == city.CitizensId[i]);
                 _clearInfoPanelList.Add(citizenUI);
                 _currentCitizensList.Add(hubMapUICitizen, citizenUI);
                 citizenUI.transform.SetParent(_citizenPanel.transform, false);
@@ -277,7 +277,7 @@ namespace BeastHunter
                 _clearInfoPanelList.Add(itemUI);
                 itemUI.transform.SetParent(_citySellingPanel.transform, false);
                 itemUI.transform.localScale = new Vector3(1, 1, 1);
-                IHubMapUIItem hubMapUIItem = Array.Find(Data.HubMapData.Items, item => item.Id == city.SellingItemsId[i]);
+                IHubMapUIItem hubMapUIItem = Data.HubMapData.Items.Find(item => item.Id == city.SellingItemsId[i]);
                 itemUI.GetComponentInChildren<HubMapUISellingItemBehaviour>().Initialize(hubMapUIItem, city.CurrentPlayerReputation > hubMapUIItem.RequiredReputationForSale);
             }
         }

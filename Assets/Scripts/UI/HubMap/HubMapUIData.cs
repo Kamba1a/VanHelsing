@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BeastHunter
@@ -29,23 +30,23 @@ namespace BeastHunter
 
         [Header("TEMPORARY CONTENT FOR TESTING HUB MAP")]
         [SerializeField, ContextMenuItem("Reassign list ids in order", "ReassignItemsListIdsInOrder")]
-        private HubMapUIItem[] _items;
+        private List<HubMapUIItem> _items;
         [SerializeField, ContextMenuItem("Reassign list ids in order", "ReassignCitizensListIdsInOrder")]
-        private HubMapUICitizen[] _citizens;
+        private List<HubMapUICitizen> _citizens;
         [SerializeField, ContextMenuItem("Reassign list ids in order", "ReassignCitiesListIdsInOrder")]
-        private HubMapUICity[] _cities;
+        private List<HubMapUICity> _cities;
         [SerializeField, ContextMenuItem("Reassign list ids in order", "ReassignLocationsListIdsInOrder")]
-        private HubMapUILocation[] _locations;
+        private List<HubMapUILocation> _locations;
         [SerializeField, ContextMenuItem("Reassign list ids in order", "ReassignCharactersListIdsInOrder")]
-        private HubMapUICharacter[] _characters;
-        [SerializeField] 
+        private List<HubMapUICharacter> _characters;
+        [SerializeField]
         private List<int> _inventoryItemsId;
 
-        public HubMapUIItem[] Items => _items;
-        public HubMapUICitizen[] Citizens => _citizens;
-        public HubMapUICity[] Cities => _cities;
-        public HubMapUILocation[] Locations => _locations;
-        public HubMapUICharacter[] Characters => _characters;
+        public List<HubMapUIItem> Items => _items;
+        public List<HubMapUICitizen> Citizens => _citizens;
+        public List<HubMapUICity> Cities => _cities;
+        public List<HubMapUILocation> Locations => _locations;
+        public List<HubMapUICharacter> Characters => _characters;
         public List<int> InventoryItemsId => _inventoryItemsId;
 
         #if UNITY_EDITOR
@@ -74,33 +75,73 @@ namespace BeastHunter
 
         private void ReassignItemsListIdsInOrder()
         {
-            for (int i = 0; i < _items.Length; i++) _items[i].SetId(i);
-            _nextItemId = _items.Length;
+            for (int i = 0; i < _items.Count; i++) _items[i].SetId(i);
+            _nextItemId = _items.Count;
         }
 
         private void ReassignCitizensListIdsInOrder()
         {
-            for (int i = 0; i < _citizens.Length; i++) _citizens[i].SetId(i);
-            _nextCitizenId = _citizens.Length;
+            for (int i = 0; i < _citizens.Count; i++) _citizens[i].SetId(i);
+            _nextCitizenId = _citizens.Count;
         }
 
         private void ReassignCitiesListIdsInOrder()
         {
-            for (int i = 0; i < _cities.Length; i++) _cities[i].SetId(i);
-            _nextCityId = _cities.Length;
+            for (int i = 0; i < _cities.Count; i++) _cities[i].SetId(i);
+            _nextCityId = _cities.Count;
         }
 
         private void ReassignLocationsListIdsInOrder()
         {
-            for (int i = 0; i < _locations.Length; i++) _locations[i].SetId(i);
-            _nextLocationId = _locations.Length;
+            for (int i = 0; i < _locations.Count; i++) _locations[i].SetId(i);
+            _nextLocationId = _locations.Count;
         }
 
         private void ReassignCharactersListIdsInOrder()
         {
-            for (int i = 0; i < _characters.Length; i++) _characters[i].SetId(i);
-            _nextCharacterId = _characters.Length;
+            for (int i = 0; i < _characters.Count; i++) _characters[i].SetId(i);
+            _nextCharacterId = _characters.Count;
         }
+
+        //private void MovingListItemsValidate(List<HubMapUIBaseEntity> list)
+        //{
+        //    if (list[0].Id != 0)
+        //    {
+        //        Debug.LogWarning("The first element of the list must be null and have a null ID!");
+        //        bool isItemRemoved = true;
+        //        for (int i = 1; i < list.Count; i++)
+        //        {
+        //            if (list[i].Id == 0)
+        //            {
+        //                list[i] = list[0];
+        //                list[0] = null;
+        //                isItemRemoved = false;
+        //            }
+        //            if (isItemRemoved)
+        //            {
+        //                list.Insert(0, new HubMapUIItem());
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void ListValidate2(List<HubMapUIBaseEntity> list)
+        //{
+        //    if (_itemsLength != list.Count)
+        //    {
+        //        if (_itemsLength < list.Count)
+        //        {
+        //            for (int i = 1; i < list.Count; i++)
+        //            {
+        //                if (list[i].Id == list[i - 1].Id)
+        //                {
+        //                    list[i].SetId(_nextItemId++);
+        //                }
+        //            }
+        //        }
+        //        _itemsLength = list.Count;
+        //    }
+        //}
 
         private void OnValidate()
         {
@@ -108,27 +149,26 @@ namespace BeastHunter
             {
                 Debug.LogWarning("The first element of the list must be null and have a null ID!");
                 bool isItemRemoved = true;
-                for (int i = 1; i < _items.Length; i++)
+                for (int i = 1; i < _items.Count; i++)
                 {
                     if (_items[i].Id == 0)
                     {
                         _items[i] = _items[0];
-                        _items[0] = new HubMapUIItem();
+                        _items[0] = null;
                         isItemRemoved = false;
                     }
-                    if (isItemRemoved)
-                    {
-                        //TODO: arrays to collections
-                        //_items.Insert(new HubMapUIItem());
-                    }
+                }
+                if (isItemRemoved)
+                {
+                    _items.Insert(0, new HubMapUIItem());
                 }
             }
 
-            if (_itemsLength != _items.Length)
+            if (_itemsLength != _items.Count)
             {
-                if (_itemsLength < _items.Length)
+                if (_itemsLength < _items.Count)
                 {
-                    for (int i = 1; i < _items.Length; i++)
+                    for (int i = 1; i < _items.Count; i++)
                     {
                         if (_items[i].Id == _items[i - 1].Id)
                         {
@@ -136,30 +176,30 @@ namespace BeastHunter
                         }
                     }
                 }
-                _itemsLength = _items.Length;
+                _itemsLength = _items.Count;
             }
 
-            if (_citizensLength != _citizens.Length)
+            if (_citizensLength != _citizens.Count)
             {
-                _citizensLength = _citizens.Length;
+                _citizensLength = _citizens.Count;
             }
 
-            if (_citiesLength != _cities.Length)
+            if (_citiesLength != _cities.Count)
             {
-                _citiesLength = _cities.Length;
+                _citiesLength = _cities.Count;
             }
 
-            if (_locationsLength != _locations.Length)
+            if (_locationsLength != _locations.Count)
             {
-                _locationsLength = _locations.Length;
+                _locationsLength = _locations.Count;
             }
 
-            if (_charactersLength != _characters.Length)
+            if (_charactersLength != _characters.Count)
             {
-                _charactersLength = _characters.Length;
+                _charactersLength = _characters.Count;
             }
 
-            for (int i = 0; i < _characters.Length; i++)
+            for (int i = 0; i < _characters.Count; i++)
             {
                 if (_characters[i].ItemsId.Length != _hikeEquipmentPanelCellAmount)
                 {
@@ -174,7 +214,7 @@ namespace BeastHunter
         private void OnEnable()
         {
             CurrentDialogsNumbers = new Dictionary<IHubMapUICitizen, int>();
-            for (int i = 0; i< _citizens.Length; i++)
+            for (int i = 0; i< _citizens.Count; i++)
             {
                 CurrentDialogsNumbers.Add(_citizens[i], 0);
             }
