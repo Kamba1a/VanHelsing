@@ -8,16 +8,26 @@ namespace BeastHunter
     {
         #region Fields
 
+        [Header("UI prefabs")]
         [SerializeField] private GameObject _citizenUIPrefab;
         [SerializeField] private GameObject _sellingItemUIPrefab;
         [SerializeField] private GameObject _locationTextUIPrefab;
         [SerializeField] private GameObject _characterUIPrefab;
         [SerializeField] private GameObject _equipmentCellUIPrefab;
         [SerializeField] private GameObject _inventoryItemUIPrefab;
+
+        [Header("UI prefs")]
         [SerializeField] private int _hikeEquipmentPanelCellAmount;
         [SerializeField] private bool _mapOnStartEnabled;
 
-        [Header("TEMPORARY CONTENT FOR TESTING HUB MAP")]
+        [Header("Objects on map ids")]
+        [SerializeField] private int _cityId;
+        [SerializeField] private int _locationId_1;
+        [SerializeField] private int _locationId_2;
+        [SerializeField] private int _locationId_3;
+        [SerializeField] private int _locationId_4;
+
+        [Header("Content for UI")]
         [SerializeField, ContextMenuItem("Reassign list ids in order", "ReassignItemsListIdsInOrder")]
         private List<HubMapUIItem> _items;
         [SerializeField, ContextMenuItem("Reassign list ids in order", "ReassignCitizensListIdsInOrder")]
@@ -58,8 +68,15 @@ namespace BeastHunter
         public GameObject CharacterUIPrefab => _characterUIPrefab;
         public GameObject EquipmentCellUIPrefab => _equipmentCellUIPrefab;
         public GameObject InventoryItemUIPrefab => _inventoryItemUIPrefab;
+
         public bool MapOnStartEnabled => _mapOnStartEnabled;
         public int HikeEquipmentPanelCellAmount => _hikeEquipmentPanelCellAmount;
+
+        public int CityId => _cityId;
+        public int LocationId_1 => _locationId_1;
+        public int LocationId_2 => _locationId_2;
+        public int LocationId_3 => _locationId_3;
+        public int LocationId_4 => _locationId_4;
 
         public List<HubMapUIItem> Items => _items;
         public List<HubMapUICitizen> Citizens => _citizens;

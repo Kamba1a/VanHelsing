@@ -7,11 +7,23 @@ namespace BeastHunter
 {
     public class HubMapUIBehaviour : MonoBehaviour
     {
-        #region SerializeFields
+        private const float CHARACTERS_PANEL_SCROLLBAR_SPEED = 1.0f;
+
+        #region Fields
+
+        [Header("Map objects")]
+        [SerializeField] private Button _cityButton;
+        [SerializeField] private Button _locationButton_1;
+        [SerializeField] private Button _locationButton_2;
+        [SerializeField] private Button _locationButton_3;
+        [SerializeField] private Button _locationButton_4;
 
         [Header("Hub map")]
         [SerializeField] private GameObject _mainPanel;
         [SerializeField] private GameObject _infoPanel;
+        [SerializeField] private Button _hideInfoPanelButton;
+        [SerializeField] private Button _hubButton;
+        [SerializeField] private Button _mapButton;
 
         [Header("City info panel")]
         [SerializeField] private GameObject _cityInfoPanel;
@@ -22,14 +34,6 @@ namespace BeastHunter
         [SerializeField] private Text _cityDescription;
         [SerializeField] private Text _cityReputation;
 
-        [Header("Dialog panel")]
-        [SerializeField] private GameObject _dialogPanel;
-        [SerializeField] private Image _citizenPortrait;
-        [SerializeField] private Text _citizenName;
-        [SerializeField] private Text _dialogText;
-        [SerializeField] private Button _acceptButton;
-        [SerializeField] private Button _declineButton;
-
         [Header("Location info panel")]
         [SerializeField] private GameObject _locationInfoPanel;
         [SerializeField] private GameObject _dwellersPanel;
@@ -39,34 +43,81 @@ namespace BeastHunter
         [SerializeField] private Image _locationScreen;
         [SerializeField] private Button _hikeButton;
 
+        [Header("Dialog panel")]
+        [SerializeField] private GameObject _dialogPanel;
+        [SerializeField] private Image _citizenPortrait;
+        [SerializeField] private Text _citizenName;
+        [SerializeField] private Text _dialogText;
+        [SerializeField] private Button _acceptButton;
+        [SerializeField] private Button _declineButton;
+
         [Header("Hike panel")]
+        [SerializeField] private Button _hikePanelButton;
+        [SerializeField] private Button _closeHikePanelButton;
+        [SerializeField] private Button _hikeAcceptButton;
         [SerializeField] private GameObject _hikePanel;
         [SerializeField] private GameObject _hikePreparePanel;
         [SerializeField] private GameObject _charactersPanel;
         [SerializeField] private GameObject _equipmentPanel;
         [SerializeField] private GameObject _inventoryPanel;
         [SerializeField] private GameObject _inventoryItemsPanel;
+        [SerializeField] private Button _closeInventoryButton;
         [SerializeField] private Scrollbar _charactersPanelScrollbar;
+        [SerializeField] private Button _charactersPanelNextButton;
+        [SerializeField] private Button _charactersPanelPreviousButton;
 
-        #endregion
-
-
-        #region Fields
-
-        private List<GameObject> _clearInfoPanelList;
-        private Dictionary<IHubMapUICitizen, GameObject> _currentCitizensList;
+        private List<GameObject> _infoPanelObjectsForDestroy;
+        private Dictionary<IHubMapUICitizen, GameObject> _currentDisplayedCitizens;
         private List<HubMapUIEquipmentCellBehaviour> _hikeEquipmentItemCells;
-        private int _currentLocationId;
+        private int _selectedLocationId;
 
         #endregion
 
 
         #region UnityMethods
 
+        private void OnEnable()
+        {
+            _cityButton.onClick.AddListener(() => ShowCityInfoPanel(Data.HubMapData.CityId));
+            _locationButton_1.onClick.AddListener(() => ShowLocationInfoPanel(Data.HubMapData.LocationId_1));
+            _locationButton_2.onClick.AddListener(() => ShowLocationInfoPanel(Data.HubMapData.LocationId_2));
+            _locationButton_3.onClick.AddListener(() => ShowLocationInfoPanel(Data.HubMapData.LocationId_3));
+            _locationButton_4.onClick.AddListener(() => ShowLocationInfoPanel(Data.HubMapData.LocationId_4));
+
+            _hubButton.onClick.AddListener(HideMap);
+            _mapButton.onClick.AddListener(ShowMap);
+            _hideInfoPanelButton.onClick.AddListener(HideRightInfoPanels);
+            _hikeAcceptButton.onClick.AddListener(LocationLoad);
+            _closeHikePanelButton.onClick.AddListener(CloseHikePanel);
+            _hikePanelButton.onClick.AddListener(ShowHikePanel);
+            _charactersPanelNextButton.onClick.AddListener(()=>MoveCharactersPanelScrollbar(CHARACTERS_PANEL_SCROLLBAR_SPEED));
+            _charactersPanelPreviousButton.onClick.AddListener(() => MoveCharactersPanelScrollbar(-CHARACTERS_PANEL_SCROLLBAR_SPEED));
+            _closeInventoryButton.onClick.AddListener(CloseInventoryPanel);
+        }
+
+        private void OnDisable()
+        {
+            _cityButton.onClick.RemoveAllListeners();
+            _locationButton_1.onClick.RemoveAllListeners();
+            _locationButton_2.onClick.RemoveAllListeners();
+            _locationButton_3.onClick.RemoveAllListeners();
+            _locationButton_4.onClick.RemoveAllListeners();
+
+            _hubButton.onClick.RemoveAllListeners();
+            _mapButton.onClick.RemoveAllListeners();
+            _hideInfoPanelButton.onClick.RemoveAllListeners();
+            _hikeAcceptButton.onClick.RemoveAllListeners();
+            _closeHikePanelButton.onClick.RemoveAllListeners();
+            _hikePanelButton.onClick.RemoveAllListeners();
+            _charactersPanelNextButton.onClick.RemoveAllListeners();
+            _charactersPanelPreviousButton.onClick.RemoveAllListeners();
+            _closeInventoryButton.onClick.RemoveAllListeners();
+        }
+
         private void Start()
         {
-            _currentCitizensList = new Dictionary<IHubMapUICitizen, GameObject>();
-            _clearInfoPanelList = new List<GameObject>();
+            _currentDisplayedCitizens = new Dictionary<IHubMapUICitizen, GameObject>();
+            _infoPanelObjectsForDestroy = new List<GameObject>();
 
             _mainPanel.SetActive(Data.HubMapData.MapOnStartEnabled);
             _infoPanel.SetActive(false);
@@ -94,27 +145,10 @@ namespace BeastHunter
                 GameObject equipCellUI = GameObject.Instantiate(Data.HubMapData.EquipmentCellUIPrefab);
                 equipCellUI.transform.SetParent(_equipmentPanel.transform, false);
                 equipCellUI.transform.localScale = new Vector3(1, 1, 1);
-                _hikeEquipmentItemCells.Add(equipCellUI.GetComponent<HubMapUIEquipmentCellBehaviour>());
                 equipCellUI.GetComponent<Button>().onClick.AddListener(ShowInventoryPanel);
+                _hikeEquipmentItemCells.Add(equipCellUI.GetComponent<HubMapUIEquipmentCellBehaviour>());
             }
         }
-
-        #endregion
-
-
-        #region TriggerEvents
-
-        //TODO?: replace obscure event subscription to OnEnable()/OnDisable methods with explicit subscription
-        public void OnClick_HubButton() => HideMap();
-        public void OnClick_MapButton() => ShowMap();
-        public void OnClick_CityButton(int cityId) => ShowCityInfoPanel(cityId);
-        public void OnClick_CloseInfoButton() => HideRightInfoPanels();
-        public void OnClick_LocationButton(int locationId) => ShowLocationInfoPanel(locationId);
-        public void OnClick_HikeButton() => ShowHikePanel();
-        public void OnClick_HikeAcceptButton() => LocationLoad();
-        public void OnClick_CloseHikeButton() => CloseHikePanel();
-        public void OnClick_CharactersPanelButton(float step) => MoveCharactersPanelScrollbar(step);
-        public void OnClick_CloseInventoryButton() => CloseInventoryPanel();
 
         #endregion
 
@@ -169,7 +203,7 @@ namespace BeastHunter
 
         private void ShowLocationInfoPanel(int locationId)
         {
-            _currentLocationId = locationId;
+            _selectedLocationId = locationId;
             HideRightInfoPanels();
             ClearRightInfoPanel();
             FillLocationInfo(Data.HubMapData.Locations.Find(location => location.Id == locationId));
@@ -263,8 +297,8 @@ namespace BeastHunter
             {
                 GameObject citizenUI = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab);
                 IHubMapUICitizen hubMapUICitizen = Data.HubMapData.Citizens.Find(citizen => citizen.Id == city.CitizensId[i]);
-                _clearInfoPanelList.Add(citizenUI);
-                _currentCitizensList.Add(hubMapUICitizen, citizenUI);
+                _infoPanelObjectsForDestroy.Add(citizenUI);
+                _currentDisplayedCitizens.Add(hubMapUICitizen, citizenUI);
                 citizenUI.transform.SetParent(_citizenPanel.transform, false);
                 citizenUI.transform.localScale = new Vector3(1, 1, 1);
                 citizenUI.GetComponentInChildren<HubMapUICitizenBehaviour>().Initialize(hubMapUICitizen);
@@ -274,7 +308,7 @@ namespace BeastHunter
             for (int i = 0; i < city.SellingItemsId.Length; i++)
             {
                 GameObject itemUI = GameObject.Instantiate(Data.HubMapData.SellingItemUIPrefab);
-                _clearInfoPanelList.Add(itemUI);
+                _infoPanelObjectsForDestroy.Add(itemUI);
                 itemUI.transform.SetParent(_citySellingPanel.transform, false);
                 itemUI.transform.localScale = new Vector3(1, 1, 1);
                 IHubMapUIItem hubMapUIItem = Data.HubMapData.Items.Find(item => item.Id == city.SellingItemsId[i]);
@@ -291,7 +325,7 @@ namespace BeastHunter
             for (int i = 0; i < location.DwellersId.Length; i++)
             {
                 GameObject dwellerUI = GameObject.Instantiate(Data.HubMapData.LocationTextUIPrefab);
-                _clearInfoPanelList.Add(dwellerUI);
+                _infoPanelObjectsForDestroy.Add(dwellerUI);
                 dwellerUI.transform.SetParent(_dwellersPanel.transform, false);
                 dwellerUI.transform.localScale = new Vector3(1, 1, 1);
                 //dwellerUI.GetComponentInChildren<DwellerUIBehaviour>().Initialize(Array.Find(Data.HubMapData.Dwellers, dweller => dweller.Id == location.DwellersId[i]));
@@ -300,7 +334,7 @@ namespace BeastHunter
             for (int i = 0; i < location.IngredientsId.Length; i++)
             {
                 GameObject ingredientUI = GameObject.Instantiate(Data.HubMapData.LocationTextUIPrefab);
-                _clearInfoPanelList.Add(ingredientUI);
+                _infoPanelObjectsForDestroy.Add(ingredientUI);
                 ingredientUI.transform.SetParent(_ingredientsPanel.transform, false);
                 ingredientUI.transform.localScale = new Vector3(1, 1, 1);
                 //ingredientUI.GetComponentInChildren<IngredientUIBehaviour>().Initialize(Array.Find(Data.HubMapData.Ingredients, ingredient => ingredient.Id == location.IngredientsId[i]));
@@ -309,12 +343,12 @@ namespace BeastHunter
 
         private void ClearRightInfoPanel()
         {
-            for (int i=0; i< _clearInfoPanelList.Count; i++)
+            for (int i=0; i< _infoPanelObjectsForDestroy.Count; i++)
             {
-                Destroy(_clearInfoPanelList[i]);
+                Destroy(_infoPanelObjectsForDestroy[i]);
             }
-            _clearInfoPanelList.Clear();
-            _currentCitizensList.Clear();
+            _infoPanelObjectsForDestroy.Clear();
+            _currentDisplayedCitizens.Clear();
         }
 
         private void OnClick_DialogButton(IHubMapUICitizen citizen, IHubMapUIDialogAnswer dialogAnswer)
@@ -337,14 +371,7 @@ namespace BeastHunter
 
         private void UpdateCitizenInfo(IHubMapUICitizen citizen)
         {
-            _currentCitizensList[citizen].GetComponentInChildren<HubMapUICitizenBehaviour>().UpdateInfo(citizen);
-            //for (int i = 0; i < _currentCitizensList.Count; i++)
-            //{
-            //    if (_currentCitizensList[i].GetComponentInChildren<HubMapUICitizenBehaviour>().Id == citizen.Id)
-            //    {
-            //        _currentCitizensList[i].GetComponentInChildren<HubMapUICitizenBehaviour>().UpdateInfo(Data.HubMapData.Citizens[citizen.Id]);
-            //    }
-            //}
+            _currentDisplayedCitizens[citizen].GetComponentInChildren<HubMapUICitizenBehaviour>().UpdateInfo(citizen);
         }
 
         private void FillDialogPanel(IHubMapUICitizen citizen)
@@ -375,7 +402,7 @@ namespace BeastHunter
 
         private void LocationLoad()
         {
-            Debug.Log("Load location. Location id: " + _currentLocationId);
+            Debug.Log("Load location. Location id: " + _selectedLocationId);
         }
 
         #endregion

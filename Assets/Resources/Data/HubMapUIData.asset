@@ -26,6 +26,11 @@ MonoBehaviour:
     type: 3}
   _hikeEquipmentPanelCellAmount: 6
   _mapOnStartEnabled: 0
+  _cityId: 0
+  _locationId_1: 0
+  _locationId_2: 1
+  _locationId_3: 2
+  _locationId_4: 3
   _items:
   - _id: 0
     _image: {fileID: 0}
