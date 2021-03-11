@@ -69,6 +69,8 @@ namespace BeastHunter
         private List<GameObject> _infoPanelObjectsForDestroy;
         private Dictionary<IHubMapUICitizen, GameObject> _currentDisplayedCitizens;
         private List<HubMapUIEquipmentCellBehaviour> _hikeEquipmentItemCells;
+        private (int cellIndex, IHubMapUIItem item) _selectedEquipmentCell;
+        private IHubMapUICharacter _selectedCharacter;
         private int _selectedLocationId;
 
         #endregion
@@ -136,7 +138,7 @@ namespace BeastHunter
                 characterUI.transform.SetParent(_charactersPanel.transform, false);
                 characterUI.transform.localScale = new Vector3(1, 1, 1);
                 characterUI.GetComponentInChildren<HubMapUICharacterBehaviour>().Initialize(Data.HubMapData.Characters[i]);
-                characterUI.GetComponentInChildren<HubMapUICharacterBehaviour>().OnClick_CharacterButtonHandler = FillEquipmentPanel;
+                characterUI.GetComponentInChildren<HubMapUICharacterBehaviour>().OnClick_CharacterButtonHandler = SelectCharacter;
             }
 
             _hikeEquipmentItemCells = new List<HubMapUIEquipmentCellBehaviour>();
@@ -145,8 +147,8 @@ namespace BeastHunter
                 GameObject equipCellUI = GameObject.Instantiate(Data.HubMapData.EquipmentCellUIPrefab);
                 equipCellUI.transform.SetParent(_equipmentPanel.transform, false);
                 equipCellUI.transform.localScale = new Vector3(1, 1, 1);
-                equipCellUI.GetComponent<Button>().onClick.AddListener(ShowInventoryPanel);
                 _hikeEquipmentItemCells.Add(equipCellUI.GetComponent<HubMapUIEquipmentCellBehaviour>());
+                equipCellUI.GetComponent<Button>().onClick.AddListener(() => SelectEquipmentCell(i, _hikeEquipmentItemCells[i].ItemInCell));
             }
         }
 
@@ -237,37 +239,49 @@ namespace BeastHunter
                 GameObject itemUI = GameObject.Instantiate(Data.HubMapData.InventoryItemUIPrefab);
                 itemUI.transform.SetParent(_inventoryItemsPanel.transform, false);
                 itemUI.transform.localScale = new Vector3(1, 1, 1);
-
-                itemUI.GetComponent<Image>().sprite = Data.HubMapData.Items.Find(item => item.Id == itemsId[i]).Image;
-                //itemUI.GetComponent<Button>().onClick.AddListener(TEMPmethod);
+                IHubMapUIItem hubMapUIItem = Data.HubMapData.Items.Find(item => item.Id == itemsId[i]);
+                itemUI.GetComponent<Image>().sprite = hubMapUIItem.Image;
+                itemUI.GetComponent<Button>().onClick.AddListener(() => OnClick_InventoryItem(i, hubMapUIItem));
             }
         }
 
         //WIP
-        private void TEMPmethod()
+        private void OnClick_InventoryItem(int cellIndex, IHubMapUIItem item)
         {
-            /*
-            ICharacter currentCharacter = new TemporaryCharacterModel();
+            //IHubMapUICharacter currentCharacter = new HubMapUICharacter();
 
-            int? equipItemIdInCell = 0; //currentCharacter.ItemsId
-            int inventoryItemId = 0;    //Data.HubMapData.InventoryItemsId
+            //int equipInCellItemId = 0; //currentCharacter.ItemsId
+            //int inventoryItemId = 0;    //Data.HubMapData.InventoryItemsId
 
-            int currentEquipCellNumber = 0;
-            int currentInventoryCellNumber = 0;
+            //int selectEquipCellNumber = 0;  //currentCharacter.ItemsId[i]
+            //int selectInventoryCellNumber = 0; //Data.HubMapData.InventoryItemsId[i]
 
-            if (currentCharacter.ItemsId[currentEquipCellNumber] != 0)
-            {
-                Data.HubMapData.InventoryItemsId[currentInventoryCellNumber] = equipItemIdInCell.Value;
-            }
-            else
-            {
-                Data.HubMapData.InventoryItemsId.Remove(inventoryItemId);
-            }
-            currentCharacter.ItemsId[currentEquipCellNumber] = inventoryItemId;
+            //if (_selectedEquipmentCell.item == null)
+            //{
+            //    Data.HubMapData.InventoryItemsId.Remove(item);
+            //    Data.HubMapData.InventoryItemsId.Insert(selectInventoryCellNumber, equipInCellItemId);
+            //}
+            //else
+            //{
+            //    Data.HubMapData.InventoryItemsId.Insert(selectInventoryCellNumber, equipInCellItemId);
+            //}
+            //currentCharacter.ItemsId[selectEquipCellNumber] = inventoryItemId;
 
-            //update inventory
-            //update equipment
-            */
+            ////update inventory
+            //FillEquipmentPanel(currentCharacter.ItemsId);    //update equipment
+        }
+
+        private void SelectEquipmentCell(int cellIndex, IHubMapUIItem item)
+        {
+            _selectedEquipmentCell.cellIndex = cellIndex;
+            _selectedEquipmentCell.item = item;
+            ShowInventoryPanel();
+        }
+
+        private void SelectCharacter(IHubMapUICharacter character)
+        {
+            _selectedCharacter = character;
+            FillEquipmentPanel(character.ItemsId);
         }
 
         private void FillEquipmentPanel(int[] itemsId)

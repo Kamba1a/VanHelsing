@@ -9,6 +9,8 @@ namespace BeastHunter
 
         [SerializeField] private Image _itemImage;
         [SerializeField] private Button _itemButton;
+        
+        public IHubMapUIItem ItemInCell { get; set; }
 
         #endregion
 
@@ -22,11 +24,13 @@ namespace BeastHunter
 
         public void PutItemInCell(IHubMapUIItem item)
         {
+            ItemInCell = item;
             SetImage(item.Image);
         }
 
         public void ClearCell()
         {
+            ItemInCell = null;
             SetImage(null);
         }
 
