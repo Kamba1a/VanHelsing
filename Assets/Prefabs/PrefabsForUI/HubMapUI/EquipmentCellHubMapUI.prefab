@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemImage: {fileID: 4649815293984873940}
-  _itemButton: {fileID: 4649815293729276571}
+  _slotButton: {fileID: 4649815293729276571}
 --- !u!1 &4649815293984873938
 GameObject:
   m_ObjectHideFlags: 0

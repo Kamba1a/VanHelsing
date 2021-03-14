@@ -9,14 +9,29 @@ namespace BeastHunter
     {
         #region Fields
 
-        public string Name;
-        public string Discription;
+        [SerializeField] private string _name;
+        [SerializeField] private string _description;
 
-        public SlotSize SlotSize;
-        public ItemType ItemType;
+        [SerializeField] private SlotSize _slotSize;
+        [SerializeField] private ItemType _itemType;
 
-        public Mesh MeshOfObject;
-        public Sprite Icon;
+        [SerializeField] private Mesh _meshOfObject;
+        [SerializeField] private Sprite _icon;
+
+        [SerializeField] private float _requiredReputationForSaleInStore;
+
+        #endregion
+
+
+        #region Properties
+
+        public string Name => _name;
+        public string Description => _description;
+        public SlotSize SlotSize => _slotSize;
+        public ItemType ItemType => _itemType;
+        public Mesh MeshOfObject => _meshOfObject;
+        public Sprite Icon => _icon;
+        public float RequiredReputationForSale => _requiredReputationForSaleInStore;
 
         #endregion
     }

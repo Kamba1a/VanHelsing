@@ -8,20 +8,20 @@ namespace BeastHunter
     {
         #region Properties
 
-        public Action<IHubMapUICharacter> OnClick_CharacterButtonHandler { get; set; }
+        public Action<HubMapUICharacter> OnClick_CharacterButtonHandler { get; set; }
 
         #endregion
 
 
         #region Methods
 
-        public void Initialize(IHubMapUICharacter character)
+        public void FillCharacterInfo(HubMapUICharacter character)
         {
             GetComponent<Image>().sprite = character.Portrait;
             GetComponent<Button>().onClick.AddListener(() => OnClick_CharacterButton(character));
         }
 
-        public void OnClick_CharacterButton(IHubMapUICharacter character)
+        public void OnClick_CharacterButton(HubMapUICharacter character)
         {
             OnClick_CharacterButtonHandler?.Invoke(character);
         }
