@@ -10,6 +10,7 @@ namespace BeastHunter
         [SerializeField] private string _name;
         [SerializeField] private Sprite _portrait;
         [SerializeField] private int _firstDialogId;
+        [SerializeField] private HubMapUIDialogAnswer[] _otherAnswers;
         [SerializeField] private HubMapUIDialogNode[] _dialogs;
 
         #endregion
