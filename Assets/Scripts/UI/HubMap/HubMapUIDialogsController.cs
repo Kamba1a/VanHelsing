@@ -32,7 +32,7 @@ namespace BeastHunter
             }
         }
 
-        public int GetDialogId(HubMapUICitizen citizen)
+        public int GetCurrentDialogId(HubMapUICitizen citizen)
         {
             if (_currentDialogsIds.ContainsKey(citizen))
             {
