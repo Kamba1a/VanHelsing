@@ -8,7 +8,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        [SerializeField] private int _id;
+        [SerializeField][ReadOnlyInUnityInspector] private int _id;
         [SerializeField][TextArea(3, 10)] private string _text;
         [SerializeField] private HubMapUIDialogAnswer[] _answers;
 
@@ -22,5 +22,10 @@ namespace BeastHunter
         public HubMapUIDialogAnswer[] Answers => _answers;
 
         #endregion
+
+        public void SetId(int id)
+        {
+            _id = id;
+        }
     }
 }

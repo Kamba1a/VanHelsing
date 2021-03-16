@@ -32,6 +32,12 @@ namespace BeastHunter
         [Header("Content for UI")]
         [SerializeField] private List<HubMapUICharacter> _characters;
         [SerializeField] private BaseItem[] _startInventoryItems;
+        [SerializeField] private List<HubMapUIDialogNode> _dialogs;
+
+        #if UNITY_EDITOR
+        private int _dialogsListCount;
+        private int _nextDialogsListId;
+        #endif
 
         #endregion
 
@@ -58,13 +64,71 @@ namespace BeastHunter
 
         public List<HubMapUICharacter> Characters => _characters;
         public BaseItem[] StartInventoryItems => _startInventoryItems;
+        public List<HubMapUIDialogNode> Dialogs => _dialogs;
+
         public HubMapUIDialogsController DialogsController { get; private set; }
+        public HubMapUIQuestsController QuestsController { get; private set; }
 
         #endregion
+
+
+        #region UnityMethods
 
         private void OnEnable()
         {
             DialogsController = new HubMapUIDialogsController();
+            QuestsController = new HubMapUIQuestsController();
+
+        #if UNITY_EDITOR
+            _dialogsListCount = _dialogs.Count;
+            _nextDialogsListId = NextDialogsListId();
+        #endif
         }
+
+        private void OnValidate()
+        {
+            OnChangeDialogListIdValidate();
+        }
+
+        #endregion
+
+
+        #region Methods
+
+        #if UNITY_EDITOR
+        private void OnChangeDialogListIdValidate()
+        {
+            if (_dialogsListCount != _dialogs.Count)
+            {
+                if (_dialogsListCount < _dialogs.Count)
+                {
+                    for (int i = 1; i < _dialogs.Count; i++)
+                    {
+                        if (_dialogs[i].Id == _dialogs[i - 1].Id)
+                        {
+                            _dialogs[i].SetId(_nextDialogsListId++);
+                        }
+                    }
+                }
+                else if (_dialogsListCount > _dialogs.Count)
+                {
+                    _nextDialogsListId = NextDialogsListId();
+                }
+                _dialogsListCount = _dialogs.Count;
+            }
+        }
+
+        private int NextDialogsListId()
+        {
+            _nextDialogsListId = 0;
+            for (int i = 0; i < _dialogs.Count; i++)
+            {
+                if (_dialogs[i].Id > _nextDialogsListId) _nextDialogsListId = _dialogs[i].Id;
+            }
+            return ++_nextDialogsListId;
+        }
+        #endif
+
+        #endregion
     }
 }
