@@ -29,8 +29,8 @@ namespace BeastHunter
             _citizenNamePanel.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
             Data.HubMapData.DialogsController.AddCitizen(citizen);
-            //_exclamationImage.SetActive(citizen.Dialogs[Data.HubMapData.DialogsController.GetCurrentDialogId(citizen)].IsQuest);
             GetComponent<Button>().onClick.AddListener(() => OnClick_CitizenButton(citizen));
+            SetQuestMarker(Data.HubMapData.QuestsController.GetQuestMarker(citizen));
         }
 
         public void OnClick_CitizenButton(HubMapUICitizen citizen)
@@ -40,7 +40,18 @@ namespace BeastHunter
 
         public void UpdateInfo(HubMapUICitizen citizen)
         {
-            //_exclamationImage.SetActive(citizen.Dialogs[Data.HubMapData.DialogsController.GetCurrentDialogId(citizen)].IsQuest);
+            SetQuestMarker(Data.HubMapData.QuestsController.GetQuestMarker(citizen));
+        }
+
+        private void SetQuestMarker(HubMapUIQuestMarkerType questMarkerType)
+        {
+            switch (questMarkerType)
+            {
+                case HubMapUIQuestMarkerType.None: _exclamationImage.SetActive(false); break;
+                case HubMapUIQuestMarkerType.Exclamation: _exclamationImage.SetActive(true); break;
+                case HubMapUIQuestMarkerType.Question: _exclamationImage.SetActive(true); break;    //todo: question image for quest mark
+                default: _exclamationImage.SetActive(false); break;
+            }
         }
 
         #endregion

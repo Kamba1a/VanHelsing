@@ -443,6 +443,12 @@ namespace BeastHunter
                 answerButton.GetComponentInChildren<Button>().onClick.AddListener(()=>OnClick_DialogButton(citizen, answer));
                 _displayedDialogAnswerButtons.Add(answerButton);
             }
+
+            //todo: add quest answers
+            //if (Data.HubMapData.QuestsController.CheckTargetCitizen(citizen))
+            //{
+
+            //}
         }
 
         private void OnClick_DialogButton(HubMapUICitizen citizen, HubMapUIDialogAnswer dialogAnswer)

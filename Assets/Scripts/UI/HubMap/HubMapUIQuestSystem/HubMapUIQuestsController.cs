@@ -1,53 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace BeastHunter
 {
-    [CreateAssetMenu(fileName = "HubMapUIQuest", menuName = "CreateData/HubMapUIData/HubMapUIQuest", order = 0)]
-    public class HubMapUIQuest : ScriptableObject
-    {
-        [SerializeField] private string _name;
-        [SerializeField] private HubMapUIQuestTask[] _tasks;
-        [SerializeField] private int _firstTaskId;
-        [SerializeField] private int _endTaskId;
-
-        public string Name => _name;
-        public HubMapUIQuestTask FirstTask { get; private set; }
-
-        private void OnEnable()
-        {
-            FirstTask = Array.Find(_tasks, task=> task.Id == _firstTaskId);
-        }
-    }
-
-    [System.Serializable]
-    public class HubMapUIQuestTask
-    {
-        [SerializeField] private int _id;
-        //[SerializeField] private TaskType _taskType;
-        [SerializeField] private HubMapUICitizen _targetCitizen;
-        [SerializeField] private int _startAnswerId;
-        [SerializeField] private int _endAnswerId;
-        [SerializeField] private int _nextQuestTaskId;
-
-
-        public int Id => _id;
-        public int NextQuestTaskId => _nextQuestTaskId;
-        public HubMapUICitizen TargetCitizen => _targetCitizen;
-    }
-
-    public class HubMapUIQuestController
+    public class HubMapUIQuestsController
     {
         private Dictionary<HubMapUIQuest, HubMapUIQuestTask> _currentQuestTask;
         private List<HubMapUIQuest> _completedQuests;
 
 
-        public HubMapUIQuestController()
+        public HubMapUIQuestsController()
         {
             _completedQuests = new List<HubMapUIQuest>();
             _currentQuestTask = new Dictionary<HubMapUIQuest, HubMapUIQuestTask>();
             //add quests from quest storage?
+        }
+
+        public HubMapUIQuestMarkerType GetQuestMarker(HubMapUICitizen citizen)
+        {
+            foreach (KeyValuePair<HubMapUIQuest, HubMapUIQuestTask> kvp in _currentQuestTask)
+            {
+                if (kvp.Value.TargetCitizen == citizen)
+                {
+                    if (kvp.Key.FirstTaskId == kvp.Value.Id)
+                    {
+                        return HubMapUIQuestMarkerType.Exclamation;
+                    }
+                    else
+                    {
+                        return HubMapUIQuestMarkerType.Question;
+                    }
+                }
+            }
+            return HubMapUIQuestMarkerType.None;
+        }
+
+        public bool CheckTargetCitizen(HubMapUICitizen citizen)
+        {
+            foreach (KeyValuePair<HubMapUIQuest, HubMapUIQuestTask> kvp in _currentQuestTask)
+            {
+                return kvp.Value.TargetCitizen == citizen;
+            }
+            return false;
         }
 
         public void AddQuest(HubMapUIQuest quest)

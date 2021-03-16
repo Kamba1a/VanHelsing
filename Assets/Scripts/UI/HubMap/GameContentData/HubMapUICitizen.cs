@@ -12,6 +12,7 @@ namespace BeastHunter
         [SerializeField] private int _firstDialogId;
         [SerializeField] private HubMapUIDialogAnswer[] _otherAnswers;
         [SerializeField] private HubMapUIDialogNode[] _dialogs;
+        //todo: delete dialogs, add first dialog id
 
         #endregion
 
