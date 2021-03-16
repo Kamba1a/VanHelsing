@@ -7,22 +7,17 @@ namespace BeastHunter
     [CreateAssetMenu(fileName = "HubMapUIQuest", menuName = "CreateData/HubMapUIData/HubMapUIQuest", order = 0)]
     public class HubMapUIQuest : ScriptableObject
     {
+        [SerializeField] private string _name;
         [SerializeField] private HubMapUIQuestTask[] _tasks;
-        private int _firstTaskId;
-        private int _endTaskId;
-        private bool _isCompleted = false;
+        [SerializeField] private int _firstTaskId;
+        [SerializeField] private int _endTaskId;
 
-        public bool IsCompleted 
+        public string Name => _name;
+        public HubMapUIQuestTask FirstTask { get; private set; }
+
+        private void OnEnable()
         {
-            get { return _isCompleted; }
-            private set { _isCompleted = value; }
-        }
-
-        public int FirstTaskId => _firstTaskId;
-
-        private void QuestComplete()
-        {
-            _isCompleted = true;
+            FirstTask = Array.Find(_tasks, task=> task.Id == _firstTaskId);
         }
     }
 
@@ -35,41 +30,35 @@ namespace BeastHunter
         [SerializeField] private int _startAnswerId;
         [SerializeField] private int _endAnswerId;
         [SerializeField] private int _nextQuestTaskId;
-        private bool _isCompleted = false;
 
-        public bool IsCompleted
-        {
-            get { return _isCompleted; }
-            private set
-            { 
-                if (value)
-                {
 
-                }
-                _isCompleted = value;
-            }
-        }
+        public int Id => _id;
+        public int NextQuestTaskId => _nextQuestTaskId;
+        public HubMapUICitizen TargetCitizen => _targetCitizen;
     }
 
     public class HubMapUIQuestController
     {
-        private Dictionary<HubMapUIQuest, int> _currentQuestTask;
+        private Dictionary<HubMapUIQuest, HubMapUIQuestTask> _currentQuestTask;
+        private List<HubMapUIQuest> _completedQuests;
 
 
         public HubMapUIQuestController()
         {
-            _currentQuestTask = new Dictionary<HubMapUIQuest, int>();
+            _completedQuests = new List<HubMapUIQuest>();
+            _currentQuestTask = new Dictionary<HubMapUIQuest, HubMapUIQuestTask>();
+            //add quests from quest storage?
         }
 
         public void AddQuest(HubMapUIQuest quest)
         {
             if (!_currentQuestTask.ContainsKey(quest))
             {
-                _currentQuestTask.Add(quest, quest.FirstTaskId);
+                _currentQuestTask.Add(quest, quest.FirstTask);
             }
         }
 
-        public int GetCurrentTaskId(HubMapUIQuest quest)
+        public HubMapUIQuestTask GetCurrentTaskId(HubMapUIQuest quest)
         {
             if (_currentQuestTask.ContainsKey(quest))
             {
@@ -81,16 +70,23 @@ namespace BeastHunter
             }
         }
 
-        public void SetNewTaskId(HubMapUIQuest quest, int id)
+        public void SetNextTaskId(HubMapUIQuest quest, HubMapUIQuestTask task)
         {
             if (_currentQuestTask.ContainsKey(quest))
             {
-                _currentQuestTask[quest] = id;
+                _currentQuestTask[quest] = task;
             }
             else
             {
                 throw new System.Exception(this + " does not contain the requested quest");
             }
+        }
+
+        private void QuestComplete(HubMapUIQuest quest)
+        {
+            _completedQuests.Add(quest);
+            Debug.Log(quest.Name + "is completed");
+            //reward, etc?
         }
     }
 }
