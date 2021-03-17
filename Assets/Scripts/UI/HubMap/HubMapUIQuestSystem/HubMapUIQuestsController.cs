@@ -10,6 +10,8 @@ namespace BeastHunter
 
 
         public event Action OnQuestIsActiveHandler;
+        public event Action OnNextTaskHandler;
+
 
         public HubMapUIQuestsController(IEnumerable<HubMapUIQuest> quests)
         {
@@ -49,7 +51,9 @@ namespace BeastHunter
                     if (CheckQuestForRequiredConditions(quest))
                     {
                         _questsInfo[quest].SetQuestStatus(HubMapUIQuestStatus.Active);
+                        OnQuestIsActiveHandler?.Invoke();
                         SetQuestDialogToCitizen(quest);
+                        Debug.Log("Change quest status on active");
                     }
 
                     break;
@@ -58,6 +62,7 @@ namespace BeastHunter
                     if(_questsInfo[quest].CurrentTask.Id == quest.EmptyEndTaskId)
                     {
                         _questsInfo[quest].SetQuestStatus(HubMapUIQuestStatus.Completed);
+                        Debug.Log("Change quest status on completed");
                     }
                     break;
                 default:
@@ -192,15 +197,20 @@ namespace BeastHunter
             }
         }
 
-        public HubMapUIDialogAnswer GetAdditionalQuestAnswer(HubMapUICitizen citizen)
+        public HubMapUIDialogAnswer GetAdditionalQuestAnswer(int currentDialogId)
         {
             foreach (KeyValuePair<HubMapUIQuest, HubMapUIQuestInfo> kvp in GetActiveQuests())
             {
-                for (int i = 0; i < kvp.Value.CurrentTask.TaskAnswers.Length; i++)
+                HubMapUIQuestTaskAnswers[] additionalAnswers = kvp.Value.CurrentTask.TaskAnswers;
+                for (int i = 0; i < additionalAnswers.Length; i++)
                 {
-                    if (kvp.Value.CurrentTask.TaskAnswers[i].Citizen == citizen)
+                    int[] dialogNodesForAdditionalAnswer = additionalAnswers[i].DialogNodesForThisAnswer;
+                    for (int j = 0; j < dialogNodesForAdditionalAnswer.Length; j++)
                     {
-                        return kvp.Value.CurrentTask.TaskAnswers[i].Answer;
+                        if (dialogNodesForAdditionalAnswer[j] == currentDialogId)
+                        {
+                            return additionalAnswers[i].Answer;
+                        }
                     }
                 }
             }

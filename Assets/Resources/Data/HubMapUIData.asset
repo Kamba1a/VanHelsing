@@ -128,8 +128,8 @@ MonoBehaviour:
     - _text: "\u0421\u043F\u0430\u0441\u0438\u0431\u043E!"
       _isDialogEnd: 1
       _nextDialogNodeId: 5
-      _isProgressQuest: 0
-      _progressQuest: {fileID: 0}
+      _isProgressQuest: 1
+      _progressQuest: {fileID: 11400000, guid: 81ad56c84f8679347b6301f8a566d862, type: 2}
   - _id: 5
     _text: "\u041F\u0440\u0438\u0432\u0435\u0442-\u043F\u0440\u0438\u0432\u0435\u0442!
       \u041E\u0445, \u0438 \u043F\u043E\u0440\u0430\u0434\u043E\u0432\u0430\u043B
@@ -163,9 +163,9 @@ MonoBehaviour:
     - _text: "(\u041E\u0442\u043D\u0435\u0441\u0442\u0438 \u043B\u0435\u0448\u0435\u0433\u043E
         \u0432 \u043A\u043B\u0435\u0442\u043A\u0443)"
       _isDialogEnd: 1
-      _nextDialogNodeId: 7
-      _isProgressQuest: 0
-      _progressQuest: {fileID: 0}
+      _nextDialogNodeId: 13
+      _isProgressQuest: 1
+      _progressQuest: {fileID: 11400000, guid: 81ad56c84f8679347b6301f8a566d862, type: 2}
   - _id: 8
     _text: "\u0417\u0434\u0440\u0430\u0432\u0441\u0442\u0432\u0443\u0439, \u0447\u0435\u043B\u043E\u0432\u0435\u043A!
       \u042F \u043C\u0435\u0441\u0442\u043D\u044B\u0439 \u043B\u0435\u0448\u0438\u0439.
@@ -213,5 +213,15 @@ MonoBehaviour:
     - _text: "\u0425\u043E\u0447\u0443, \u0438 \u0445\u043E\u0436\u0443.."
       _isDialogEnd: 1
       _nextDialogNodeId: 12
+      _isProgressQuest: 0
+      _progressQuest: {fileID: 0}
+  - _id: 13
+    _text: "[\u0418\u0437 \u043A\u043B\u0435\u0442\u043A\u0438]: \u0417\u043D\u0430\u043B
+      \u044F, \u0447\u0442\u043E \u043B\u044E\u0434\u044F\u043C \u0432\u0435\u0440\u0438\u0442\u044C
+      \u043D\u0435\u043B\u044C\u0437\u044F.."
+    _answers:
+    - _text: "\u0414\u0430, \u0442\u0430\u043A\u0438\u0435 \u0443\u0436 \u043C\u044B.."
+      _isDialogEnd: 1
+      _nextDialogNodeId: 13
       _isProgressQuest: 0
       _progressQuest: {fileID: 0}

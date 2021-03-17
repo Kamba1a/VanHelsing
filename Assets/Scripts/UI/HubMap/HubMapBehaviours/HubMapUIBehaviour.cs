@@ -80,15 +80,6 @@ namespace BeastHunter
 
         #region UnityMethods
 
-        [SerializeField] private HubMapUICity _testCityLink;
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                Data.HubMapData.ReputationController.AddReputation(_testCityLink,20);
-            }
-        }
-
         private void OnEnable()
         {
             _cityButton.onClick.AddListener(() => ShowCityInfoPanel(Data.HubMapData.City));
@@ -445,27 +436,25 @@ namespace BeastHunter
 
             for (int i = 0; i < currentDialog.Answers.Length; i++)
             {
-                GameObject answerButton = GameObject.Instantiate(Data.HubMapData.AnswerButtonUIPrefab);
-                answerButton.transform.SetParent(_answerButtonsPanel.transform, false);
-                answerButton.transform.localScale = new Vector3(1, 1, 1);
-                answerButton.GetComponentInChildren<Text>().text = currentDialog.Answers[i].Text;
-
-                HubMapUIDialogAnswer answer = currentDialog.Answers[i];
-                answerButton.GetComponentInChildren<Button>().onClick.AddListener(()=>OnClick_DialogButton(citizen, answer));
-                _displayedDialogAnswerButtons.Add(answerButton);
+                InitializeDialogAnswerButton(citizen, currentDialog.Answers[i]);
             }
 
-            HubMapUIDialogAnswer additionalQuestAnswer = Data.HubMapData.QuestsController.GetAdditionalQuestAnswer(citizen);
+            HubMapUIDialogAnswer additionalQuestAnswer = Data.HubMapData.QuestsController.GetAdditionalQuestAnswer(currentDialog.Id);
             if(additionalQuestAnswer != null)
             {
-                GameObject answerButton = GameObject.Instantiate(Data.HubMapData.AnswerButtonUIPrefab);
-                answerButton.transform.SetParent(_answerButtonsPanel.transform, false);
-                answerButton.transform.localScale = new Vector3(1, 1, 1);
-                answerButton.GetComponentInChildren<Text>().text = additionalQuestAnswer.Text;
-
-                answerButton.GetComponentInChildren<Button>().onClick.AddListener(() => OnClick_DialogButton(citizen, additionalQuestAnswer));
-                _displayedDialogAnswerButtons.Add(answerButton);
+                InitializeDialogAnswerButton(citizen, additionalQuestAnswer);
             }
+        }
+
+        private void InitializeDialogAnswerButton(HubMapUICitizen citizen, HubMapUIDialogAnswer answer)
+        {
+            GameObject answerButton = GameObject.Instantiate(Data.HubMapData.AnswerButtonUIPrefab);
+            answerButton.transform.SetParent(_answerButtonsPanel.transform, false);
+            answerButton.transform.localScale = new Vector3(1, 1, 1);
+            answerButton.GetComponentInChildren<Text>().text = answer.Text;
+
+            answerButton.GetComponentInChildren<Button>().onClick.AddListener(() => OnClick_DialogButton(citizen, answer));
+            _displayedDialogAnswerButtons.Add(answerButton);
         }
 
         private void OnClick_DialogButton(HubMapUICitizen citizen, HubMapUIDialogAnswer dialogAnswer)

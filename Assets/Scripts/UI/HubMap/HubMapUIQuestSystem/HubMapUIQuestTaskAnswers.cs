@@ -5,10 +5,11 @@ namespace BeastHunter
     [System.Serializable]
     public class HubMapUIQuestTaskAnswers
     {
-        [SerializeField] private HubMapUICitizen _citizen;
+        [SerializeField] private int[] _dialogNodesForThisAnswer;
         [SerializeField] private HubMapUIDialogAnswer _answer;
 
-        public HubMapUICitizen Citizen => _citizen;
+
+        public int[] DialogNodesForThisAnswer => _dialogNodesForThisAnswer;
         public HubMapUIDialogAnswer Answer => _answer;
     }
 }
