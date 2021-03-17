@@ -12,7 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bb70218c962d204e96c150ade232478, type: 3}
   m_Name: HubMapUIQuest
   m_EditorClassIdentifier: 
-  _name: 
-  _tasks: []
+  _title: Test quest
+  _tasks:
+  - _id: 0
+    _targetCitizen: {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
+    _isNpcInitiatesDialogue: 1
+    _initiatedDialogueId: 0
+    _taskAnswers: []
+    _nextQuestTaskId: 1
+  - _id: 1
+    _targetCitizen: {fileID: 11400000, guid: 17a1729913f8bc2449a4c5893db22200, type: 2}
+    _isNpcInitiatesDialogue: 0
+    _initiatedDialogueId: 0
+    _taskAnswers:
+    - _citizen: {fileID: 11400000, guid: 17a1729913f8bc2449a4c5893db22200, type: 2}
+      _answer:
+        _text: "\u042F \u0442\u0435\u0431\u0435 \u0442\u0443\u0442 \u043F\u043E\u0440\u043E\u0448\u043E\u0447\u043A\u0430
+          \u043F\u0440\u0438\u043D\u0435\u0441.."
+        _isDialogEnd: 0
+        _nextDialogNodeId: 7
+    _nextQuestTaskId: 2
+  - _id: 2
+    _targetCitizen: {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
+    _isNpcInitiatesDialogue: 0
+    _initiatedDialogueId: 0
+    _taskAnswers:
+    - _citizen: {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
+      _answer:
+        _text: "\u0410\u0433\u0430, \u0441\u0438\u0434\u0438\u0442 \u043A\u0430\u043A
+          \u043C\u0438\u043B\u0435\u043D\u044C\u043A\u0438\u0439!"
+        _isDialogEnd: 0
+        _nextDialogNodeId: 4
+    _nextQuestTaskId: 2
   _firstTaskId: 0
-  _endTaskId: 0
+  _endTaskId: 2
