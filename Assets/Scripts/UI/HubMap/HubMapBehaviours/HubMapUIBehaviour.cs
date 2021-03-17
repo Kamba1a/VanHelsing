@@ -427,7 +427,7 @@ namespace BeastHunter
 
         private void FillDialogInfo(HubMapUICitizen citizen)
         {
-            HubMapUIDialogNode currentDialog = Array.Find(citizen.Dialogs, dialog => dialog.Id == Data.HubMapData.DialogsController.GetCurrentDialogId(citizen));
+            HubMapUIDialogNode currentDialog = Data.HubMapData.Dialogs.Find(dialog => dialog.Id == Data.HubMapData.DialogsController.GetCurrentDialogId(citizen));
             _citizenName.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
             _dialogText.text = currentDialog.Text;
