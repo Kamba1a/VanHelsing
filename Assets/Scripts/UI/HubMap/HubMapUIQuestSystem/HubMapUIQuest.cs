@@ -3,21 +3,30 @@ using UnityEngine;
 
 namespace BeastHunter
 {
-    [CreateAssetMenu(fileName = "HubMapUIQuest", menuName = "CreateData/HubMapUIData/HubMapUIQuest", order = 0)]
     public class HubMapUIQuest : ScriptableObject
     {
-        [SerializeField] private string _name;
+        [SerializeField] private string _title;
         [SerializeField] private HubMapUIQuestTask[] _tasks;
         [SerializeField] private int _firstTaskId;
-        [SerializeField] private int _endTaskId;
+        [SerializeField] private int _emptyEndTaskId;
+        [SerializeField] private HubMapUICityReputation _requiredReputation;
+        [SerializeField] private HubMapUIQuest _requiredQuest;
 
-        public string Name => _name;
+        public string Title => _title;
         public int FirstTaskId => _firstTaskId;
+        public int EmptyEndTaskId => _emptyEndTaskId;
+        public HubMapUICityReputation RequiredReputation => _requiredReputation;
+        public HubMapUIQuest RequiredQuest => _requiredQuest;
         public HubMapUIQuestTask FirstTask { get; private set; }
 
         private void OnEnable()
         {
             FirstTask = Array.Find(_tasks, task=> task.Id == _firstTaskId);
+        }
+
+        public HubMapUIQuestTask[] GetTasks()
+        {
+            return (HubMapUIQuestTask[])_tasks.Clone();
         }
     }
 }

@@ -52,7 +52,7 @@ namespace BeastHunter
             }
             else
             {
-                throw new System.Exception(this + " does not contain the requested citizen");
+                _currentDialogsIds.Add(citizen, id);
             }
         }
 

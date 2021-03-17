@@ -31,6 +31,8 @@ namespace BeastHunter
             Data.HubMapData.DialogsController.AddCitizen(citizen);
             GetComponent<Button>().onClick.AddListener(() => OnClick_CitizenButton(citizen));
             SetQuestMarker(Data.HubMapData.QuestsController.GetQuestMarker(citizen));
+
+            Data.HubMapData.QuestsController.OnQuestIsActiveHandler += () => UpdateInfo(citizen);
         }
 
         public void OnClick_CitizenButton(HubMapUICitizen citizen)

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Volod Imir
   _portrait: {fileID: 21300000, guid: bd65735d676f7a440a06fee6633d284c, type: 3}
-  _firstDialogId: 0
+  _firstDialogId: 12

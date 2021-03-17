@@ -80,6 +80,15 @@ namespace BeastHunter
 
         #region UnityMethods
 
+        [SerializeField] private HubMapUICity _testCityLink;
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                Data.HubMapData.ReputationController.AddReputation(_testCityLink,20);
+            }
+        }
+
         private void OnEnable()
         {
             _cityButton.onClick.AddListener(() => ShowCityInfoPanel(Data.HubMapData.City));
@@ -346,7 +355,9 @@ namespace BeastHunter
             _cityFraction.sprite = city.Fraction;
             _cityName.text = city.Name;
             _cityDescription.text = city.Description;
-            _cityReputation.text = city.CurrentPlayerReputation.ToString();
+
+            float cityReputation = Data.HubMapData.ReputationController.GetReputation(city);
+            _cityReputation.text = cityReputation.ToString();
 
             for (int i = 0; i < city.Citizens.Length; i++)
             {
@@ -355,7 +366,7 @@ namespace BeastHunter
 
             for (int i = 0; i < city.SellingItems.Length; i++)
             {
-                InitializeSellingItemUI(city.SellingItems[i], city.CurrentPlayerReputation);
+                InitializeSellingItemUI(city.SellingItems[i], cityReputation);
             }
         }
 
@@ -444,11 +455,17 @@ namespace BeastHunter
                 _displayedDialogAnswerButtons.Add(answerButton);
             }
 
-            //todo: add quest answers
-            //if (Data.HubMapData.QuestsController.CheckTargetCitizen(citizen))
-            //{
+            HubMapUIDialogAnswer additionalQuestAnswer = Data.HubMapData.QuestsController.GetAdditionalQuestAnswer(citizen);
+            if(additionalQuestAnswer != null)
+            {
+                GameObject answerButton = GameObject.Instantiate(Data.HubMapData.AnswerButtonUIPrefab);
+                answerButton.transform.SetParent(_answerButtonsPanel.transform, false);
+                answerButton.transform.localScale = new Vector3(1, 1, 1);
+                answerButton.GetComponentInChildren<Text>().text = additionalQuestAnswer.Text;
 
-            //}
+                answerButton.GetComponentInChildren<Button>().onClick.AddListener(() => OnClick_DialogButton(citizen, additionalQuestAnswer));
+                _displayedDialogAnswerButtons.Add(answerButton);
+            }
         }
 
         private void OnClick_DialogButton(HubMapUICitizen citizen, HubMapUIDialogAnswer dialogAnswer)
@@ -461,10 +478,18 @@ namespace BeastHunter
 
             Data.HubMapData.DialogsController.SetNewDialogId(citizen, dialogAnswer.NextDialogNodeId);
 
+            if (dialogAnswer.IsProgressQuest)
+            {
+                Data.HubMapData.QuestsController.SetNextTask(dialogAnswer.ProgressQuest);
+            }
+
             if (dialogAnswer.IsDialogEnd)
             {
                 HideDialogPanel();
-                //UpdateCitizenInfo(citizen);
+                foreach (KeyValuePair<HubMapUICitizen,GameObject> kvp in _displayedCurrentCitizensUI)
+                {
+                    UpdateCitizenInfo(kvp.Key);
+                }
             }
             else
             {

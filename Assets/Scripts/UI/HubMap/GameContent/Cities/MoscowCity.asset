@@ -22,6 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dea6acd5ee8e6274095f290fa5e510ed, type: 2}
   - {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
   - {fileID: 11400000, guid: 05f17ea7ba468624c9cdaa41bc7714ea, type: 2}
+  - {fileID: 11400000, guid: 17a1729913f8bc2449a4c5893db22200, type: 2}
   _playerReputation: 50
   _sellingItems:
   - {fileID: 11400000, guid: b5ebb6cfceec1f447b854382d3f33d9f, type: 2}

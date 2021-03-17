@@ -11,7 +11,6 @@ namespace BeastHunter
         [SerializeField][TextArea(3,10)] private string _description;
         [SerializeField] private Sprite _fraction;
         [SerializeField] private HubMapUICitizen[] _citizens;
-        [SerializeField] private float _playerReputation;
         [SerializeField] private BaseItem[] _sellingItems;
 
         #endregion
@@ -22,7 +21,6 @@ namespace BeastHunter
         public string Description => _description;
         public Sprite Fraction => _fraction;
         public HubMapUICitizen[] Citizens => _citizens;
-        public float CurrentPlayerReputation => _playerReputation;
         public BaseItem[] SellingItems => _sellingItems;
 
         #endregion
