@@ -32,7 +32,7 @@ namespace BeastHunter
         [Header("Content for UI")]
         [SerializeField] private List<HubMapUICharacter> _characters;
         [SerializeField] private BaseItem[] _startInventoryItems;
-        [SerializeField] private List<HubMapUIDialogNode> _dialogs;
+        [SerializeField, ContextMenuItem("Reset ids", "DialogListResetIds")] private List<HubMapUIDialogNode> _dialogs;
 
         #if UNITY_EDITOR
         private int _dialogsListCount;
@@ -127,8 +127,14 @@ namespace BeastHunter
             }
             return ++_nextDialogsListId;
         }
+
+        private void DialogListResetIds()
+        {
+            for (int i = 0; i < _dialogs.Count; i++) _dialogs[i].SetId(i);
+            _nextDialogsListId = _dialogs.Count;
+        }
         #endif
 
-        #endregion
-    }
+            #endregion
+        }
 }
