@@ -382,6 +382,7 @@ namespace BeastHunter
             HubMapUICitizenBehaviour citizenUIBehaviour = citizenUI.GetComponentInChildren<HubMapUICitizenBehaviour>();
             citizenUIBehaviour.FillCitizenInfo(citizen);
             citizenUIBehaviour.OnClick_CitizenButtonHandler = ShowDialogPanel;
+            Data.HubMapData.QuestService.OnQuestIsActiveHandler += () => citizenUIBehaviour.UpdateInfo(citizen);
 
             _rightInfoPanelObjectsForDestroy.Add(citizenUI);
             _displayedCurrentCitizensUI.Add(citizen, citizenUI);
@@ -414,10 +415,17 @@ namespace BeastHunter
 
         private void ClearRightInfoPanel()
         {
+            foreach (KeyValuePair<HubMapUICitizen,GameObject> kvp in _displayedCurrentCitizensUI)
+            {
+                Data.HubMapData.QuestService.OnQuestIsActiveHandler -=
+                    () => kvp.Value.GetComponentInChildren<HubMapUICitizenBehaviour>().UpdateInfo(kvp.Key);
+            }
+
             for (int i=0; i< _rightInfoPanelObjectsForDestroy.Count; i++)
             {
                 Destroy(_rightInfoPanelObjectsForDestroy[i]);
             }
+
             _rightInfoPanelObjectsForDestroy.Clear();
             _displayedCurrentCitizensUI.Clear();
         }

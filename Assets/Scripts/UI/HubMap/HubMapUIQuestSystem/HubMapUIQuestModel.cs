@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BeastHunter
+﻿namespace BeastHunter
 {
     public class HubMapUIQuestModel
     {

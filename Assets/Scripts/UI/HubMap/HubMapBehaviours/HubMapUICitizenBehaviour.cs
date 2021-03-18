@@ -11,6 +11,7 @@ namespace BeastHunter
         [SerializeField] private Text _citizenNamePanel;
         [SerializeField] private Image _citizenPortrait;
         [SerializeField] private GameObject _exclamationImage;
+        [SerializeField] private GameObject _questionImage;
 
         #endregion
 
@@ -31,8 +32,6 @@ namespace BeastHunter
             Data.HubMapData.DialogsController.AddCitizen(citizen);
             GetComponent<Button>().onClick.AddListener(() => OnClick_CitizenButton(citizen));
             SetQuestMarker(Data.HubMapData.QuestService.GetQuestMarker(citizen));
-
-            Data.HubMapData.QuestService.OnQuestIsActiveHandler += () => UpdateInfo(citizen); //todo: ondestroy unsubscribed?
         }
 
         public void OnClick_CitizenButton(HubMapUICitizen citizen)
@@ -49,10 +48,12 @@ namespace BeastHunter
         {
             switch (questMarkerType)
             {
-                case HubMapUIQuestMarkerType.None: _exclamationImage.SetActive(false); break;
                 case HubMapUIQuestMarkerType.Exclamation: _exclamationImage.SetActive(true); break;
-                case HubMapUIQuestMarkerType.Question: _exclamationImage.SetActive(true); break;    //todo: question image for quest mark
-                default: _exclamationImage.SetActive(false); break;
+                case HubMapUIQuestMarkerType.Question: _questionImage.SetActive(true); break;
+                default: 
+                    _exclamationImage.SetActive(false);
+                    _questionImage.SetActive(false);
+                    break;
             }
         }
 
