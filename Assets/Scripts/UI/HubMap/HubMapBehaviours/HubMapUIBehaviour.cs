@@ -477,7 +477,7 @@ namespace BeastHunter
 
             if (dialogAnswer.IsProgressQuest)
             {
-                Data.HubMapData.QuestService.QuestProgressed(dialogAnswer.ProgressQuest);
+                Data.HubMapData.QuestService.QuestProgressed(dialogAnswer.ProgressQuest, citizen);
             }
 
             if (dialogAnswer.IsDialogEnd)

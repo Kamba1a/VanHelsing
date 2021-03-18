@@ -49,17 +49,20 @@ namespace BeastHunter
 
         #region Methods
 
-        public void QuestProgressed(HubMapUIQuestData questData)
+        public void QuestProgressed(HubMapUIQuestData questData, HubMapUICitizen citizen)
         {
             HubMapUIQuestModel quest = _activeQuests.Find(q => q.Data == questData);
             if (quest != null)
             {
-                HubMapUIQuestTask nextTask = Array.Find(quest.Data.Tasks, task => task.Id == quest.CurrentTask.NextQuestTaskId);
-                quest.CurrentTask = nextTask;
-
-                if (IsLastTaskComplete(quest))
+                if (quest.CurrentTask.TargetCitizen == citizen)
                 {
-                    CompleteQuest(quest);
+                    HubMapUIQuestTask nextTask = Array.Find(quest.Data.Tasks, task => task.Id == quest.CurrentTask.NextQuestTaskId);
+                    quest.CurrentTask = nextTask;
+
+                    if (IsLastTaskComplete(quest))
+                    {
+                        CompleteQuest(quest);
+                    }
                 }
             }
             else
