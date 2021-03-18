@@ -51,8 +51,7 @@ namespace BeastHunter
                     if (CheckQuestForRequiredConditions(quest))
                     {
                         _questsInfo[quest].SetQuestStatus(HubMapUIQuestStatus.Active);
-                        OnQuestIsActiveHandler?.Invoke();
-                        SetQuestDialogToCitizen(quest);
+                        OnQuestActive(quest);
                         Debug.Log("Change quest status on active");
                     }
 
@@ -62,6 +61,7 @@ namespace BeastHunter
                     if(_questsInfo[quest].CurrentTask.Id == quest.EmptyEndTaskId)
                     {
                         _questsInfo[quest].SetQuestStatus(HubMapUIQuestStatus.Completed);
+                        OnQuestComplete();
                         Debug.Log("Change quest status on completed");
                     }
                     break;
@@ -154,18 +154,6 @@ namespace BeastHunter
             return HubMapUIQuestMarkerType.None;
         }
 
-        //public HubMapUIQuestTask GetCurrentTaskId(HubMapUIQuest quest)
-        //{
-        //    if (_questsInfo.ContainsKey(quest))
-        //    {
-        //        return _questsInfo[quest].CurrentTask;
-        //    }
-        //    else
-        //    {
-        //        throw new System.Exception(this + " does not contain the requested quest");
-        //    }
-        //}
-
         public void SetNextTask(HubMapUIQuest quest)
         {
             if (_questsInfo.ContainsKey(quest))
@@ -189,12 +177,18 @@ namespace BeastHunter
             }
         }
 
-        private void OnQuestComplete(HubMapUICityReputation cityReputation)
+        private void OnQuestComplete()
         {
-            foreach (KeyValuePair<HubMapUIQuest, HubMapUIQuestInfo> kvp in GetCompletedQuests())
+            foreach (KeyValuePair<HubMapUIQuest, HubMapUIQuestInfo> kvp in GetNotStartedQuests())
             {
                 DefineQuestStatus(kvp.Key);
             }
+        }
+
+        private void OnQuestActive(HubMapUIQuest quest)
+        {
+            OnQuestIsActiveHandler?.Invoke();
+            SetQuestDialogToCitizen(quest);
         }
 
         public HubMapUIDialogAnswer GetAdditionalQuestAnswer(int currentDialogId)
