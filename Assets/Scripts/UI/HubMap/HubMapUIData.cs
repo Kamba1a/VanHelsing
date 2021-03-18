@@ -33,7 +33,7 @@ namespace BeastHunter
         [SerializeField] private List<HubMapUICharacter> _characters;
         [SerializeField] private BaseItem[] _startInventoryItems;
         [SerializeField] HubMapUICityReputation[] _startCitiesReputation;
-        [SerializeField] private List<HubMapUIQuest> _quests;
+        [SerializeField] private List<HubMapUIQuestData> _quests;
         [SerializeField, ContextMenuItem("Reset ids", "DialogListResetIds")] private List<HubMapUIDialogNode> _dialogs;
 
         #if UNITY_EDITOR
@@ -69,7 +69,7 @@ namespace BeastHunter
         public List<HubMapUIDialogNode> Dialogs => _dialogs;
 
         public HubMapUIDialogsController DialogsController { get; private set; }
-        public HubMapUIQuestsController QuestsController { get; private set; }
+        public HubMapUIQuestService QuestService { get; private set; }
         public HubMapUIReputationController ReputationController { get; private set; }
 
         #endregion
@@ -81,7 +81,7 @@ namespace BeastHunter
         {
             DialogsController = new HubMapUIDialogsController();
             ReputationController = new HubMapUIReputationController(_startCitiesReputation);
-            QuestsController = new HubMapUIQuestsController(_quests);
+            QuestService = new HubMapUIQuestService(_quests);
 
             #if UNITY_EDITOR
             _dialogsListCount = _dialogs.Count;

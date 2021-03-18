@@ -439,7 +439,7 @@ namespace BeastHunter
                 InitializeDialogAnswerButton(citizen, currentDialog.Answers[i]);
             }
 
-            HubMapUIDialogAnswer additionalQuestAnswer = Data.HubMapData.QuestsController.GetAdditionalQuestAnswer(currentDialog.Id);
+            HubMapUIDialogAnswer additionalQuestAnswer = Data.HubMapData.QuestService.GetAdditionalQuestAnswer(currentDialog.Id);
             if(additionalQuestAnswer != null)
             {
                 InitializeDialogAnswerButton(citizen, additionalQuestAnswer);
@@ -469,7 +469,7 @@ namespace BeastHunter
 
             if (dialogAnswer.IsProgressQuest)
             {
-                Data.HubMapData.QuestsController.SetNextTask(dialogAnswer.ProgressQuest);
+                Data.HubMapData.QuestService.QuestProgressed(dialogAnswer.ProgressQuest);
             }
 
             if (dialogAnswer.IsDialogEnd)

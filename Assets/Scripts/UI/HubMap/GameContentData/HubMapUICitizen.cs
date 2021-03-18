@@ -10,7 +10,7 @@ namespace BeastHunter
         [SerializeField] private string _name;
         [SerializeField] private Sprite _portrait;
         [SerializeField] private int _firstDialogId;
-        [SerializeField] private HubMapUIQuest[] _quests;
+        [SerializeField] private HubMapUIQuestData[] _quests;
 
         #endregion
 
@@ -20,7 +20,7 @@ namespace BeastHunter
         public string Name => _name;
         public Sprite Portrait => _portrait;
         public int FirstDialogId => _firstDialogId;
-        public HubMapUIQuest[] Quests => _quests;
+        public HubMapUIQuestData[] Quests => _quests;
 
         #endregion
     }

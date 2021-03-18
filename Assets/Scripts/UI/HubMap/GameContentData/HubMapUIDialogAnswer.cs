@@ -12,7 +12,7 @@ namespace BeastHunter
         [SerializeField] private bool _isDialogEnd;
         [SerializeField] private int _nextDialogNodeId;
         [SerializeField] private bool _isProgressQuest;
-        [SerializeField] private HubMapUIQuest _progressQuest;
+        [SerializeField] private HubMapUIQuestData _progressQuest;
 
         #endregion
 
@@ -23,7 +23,7 @@ namespace BeastHunter
         public bool IsDialogEnd => _isDialogEnd;
         public int NextDialogNodeId => _nextDialogNodeId;
         public bool IsProgressQuest => _isProgressQuest;
-        public HubMapUIQuest ProgressQuest => _progressQuest;
+        public HubMapUIQuestData ProgressQuest => _progressQuest;
 
         #endregion
     }

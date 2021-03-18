@@ -30,9 +30,9 @@ namespace BeastHunter
             _citizenPortrait.sprite = citizen.Portrait;
             Data.HubMapData.DialogsController.AddCitizen(citizen);
             GetComponent<Button>().onClick.AddListener(() => OnClick_CitizenButton(citizen));
-            SetQuestMarker(Data.HubMapData.QuestsController.GetQuestMarker(citizen));
+            SetQuestMarker(Data.HubMapData.QuestService.GetQuestMarker(citizen));
 
-            Data.HubMapData.QuestsController.OnQuestIsActiveHandler += () => UpdateInfo(citizen); //todo: ondestroy unsubscribed?
+            Data.HubMapData.QuestService.OnQuestIsActiveHandler += () => UpdateInfo(citizen); //todo: ondestroy unsubscribed?
         }
 
         public void OnClick_CitizenButton(HubMapUICitizen citizen)
@@ -42,7 +42,7 @@ namespace BeastHunter
 
         public void UpdateInfo(HubMapUICitizen citizen)
         {
-            SetQuestMarker(Data.HubMapData.QuestsController.GetQuestMarker(citizen));
+            SetQuestMarker(Data.HubMapData.QuestService.GetQuestMarker(citizen));
         }
 
         private void SetQuestMarker(HubMapUIQuestMarkerType questMarkerType)
