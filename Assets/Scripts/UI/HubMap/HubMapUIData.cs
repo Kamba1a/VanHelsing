@@ -13,8 +13,8 @@ namespace BeastHunter
         [SerializeField] private GameObject _sellingItemUIPrefab;
         [SerializeField] private GameObject _locationTextUIPrefab;
         [SerializeField] private GameObject _characterUIPrefab;
-        [SerializeField] private GameObject _equipmentCellUIPrefab;
-        [SerializeField] private GameObject _inventoryItemUIPrefab;
+        [SerializeField] private GameObject _equipmentSlotUIPrefab;
+        [SerializeField] private GameObject _inventorySlotUIPrefab;
         [SerializeField] private GameObject _answerButtonUIPrefab;
 
         [Header("UI prefs")]
@@ -22,7 +22,7 @@ namespace BeastHunter
         [SerializeField] private int _charactersEquipmentSlotsAmount;
         [SerializeField] private int _inventorySlotsAmount;
 
-        [Header("Objects on map ids")]
+        [Header("Objects on map")]
         [SerializeField] private HubMapUICity _city;
         [SerializeField] private HubMapUILocation _location_1;
         [SerializeField] private HubMapUILocation _location_2;
@@ -50,8 +50,8 @@ namespace BeastHunter
         public GameObject SellingItemUIPrefab => _sellingItemUIPrefab;
         public GameObject LocationTextUIPrefab => _locationTextUIPrefab;
         public GameObject CharacterUIPrefab => _characterUIPrefab;
-        public GameObject EquipmentCellUIPrefab => _equipmentCellUIPrefab;
-        public GameObject InventoryItemUIPrefab => _inventoryItemUIPrefab;
+        public GameObject EquipmentSlotUIPrefab => _equipmentSlotUIPrefab;
+        public GameObject InventorySlotUIPrefab => _inventorySlotUIPrefab;
         public GameObject AnswerButtonUIPrefab => _answerButtonUIPrefab;
 
         public bool MapOnStartEnabled => _mapOnStartEnabled;

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace BeastHunter
 {
-    class HubMapUIEquipmentSlotBehaviour : MonoBehaviour
+    class HubMapUISlotBehaviour : MonoBehaviour
     {
         #region Fields
 

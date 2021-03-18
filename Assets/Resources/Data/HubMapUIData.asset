@@ -20,14 +20,14 @@ MonoBehaviour:
     type: 3}
   _characterUIPrefab: {fileID: 3663167388749810844, guid: d76eafa59c0177848b959baa6daa5a28,
     type: 3}
-  _equipmentCellUIPrefab: {fileID: 4649815293729276567, guid: 7899f865f88bda740864b45d02cbea24,
+  _equipmentSlotUIPrefab: {fileID: 4649815293729276567, guid: 7899f865f88bda740864b45d02cbea24,
     type: 3}
-  _inventoryItemUIPrefab: {fileID: 4453913233983459706, guid: 30984c6c07d235c459e8e3c072b4a15c,
+  _inventorySlotUIPrefab: {fileID: 4453913233983459706, guid: 30984c6c07d235c459e8e3c072b4a15c,
     type: 3}
   _answerButtonUIPrefab: {fileID: 4532874562538034351, guid: d3bcb53cab92ad245a8f95bd2cb657e2,
     type: 3}
   _mapOnStartEnabled: 0
-  _charactersEquipmentSlotsAmount: 6
+  _charactersEquipmentSlotsAmount: 12
   _inventorySlotsAmount: 10
   _city: {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
   _location_1: {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}

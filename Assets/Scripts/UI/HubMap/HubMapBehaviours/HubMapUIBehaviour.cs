@@ -64,10 +64,12 @@ namespace BeastHunter
         [SerializeField] private Scrollbar _charactersPanelScrollbar;
         [SerializeField] private Button _charactersPanelNextButton;
         [SerializeField] private Button _charactersPanelPreviousButton;
+        [SerializeField] private Button _perkTreeButton;
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
         private Dictionary<HubMapUICitizen, GameObject> _displayedCurrentCitizensUI;
-        private List<HubMapUIEquipmentSlotBehaviour> _equipmentSlotsUIBehaviours;
+        private List<HubMapUISlotBehaviour> _equipmentSlotsUIBehaviours;
+        private List<HubMapUISlotBehaviour> __inventorySlotsUIBehaviours;
         private List<HubMapUICharacterBehaviour> _charactersUIBehaviours;
         private List<GameObject> _displayedDialogAnswerButtons = new List<GameObject>();
         private int _selectedEquipmentSlotIndex;
@@ -97,6 +99,7 @@ namespace BeastHunter
             _charactersPanelNextButton.onClick.AddListener(()=>MoveCharactersPanelScrollbar(CHARACTERS_PANEL_SCROLLBAR_SPEED));
             _charactersPanelPreviousButton.onClick.AddListener(() => MoveCharactersPanelScrollbar(-CHARACTERS_PANEL_SCROLLBAR_SPEED));
             _closeInventoryButton.onClick.AddListener(CloseInventoryPanel);
+            _perkTreeButton.onClick.AddListener(ShowPerkTreePanel);
 
             _charactersUIBehaviours = new List<HubMapUICharacterBehaviour>();
             for (int i = 0; i < Data.HubMapData.Characters.Count; i++)
@@ -104,7 +107,7 @@ namespace BeastHunter
                 CharacterUIInitialize(Data.HubMapData.Characters[i]);
             }
 
-            _equipmentSlotsUIBehaviours = new List<HubMapUIEquipmentSlotBehaviour>();
+            _equipmentSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
             for (int i = 0; i < Data.HubMapData.CharactersEquipmentSlotsAmount; i++)
             {
                 EquipmentSlotUIInitialize(i);
@@ -128,6 +131,7 @@ namespace BeastHunter
             _charactersPanelNextButton.onClick.RemoveAllListeners();
             _charactersPanelPreviousButton.onClick.RemoveAllListeners();
             _closeInventoryButton.onClick.RemoveAllListeners();
+            _perkTreeButton.onClick.RemoveAllListeners();
 
             for (int i = 0; i < _charactersUIBehaviours.Count; i++)
             {
@@ -147,6 +151,8 @@ namespace BeastHunter
             {
                 _inventory.PutItem(i, Data.HubMapData.StartInventoryItems[i]);
             }
+            //todo: initialize inventory slots
+            //fill inventory slots
             FillInventoryInfo(_inventory.GetItemsOnly());
 
             _displayedCurrentCitizensUI = new Dictionary<HubMapUICitizen, GameObject>();
@@ -183,11 +189,11 @@ namespace BeastHunter
 
         private void EquipmentSlotUIInitialize(int slotIndex)
         {
-            GameObject equipCellUI = GameObject.Instantiate(Data.HubMapData.EquipmentCellUIPrefab);
+            GameObject equipCellUI = GameObject.Instantiate(Data.HubMapData.EquipmentSlotUIPrefab);
             equipCellUI.transform.SetParent(_equipmentPanel.transform, false);
             equipCellUI.transform.localScale = new Vector3(1, 1, 1);
 
-            HubMapUIEquipmentSlotBehaviour slotBehaviour = equipCellUI.GetComponent<HubMapUIEquipmentSlotBehaviour>();
+            HubMapUISlotBehaviour slotBehaviour = equipCellUI.GetComponent<HubMapUISlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex);
             slotBehaviour.OnClick_SlotButtonHandler = OnClick_EquipmentSlot;
             _equipmentSlotsUIBehaviours.Add(slotBehaviour);
@@ -268,21 +274,37 @@ namespace BeastHunter
             _dialogPanel.SetActive(false);
         }
 
+        private void ShowPerkTreePanel()
+        {
+            //todo perk tree UI
+        }
+
         private void FillInventoryInfo(IEnumerable<BaseItem> items)
         {
             int i = 0;
             foreach(BaseItem item in items)
             {
-                GameObject itemUI = GameObject.Instantiate(Data.HubMapData.InventoryItemUIPrefab);
-                itemUI.transform.SetParent(_inventoryItemsPanel.transform, false);
-                itemUI.transform.localScale = new Vector3(1, 1, 1);
-                itemUI.GetComponent<Image>().sprite = item.ItemStruct.Icon;
-                itemUI.GetComponent<Button>().onClick.AddListener(() => OnClick_InventoryItem(i++, item));
+                //GameObject itemUI = GameObject.Instantiate(Data.HubMapData.InventorySlotUIPrefab);
+                //itemUI.transform.SetParent(_inventoryItemsPanel.transform, false);
+                //itemUI.transform.localScale = new Vector3(1, 1, 1);
+                //itemUI.GetComponent<Image>().sprite = item.ItemStruct.Icon;
+                //itemUI.GetComponent<Button>().onClick.AddListener(() => OnClick_InventoryItem(i++, item));
+
+                GameObject inventorySlotUI = GameObject.Instantiate(Data.HubMapData.InventorySlotUIPrefab);
+                inventorySlotUI.transform.SetParent(_inventoryItemsPanel.transform, false);
+                inventorySlotUI.transform.localScale = new Vector3(1, 1, 1);
+
+                HubMapUISlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<HubMapUISlotBehaviour>();
+                slotBehaviour.FillSlotInfo(i);
+                slotBehaviour.OnClick_SlotButtonHandler = OnClick_InventoryItem;
+                __inventorySlotsUIBehaviours.Add(slotBehaviour);
+
+                i++;
             }
         }
 
         //WIP
-        private void OnClick_InventoryItem(int cellIndex, BaseItem item)
+        private void OnClick_InventoryItem(int slotIndex)
         {
             //IHubMapUICharacter currentCharacter = new HubMapUICharacter();
 
