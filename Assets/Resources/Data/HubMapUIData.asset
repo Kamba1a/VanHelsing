@@ -28,7 +28,7 @@ MonoBehaviour:
     type: 3}
   _mapOnStartEnabled: 0
   _charactersEquipmentSlotsAmount: 12
-  _inventorySlotsAmount: 10
+  _inventorySlotsAmount: 48
   _city: {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
   _location_1: {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
   _location_2: {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}

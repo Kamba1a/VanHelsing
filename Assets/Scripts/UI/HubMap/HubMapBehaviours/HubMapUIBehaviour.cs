@@ -69,7 +69,7 @@ namespace BeastHunter
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
         private Dictionary<HubMapUICitizen, GameObject> _displayedCurrentCitizensUI;
         private List<HubMapUISlotBehaviour> _equipmentSlotsUIBehaviours;
-        private List<HubMapUISlotBehaviour> __inventorySlotsUIBehaviours;
+        private List<HubMapUISlotBehaviour> _inventorySlotsUIBehaviours;
         private List<HubMapUICharacterBehaviour> _charactersUIBehaviours;
         private List<GameObject> _displayedDialogAnswerButtons = new List<GameObject>();
         private int _selectedEquipmentSlotIndex;
@@ -112,6 +112,12 @@ namespace BeastHunter
             {
                 EquipmentSlotUIInitialize(i);
             }
+
+            _inventorySlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
+            for (int i = 0; i < Data.HubMapData.InventorySlotsAmount; i++)
+            {
+                InventorySlotUIInitialize(i);
+            }
         }
 
         private void OnDisable()
@@ -142,6 +148,11 @@ namespace BeastHunter
             {
                 _equipmentSlotsUIBehaviours[i].OnClick_SlotButtonHandler = null;
             }
+
+            for (int i = 0; i < _inventorySlotsUIBehaviours.Count; i++)
+            {
+                _inventorySlotsUIBehaviours[i].OnClick_SlotButtonHandler = null;
+            }
         }
 
         private void Start()
@@ -151,9 +162,8 @@ namespace BeastHunter
             {
                 _inventory.PutItem(i, Data.HubMapData.StartInventoryItems[i]);
             }
-            //todo: initialize inventory slots
-            //fill inventory slots
-            FillInventoryInfo(_inventory.GetItemsOnly());
+            _inventory.OnChangeItemHandler = FillInventorySlotUI;
+            FillInventorySlotsByItems(_inventory.GetItemsOnly());
 
             _displayedCurrentCitizensUI = new Dictionary<HubMapUICitizen, GameObject>();
             _rightInfoPanelObjectsForDestroy = new List<GameObject>();
@@ -173,6 +183,28 @@ namespace BeastHunter
 
 
         #region Methods
+
+        void FillInventorySlotUI(int slotIndex, Sprite sprite)
+        {
+            _inventorySlotsUIBehaviours[slotIndex].FillSlot(sprite);
+        }
+
+        void FillEquipmentSlotUI(int slotIndex, Sprite sprite)
+        {
+            _equipmentSlotsUIBehaviours[slotIndex].FillSlot(sprite);
+        }
+
+        private void InventorySlotUIInitialize(int slotIndex)
+        {
+            GameObject inventorySlotUI = GameObject.Instantiate(Data.HubMapData.InventorySlotUIPrefab);
+            inventorySlotUI.transform.SetParent(_inventoryItemsPanel.transform, false);
+            inventorySlotUI.transform.localScale = new Vector3(1, 1, 1);
+
+            HubMapUISlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<HubMapUISlotBehaviour>();
+            slotBehaviour.FillSlotInfo(slotIndex);
+            slotBehaviour.OnClick_SlotButtonHandler = OnClick_InventorySlot;
+            _inventorySlotsUIBehaviours.Add(slotBehaviour);
+        }
 
         private void CharacterUIInitialize(HubMapUICharacter character)
         {
@@ -223,7 +255,7 @@ namespace BeastHunter
         {
             for (int i = 0; i < _equipmentSlotsUIBehaviours.Count; i++)
             {
-                _equipmentSlotsUIBehaviours[i].ClearSlot();
+                _equipmentSlotsUIBehaviours[i].FillSlot(null);
                 _equipmentSlotsUIBehaviours[i].SetInteractable(false);
             }
             _hikePanel.SetActive(true);
@@ -279,33 +311,31 @@ namespace BeastHunter
             //todo perk tree UI
         }
 
-        private void FillInventoryInfo(IEnumerable<BaseItem> items)
+        private void FillInventorySlotsByItems(IEnumerable<BaseItem> items)
         {
             int i = 0;
-            foreach(BaseItem item in items)
+            foreach (BaseItem item in items)
             {
-                //GameObject itemUI = GameObject.Instantiate(Data.HubMapData.InventorySlotUIPrefab);
-                //itemUI.transform.SetParent(_inventoryItemsPanel.transform, false);
-                //itemUI.transform.localScale = new Vector3(1, 1, 1);
-                //itemUI.GetComponent<Image>().sprite = item.ItemStruct.Icon;
-                //itemUI.GetComponent<Button>().onClick.AddListener(() => OnClick_InventoryItem(i++, item));
-
-                GameObject inventorySlotUI = GameObject.Instantiate(Data.HubMapData.InventorySlotUIPrefab);
-                inventorySlotUI.transform.SetParent(_inventoryItemsPanel.transform, false);
-                inventorySlotUI.transform.localScale = new Vector3(1, 1, 1);
-
-                HubMapUISlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<HubMapUISlotBehaviour>();
-                slotBehaviour.FillSlotInfo(i);
-                slotBehaviour.OnClick_SlotButtonHandler = OnClick_InventoryItem;
-                __inventorySlotsUIBehaviours.Add(slotBehaviour);
-
+                FillInventorySlotUI(i, item.ItemStruct.Icon);
                 i++;
+                if (i >= _inventorySlotsUIBehaviours.Count)
+                { 
+                    break;
+                }
             }
         }
 
         //WIP
-        private void OnClick_InventoryItem(int slotIndex)
+        private void OnClick_InventorySlot(int slotIndex)
         {
+            BaseItem inventoryItem = _inventory.TakeItem(slotIndex);
+            BaseItem equipmentItem = _selectedCharacter.Backpack.TakeItem(_selectedEquipmentSlotIndex);
+
+            _inventory.PutItem(slotIndex, equipmentItem);
+            _selectedCharacter.Backpack.PutItem(_selectedEquipmentSlotIndex, inventoryItem);
+
+            //_inventorySlotsUIBehaviours[slotIndex].FillSlot(equipmentItem);
+
             //IHubMapUICharacter currentCharacter = new HubMapUICharacter();
 
             //int equipInCellItemId = 0; //currentCharacter.ItemsId
@@ -314,7 +344,7 @@ namespace BeastHunter
             //int selectEquipCellNumber = 0;  //currentCharacter.ItemsId[i]
             //int selectInventoryCellNumber = 0; //Data.HubMapData.InventoryItemsId[i]
 
-            //if (_selectedEquipmentCell.item == null)
+            //if (_selectedCharacter.Backpack.GetItemBySlot(_selectedEquipmentSlotIndex) == null)
             //{
             //    Data.HubMapData.InventoryItemsId.Remove(item);
             //    Data.HubMapData.InventoryItemsId.Insert(selectInventoryCellNumber, equipInCellItemId);
@@ -337,24 +367,26 @@ namespace BeastHunter
 
         private void OnClick_CharacterButton(HubMapUICharacter character)
         {
+            if (_selectedCharacter != null)
+            {
+                _selectedCharacter.Backpack.OnChangeItemHandler = null;
+            }
             _selectedCharacter = character;
-            FillCharacterEquipmentInfo(character.Backpack.GetAll());
+            FillCharacterEquipmentByItems(character.Backpack.GetAll());
+            character.Backpack.OnChangeItemHandler = FillEquipmentSlotUI;
         }
 
-        private void FillCharacterEquipmentInfo(BaseItem[] items)
+        private void FillCharacterEquipmentByItems(BaseItem[] items)
         {
             int i = 0;
             foreach (BaseItem item in items)
             {
-                if (item != null)
-                {
-                    _equipmentSlotsUIBehaviours[i].FillSlot(item);
-                }
-                else
-                {
-                    _equipmentSlotsUIBehaviours[i].ClearSlot();
-                }
+                FillEquipmentSlotUI(i, item?.ItemStruct.Icon);
                 i++;
+                if (i >= _equipmentSlotsUIBehaviours.Count)
+                {
+                    break;
+                }
             }
 
             for (int j = 0; j < _equipmentSlotsUIBehaviours.Count; j++)

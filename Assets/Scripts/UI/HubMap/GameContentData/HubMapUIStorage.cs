@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace BeastHunter
 {
     public class HubMapUIStorage
     {
         private BaseItem[] _items;
+
+        public Action<int, Sprite> OnChangeItemHandler;
 
         public HubMapUIStorage(int slotsAmount)
         {
@@ -17,20 +21,15 @@ namespace BeastHunter
             {
                 _items[slotNumber] = item;
             }
+            OnChangeItem(slotNumber, item);
         }
 
         public BaseItem TakeItem(int slotNumber)
         {
             BaseItem item = _items[slotNumber];
             _items[slotNumber] = null;
+            OnChangeItem(slotNumber, item);
             return item;
-        }
-
-        public BaseItem TakeAndPutItem(int slotNumber, BaseItem item)
-        {
-            BaseItem takeItem = TakeItem(slotNumber);
-            PutItem(slotNumber, item);
-            return takeItem;
         }
 
         public BaseItem GetItemBySlot(int slotNumber)
@@ -59,6 +58,11 @@ namespace BeastHunter
                 }
             }
             return items;
+        }
+
+        private void OnChangeItem(int slotNumber, BaseItem item)
+        {
+            OnChangeItemHandler?.Invoke(slotNumber, item?.ItemStruct.Icon);
         }
     }
 }

@@ -33,19 +33,14 @@ namespace BeastHunter
             _slotButton.interactable = flag;
         }
 
-        public void FillSlot(BaseItem item)
+        public void FillSlot(Sprite sprite)
         {
-            SetImage(item.ItemStruct.Icon);
+            SetIcon(sprite);
         }
 
-        public void ClearSlot()
+        private void SetIcon(Sprite sprite)
         {
-            SetImage(null);
-        }
-
-        private void SetImage(Sprite image)
-        {
-            if (image != null)
+            if (sprite != null)
             {
                 Color color = _itemImage.color;
                 color.a = 255f;
@@ -57,7 +52,7 @@ namespace BeastHunter
                 color.a = 0f;
                 _itemImage.color = color;
             }
-            _itemImage.sprite = image;
+            _itemImage.sprite = sprite;
         }
 
         private void OnClick_SlotButton(int slotIndex)
