@@ -1,22 +1,26 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace BeastHunter
 {
-    class HubMapUISlotBehaviour : MonoBehaviour
+    class HubMapUISlotBehaviour : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
         #region Fields
 
         [SerializeField] private Image _itemImage;
         [SerializeField] private Button _slotButton;
+        [SerializeField] private GameObject _selectSlotFrame;
 
         #endregion
 
 
         #region Properties
 
-        public Action <int>OnClick_SlotButtonHandler { get; set; }
+        public Action<int> OnClick_SlotButtonHandler { get; set; }
+        public Action<int> OnSelectHandler { get; set; }
+        public int SlotIndex { get; private set; }
 
         #endregion
 
@@ -25,7 +29,8 @@ namespace BeastHunter
 
         public void FillSlotInfo(int slotIndex)
         {
-            _slotButton.onClick.AddListener(() => OnClick_SlotButton(slotIndex));
+            SlotIndex = slotIndex;
+            _slotButton.onClick.AddListener(() => OnClick_SlotButton());
         }
 
         public void SetInteractable(bool flag)
@@ -55,9 +60,30 @@ namespace BeastHunter
             _itemImage.sprite = sprite;
         }
 
-        private void OnClick_SlotButton(int slotIndex)
+        private void OnClick_SlotButton()
         {
-            OnClick_SlotButtonHandler?.Invoke(slotIndex);
+            OnClick_SlotButtonHandler?.Invoke(SlotIndex);
+        }
+
+        public void OnSelect(BaseEventData eventData)
+        {
+            Debug.Log("OnSelect");
+
+            OnSelectHandler?.Invoke(SlotIndex);
+            if (_selectSlotFrame != null)
+            {
+                _selectSlotFrame.SetActive(true);
+            }
+        }
+
+        public void OnDeselect(BaseEventData eventData)
+        {
+            Debug.Log("OnDeSelect");
+
+            if (_selectSlotFrame != null)
+            {
+                _selectSlotFrame.SetActive(false);
+            }
         }
 
         #endregion

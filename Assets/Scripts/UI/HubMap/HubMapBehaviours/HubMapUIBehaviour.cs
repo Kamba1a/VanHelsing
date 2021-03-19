@@ -221,13 +221,14 @@ namespace BeastHunter
 
         private void EquipmentSlotUIInitialize(int slotIndex)
         {
-            GameObject equipCellUI = GameObject.Instantiate(Data.HubMapData.EquipmentSlotUIPrefab);
-            equipCellUI.transform.SetParent(_equipmentPanel.transform, false);
-            equipCellUI.transform.localScale = new Vector3(1, 1, 1);
+            GameObject equipSlotUI = GameObject.Instantiate(Data.HubMapData.EquipmentSlotUIPrefab);
+            equipSlotUI.transform.SetParent(_equipmentPanel.transform, false);
+            equipSlotUI.transform.localScale = new Vector3(1, 1, 1);
 
-            HubMapUISlotBehaviour slotBehaviour = equipCellUI.GetComponent<HubMapUISlotBehaviour>();
+            HubMapUISlotBehaviour slotBehaviour = equipSlotUI.GetComponent<HubMapUISlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex);
             slotBehaviour.OnClick_SlotButtonHandler = OnClick_EquipmentSlot;
+            slotBehaviour.OnSelectHandler = OnSelectEquipmentSlot;
             _equipmentSlotsUIBehaviours.Add(slotBehaviour);
         }
 
@@ -325,7 +326,6 @@ namespace BeastHunter
             }
         }
 
-        //WIP
         private void OnClick_InventorySlot(int slotIndex)
         {
             BaseItem inventoryItem = _inventory.TakeItem(slotIndex);
@@ -333,35 +333,15 @@ namespace BeastHunter
 
             _inventory.PutItem(slotIndex, equipmentItem);
             _selectedCharacter.Backpack.PutItem(_selectedEquipmentSlotIndex, inventoryItem);
+        }
 
-            //_inventorySlotsUIBehaviours[slotIndex].FillSlot(equipmentItem);
-
-            //IHubMapUICharacter currentCharacter = new HubMapUICharacter();
-
-            //int equipInCellItemId = 0; //currentCharacter.ItemsId
-            //int inventoryItemId = 0;    //Data.HubMapData.InventoryItemsId
-
-            //int selectEquipCellNumber = 0;  //currentCharacter.ItemsId[i]
-            //int selectInventoryCellNumber = 0; //Data.HubMapData.InventoryItemsId[i]
-
-            //if (_selectedCharacter.Backpack.GetItemBySlot(_selectedEquipmentSlotIndex) == null)
-            //{
-            //    Data.HubMapData.InventoryItemsId.Remove(item);
-            //    Data.HubMapData.InventoryItemsId.Insert(selectInventoryCellNumber, equipInCellItemId);
-            //}
-            //else
-            //{
-            //    Data.HubMapData.InventoryItemsId.Insert(selectInventoryCellNumber, equipInCellItemId);
-            //}
-            //currentCharacter.ItemsId[selectEquipCellNumber] = inventoryItemId;
-
-            ////update inventory
-            //FillEquipmentPanel(currentCharacter.ItemsId);    //update equipment
+        private void OnSelectEquipmentSlot(int slotIndex)
+        {
+            _selectedEquipmentSlotIndex = slotIndex;
         }
 
         private void OnClick_EquipmentSlot(int slotIndex)
         {
-            _selectedEquipmentSlotIndex = slotIndex;
             ShowInventoryPanel();
         }
 
