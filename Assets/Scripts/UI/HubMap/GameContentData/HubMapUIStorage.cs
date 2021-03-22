@@ -28,7 +28,7 @@ namespace BeastHunter
         {
             BaseItem item = _items[slotNumber];
             _items[slotNumber] = null;
-            OnChangeItem(slotNumber, item);
+            OnChangeItem(slotNumber, null);
             return item;
         }
 

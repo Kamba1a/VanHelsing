@@ -340,9 +340,10 @@ namespace BeastHunter
 
         private void OnDoubleClick_InventorySlot(int slotIndex)
         {
+            BaseItem inventoryItem = _inventory.TakeItem(slotIndex);
+
             if (_selectedEquipmentSlotIndex.HasValue)
             {
-                BaseItem inventoryItem = _inventory.TakeItem(slotIndex);
                 BaseItem equipmentItem = _selectedCharacter.Backpack.TakeItem(_selectedEquipmentSlotIndex.Value);
 
                 _inventory.PutItem(slotIndex, equipmentItem);
@@ -350,7 +351,23 @@ namespace BeastHunter
             }
             else
             {
-                //предмет из инвентар€ перемещаетс€ в первый пустой слот снар€жени€ (пока нельз€ сбросить выбор €чейки)
+                bool isFoundEmptySlot = false;
+
+                for (int i = 0; i < _selectedCharacter.Backpack.GetSlotsCount(); i++)
+                {
+                    if (_selectedCharacter.Backpack.GetItemBySlot(i) == null)
+                    {
+                        _selectedCharacter.Backpack.PutItem(i, inventoryItem);
+                        isFoundEmptySlot = true;
+                        break;
+                    }
+                }
+
+                if (!isFoundEmptySlot)
+                {
+                    _inventory.PutItem(slotIndex, inventoryItem);
+                    Debug.Log("Equipment is full");
+                }
             }
         }
 
@@ -371,17 +388,34 @@ namespace BeastHunter
 
         private void OnDoubleClick_EquipmentSlot(int slotIndex)
         {
+            BaseItem equipmentItem = _selectedCharacter.Backpack.TakeItem(slotIndex);
+
             if (_selectedInventorySlotIndex.HasValue)
             {
                 BaseItem inventoryItem = _inventory.TakeItem(_selectedInventorySlotIndex.Value);
-                BaseItem equipmentItem = _selectedCharacter.Backpack.TakeItem(slotIndex);
 
                 _inventory.PutItem(_selectedInventorySlotIndex.Value, equipmentItem);
                 _selectedCharacter.Backpack.PutItem(slotIndex, inventoryItem);
             }
             else
             {
-                //предмет из инвентар€ перемещаетс€ в первый пустой слот инвентар€ (пока нельз€ сбросить выбор €чейки)
+                bool isFoundEmptySlot = false;
+
+                for (int i = 0; i < _inventory.GetSlotsCount(); i++)
+                {
+                    if (_inventory.GetItemBySlot(i) == null)
+                    {
+                        _inventory.PutItem(i, equipmentItem);
+                        isFoundEmptySlot = true;
+                        break;
+                    }
+                }
+
+                if (!isFoundEmptySlot)
+                {
+                    _selectedCharacter.Backpack.PutItem(slotIndex, equipmentItem);
+                    Debug.Log("Inventory is full");
+                }
             }
         }
 
