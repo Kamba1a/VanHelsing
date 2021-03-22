@@ -5,13 +5,17 @@ using UnityEngine.EventSystems;
 
 namespace BeastHunter
 {
-    class HubMapUISlotBehaviour : MonoBehaviour, ISelectHandler, IDeselectHandler
+    class HubMapUISlotBehaviour : MonoBehaviour, IPointerClickHandler
     {
+        private const float DOUBLECLICK_TIME = 0.75f;
+
         #region Fields
 
         [SerializeField] private Image _itemImage;
         [SerializeField] private Button _slotButton;
         [SerializeField] private GameObject _selectSlotFrame;
+
+        private float lastClickTime;
 
         #endregion
 
@@ -19,13 +23,25 @@ namespace BeastHunter
         #region Properties
 
         public Action<int> OnClick_SlotButtonHandler { get; set; }
-        public Action<int> OnSelectHandler { get; set; }
+        public Action<int> OnDoubleClickButtonHandler { get; set; }
         public int SlotIndex { get; private set; }
 
         #endregion
 
 
         #region Methods
+
+        public void SelectFrameSwitcher(bool flag)
+        {
+            _selectSlotFrame.SetActive(flag);
+        }
+
+        public void RemoveAllListeners()
+        {
+            OnClick_SlotButtonHandler = null;
+            OnDoubleClickButtonHandler = null;
+
+        }
 
         public void FillSlotInfo(int slotIndex)
         {
@@ -65,24 +81,15 @@ namespace BeastHunter
             OnClick_SlotButtonHandler?.Invoke(SlotIndex);
         }
 
-        public void OnSelect(BaseEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("OnSelect");
-
-            OnSelectHandler?.Invoke(SlotIndex);
-            if (_selectSlotFrame != null)
+            if (_slotButton.IsInteractable())
             {
-                _selectSlotFrame.SetActive(true);
-            }
-        }
-
-        public void OnDeselect(BaseEventData eventData)
-        {
-            Debug.Log("OnDeSelect");
-
-            if (_selectSlotFrame != null)
-            {
-                _selectSlotFrame.SetActive(false);
+                if (Time.time < lastClickTime + DOUBLECLICK_TIME)
+                {
+                    OnDoubleClickButtonHandler?.Invoke(SlotIndex);
+                }
+                lastClickTime = Time.time;
             }
         }
 

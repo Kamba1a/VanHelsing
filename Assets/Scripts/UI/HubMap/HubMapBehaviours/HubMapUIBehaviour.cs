@@ -72,7 +72,8 @@ namespace BeastHunter
         private List<HubMapUISlotBehaviour> _inventorySlotsUIBehaviours;
         private List<HubMapUICharacterBehaviour> _charactersUIBehaviours;
         private List<GameObject> _displayedDialogAnswerButtons = new List<GameObject>();
-        private int _selectedEquipmentSlotIndex;
+        private int? _selectedEquipmentSlotIndex;
+        private int? _selectedInventorySlotIndex;
         private HubMapUICharacter _selectedCharacter;
         private HubMapUILocation _selectedLocation;
         private HubMapUIStorage _inventory;
@@ -146,12 +147,12 @@ namespace BeastHunter
 
             for (int i = 0; i < _equipmentSlotsUIBehaviours.Count; i++)
             {
-                _equipmentSlotsUIBehaviours[i].OnClick_SlotButtonHandler = null;
+                _equipmentSlotsUIBehaviours[i].RemoveAllListeners();
             }
 
             for (int i = 0; i < _inventorySlotsUIBehaviours.Count; i++)
             {
-                _inventorySlotsUIBehaviours[i].OnClick_SlotButtonHandler = null;
+                _inventorySlotsUIBehaviours[i].RemoveAllListeners();
             }
         }
 
@@ -203,6 +204,7 @@ namespace BeastHunter
             HubMapUISlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<HubMapUISlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex);
             slotBehaviour.OnClick_SlotButtonHandler = OnClick_InventorySlot;
+            slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_InventorySlot;
             _inventorySlotsUIBehaviours.Add(slotBehaviour);
         }
 
@@ -228,7 +230,7 @@ namespace BeastHunter
             HubMapUISlotBehaviour slotBehaviour = equipSlotUI.GetComponent<HubMapUISlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex);
             slotBehaviour.OnClick_SlotButtonHandler = OnClick_EquipmentSlot;
-            slotBehaviour.OnSelectHandler = OnSelectEquipmentSlot;
+            slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_EquipmentSlot;
             _equipmentSlotsUIBehaviours.Add(slotBehaviour);
         }
 
@@ -309,7 +311,7 @@ namespace BeastHunter
 
         private void ShowPerkTreePanel()
         {
-            //todo perk tree UI
+            //todo: perk tree UI
         }
 
         private void FillInventorySlotsByItems(IEnumerable<BaseItem> items)
@@ -328,21 +330,59 @@ namespace BeastHunter
 
         private void OnClick_InventorySlot(int slotIndex)
         {
-            BaseItem inventoryItem = _inventory.TakeItem(slotIndex);
-            BaseItem equipmentItem = _selectedCharacter.Backpack.TakeItem(_selectedEquipmentSlotIndex);
-
-            _inventory.PutItem(slotIndex, equipmentItem);
-            _selectedCharacter.Backpack.PutItem(_selectedEquipmentSlotIndex, inventoryItem);
+            if (_selectedInventorySlotIndex.HasValue)
+            {
+                _inventorySlotsUIBehaviours[_selectedInventorySlotIndex.Value].SelectFrameSwitcher(false);
+            }
+            _inventorySlotsUIBehaviours[slotIndex].SelectFrameSwitcher(true);
+            _selectedInventorySlotIndex = slotIndex;
         }
 
-        private void OnSelectEquipmentSlot(int slotIndex)
+        private void OnDoubleClick_InventorySlot(int slotIndex)
         {
-            _selectedEquipmentSlotIndex = slotIndex;
+            if (_selectedEquipmentSlotIndex.HasValue)
+            {
+                BaseItem inventoryItem = _inventory.TakeItem(slotIndex);
+                BaseItem equipmentItem = _selectedCharacter.Backpack.TakeItem(_selectedEquipmentSlotIndex.Value);
+
+                _inventory.PutItem(slotIndex, equipmentItem);
+                _selectedCharacter.Backpack.PutItem(_selectedEquipmentSlotIndex.Value, inventoryItem);
+            }
+            else
+            {
+                //предмет из инвентар€ перемещаетс€ в первый пустой слот снар€жени€ (пока нельз€ сбросить выбор €чейки)
+            }
         }
 
         private void OnClick_EquipmentSlot(int slotIndex)
         {
-            ShowInventoryPanel();
+            if (_selectedEquipmentSlotIndex.HasValue)
+            {
+                _equipmentSlotsUIBehaviours[_selectedEquipmentSlotIndex.Value].SelectFrameSwitcher(false);
+            }
+            _equipmentSlotsUIBehaviours[slotIndex].SelectFrameSwitcher(true);
+            _selectedEquipmentSlotIndex = slotIndex;
+
+            if (!_inventoryPanel.activeSelf)
+            {
+                ShowInventoryPanel();
+            }
+        }
+
+        private void OnDoubleClick_EquipmentSlot(int slotIndex)
+        {
+            if (_selectedInventorySlotIndex.HasValue)
+            {
+                BaseItem inventoryItem = _inventory.TakeItem(_selectedInventorySlotIndex.Value);
+                BaseItem equipmentItem = _selectedCharacter.Backpack.TakeItem(slotIndex);
+
+                _inventory.PutItem(_selectedInventorySlotIndex.Value, equipmentItem);
+                _selectedCharacter.Backpack.PutItem(slotIndex, inventoryItem);
+            }
+            else
+            {
+                //предмет из инвентар€ перемещаетс€ в первый пустой слот инвентар€ (пока нельз€ сбросить выбор €чейки)
+            }
         }
 
         private void OnClick_CharacterButton(HubMapUICharacter character)
