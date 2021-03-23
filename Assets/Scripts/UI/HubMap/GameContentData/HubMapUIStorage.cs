@@ -37,6 +37,18 @@ namespace BeastHunter
             return _items[slotNumber];
         }
 
+        public Sprite GetItemIconBySlot(int slotNumber)
+        {
+            if (_items[slotNumber] != null)
+            {
+                return _items[slotNumber].ItemStruct.Icon;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public BaseItem[] GetAll()
         {
             return (BaseItem[])_items.Clone();

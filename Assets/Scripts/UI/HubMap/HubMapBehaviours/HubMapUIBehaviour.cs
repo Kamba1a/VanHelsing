@@ -74,6 +74,7 @@ namespace BeastHunter
         private List<GameObject> _displayedDialogAnswerButtons = new List<GameObject>();
         private int? _selectedEquipmentSlotIndex;
         private int? _selectedInventorySlotIndex;
+        private (int? slotIndex, StorageSlotType slotType) _draggedItemSlot;
         private HubMapUICharacter _selectedCharacter;
         private HubMapUILocation _selectedLocation;
         private HubMapUIStorage _inventory;
@@ -205,6 +206,9 @@ namespace BeastHunter
             slotBehaviour.FillSlotInfo(slotIndex);
             slotBehaviour.OnClick_SlotButtonHandler = OnClick_InventorySlot;
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_InventorySlot;
+            slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageSlotType.Inventory);
+            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageSlotType.Inventory);
+            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageSlotType.Inventory);
             _inventorySlotsUIBehaviours.Add(slotBehaviour);
         }
 
@@ -231,6 +235,9 @@ namespace BeastHunter
             slotBehaviour.FillSlotInfo(slotIndex);
             slotBehaviour.OnClick_SlotButtonHandler = OnClick_EquipmentSlot;
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_EquipmentSlot;
+            slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageSlotType.Equipment);
+            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageSlotType.Equipment);
+            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageSlotType.Equipment);
             _equipmentSlotsUIBehaviours.Add(slotBehaviour);
         }
 
@@ -417,6 +424,61 @@ namespace BeastHunter
                     Debug.Log("Inventory is full");
                 }
             }
+        }
+
+        private void OnDragItemFromSlot(int slotIndex, StorageSlotType slotType)
+        {
+            _draggedItemSlot.slotIndex = slotIndex;
+            _draggedItemSlot.slotType = slotType;
+        }
+
+        private void OnEndDragItem(int slotIndex, StorageSlotType slotType)
+        {
+            switch (slotType)
+            {
+                case StorageSlotType.Equipment:
+                    FillEquipmentSlotUI(slotIndex, _selectedCharacter.Backpack.GetItemIconBySlot(slotIndex));
+                    break;
+                case StorageSlotType.Inventory:
+                    FillInventorySlotUI(slotIndex, _inventory.GetItemIconBySlot(slotIndex)); ;
+                    break;
+                default:
+                    Debug.LogError(this + ": incorrect StorageSlotType");
+                    break;
+            }
+        }
+
+        private void OnDropItemToSlot(int dropSlotIndex, StorageSlotType dropSlotType)
+        {
+            if (_draggedItemSlot.slotIndex.HasValue)
+            {
+                HubMapUIStorage dropItemStorage = GetStorageByType(dropSlotType); ;
+                HubMapUIStorage takeItemStorage = GetStorageByType(_draggedItemSlot.slotType);
+
+                BaseItem draggedItem = takeItemStorage.TakeItem(_draggedItemSlot.slotIndex.Value);
+                BaseItem droppedSlotItem = dropItemStorage.TakeItem(dropSlotIndex);
+
+                dropItemStorage.PutItem(dropSlotIndex, draggedItem);
+                takeItemStorage.PutItem(_draggedItemSlot.slotIndex.Value, droppedSlotItem);
+            }
+        }
+
+        private HubMapUIStorage GetStorageByType(StorageSlotType slotType)
+        {
+            HubMapUIStorage storage = null;
+            switch (slotType)
+            {
+                case StorageSlotType.Equipment:
+                    storage = _selectedCharacter.Backpack;
+                    break;
+                case StorageSlotType.Inventory:
+                    storage = _inventory;
+                    break;
+                default:
+                    Debug.LogError(this + ": incorrect StorageSlotType");
+                    break;
+            }
+            return storage;
         }
 
         private void OnClick_CharacterButton(HubMapUICharacter character)
@@ -613,5 +675,13 @@ namespace BeastHunter
         }
 
         #endregion
+
+
+        private enum StorageSlotType
+        {
+            None = 0,
+            Equipment = 1,
+            Inventory = 2,
+        }
     }
 }
