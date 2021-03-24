@@ -19,8 +19,6 @@ namespace BeastHunter
 
         [Header("UI prefs")]
         [SerializeField] private bool _mapOnStartEnabled;
-        [SerializeField] private int _charactersEquipmentSlotsAmount;
-        [SerializeField] private int _inventorySlotsAmount;
 
         [Header("Objects on map")]
         [SerializeField] private HubMapUICity _city;
@@ -31,6 +29,9 @@ namespace BeastHunter
 
         [Header("Content for UI")]
         [SerializeField] private List<HubMapUICharacter> _characters;
+        [SerializeField] private int _charactersEquipmentSlotsAmount;
+        [SerializeField] private int _inventorySlotsAmount;
+        [SerializeField] private int _buyBackStorageSlotsAmount;
         [SerializeField] private BaseItem[] _startInventoryItems;
         [SerializeField] HubMapUICityReputation[] _startCitiesReputation;
         [SerializeField] private List<HubMapUIQuestData> _quests;
@@ -55,8 +56,6 @@ namespace BeastHunter
         public GameObject AnswerButtonUIPrefab => _answerButtonUIPrefab;
 
         public bool MapOnStartEnabled => _mapOnStartEnabled;
-        public int CharactersEquipmentSlotsAmount => _charactersEquipmentSlotsAmount;
-        public int InventorySlotsAmount => _inventorySlotsAmount;
 
         public HubMapUICity City => _city;
         public HubMapUILocation Location_1 => _location_1;
@@ -65,6 +64,9 @@ namespace BeastHunter
         public HubMapUILocation Location_4 => _location_4;
 
         public List<HubMapUICharacter> Characters => _characters;
+        public int CharactersEquipmentSlotsAmount => _charactersEquipmentSlotsAmount;
+        public int InventorySlotsAmount => _inventorySlotsAmount;
+        public int BuyBackStorageSlotsAmount => _buyBackStorageSlotsAmount;
         public BaseItem[] StartInventoryItems => _startInventoryItems;
         public List<HubMapUIDialogNode> Dialogs => _dialogs;
 

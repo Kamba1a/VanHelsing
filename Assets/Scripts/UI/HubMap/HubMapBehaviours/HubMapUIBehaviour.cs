@@ -14,6 +14,8 @@ namespace BeastHunter
             None = 0,
             Equipment = 1,
             Inventory = 2,
+            Shop = 3,
+            BuyBackStorage = 4,
         }
 
         private class SelectedElements
@@ -157,6 +159,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _shopPanel;
         [SerializeField] private GameObject _shopInventoryScrollView;
         [SerializeField] private Button _closeShopButton;
+        [SerializeField] private Text _sellingItemPrice;
 
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
@@ -168,6 +171,7 @@ namespace BeastHunter
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
         private HubMapUILocation _selectedLocation;
         private HubMapUIStorage _inventory;
+        private HubMapUIStorage _buyBackStorage;
         private SelectedElements _selected;
 
         #endregion
@@ -260,6 +264,7 @@ namespace BeastHunter
 
         private void Start()
         {
+            _buyBackStorage = new HubMapUIStorage(Data.HubMapData.BuyBackStorageSlotsAmount);
             _inventory = new HubMapUIStorage(Data.HubMapData.InventorySlotsAmount);
             for (int i = 0; i < Data.HubMapData.StartInventoryItems.Length; i++)
             {
@@ -340,6 +345,7 @@ namespace BeastHunter
         private void OnClick_ShopButton()
         {
             SetScrollViewParentForInventoryItemsPanel(_shopInventoryScrollView);
+            _sellingItemPrice.text = "0";
             _shopPanel.SetActive(true);
         }
 
@@ -391,6 +397,10 @@ namespace BeastHunter
         private void OnClick_InventorySlot(int slotIndex)
         {
             _selected.InventorySlotIndex = slotIndex;
+
+            _sellingItemPrice.text = _inventory.GetItemBySlot(slotIndex) != null?
+                _inventory.GetItemBySlot(slotIndex).ItemStruct.ShopPrice.ToString()
+                : "0";
         }
 
         private void OnClick_EquipmentSlot(int slotIndex)
@@ -408,31 +418,30 @@ namespace BeastHunter
         {
             BaseItem inventoryItem = _inventory.TakeItem(slotIndex);
 
-            if (_selected.EquipmentSlotIndex.HasValue)
+            if (_shopPanel.activeSelf)
             {
-                BaseItem equipmentItem = _selected.Character.Backpack.TakeItem(_selected.EquipmentSlotIndex.Value);
-
-                _inventory.PutItem(slotIndex, equipmentItem);
-                _selected.Character.Backpack.PutItem(_selected.EquipmentSlotIndex.Value, inventoryItem);
+                if (!MovingItemToFirstEmptySlot(inventoryItem, _buyBackStorage))
+                {
+                    _inventory.PutItem(slotIndex, inventoryItem);
+                    Debug.Log("BuyBackStorage is full");
+                }
             }
             else
             {
-                bool isFoundEmptySlot = false;
-
-                for (int i = 0; i < _selected.Character.Backpack.GetSlotsCount(); i++)
+                if (_selected.EquipmentSlotIndex.HasValue)
                 {
-                    if (_selected.Character.Backpack.GetItemBySlot(i) == null)
-                    {
-                        _selected.Character.Backpack.PutItem(i, inventoryItem);
-                        isFoundEmptySlot = true;
-                        break;
-                    }
+                    BaseItem equipmentItem = _selected.Character.Backpack.TakeItem(_selected.EquipmentSlotIndex.Value);
+
+                    _inventory.PutItem(slotIndex, equipmentItem);
+                    _selected.Character.Backpack.PutItem(_selected.EquipmentSlotIndex.Value, inventoryItem);
                 }
-
-                if (!isFoundEmptySlot)
+                else
                 {
-                    _inventory.PutItem(slotIndex, inventoryItem);
-                    Debug.Log("Equipment is full");
+                    if (!MovingItemToFirstEmptySlot(inventoryItem, _selected.Character.Backpack))
+                    {
+                        _inventory.PutItem(slotIndex, inventoryItem);
+                        Debug.Log("Equipment is full");
+                    }
                 }
             }
         }
@@ -634,6 +643,11 @@ namespace BeastHunter
             answerButton.transform.localScale = new Vector3(1, 1, 1);
             answerButton.GetComponentInChildren<Text>().text = answer.Text;
 
+            if (answer.IsDialogEnd)
+            {
+                answerButton.GetComponentInChildren<Text>().text += " (ףיעט)";
+            }
+
             answerButton.GetComponentInChildren<Button>().onClick.AddListener(() => OnClick_DialogButton(citizen, answer));
             _displayedDialogAnswerButtons.Add(answerButton);
         }
@@ -786,9 +800,15 @@ namespace BeastHunter
                 case StorageType.Equipment:
                     storage = _selected.Character.Backpack;
                     break;
+
                 case StorageType.Inventory:
                     storage = _inventory;
                     break;
+
+                case StorageType.BuyBackStorage:
+                    storage = _buyBackStorage;
+                    break;
+
                 default:
                     Debug.LogError(this + ": incorrect StorageSlotType");
                     break;
@@ -800,6 +820,19 @@ namespace BeastHunter
         {
             _inventoryItemsPanel.transform.SetParent(parentPanel.transform.Find("Viewport"), false);
             parentPanel.GetComponent<ScrollRect>().content = _inventoryItemsPanel.GetComponent<RectTransform>();
+        }
+
+        private bool MovingItemToFirstEmptySlot(BaseItem item, HubMapUIStorage storage)
+        {
+            for (int i = 0; i < storage.GetSlotsCount(); i++)
+            {
+                if (storage.GetItemBySlot(i) == null)
+                {
+                    storage.PutItem(i, item);
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void LocationLoad()
