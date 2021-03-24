@@ -110,11 +110,12 @@ namespace BeastHunter
         [SerializeField] private Button _hideInfoPanelButton;
         [SerializeField] private Button _hubButton;
         [SerializeField] private Button _mapButton;
+        [SerializeField] private GameObject _inventoryItemsPanel;
 
         [Header("City info panel")]
         [SerializeField] private GameObject _cityInfoPanel;
         [SerializeField] private GameObject _citizenPanel;
-        [SerializeField] private Button _cityShopButton;
+        [SerializeField] private Button _shopButton;
         [SerializeField] private Image _cityFraction;
         [SerializeField] private Text _cityName;
         [SerializeField] private Text _cityDescription;
@@ -144,13 +145,19 @@ namespace BeastHunter
         [SerializeField] private GameObject _hikePreparePanel;
         [SerializeField] private GameObject _charactersPanel;
         [SerializeField] private GameObject _equipmentPanel;
-        [SerializeField] private GameObject _inventoryPanel;
-        [SerializeField] private GameObject _inventoryItemsPanel;
+        [SerializeField] private GameObject _hikeInventoryPanel;
+        [SerializeField] private GameObject _hikeInventoryScrollView;
         [SerializeField] private Button _closeInventoryButton;
         [SerializeField] private Scrollbar _charactersPanelScrollbar;
         [SerializeField] private Button _charactersPanelNextButton;
         [SerializeField] private Button _charactersPanelPreviousButton;
         [SerializeField] private Button _perkTreeButton;
+
+        [Header("Shop panel")]
+        [SerializeField] private GameObject _shopPanel;
+        [SerializeField] private GameObject _shopInventoryScrollView;
+        [SerializeField] private Button _closeShopButton;
+
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
         private List<HubMapUISlotBehaviour> _equipmentSlotsUIBehaviours;
@@ -186,7 +193,8 @@ namespace BeastHunter
             _charactersPanelPreviousButton.onClick.AddListener(() => OnClick_CharactersPanelNavigationButton(-CHARACTERS_PANEL_SCROLLBAR_STEP));
             _closeInventoryButton.onClick.AddListener(OnClick_CloseInventoryButton);
             _perkTreeButton.onClick.AddListener(OnClick_PerkTreeButton);
-            _cityShopButton.onClick.AddListener(OnClick_CityShopButton);
+            _shopButton.onClick.AddListener(OnClick_ShopButton);
+            _closeShopButton.onClick.AddListener(OnClick_CloseShopButton);
 
             _charactersUIBehaviours = new List<HubMapUICharacterBehaviour>();
             for (int i = 0; i < Data.HubMapData.Characters.Count; i++)
@@ -230,7 +238,7 @@ namespace BeastHunter
             _charactersPanelPreviousButton.onClick.RemoveAllListeners();
             _closeInventoryButton.onClick.RemoveAllListeners();
             _perkTreeButton.onClick.RemoveAllListeners();
-            _cityShopButton.onClick.RemoveAllListeners();
+            _shopButton.onClick.RemoveAllListeners();
 
             for (int i = 0; i < _charactersUIBehaviours.Count; i++)
             {
@@ -271,7 +279,8 @@ namespace BeastHunter
             _locationInfoPanel.SetActive(false);
             _hikePanel.SetActive(false);
             _hikePreparePanel.SetActive(true);
-            _inventoryPanel.SetActive(false);
+            _hikeInventoryPanel.SetActive(false);
+            _shopPanel.SetActive(false);
         }
 
         #endregion
@@ -314,7 +323,7 @@ namespace BeastHunter
             _selected.EquipmentSlotIndex = null;
             _selected.InventorySlotIndex = null;
 
-            _inventoryPanel.SetActive(false);
+            _hikeInventoryPanel.SetActive(false);
             _hikePanel.SetActive(false);
         }
 
@@ -328,10 +337,15 @@ namespace BeastHunter
             _cityInfoPanel.SetActive(true);
         }
 
-        private void OnClick_CityShopButton()
+        private void OnClick_ShopButton()
         {
-            //todo: shop panels
-            Debug.Log("OnClick_CityShopButton");
+            SetScrollViewParentForInventoryItemsPanel(_shopInventoryScrollView);
+            _shopPanel.SetActive(true);
+        }
+
+        private void OnClick_CloseShopButton()
+        {
+            _shopPanel.SetActive(false);
         }
 
         private void OnClick_LocationButton(HubMapUILocation location)
@@ -358,7 +372,7 @@ namespace BeastHunter
 
         private void OnClick_CloseInventoryButton()
         {
-            _inventoryPanel.SetActive(false);
+            _hikeInventoryPanel.SetActive(false);
         }
 
         private void OnClick_PerkTreeButton()
@@ -383,9 +397,10 @@ namespace BeastHunter
         {
             _selected.EquipmentSlotIndex = slotIndex;
 
-            if (!_inventoryPanel.activeSelf)
+            if (!_hikeInventoryPanel.activeSelf)
             {
-                _inventoryPanel.SetActive(true);
+                SetScrollViewParentForInventoryItemsPanel(_hikeInventoryScrollView);
+                _hikeInventoryPanel.SetActive(true);
             }
         }
 
@@ -779,6 +794,12 @@ namespace BeastHunter
                     break;
             }
             return storage;
+        }
+
+        private void SetScrollViewParentForInventoryItemsPanel(GameObject parentPanel)
+        {
+            _inventoryItemsPanel.transform.SetParent(parentPanel.transform.Find("Viewport"), false);
+            parentPanel.GetComponent<ScrollRect>().content = _inventoryItemsPanel.GetComponent<RectTransform>();
         }
 
         private void LocationLoad()
