@@ -18,7 +18,8 @@ namespace BeastHunter
         [SerializeField] private Mesh _meshOfObject;
         [SerializeField] private Sprite _icon;
 
-        [SerializeField] private float _requiredReputationForSaleInStore;
+        [SerializeField] private float _shopPrice;
+        [SerializeField] private float _requiredReputationForBuyInShop;
 
         #endregion
 
@@ -31,7 +32,8 @@ namespace BeastHunter
         public ItemType ItemType => _itemType;
         public Mesh MeshOfObject => _meshOfObject;
         public Sprite Icon => _icon;
-        public float RequiredReputationForSale => _requiredReputationForSaleInStore;
+        public float ShopPrice => _shopPrice;
+        public float RequiredReputationForSaleInShop => _requiredReputationForBuyInShop;
 
         #endregion
     }

@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: item_2
   m_EditorClassIdentifier: 
   ItemStruct:
-    _name: 
-    _description: 
+    _name: "\u0428\u0442\u0443\u043A\u0435\u043D\u0446\u0438\u044F"
+    _description: "\u041D\u0435\u043F\u043E\u043D\u044F\u0442\u043D\u0430\u044F \u0448\u0442\u0443\u043A\u0430"
     _slotSize: 0
     _itemType: 0
     _meshOfObject: {fileID: 0}
     _icon: {fileID: 21300000, guid: e8c7627430dc8f54dbc3772ebad1e526, type: 3}
-    _requiredReputationForSaleInStore: 0
+    _shopPrice: 55
+    _requiredReputationForBuyInShop: 0

@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: chest
   m_EditorClassIdentifier: 
   ItemStruct:
-    _name: 
-    _description: 
+    _name: "\u0421\u0443\u043D\u0434\u0443\u043A"
+    _description: "\u0421\u043E\u0434\u0435\u0440\u0436\u0438\u043C\u043E\u0435 \u043D\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u043E"
     _slotSize: 0
     _itemType: 0
     _meshOfObject: {fileID: 0}
     _icon: {fileID: 21300000, guid: eb30ddda20b252d43bf48e22a42dccf8, type: 3}
-    _requiredReputationForSaleInStore: 0
+    _shopPrice: 3000
+    _requiredReputationForBuyInShop: 75

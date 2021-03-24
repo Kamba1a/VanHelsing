@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: book
   m_EditorClassIdentifier: 
   ItemStruct:
-    _name: 
-    _description: 
+    _name: "\u041A\u043D\u0438\u0433\u0430"
+    _description: "\u041F\u0440\u043E\u0447\u0442\u0438 \u043C\u0435\u043D\u044F!"
     _slotSize: 0
     _itemType: 0
     _meshOfObject: {fileID: 0}
     _icon: {fileID: 21300000, guid: 58ac4331c120c5740938347bd5ed3611, type: 3}
-    _requiredReputationForSaleInStore: 0
+    _shopPrice: 75
+    _requiredReputationForBuyInShop: 0

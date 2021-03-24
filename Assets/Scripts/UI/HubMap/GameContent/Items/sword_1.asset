@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: sword_1
   m_EditorClassIdentifier: 
   ItemStruct:
-    _name: 
-    _description: 
+    _name: "\u041C\u0435\u0447"
+    _description: "\u041E\u0431\u044B\u0447\u043D\u044B\u0439 \u043C\u0435\u0447"
     _slotSize: 0
     _itemType: 0
     _meshOfObject: {fileID: 0}
     _icon: {fileID: 21300000, guid: fff6f4db7e9ad874d8ba024d5ea7469d, type: 3}
-    _requiredReputationForSaleInStore: 0
+    _shopPrice: 150
+    _requiredReputationForBuyInShop: 75
