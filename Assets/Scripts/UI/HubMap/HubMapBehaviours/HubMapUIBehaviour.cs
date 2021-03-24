@@ -114,7 +114,7 @@ namespace BeastHunter
         [Header("City info panel")]
         [SerializeField] private GameObject _cityInfoPanel;
         [SerializeField] private GameObject _citizenPanel;
-        [SerializeField] private GameObject _citySellingPanel;
+        [SerializeField] private Button _cityShopButton;
         [SerializeField] private Image _cityFraction;
         [SerializeField] private Text _cityName;
         [SerializeField] private Text _cityDescription;
@@ -186,6 +186,7 @@ namespace BeastHunter
             _charactersPanelPreviousButton.onClick.AddListener(() => OnClick_CharactersPanelNavigationButton(-CHARACTERS_PANEL_SCROLLBAR_STEP));
             _closeInventoryButton.onClick.AddListener(OnClick_CloseInventoryButton);
             _perkTreeButton.onClick.AddListener(OnClick_PerkTreeButton);
+            _cityShopButton.onClick.AddListener(OnClick_CityShopButton);
 
             _charactersUIBehaviours = new List<HubMapUICharacterBehaviour>();
             for (int i = 0; i < Data.HubMapData.Characters.Count; i++)
@@ -229,6 +230,7 @@ namespace BeastHunter
             _charactersPanelPreviousButton.onClick.RemoveAllListeners();
             _closeInventoryButton.onClick.RemoveAllListeners();
             _perkTreeButton.onClick.RemoveAllListeners();
+            _cityShopButton.onClick.RemoveAllListeners();
 
             for (int i = 0; i < _charactersUIBehaviours.Count; i++)
             {
@@ -326,6 +328,12 @@ namespace BeastHunter
             _cityInfoPanel.SetActive(true);
         }
 
+        private void OnClick_CityShopButton()
+        {
+            //todo: shop panels
+            Debug.Log("OnClick_CityShopButton");
+        }
+
         private void OnClick_LocationButton(HubMapUILocation location)
         {
             _selectedLocation = location;
@@ -356,6 +364,7 @@ namespace BeastHunter
         private void OnClick_PerkTreeButton()
         {
             //todo: show perk tree UI
+            Debug.Log("OnClick_PerkTreeButton");
         }
 
         private void OnClick_CharacterButton(HubMapUICharacter character)
@@ -588,18 +597,6 @@ namespace BeastHunter
             _inventorySlotsUIBehaviours.Add(slotBehaviour);
         }
 
-        private void InitializeSellingItemUI(BaseItem item, float playerCityReputation)
-        {
-            GameObject itemUI = GameObject.Instantiate(Data.HubMapData.SellingItemUIPrefab);
-            itemUI.transform.SetParent(_citySellingPanel.transform, false);
-            itemUI.transform.localScale = new Vector3(1, 1, 1);
-
-            HubMapUISellingItemBehaviour sellingItemUIBehaviour = itemUI.GetComponentInChildren<HubMapUISellingItemBehaviour>();
-            sellingItemUIBehaviour.FillSellingItemInfo(item, playerCityReputation >= item.ItemStruct.RequiredReputationForSale);
-
-            _rightInfoPanelObjectsForDestroy.Add(itemUI);
-        }
-
         private void InitializeCitizenUI(HubMapUICitizen citizen)
         {
             GameObject citizenUI = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab);
@@ -680,11 +677,6 @@ namespace BeastHunter
             for (int i = 0; i < city.Citizens.Length; i++)
             {
                 InitializeCitizenUI(city.Citizens[i]);
-            }
-
-            for (int i = 0; i < city.SellingItems.Length; i++)
-            {
-                InitializeSellingItemUI(city.SellingItems[i], cityReputation);
             }
         }
 
