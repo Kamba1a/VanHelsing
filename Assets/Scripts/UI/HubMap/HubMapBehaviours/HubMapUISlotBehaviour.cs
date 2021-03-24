@@ -3,13 +3,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Extensions;
-using System.Collections.Generic;
+
 
 namespace BeastHunter
 {
     class HubMapUISlotBehaviour : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
     {
+        #region Constants
+
         private const float DOUBLECLICK_TIME = 0.75f;
+
+        #endregion
+
 
         #region Fields
 
@@ -18,9 +23,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _selectSlotFrame;
 
         private float _lastClickTime;
-        private Vector3 _position;
         private GameObject _draggedObject;
-        Sprite _itemSprite;
 
         #endregion
 
@@ -40,25 +43,15 @@ namespace BeastHunter
 
         #region Methods
 
-        public void SelectFrameSwitcher(bool flag)
-        {
-            _selectSlotFrame.SetActive(flag);
-        }
-
-        public void RemoveAllListeners()
-        {
-            OnClick_SlotButtonHandler = null;
-            OnDoubleClickButtonHandler = null;
-            OnDraggedItemHandler = null;
-            OnDroppedItemHandler = null;
-            OnEndDragItemHandler = null;
-
-        }
-
         public void FillSlotInfo(int slotIndex)
         {
             SlotIndex = slotIndex;
             _slotButton.onClick.AddListener(() => OnClick_SlotButton());
+        }
+
+        public void SelectFrameSwitcher(bool flag)
+        {
+            _selectSlotFrame.SetActive(flag);
         }
 
         public void SetInteractable(bool flag)
@@ -69,6 +62,16 @@ namespace BeastHunter
         public void FillSlot(Sprite sprite)
         {
             SetIcon(sprite);
+        }
+
+        public void RemoveAllListeners()
+        {
+            OnClick_SlotButtonHandler = null;
+            OnDoubleClickButtonHandler = null;
+            OnDraggedItemHandler = null;
+            OnDroppedItemHandler = null;
+            OnEndDragItemHandler = null;
+
         }
 
         private void SetIcon(Sprite sprite)
@@ -93,6 +96,11 @@ namespace BeastHunter
             OnClick_SlotButtonHandler?.Invoke(SlotIndex);
         }
 
+        #endregion
+
+
+        #region IPointerClickHandler
+
         public void OnPointerClick(PointerEventData eventData)
         {
             if (_slotButton.IsInteractable())
@@ -105,13 +113,15 @@ namespace BeastHunter
             }
         }
 
+        #endregion
+
+
+        #region IBeginDragHandler
+
         public void OnBeginDrag(PointerEventData eventData)
         {
             if (_itemImage.sprite != null)
             {
-                _itemSprite = _itemImage.sprite;
-                _position = _itemImage.gameObject.transform.position;
-
                 _draggedObject = Instantiate(_itemImage.gameObject, gameObject.transform.GetMainParent().Find("Canvas"));
 
                 RectTransform draggedObjectRectTransform = _draggedObject.GetComponent<RectTransform>();
@@ -128,6 +138,11 @@ namespace BeastHunter
             }
         }
 
+        #endregion
+
+
+        #region IDragHandler
+
         public void OnDrag(PointerEventData eventData)
         {
             if (_draggedObject != null)
@@ -135,6 +150,11 @@ namespace BeastHunter
                 _draggedObject.transform.position = Input.mousePosition;
             }
         }
+
+        #endregion
+
+
+        #region IEndDragHandler
 
         public void OnEndDrag(PointerEventData eventData)
         {
@@ -144,6 +164,11 @@ namespace BeastHunter
                 OnEndDragItemHandler?.Invoke(SlotIndex);
             }
         }
+
+        #endregion
+
+
+        #region IDropHandler
 
         public void OnDrop(PointerEventData eventData)
         {
