@@ -9,7 +9,7 @@ namespace BeastHunter
     {
         #region PrivateData
 
-        private enum StorageSlotType
+        private enum StorageType
         {
             None = 0,
             Equipment = 1,
@@ -153,12 +153,12 @@ namespace BeastHunter
         [SerializeField] private Button _perkTreeButton;
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
-        private Dictionary<HubMapUICitizen, GameObject> _displayedCurrentCitizensUI;
         private List<HubMapUISlotBehaviour> _equipmentSlotsUIBehaviours;
         private List<HubMapUISlotBehaviour> _inventorySlotsUIBehaviours;
         private List<HubMapUICharacterBehaviour> _charactersUIBehaviours;
+        private Dictionary<HubMapUICitizen, HubMapUICitizenBehaviour> _displayedCurrentCitizensUIBehaviours;
         private List<GameObject> _displayedDialogAnswerButtons;
-        private (int? slotIndex, StorageSlotType slotType) _draggedItemSlot;
+        private (int? slotIndex, StorageType storageType) _draggedItemInfo;
         private HubMapUILocation _selectedLocation;
         private HubMapUIStorage _inventory;
         private SelectedElements _selected;
@@ -255,10 +255,10 @@ namespace BeastHunter
             {
                 _inventory.PutItem(i, Data.HubMapData.StartInventoryItems[i]);
             }
-            FillItemsSlots(_inventory.GetItemsOnly(), StorageSlotType.Inventory);
-            _inventory.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageSlotType.Inventory);
+            FillItemsSlots(_inventory.GetItemsOnly(), StorageType.Inventory);
+            _inventory.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Inventory);
 
-            _displayedCurrentCitizensUI = new Dictionary<HubMapUICitizen, GameObject>();
+            _displayedCurrentCitizensUIBehaviours = new Dictionary<HubMapUICitizen, HubMapUICitizenBehaviour>();
             _rightInfoPanelObjectsForDestroy = new List<GameObject>();
             _displayedDialogAnswerButtons = new List<GameObject>();
 
@@ -361,7 +361,7 @@ namespace BeastHunter
         private void OnClick_CharacterButton(HubMapUICharacter character)
         {
             _selected.Character = character;
-            FillItemsSlots(character.Backpack.GetAll(), StorageSlotType.Equipment);
+            FillItemsSlots(character.Backpack.GetAll(), StorageType.Equipment);
             SetEquipmentSlotsInteractable(true);
         }
 
@@ -464,9 +464,9 @@ namespace BeastHunter
             if (dialogAnswer.IsDialogEnd)
             {
                 _dialogPanel.SetActive(false);
-                foreach (KeyValuePair<HubMapUICitizen, GameObject> kvp in _displayedCurrentCitizensUI)
+                foreach (KeyValuePair<HubMapUICitizen, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
                 {
-                    UpdateCitizenInfo(kvp.Key);
+                    kvp.Value.UpdateInfo(kvp.Key);
                 }
             }
             else
@@ -475,30 +475,30 @@ namespace BeastHunter
             }
         }
 
-        private void OnDragItemFromSlot(int slotIndex, StorageSlotType slotType)
+        private void OnDragItemFromSlot(int slotIndex, StorageType storageType)
         {
-            _draggedItemSlot.slotIndex = slotIndex;
-            _draggedItemSlot.slotType = slotType;
+            _draggedItemInfo.slotIndex = slotIndex;
+            _draggedItemInfo.storageType = storageType;
         }
 
-        private void OnEndDragItem(int slotIndex, StorageSlotType slotType)
+        private void OnEndDragItem(int slotIndex, StorageType storageType)
         {
-            FillSlotUI(slotIndex, GetStorageByType(slotType).GetItemIconBySlot(slotIndex), slotType);
-            _draggedItemSlot.slotIndex = null;
+            FillSlotUI(slotIndex, GetStorageByType(storageType).GetItemIconBySlot(slotIndex), storageType);
+            _draggedItemInfo.slotIndex = null;
         }
 
-        private void OnDropItemToSlot(int dropSlotIndex, StorageSlotType dropSlotType)
+        private void OnDropItemToSlot(int dropSlotIndex, StorageType dropStorageType)
         {
-            if (_draggedItemSlot.slotIndex.HasValue)
+            if (_draggedItemInfo.slotIndex.HasValue)
             {
-                HubMapUIStorage dropItemStorage = GetStorageByType(dropSlotType); ;
-                HubMapUIStorage takeItemStorage = GetStorageByType(_draggedItemSlot.slotType);
+                HubMapUIStorage dropItemStorage = GetStorageByType(dropStorageType); ;
+                HubMapUIStorage takeItemStorage = GetStorageByType(_draggedItemInfo.storageType);
 
-                BaseItem draggedItem = takeItemStorage.TakeItem(_draggedItemSlot.slotIndex.Value);
+                BaseItem draggedItem = takeItemStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
                 BaseItem droppedSlotItem = dropItemStorage.TakeItem(dropSlotIndex);
 
                 dropItemStorage.PutItem(dropSlotIndex, draggedItem);
-                takeItemStorage.PutItem(_draggedItemSlot.slotIndex.Value, droppedSlotItem);
+                takeItemStorage.PutItem(_draggedItemInfo.slotIndex.Value, droppedSlotItem);
             }
         }
 
@@ -534,7 +534,7 @@ namespace BeastHunter
             }
             if (_selected.Character != null)
             {
-                _selected.Character.Backpack.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageSlotType.Equipment);
+                _selected.Character.Backpack.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Equipment);
             }
         }
 
@@ -566,9 +566,9 @@ namespace BeastHunter
             slotBehaviour.FillSlotInfo(slotIndex);
             slotBehaviour.OnClick_SlotButtonHandler = OnClick_EquipmentSlot;
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_EquipmentSlot;
-            slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageSlotType.Equipment);
-            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageSlotType.Equipment);
-            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageSlotType.Equipment);
+            slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageType.Equipment);
+            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.Equipment);
+            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.Equipment);
             _equipmentSlotsUIBehaviours.Add(slotBehaviour);
         }
 
@@ -582,9 +582,9 @@ namespace BeastHunter
             slotBehaviour.FillSlotInfo(slotIndex);
             slotBehaviour.OnClick_SlotButtonHandler = OnClick_InventorySlot;
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_InventorySlot;
-            slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageSlotType.Inventory);
-            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageSlotType.Inventory);
-            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageSlotType.Inventory);
+            slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageType.Inventory);
+            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.Inventory);
+            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.Inventory);
             _inventorySlotsUIBehaviours.Add(slotBehaviour);
         }
 
@@ -612,7 +612,7 @@ namespace BeastHunter
             Data.HubMapData.QuestService.OnQuestIsActiveHandler += () => citizenUIBehaviour.UpdateInfo(citizen);
 
             _rightInfoPanelObjectsForDestroy.Add(citizenUI);
-            _displayedCurrentCitizensUI.Add(citizen, citizenUI);
+            _displayedCurrentCitizensUIBehaviours.Add(citizen, citizenUIBehaviour);
         }
 
         private void InitializeDialogAnswerButton(HubMapUICitizen citizen, HubMapUIDialogAnswer answer)
@@ -631,14 +631,14 @@ namespace BeastHunter
 
         #region FillUIElementsByInfo
 
-        private void FillSlotUI(int slotIndex, Sprite sprite, StorageSlotType slotType)
+        private void FillSlotUI(int slotIndex, Sprite sprite, StorageType storageType)
         {
-            switch (slotType)
+            switch (storageType)
             {
-                case StorageSlotType.Equipment:
+                case StorageType.Equipment:
                     _equipmentSlotsUIBehaviours[slotIndex].FillSlot(sprite);
                     break;
-                case StorageSlotType.Inventory:
+                case StorageType.Inventory:
                     _inventorySlotsUIBehaviours[slotIndex].FillSlot(sprite);
                     break;
                 default:
@@ -647,21 +647,21 @@ namespace BeastHunter
             }
         }
 
-         private void FillItemsSlots(IEnumerable<BaseItem> items, StorageSlotType slotType)
+         private void FillItemsSlots(IEnumerable<BaseItem> items, StorageType storageType)
         {
             int i = 0;
             foreach (BaseItem item in items)
             {
                 if (item != null)
                 {
-                    FillSlotUI(i, item.ItemStruct.Icon, slotType);
+                    FillSlotUI(i, item.ItemStruct.Icon, storageType);
                 }
                 else
                 {
-                    FillSlotUI(i, null, slotType);
+                    FillSlotUI(i, null, storageType);
                 }
                 i++;
-                if (i >= GetStorageByType(slotType).GetSlotsCount())
+                if (i >= GetStorageByType(storageType).GetSlotsCount())
                 {
                     break;
                 }
@@ -744,10 +744,10 @@ namespace BeastHunter
 
         private void ClearRightInfoPanel()
         {
-            foreach (KeyValuePair<HubMapUICitizen,GameObject> kvp in _displayedCurrentCitizensUI)
+            foreach (KeyValuePair<HubMapUICitizen, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
             {
                 Data.HubMapData.QuestService.OnQuestIsActiveHandler -=
-                    () => kvp.Value.GetComponentInChildren<HubMapUICitizenBehaviour>().UpdateInfo(kvp.Key);
+                    () => kvp.Value.UpdateInfo(kvp.Key);
             }
 
             for (int i=0; i< _rightInfoPanelObjectsForDestroy.Count; i++)
@@ -756,7 +756,7 @@ namespace BeastHunter
             }
 
             _rightInfoPanelObjectsForDestroy.Clear();
-            _displayedCurrentCitizensUI.Clear();
+            _displayedCurrentCitizensUIBehaviours.Clear();
         }
 
         private void SetEquipmentSlotsInteractable(bool flag)
@@ -771,15 +771,15 @@ namespace BeastHunter
             }
         }
 
-        private HubMapUIStorage GetStorageByType(StorageSlotType slotType)
+        private HubMapUIStorage GetStorageByType(StorageType storageType)
         {
             HubMapUIStorage storage = null;
-            switch (slotType)
+            switch (storageType)
             {
-                case StorageSlotType.Equipment:
+                case StorageType.Equipment:
                     storage = _selected.Character.Backpack;
                     break;
-                case StorageSlotType.Inventory:
+                case StorageType.Inventory:
                     storage = _inventory;
                     break;
                 default:
@@ -787,11 +787,6 @@ namespace BeastHunter
                     break;
             }
             return storage;
-        }
-
-        private void UpdateCitizenInfo(HubMapUICitizen citizen)
-        {
-            _displayedCurrentCitizensUI[citizen].GetComponentInChildren<HubMapUICitizenBehaviour>().UpdateInfo(citizen);
         }
 
         private void LocationLoad()
