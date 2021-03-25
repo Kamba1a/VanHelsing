@@ -8,6 +8,7 @@ namespace BeastHunter
     {
         #region Fields
 
+        private HubMapUIPlayerModel _player;
         private List<HubMapUIQuestModel> _notStartedQuests;
         private List<HubMapUIQuestModel> _activeQuests;
         private List<HubMapUIQuestModel> _completedQuests;
@@ -21,6 +22,8 @@ namespace BeastHunter
 
         public HubMapUIQuestService(IEnumerable<HubMapUIQuestData> quests)
         {
+            _player = Data.HubMapData.Player;
+
             _notStartedQuests = new List<HubMapUIQuestModel>();
             _activeQuests = new List<HubMapUIQuestModel>();
             _completedQuests = new List<HubMapUIQuestModel>();
@@ -41,7 +44,7 @@ namespace BeastHunter
                 }
             }
 
-            Data.HubMapData.ReputationController.OnChangeReputationHandler += OnChangeCityReputation;
+            _player.OnChangeReputationHandler += OnChangeCityReputation;
         }
 
         #endregion
@@ -155,7 +158,7 @@ namespace BeastHunter
 
         private bool CheckQuestForRequiredConditions(HubMapUIQuestModel quest)
         {
-            bool checkReputationRequirement = quest.Data.RequiredReputation.Reputation <= Data.HubMapData.ReputationController.GetReputation(quest.Data.RequiredReputation.City);
+            bool checkReputationRequirement = quest.Data.RequiredReputation.Reputation <= _player.GetCityReputation(quest.Data.RequiredReputation.City);
             bool checkQuestRequirement = quest.Data.RequiredQuest == null
                     || _completedQuests.Find(q => q.Data == q.Data.RequiredQuest) != null;
 

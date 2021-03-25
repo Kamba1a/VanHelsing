@@ -274,91 +274,64 @@ namespace BeastHunter
             _closeInventoryButton.onClick.RemoveAllListeners();
             _perkTreeButton.onClick.RemoveAllListeners();
             _shopButton.onClick.RemoveAllListeners();
-
-            for (int i = 0; i < _charactersUIBehaviours.Count; i++)
-            {
-                _charactersUIBehaviours[i].OnClick_CharacterButtonHandler = null;
-            }
-
-            for (int i = 0; i < _equipmentSlotsUIBehaviours.Count; i++)
-            {
-                _equipmentSlotsUIBehaviours[i].RemoveAllListeners();
-            }
-
-            for (int i = 0; i < _inventorySlotsUIBehaviours.Count; i++)
-            {
-                _inventorySlotsUIBehaviours[i].RemoveAllListeners();
-            }
-
-            for (int i = 0; i < _buyBackSlotsUIBehaviours.Count; i++)
-            {
-                _buyBackSlotsUIBehaviours[i].RemoveAllListeners();
-            }
-
-            for (int i = 0; i < _shopSlotsUIBehaviours.Count; i++)
-            {
-                _shopSlotsUIBehaviours[i].RemoveAllListeners();
-            }
-
-            _selected.RemoveAllListeners();
         }
 
         private void Awake()
         {
             _player = Data.HubMapData.Player;
-
             _inventory = _player.Inventory;
-            FillItemsSlots(_inventory.GetItemsOnly(), StorageType.Inventory);
-            _inventory.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Inventory);
+
+            _rightInfoPanelObjectsForDestroy = new List<GameObject>();
+            _displayedCurrentCitizensUIBehaviours = new Dictionary<HubMapUICitizen, HubMapUICitizenBehaviour>();
+            _displayedDialogAnswerButtons = new List<GameObject>();
+
+            _charactersUIBehaviours = new List<HubMapUICharacterBehaviour>();
+            _equipmentSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
+            _inventorySlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
+            _buyBackSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
+            _shopSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
 
             _buyBackStorage = new HubMapUIStorage(Data.HubMapData.BuyBackStorageSlotsAmount);
+            _selected = new SelectedElements();
+        }
+
+        private void Start()
+        {
+            for (int i = 0; i < _player.Characters.Count; i++)
+            {
+                InitializeCharacterUI(_player.Characters[i]);
+            }
+
+            for (int i = 0; i < _player.CharactersEquipmentSlotAmount; i++)
+            {
+                InitializeEquipmentSlotUI(i);
+            }
+
+            for (int i = 0; i < _inventory.GetSlotsCount(); i++)
+            {
+                InitializeInventorySlotUI(i);
+            }
+
+            for (int i = 0; i < _buyBackStorage.GetSlotsCount(); i++)
+            {
+                InitializeBuyBackSlotUI(i);
+            }
+
+            FillItemsSlots(_inventory.GetItemsOnly(), StorageType.Inventory);
+
+            _inventory.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Inventory);
             _buyBackStorage.OnChangeItemHandler = (slotIndex, sprite) =>
             {
                 FillSlotUI(slotIndex, sprite, StorageType.BuyBackStorage);
                 _buyBackSlotsUIBehaviours[slotIndex].SetInteractable(sprite != null);
             };
 
-            _displayedCurrentCitizensUIBehaviours = new Dictionary<HubMapUICitizen, HubMapUICitizenBehaviour>();
-            _rightInfoPanelObjectsForDestroy = new List<GameObject>();
-            _displayedDialogAnswerButtons = new List<GameObject>();
-
-            _charactersUIBehaviours = new List<HubMapUICharacterBehaviour>();
-            for (int i = 0; i < _player.Characters.Count; i++)
-            {
-                InitializeCharacterUI(_player.Characters[i]);
-            }
-
-            _equipmentSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            for (int i = 0; i < Data.HubMapData.CharactersEquipmentSlotsAmount; i++)
-            {
-                InitializeEquipmentSlotUI(i);
-            }
-
-            _inventorySlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            for (int i = 0; i < _inventory.GetSlotsCount(); i++)
-            {
-                InitializeInventorySlotUI(i);
-            }
-
-            _buyBackSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            for (int i = 0; i < Data.HubMapData.BuyBackStorageSlotsAmount; i++)
-            {
-                InitializeBuyBackSlotUI(i);
-            }
-
-            _shopSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            //todo: initialize shop slots
-
-            _selected = new SelectedElements();
             _selected.OnChanged_InventorySlotIndex = OnChangedSelectedInventorySlot;
             _selected.OnChanged_EquipmentSlotIndex = OnChangedSelectedEquipmentSlot;
             _selected.OnChanged_BuyBackSlotIndex = OnChangedSelectedBuyBackSlot;
             _selected.OnChanged_ShopSlotIndex = OnChangedSelectedShopSlot;
             _selected.OnChanged_Character = OnChangedSelectedCharacter;
-        }
 
-        private void Start()
-        {
             _mainPanel.SetActive(Data.HubMapData.MapOnStartEnabled);
             _infoPanel.SetActive(false);
             _cityInfoPanel.SetActive(false);
@@ -430,7 +403,7 @@ namespace BeastHunter
         private void OnClick_OpenTradePanelButton()
         {
             SetScrollViewParentForInventoryItemsPanel(_shopInventoryScrollView);
-            _shopCityReputation.text = Data.HubMapData.ReputationController.GetReputation(_selectedCity).ToString();
+            _shopCityReputation.text = _player.GetCityReputation(_selectedCity).ToString();
             _tradePanel.SetActive(true);
         }
 
@@ -490,12 +463,12 @@ namespace BeastHunter
             _selected.Character = character;
         }
 
-        private void OnClick_InventorySlot(int slotIndex)
+        private void OnPointerDown_InventorySlot(int slotIndex)
         {
             _selected.InventorySlotIndex = slotIndex;
         }
 
-        private void OnClick_EquipmentSlot(int slotIndex)
+        private void OnPointerDown_EquipmentSlot(int slotIndex)
         {
             _selected.EquipmentSlotIndex = slotIndex;
 
@@ -506,7 +479,7 @@ namespace BeastHunter
             }
         }
 
-        private void OnClick_BuyBackSlot(int slotIndex)
+        private void OnPointerDown_BuyBackSlot(int slotIndex)
         {
             _selected.BuyBackSlotIndex = slotIndex;
         }
@@ -660,6 +633,30 @@ namespace BeastHunter
 
                 dropItemStorage.PutItem(dropSlotIndex, draggedItem);
                 takeItemStorage.PutItem(_draggedItemInfo.slotIndex.Value, droppedSlotItem);
+
+
+                switch (dropStorageType)
+                {
+                    case StorageType.Equipment:
+                        _selected.EquipmentSlotIndex = dropSlotIndex;
+                        break;
+
+                    case StorageType.Inventory:
+                        _selected.InventorySlotIndex = dropSlotIndex;
+                        break;
+
+                    case StorageType.BuyBackStorage:
+                        _selected.BuyBackSlotIndex = dropSlotIndex;
+                        break;
+
+                    case StorageType.Shop:
+                        _selected.ShopSlotIndex = dropSlotIndex;
+                        break;
+
+                    default:
+                        Debug.LogError("Incorrect storage type");
+                        break;
+                }
             }
         }
 
@@ -767,71 +764,66 @@ namespace BeastHunter
 
         private void InitializeCharacterUI(HubMapUICharacterModel character)
         {
-            GameObject characterUI = GameObject.Instantiate(Data.HubMapData.CharacterUIPrefab);
-            characterUI.transform.SetParent(_charactersPanel.transform, false);
-            characterUI.transform.localScale = new Vector3(1, 1, 1);
+            GameObject characterUI = InstantiateUIObject(Data.HubMapData.CharacterUIPrefab, _charactersPanel);
 
             HubMapUICharacterBehaviour characterUIBehaviour = characterUI.GetComponentInChildren<HubMapUICharacterBehaviour>();
             characterUIBehaviour.FillCharacterInfo(character);
             characterUIBehaviour.OnClick_CharacterButtonHandler = OnClick_CharacterButton;
+
             _charactersUIBehaviours.Add(characterUIBehaviour);
         }
 
         private void InitializeEquipmentSlotUI(int slotIndex)
         {
-            GameObject equipSlotUI = GameObject.Instantiate(Data.HubMapData.EquipmentSlotUIPrefab);
-            equipSlotUI.transform.SetParent(_equipmentPanel.transform, false);
-            equipSlotUI.transform.localScale = new Vector3(1, 1, 1);
+            GameObject equipSlotUI = InstantiateUIObject(Data.HubMapData.EquipmentSlotUIPrefab, _equipmentPanel);
 
             HubMapUISlotBehaviour slotBehaviour = equipSlotUI.GetComponent<HubMapUISlotBehaviour>();
-            slotBehaviour.FillSlotInfo(slotIndex);
+            slotBehaviour.FillSlotInfo(slotIndex, true);
             slotBehaviour.SetInteractable(false);
-            slotBehaviour.OnClick_SlotButtonHandler = OnClick_EquipmentSlot;
+            slotBehaviour.OnPointerDownHandler = OnPointerDown_EquipmentSlot;
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_EquipmentSlot;
             slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageType.Equipment);
             slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.Equipment);
             slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.Equipment);
+
             _equipmentSlotsUIBehaviours.Add(slotBehaviour);
         }
 
         private void InitializeInventorySlotUI(int slotIndex)
         {
-            GameObject inventorySlotUI = GameObject.Instantiate(Data.HubMapData.InventorySlotUIPrefab);
-            inventorySlotUI.transform.SetParent(_inventoryItemsPanel.transform, false);
-            inventorySlotUI.transform.localScale = new Vector3(1, 1, 1);
+            GameObject inventorySlotUI = InstantiateUIObject(Data.HubMapData.InventorySlotUIPrefab, _inventoryItemsPanel);
 
             HubMapUISlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<HubMapUISlotBehaviour>();
-            slotBehaviour.FillSlotInfo(slotIndex);
-            slotBehaviour.OnClick_SlotButtonHandler = OnClick_InventorySlot;
+            slotBehaviour.FillSlotInfo(slotIndex, true);
+            slotBehaviour.OnPointerDownHandler = OnPointerDown_InventorySlot;
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_InventorySlot;
             slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageType.Inventory);
             slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.Inventory);
             slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.Inventory);
+
             _inventorySlotsUIBehaviours.Add(slotBehaviour);
         }
 
         private void InitializeBuyBackSlotUI(int slotIndex)
         {
-            GameObject buyBackSlotUI = GameObject.Instantiate(Data.HubMapData.ShopSlotUIPrefab);
-            buyBackSlotUI.transform.SetParent(_buyBackItemsPanel.transform, false);
-            buyBackSlotUI.transform.localScale = new Vector3(1, 1, 1);
+            GameObject buyBackSlotUI = InstantiateUIObject(Data.HubMapData.ShopSlotUIPrefab, _buyBackItemsPanel);
 
             HubMapUISlotBehaviour slotBehaviour = buyBackSlotUI.GetComponent<HubMapUISlotBehaviour>();
-            slotBehaviour.FillSlotInfo(slotIndex);
+            slotBehaviour.FillSlotInfo(slotIndex, false);
             slotBehaviour.SetInteractable(false);
-            slotBehaviour.OnClick_SlotButtonHandler = OnClick_BuyBackSlot;
+            slotBehaviour.OnPointerDownHandler = OnPointerDown_BuyBackSlot;
+
             _buyBackSlotsUIBehaviours.Add(slotBehaviour);
         }
 
         private void InitializeCitizenUI(HubMapUICitizen citizen)
         {
-            GameObject citizenUI = GameObject.Instantiate(Data.HubMapData.CitizenUIPrefab);
-            citizenUI.transform.SetParent(_citizenPanel.transform, false);
-            citizenUI.transform.localScale = new Vector3(1, 1, 1);
+            GameObject citizenUI = InstantiateUIObject(Data.HubMapData.CitizenUIPrefab, _citizenPanel);
 
             HubMapUICitizenBehaviour citizenUIBehaviour = citizenUI.GetComponentInChildren<HubMapUICitizenBehaviour>();
             citizenUIBehaviour.FillCitizenInfo(citizen);
             citizenUIBehaviour.OnClick_CitizenButtonHandler = OnClick_CitizenButton;
+
             Data.HubMapData.QuestService.OnQuestIsActiveHandler += () => citizenUIBehaviour.UpdateInfo(citizen);
 
             _rightInfoPanelObjectsForDestroy.Add(citizenUI);
@@ -840,9 +832,7 @@ namespace BeastHunter
 
         private void InitializeDialogAnswerButton(HubMapUICitizen citizen, HubMapUIDialogAnswer answer)
         {
-            GameObject answerButton = GameObject.Instantiate(Data.HubMapData.AnswerButtonUIPrefab);
-            answerButton.transform.SetParent(_answerButtonsPanel.transform, false);
-            answerButton.transform.localScale = new Vector3(1, 1, 1);
+            GameObject answerButton = InstantiateUIObject(Data.HubMapData.AnswerButtonUIPrefab, _answerButtonsPanel);
             answerButton.GetComponentInChildren<Text>().text = answer.Text;
 
             if (answer.IsDialogEnd)
@@ -912,7 +902,7 @@ namespace BeastHunter
             _cityName.text = city.Name;
             _cityDescription.text = city.Description;
 
-            float cityReputation = Data.HubMapData.ReputationController.GetReputation(city);
+            float cityReputation = _player.GetCityReputation(city);
             _cityReputation.text = cityReputation.ToString();
 
             for (int i = 0; i < city.Citizens.Length; i++)
@@ -929,19 +919,15 @@ namespace BeastHunter
 
             for (int i = 0; i < location.Dwellers.Length; i++)
             {
-                GameObject dwellerUI = GameObject.Instantiate(Data.HubMapData.LocationTextUIPrefab);
+                GameObject dwellerUI = InstantiateUIObject(Data.HubMapData.LocationTextUIPrefab, _dwellersPanel);
                 _rightInfoPanelObjectsForDestroy.Add(dwellerUI);
-                dwellerUI.transform.SetParent(_dwellersPanel.transform, false);
-                dwellerUI.transform.localScale = new Vector3(1, 1, 1);
                 dwellerUI.GetComponentInChildren<Text>().text = location.Dwellers[i].Name;
             }
 
             for (int i = 0; i < location.Ingredients.Length; i++)
             {
-                GameObject ingredientUI = GameObject.Instantiate(Data.HubMapData.LocationTextUIPrefab);
+                GameObject ingredientUI = InstantiateUIObject(Data.HubMapData.LocationTextUIPrefab, _ingredientsPanel);
                 _rightInfoPanelObjectsForDestroy.Add(ingredientUI);
-                ingredientUI.transform.SetParent(_ingredientsPanel.transform, false);
-                ingredientUI.transform.localScale = new Vector3(1, 1, 1);
                 ingredientUI.GetComponentInChildren<Text>().text = location.Ingredients[i].Name;
             }
         }
@@ -1032,6 +1018,14 @@ namespace BeastHunter
         {
             _inventoryItemsPanel.transform.SetParent(parentPanel.transform.Find("Viewport"), false);
             parentPanel.GetComponent<ScrollRect>().content = _inventoryItemsPanel.GetComponent<RectTransform>();
+        }
+
+        private GameObject InstantiateUIObject(GameObject prefab, GameObject parent)
+        {
+            GameObject objectUI = GameObject.Instantiate(prefab);
+            objectUI.transform.SetParent(parent.transform, false);
+            objectUI.transform.localScale = new Vector3(1, 1, 1);
+            return objectUI;
         }
 
         private void LocationLoad()

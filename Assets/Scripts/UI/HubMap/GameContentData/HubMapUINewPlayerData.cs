@@ -2,17 +2,17 @@
 
 namespace BeastHunter
 {
-    [CreateAssetMenu(fileName = "HubMapData", menuName = "CreateData/HubMapUINewPlayerData", order = 0)]
+    [CreateAssetMenu(fileName = "HubMapUINewPlayerData", menuName = "CreateData/HubMapUIData/HubMapUINewPlayerData", order = 0)]
     public class HubMapUINewPlayerData: ScriptableObject
     {
         #region Fields
 
-        private int _goldAmount;
-        private int _inventorySlotsAmount;
-        private BaseItem[] _inventoryItems;
-        private HubMapUICityReputation[] _citiesReputation;
-        private HubMapUICharacterData[] _characters;
-        private int _charactersInventorySlotAmount;
+        [SerializeField] private int _goldAmount;
+        [SerializeField] private int _inventorySlotsAmount;
+        [SerializeField] private BaseItem[] _inventoryItems;
+        [SerializeField] private HubMapUICityReputation[] _citiesReputation;
+        [SerializeField] private HubMapUICharacterData[] _characters;
+        [SerializeField] private int _charactersInventorySlotAmount;
 
         #endregion
 

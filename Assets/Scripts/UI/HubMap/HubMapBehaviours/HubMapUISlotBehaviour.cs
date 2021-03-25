@@ -7,7 +7,7 @@ using Extensions;
 
 namespace BeastHunter
 {
-    class HubMapUISlotBehaviour : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+    class HubMapUISlotBehaviour : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerDownHandler
     {
         #region Constants
 
@@ -31,21 +31,24 @@ namespace BeastHunter
         #region Properties
 
         public Action<int> OnClick_SlotButtonHandler { get; set; }
+        public Action<int> OnPointerDownHandler { get; set; }
         public Action<int> OnDoubleClickButtonHandler { get; set; }
         public Action<int> OnDraggedItemHandler { get; set; }
         public Action<int> OnEndDragItemHandler { get; set; }
         public Action<int> OnDroppedItemHandler { get; set; }
 
         public int SlotIndex { get; private set; }
+        public bool IsDragAndDropEnabled { get; set; }
 
         #endregion
 
 
         #region Methods
 
-        public void FillSlotInfo(int slotIndex)
+        public void FillSlotInfo(int slotIndex, bool isDragAndDropEnabled)
         {
             SlotIndex = slotIndex;
+            IsDragAndDropEnabled = isDragAndDropEnabled;
             _slotButton.onClick.AddListener(() => OnClick_SlotButton());
         }
 
@@ -67,6 +70,7 @@ namespace BeastHunter
         public void RemoveAllListeners()
         {
             OnClick_SlotButtonHandler = null;
+            OnPointerDownHandler = null;
             OnDoubleClickButtonHandler = null;
             OnDraggedItemHandler = null;
             OnDroppedItemHandler = null;
@@ -93,7 +97,10 @@ namespace BeastHunter
 
         private void OnClick_SlotButton()
         {
-            OnClick_SlotButtonHandler?.Invoke(SlotIndex);
+            if (_slotButton.interactable)
+            {
+                OnClick_SlotButtonHandler?.Invoke(SlotIndex);
+            }
         }
 
         #endregion
@@ -120,21 +127,24 @@ namespace BeastHunter
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (_itemImage.sprite != null)
+            if (IsDragAndDropEnabled)
             {
-                _draggedObject = Instantiate(_itemImage.gameObject, gameObject.transform.GetMainParent().Find("Canvas"));
+                if (_itemImage.sprite != null)
+                {
+                    _draggedObject = Instantiate(_itemImage.gameObject, gameObject.transform.GetMainParent().Find("Canvas"));
 
-                RectTransform draggedObjectRectTransform = _draggedObject.GetComponent<RectTransform>();
-                draggedObjectRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-                draggedObjectRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-                draggedObjectRectTransform.pivot = new Vector2(0.5f, 0.5f);
+                    RectTransform draggedObjectRectTransform = _draggedObject.GetComponent<RectTransform>();
+                    draggedObjectRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+                    draggedObjectRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+                    draggedObjectRectTransform.pivot = new Vector2(0.5f, 0.5f);
 
-                Rect itemImageRect = _itemImage.gameObject.GetComponent<RectTransform>().rect;
-                draggedObjectRectTransform.sizeDelta = new Vector2(itemImageRect.width, itemImageRect.height);
+                    Rect itemImageRect = _itemImage.gameObject.GetComponent<RectTransform>().rect;
+                    draggedObjectRectTransform.sizeDelta = new Vector2(itemImageRect.width, itemImageRect.height);
 
-                FillSlot(null);
+                    FillSlot(null);
 
-                OnDraggedItemHandler?.Invoke(SlotIndex);
+                    OnDraggedItemHandler?.Invoke(SlotIndex);
+                }
             }
         }
 
@@ -172,7 +182,23 @@ namespace BeastHunter
 
         public void OnDrop(PointerEventData eventData)
         {
-            OnDroppedItemHandler?.Invoke(SlotIndex);
+            if (IsDragAndDropEnabled)
+            {
+                OnDroppedItemHandler?.Invoke(SlotIndex);
+            }
+        }
+
+        #endregion
+
+
+        #region IPointerDownHandler
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (_slotButton.interactable)
+            {
+                OnPointerDownHandler?.Invoke(SlotIndex);
+            }
         }
 
         #endregion

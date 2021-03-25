@@ -227,3 +227,4 @@ MonoBehaviour:
       _nextDialogNodeId: 13
       _isProgressQuest: 0
       _progressQuest: {fileID: 0}
+  _newPlayerData: {fileID: 11400000, guid: 6dc1beb443f3bb24db85b44c8bd1d503, type: 2}

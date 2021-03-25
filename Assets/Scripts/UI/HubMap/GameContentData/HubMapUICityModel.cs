@@ -10,7 +10,7 @@ namespace BeastHunter
         public HubMapUIFractionData Fraction { get; private set; } 
         public int PlayerReputation { get; set; }
         public List<HubMapUICitizen> Citizens { get; private set; }
-        public List <BaseItem> ShopItemsPool { get; private set; }
+        public List<BaseItem> ShopItemsPool { get; private set; }
         public List<BaseItem> ShopItems { get; private set; }
         public List<BaseItem> BuyBackItemsStorage { get; private set; }
 

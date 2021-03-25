@@ -27,16 +27,14 @@ namespace BeastHunter
         [SerializeField] private HubMapUILocation _location_3;
         [SerializeField] private HubMapUILocation _location_4;
 
-        [Header("Content for UI")]
-        [SerializeField] private List<HubMapUICharacterData> _characters;
-        [SerializeField] private int _charactersEquipmentSlotsAmount;
-        [SerializeField] private int _inventorySlotsAmount;
+        [Header("Game content for UI")]
+        [SerializeField] private HubMapUINewPlayerData _newPlayerData;
         [SerializeField] private int _buyBackStorageSlotsAmount;
         [SerializeField] private int _shopSlotsAmount;
-        [SerializeField] private BaseItem[] _startInventoryItems;
-        [SerializeField] HubMapUICityReputation[] _startCitiesReputation;
         [SerializeField] private List<HubMapUIQuestData> _quests;
         [SerializeField, ContextMenuItem("Reset ids", "DialogListResetIds")] private List<HubMapUIDialogNode> _dialogs;
+
+        private HubMapUIPlayerModel _player;
 
         #if UNITY_EDITOR
         private int _dialogsListCount;
@@ -64,18 +62,25 @@ namespace BeastHunter
         public HubMapUILocation Location_3 => _location_3;
         public HubMapUILocation Location_4 => _location_4;
 
-        //public List<HubMapUICharacterData> Characters => _characters;
-        public int CharactersEquipmentSlotsAmount => _charactersEquipmentSlotsAmount;
         public int BuyBackStorageSlotsAmount => _buyBackStorageSlotsAmount;
         public List<HubMapUIDialogNode> Dialogs => _dialogs;
-
         public HubMapUIDialogsController DialogsController { get; private set; }
         public HubMapUIQuestService QuestService { get; private set; }
-        public HubMapUIReputationController ReputationController { get; private set; }
-
-
-        [SerializeField] private HubMapUINewPlayerData _newPlayerData;
-        public HubMapUIPlayerModel Player { get; private set; }
+        public HubMapUIPlayerModel Player 
+        {
+            get
+            {
+                if (_player == null)
+                {
+                    _player = new HubMapUIPlayerModel(_newPlayerData);
+                }
+                return _player;
+            }
+            private set
+            {
+                _player = value;
+            }
+        }
 
         #endregion
 
@@ -84,10 +89,7 @@ namespace BeastHunter
 
         private void OnEnable()
         {
-            Player = new HubMapUIPlayerModel(_newPlayerData);
-
             DialogsController = new HubMapUIDialogsController();
-            ReputationController = new HubMapUIReputationController(_startCitiesReputation);
             QuestService = new HubMapUIQuestService(_quests);
 
             #if UNITY_EDITOR
@@ -139,13 +141,13 @@ namespace BeastHunter
             return ++_nextDialogsListId;
         }
 
-        private void DialogListResetIds()
+        private void DialogListResetIds() //ContextMenuItem
         {
             for (int i = 0; i < _dialogs.Count; i++) _dialogs[i].SetId(i);
             _nextDialogsListId = _dialogs.Count;
         }
         #endif
 
-            #endregion
+        #endregion
     }
 }

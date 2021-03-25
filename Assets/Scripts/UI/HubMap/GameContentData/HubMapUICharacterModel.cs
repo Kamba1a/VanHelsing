@@ -7,7 +7,7 @@ namespace BeastHunter
         public string Name { get; set; }
         public Sprite Portrait { get; private set; }
         public HubMapUIStorage Backpack { get; private set; }
-        public HubMapUICharacterBehaviour HubMapUIBehaviour { get; set; }
+        //public HubMapUICharacterBehaviour HubMapUIBehaviour { get; private set; }
 
 
         public HubMapUICharacterModel(HubMapUICharacterData data, int backpackSize)
@@ -21,5 +21,11 @@ namespace BeastHunter
                 Backpack.PutItem(i, data.StartItems[i]);
             }
         }
+
+        //public void HubMapUIBehaviourInitialize(GameObject UIGameObject)
+        //{
+        //    HubMapUIBehaviour = UIGameObject.GetComponentInChildren<HubMapUICharacterBehaviour>();
+        //    HubMapUIBehaviour.FillCharacterInfo(this);
+        //}
     }
 }
