@@ -23,17 +23,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
   - {fileID: 11400000, guid: 05f17ea7ba468624c9cdaa41bc7714ea, type: 2}
   - {fileID: 11400000, guid: 17a1729913f8bc2449a4c5893db22200, type: 2}
-  _playerReputation: 50
-  _sellingItems:
-  - {fileID: 11400000, guid: b5ebb6cfceec1f447b854382d3f33d9f, type: 2}
+  _shopItemsPool:
   - {fileID: 11400000, guid: bcf86c51ad05c2146a85fb9d5b5469fe, type: 2}
-  - {fileID: 11400000, guid: 8682e87798a2cc54db3cb20ac3b3e13d, type: 2}
+  - {fileID: 11400000, guid: b5ebb6cfceec1f447b854382d3f33d9f, type: 2}
   - {fileID: 11400000, guid: a88050e6ffe574545a743ba522bf7661, type: 2}
   - {fileID: 11400000, guid: 09e14489a9a680e4db2c7bf0d6d94254, type: 2}
+  - {fileID: 11400000, guid: 1b9e928e0e165224fb2ba93bbd1cbb56, type: 2}
   - {fileID: 11400000, guid: f97def50cf61b184394788bde1c1879a, type: 2}
-  - {fileID: 11400000, guid: f15a4cf58e631ea46a185eb1f2594fd7, type: 2}
   - {fileID: 11400000, guid: 0bb8ff4f15e4c16428279f49ca2baec2, type: 2}
   - {fileID: 11400000, guid: 7293ce42d6a7b2447894d96df81d0b04, type: 2}
-  - {fileID: 11400000, guid: 1b9e928e0e165224fb2ba93bbd1cbb56, type: 2}
   - {fileID: 11400000, guid: f1cd6127f93ef3747a48bacc406c5a31, type: 2}
   - {fileID: 11400000, guid: 92f5ea27fd6261a47ad984a545947ad3, type: 2}
+  - {fileID: 11400000, guid: f15a4cf58e631ea46a185eb1f2594fd7, type: 2}
+  - {fileID: 11400000, guid: 8682e87798a2cc54db3cb20ac3b3e13d, type: 2}

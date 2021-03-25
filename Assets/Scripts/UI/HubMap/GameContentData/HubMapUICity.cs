@@ -11,7 +11,7 @@ namespace BeastHunter
         [SerializeField][TextArea(3,10)] private string _description;
         [SerializeField] private Sprite _fraction;
         [SerializeField] private HubMapUICitizen[] _citizens;
-        [SerializeField] private BaseItem[] _sellingItems;
+        [SerializeField] private BaseItem[] _shopItemsPool;
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace BeastHunter
         public string Description => _description;
         public Sprite Fraction => _fraction;
         public HubMapUICitizen[] Citizens => _citizens;
-        public BaseItem[] SellingItems => _sellingItems;
+        public BaseItem[] ShopItemsPool => _shopItemsPool;
 
         #endregion
     }

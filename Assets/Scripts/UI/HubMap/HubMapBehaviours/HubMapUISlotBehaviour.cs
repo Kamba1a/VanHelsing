@@ -20,7 +20,7 @@ namespace BeastHunter
 
         [SerializeField] private Image _itemImage;
         [SerializeField] private Button _slotButton;
-        [SerializeField] private GameObject _selectSlotFrame;
+        [SerializeField] private Image _selectSlotFrame;
 
         private float _lastClickTime;
         private GameObject _draggedObject;
@@ -51,7 +51,7 @@ namespace BeastHunter
 
         public void SelectFrameSwitcher(bool flag)
         {
-            _selectSlotFrame.SetActive(flag);
+            _selectSlotFrame.enabled = flag;
         }
 
         public void SetInteractable(bool flag)

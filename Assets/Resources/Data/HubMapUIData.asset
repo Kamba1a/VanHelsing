@@ -14,8 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _citizenUIPrefab: {fileID: 5311113231720852829, guid: a9a2ad70cde8fd5409f8b95ef49c4e33,
     type: 3}
-  _sellingItemUIPrefab: {fileID: 6062753379447882041, guid: 1edea349712c2eb448e6e5caa33b4599,
-    type: 3}
   _locationTextUIPrefab: {fileID: 4845705783241596257, guid: a6b652d58e47e6b48807f69de54a5709,
     type: 3}
   _characterUIPrefab: {fileID: 3663167388749810844, guid: d76eafa59c0177848b959baa6daa5a28,
@@ -24,11 +22,11 @@ MonoBehaviour:
     type: 3}
   _inventorySlotUIPrefab: {fileID: 4453913233983459706, guid: 30984c6c07d235c459e8e3c072b4a15c,
     type: 3}
+  _shopSlotUIPrefab: {fileID: 6062753379447882041, guid: 1edea349712c2eb448e6e5caa33b4599,
+    type: 3}
   _answerButtonUIPrefab: {fileID: 4532874562538034351, guid: d3bcb53cab92ad245a8f95bd2cb657e2,
     type: 3}
   _mapOnStartEnabled: 0
-  _charactersEquipmentSlotsAmount: 12
-  _inventorySlotsAmount: 48
   _city: {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
   _location_1: {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
   _location_2: {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
@@ -39,6 +37,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9fb474a159a104d49a106419732f29d4, type: 2}
   - {fileID: 11400000, guid: 5bedb4bb121491a418e9a717db215ba4, type: 2}
   - {fileID: 11400000, guid: 5e2a56911803eb640a1facc3389c8627, type: 2}
+  _charactersEquipmentSlotsAmount: 12
+  _inventorySlotsAmount: 48
+  _buyBackStorageSlotsAmount: 20
+  _shopSlotsAmount: 20
   _startInventoryItems:
   - {fileID: 11400000, guid: bcf86c51ad05c2146a85fb9d5b5469fe, type: 2}
   - {fileID: 11400000, guid: b5ebb6cfceec1f447b854382d3f33d9f, type: 2}

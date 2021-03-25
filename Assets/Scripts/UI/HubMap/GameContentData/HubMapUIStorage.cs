@@ -8,20 +8,33 @@ namespace BeastHunter
     {
         private BaseItem[] _items;
 
-        public Action<int, Sprite> OnChangeItemHandler;
+        public Action<int, Sprite> OnChangeItemHandler { get; set; }
 
         public HubMapUIStorage(int slotsAmount)
         {
             _items = new BaseItem[slotsAmount];
         }
 
-        public void PutItem(int slotNumber, BaseItem item)
+        public bool PutItem(int slotNumber, BaseItem item)
         {
+            bool isSucceful = false;
+
             if (_items[slotNumber] == null)
             {
                 _items[slotNumber] = item;
+                isSucceful = true;
             }
-            OnChangeItem(slotNumber, item);
+            else
+            {
+                isSucceful = MovingItemToFirstEmptySlot(item);
+            }
+
+            if (isSucceful)
+            {
+                OnChangeItem(slotNumber, item);
+            }
+
+            return isSucceful;
         }
 
         public BaseItem TakeItem(int slotNumber)
@@ -75,6 +88,30 @@ namespace BeastHunter
         private void OnChangeItem(int slotNumber, BaseItem item)
         {
             OnChangeItemHandler?.Invoke(slotNumber, item?.ItemStruct.Icon);
+        }
+
+        public bool MovingItemToFirstEmptySlot(BaseItem item)
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] == null)
+                {
+                    PutItem(i, item);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void Clear()
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] != null)
+                {
+                    TakeItem(i);
+                }
+            }
         }
     }
 }

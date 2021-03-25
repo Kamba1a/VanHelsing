@@ -10,11 +10,11 @@ namespace BeastHunter
 
         [Header("UI prefabs")]
         [SerializeField] private GameObject _citizenUIPrefab;
-        [SerializeField] private GameObject _sellingItemUIPrefab;
         [SerializeField] private GameObject _locationTextUIPrefab;
         [SerializeField] private GameObject _characterUIPrefab;
         [SerializeField] private GameObject _equipmentSlotUIPrefab;
         [SerializeField] private GameObject _inventorySlotUIPrefab;
+        [SerializeField] private GameObject _shopSlotUIPrefab;
         [SerializeField] private GameObject _answerButtonUIPrefab;
 
         [Header("UI prefs")]
@@ -32,6 +32,7 @@ namespace BeastHunter
         [SerializeField] private int _charactersEquipmentSlotsAmount;
         [SerializeField] private int _inventorySlotsAmount;
         [SerializeField] private int _buyBackStorageSlotsAmount;
+        [SerializeField] private int _shopSlotsAmount;
         [SerializeField] private BaseItem[] _startInventoryItems;
         [SerializeField] HubMapUICityReputation[] _startCitiesReputation;
         [SerializeField] private List<HubMapUIQuestData> _quests;
@@ -48,7 +49,7 @@ namespace BeastHunter
         #region Properties
 
         public GameObject CitizenUIPrefab => _citizenUIPrefab;
-        public GameObject SellingItemUIPrefab => _sellingItemUIPrefab;
+        public GameObject ShopSlotUIPrefab => _shopSlotUIPrefab;
         public GameObject LocationTextUIPrefab => _locationTextUIPrefab;
         public GameObject CharacterUIPrefab => _characterUIPrefab;
         public GameObject EquipmentSlotUIPrefab => _equipmentSlotUIPrefab;
@@ -67,6 +68,7 @@ namespace BeastHunter
         public int CharactersEquipmentSlotsAmount => _charactersEquipmentSlotsAmount;
         public int InventorySlotsAmount => _inventorySlotsAmount;
         public int BuyBackStorageSlotsAmount => _buyBackStorageSlotsAmount;
+        public int ShopSlotsAmount => _shopSlotsAmount;
         public BaseItem[] StartInventoryItems => _startInventoryItems;
         public List<HubMapUIDialogNode> Dialogs => _dialogs;
 
