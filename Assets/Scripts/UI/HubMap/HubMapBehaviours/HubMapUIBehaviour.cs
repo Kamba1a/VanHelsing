@@ -24,13 +24,13 @@ namespace BeastHunter
             private int? _inventorySlotIndex;
             private int? _shopSlotIndex;
             private int? _buyBackSlotIndex;
-            private HubMapUICharacter _character;
+            private HubMapUICharacterModel _character;
 
             public Action<int?> OnChanged_EquipmentSlotIndex { get; set; }
             public Action<int?> OnChanged_InventorySlotIndex { get; set; }
             public Action<int?> OnChanged_ShopSlotIndex { get; set; }
             public Action<int?> OnChanged_BuyBackSlotIndex { get; set; }
-            public Action<HubMapUICharacter> OnChanged_Character { get; set; }
+            public Action<HubMapUICharacterModel> OnChanged_Character { get; set; }
 
             public int? EquipmentSlotIndex
             {
@@ -100,7 +100,7 @@ namespace BeastHunter
                 }
             }
 
-            public HubMapUICharacter Character
+            public HubMapUICharacterModel Character
             {
                 get
                 {
@@ -110,7 +110,7 @@ namespace BeastHunter
                 {
                     if (value != _character)
                     {
-                        HubMapUICharacter previousValue = _character;
+                        HubMapUICharacterModel previousValue = _character;
                         _character = value;
                         OnChanged_Character?.Invoke(previousValue);
                     }
@@ -220,10 +220,11 @@ namespace BeastHunter
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
         private HubMapUILocation _selectedLocation;
-        private HubMapUICity _selectedCity;
+        private HubMapUICityData _selectedCity;
         private HubMapUIStorage _inventory;
         private HubMapUIStorage _buyBackStorage;
         private SelectedElements _selected;
+        private HubMapUIPlayerModel _player;
 
         #endregion
 
@@ -252,40 +253,6 @@ namespace BeastHunter
             _closeTradePanelButton.onClick.AddListener(OnClick_CloseTradePanelButton);
             _sellButton.onClick.AddListener(OnClick_SellItemButton);
             _buyBackButton.onClick.AddListener(OnClick_BuyBackItemButton);
-
-            _charactersUIBehaviours = new List<HubMapUICharacterBehaviour>();
-            for (int i = 0; i < Data.HubMapData.Characters.Count; i++)
-            {
-                InitializeCharacterUI(Data.HubMapData.Characters[i]);
-            }
-
-            _equipmentSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            for (int i = 0; i < Data.HubMapData.CharactersEquipmentSlotsAmount; i++)
-            {
-                InitializeEquipmentSlotUI(i);
-            }
-
-            _inventorySlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            for (int i = 0; i < Data.HubMapData.InventorySlotsAmount; i++)
-            {
-                InitializeInventorySlotUI(i);
-            }
-
-            _buyBackSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            for (int i = 0; i < Data.HubMapData.BuyBackStorageSlotsAmount; i++)
-            {
-                InitializeBuyBackSlotUI(i);
-            }
-
-            _shopSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            //todo: initialize shop slots
-
-            _selected = new SelectedElements();
-            _selected.OnChanged_InventorySlotIndex = OnChangedSelectedInventorySlot;
-            _selected.OnChanged_EquipmentSlotIndex = OnChangedSelectedEquipmentSlot;
-            _selected.OnChanged_BuyBackSlotIndex = OnChangedSelectedBuyBackSlot;
-            _selected.OnChanged_ShopSlotIndex = OnChangedSelectedShopSlot;
-            _selected.OnChanged_Character = OnChangedSelectedCharacter;
         }
 
         private void OnDisable()
@@ -336,8 +303,14 @@ namespace BeastHunter
             _selected.RemoveAllListeners();
         }
 
-        private void Start()
+        private void Awake()
         {
+            _player = Data.HubMapData.Player;
+
+            _inventory = _player.Inventory;
+            FillItemsSlots(_inventory.GetItemsOnly(), StorageType.Inventory);
+            _inventory.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Inventory);
+
             _buyBackStorage = new HubMapUIStorage(Data.HubMapData.BuyBackStorageSlotsAmount);
             _buyBackStorage.OnChangeItemHandler = (slotIndex, sprite) =>
             {
@@ -345,18 +318,47 @@ namespace BeastHunter
                 _buyBackSlotsUIBehaviours[slotIndex].SetInteractable(sprite != null);
             };
 
-            _inventory = new HubMapUIStorage(Data.HubMapData.InventorySlotsAmount);
-            for (int i = 0; i < Data.HubMapData.StartInventoryItems.Length; i++)
-            {
-                _inventory.PutItem(i, Data.HubMapData.StartInventoryItems[i]);
-            }
-            FillItemsSlots(_inventory.GetItemsOnly(), StorageType.Inventory);
-            _inventory.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Inventory);
-
             _displayedCurrentCitizensUIBehaviours = new Dictionary<HubMapUICitizen, HubMapUICitizenBehaviour>();
             _rightInfoPanelObjectsForDestroy = new List<GameObject>();
             _displayedDialogAnswerButtons = new List<GameObject>();
 
+            _charactersUIBehaviours = new List<HubMapUICharacterBehaviour>();
+            for (int i = 0; i < _player.Characters.Count; i++)
+            {
+                InitializeCharacterUI(_player.Characters[i]);
+            }
+
+            _equipmentSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
+            for (int i = 0; i < Data.HubMapData.CharactersEquipmentSlotsAmount; i++)
+            {
+                InitializeEquipmentSlotUI(i);
+            }
+
+            _inventorySlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
+            for (int i = 0; i < _inventory.GetSlotsCount(); i++)
+            {
+                InitializeInventorySlotUI(i);
+            }
+
+            _buyBackSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
+            for (int i = 0; i < Data.HubMapData.BuyBackStorageSlotsAmount; i++)
+            {
+                InitializeBuyBackSlotUI(i);
+            }
+
+            _shopSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
+            //todo: initialize shop slots
+
+            _selected = new SelectedElements();
+            _selected.OnChanged_InventorySlotIndex = OnChangedSelectedInventorySlot;
+            _selected.OnChanged_EquipmentSlotIndex = OnChangedSelectedEquipmentSlot;
+            _selected.OnChanged_BuyBackSlotIndex = OnChangedSelectedBuyBackSlot;
+            _selected.OnChanged_ShopSlotIndex = OnChangedSelectedShopSlot;
+            _selected.OnChanged_Character = OnChangedSelectedCharacter;
+        }
+
+        private void Start()
+        {
             _mainPanel.SetActive(Data.HubMapData.MapOnStartEnabled);
             _infoPanel.SetActive(false);
             _cityInfoPanel.SetActive(false);
@@ -411,7 +413,7 @@ namespace BeastHunter
             _hikePanel.SetActive(false);
         }
 
-        private void OnClick_CityButton(HubMapUICity city)
+        private void OnClick_CityButton(HubMapUICityData city)
         {
             _selectedCity = city;
 
@@ -483,7 +485,7 @@ namespace BeastHunter
             Debug.Log("OnClick_PerkTreeButton");
         }
 
-        private void OnClick_CharacterButton(HubMapUICharacter character)
+        private void OnClick_CharacterButton(HubMapUICharacterModel character)
         {
             _selected.Character = character;
         }
@@ -739,7 +741,7 @@ namespace BeastHunter
             }
         }
 
-        private void OnChangedSelectedCharacter(HubMapUICharacter previousCharacter)
+        private void OnChangedSelectedCharacter(HubMapUICharacterModel previousCharacter)
         {
             if (previousCharacter != null)
             {
@@ -763,9 +765,8 @@ namespace BeastHunter
 
         #region InitializeUIElements
 
-        private void InitializeCharacterUI(HubMapUICharacter character)
+        private void InitializeCharacterUI(HubMapUICharacterModel character)
         {
-            character.SetStartEquipment();
             GameObject characterUI = GameObject.Instantiate(Data.HubMapData.CharacterUIPrefab);
             characterUI.transform.SetParent(_charactersPanel.transform, false);
             characterUI.transform.localScale = new Vector3(1, 1, 1);
@@ -905,9 +906,9 @@ namespace BeastHunter
             }
         }
 
-        private void FillCityPanel(HubMapUICity city)
+        private void FillCityPanel(HubMapUICityData city)
         {
-            _cityFraction.sprite = city.Fraction;
+            _cityFraction.sprite = city.Fraction.Logo;
             _cityName.text = city.Name;
             _cityDescription.text = city.Description;
 

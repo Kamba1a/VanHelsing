@@ -23,12 +23,12 @@ namespace BeastHunter
             }
         }
 
-        public float GetReputation(HubMapUICity city)
+        public float GetReputation(HubMapUICityData city)
         {
             return _citiesReputation.Find(e => e.City == city).Reputation;
         }
 
-        public void AddReputation(HubMapUICity city, float number)
+        public void AddReputation(HubMapUICityData city, float number)
         {
             HubMapUICityReputation cityReputation = _citiesReputation.Find(e => e.City == city);
             cityReputation.Reputation += number;

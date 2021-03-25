@@ -3,10 +3,11 @@
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HubMapUICharacter", menuName = "CreateData/HubMapUIData/HubMapUICharacter", order = 0)]
-    public class HubMapUICharacter : ScriptableObject
+    public class HubMapUICharacterData : ScriptableObject
     {
         #region Fields
 
+        [SerializeField] private string _name;
         [SerializeField] private Sprite _portrait;
         [SerializeField] private BaseItem[] _startItems;
         private HubMapUIStorage _backpack;
@@ -16,8 +17,10 @@ namespace BeastHunter
 
         #region Properties
 
+        public string Name => _name;
         public Sprite Portrait => _portrait;
         public HubMapUIStorage Backpack => _backpack;
+        public BaseItem[] StartItems => (BaseItem[])_startItems.Clone();
 
         #endregion
 
