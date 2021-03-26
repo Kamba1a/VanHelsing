@@ -18,30 +18,31 @@ namespace BeastHunter
 
         #region Properties
 
-        public Action<HubMapUICitizen> OnClick_CitizenButtonHandler { get; set; }
+        public Action<HubMapUICitizenModel> OnClick_CitizenButtonHandler { get; set; }
 
         #endregion
 
 
         #region Methods
 
-        public void FillCitizenInfo(HubMapUICitizen citizen)
+        public void FillCitizenInfo(HubMapUICitizenModel citizen)
         {
             _citizenNamePanel.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
-            Data.HubMapData.DialogsController.AddCitizen(citizen);
             GetComponent<Button>().onClick.AddListener(() => OnClick_CitizenButton(citizen));
-            SetQuestMarker(Data.HubMapData.QuestService.GetQuestMarker(citizen));
+            //SetQuestMarker(Data.HubMapData.QuestService.GetQuestMarker(citizen));
+            SetQuestMarker(citizen.QuestMarkerType);
         }
 
-        public void OnClick_CitizenButton(HubMapUICitizen citizen)
+        public void OnClick_CitizenButton(HubMapUICitizenModel citizen)
         {
             OnClick_CitizenButtonHandler?.Invoke(citizen);
         }
 
-        public void UpdateInfo(HubMapUICitizen citizen)
+        public void UpdateInfo(HubMapUICitizenModel citizen)
         {
-            SetQuestMarker(Data.HubMapData.QuestService.GetQuestMarker(citizen));
+            //SetQuestMarker(Data.HubMapData.QuestService.GetQuestMarker(citizen));
+            SetQuestMarker(citizen.QuestMarkerType);
         }
 
         private void SetQuestMarker(HubMapUIQuestMarkerType questMarkerType)

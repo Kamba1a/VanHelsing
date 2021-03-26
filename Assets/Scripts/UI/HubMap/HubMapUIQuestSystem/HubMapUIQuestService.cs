@@ -8,7 +8,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        private HubMapUIPlayerModel _player;
+        private HubMapUIWorldModel _world;
         private List<HubMapUIQuestModel> _notStartedQuests;
         private List<HubMapUIQuestModel> _activeQuests;
         private List<HubMapUIQuestModel> _completedQuests;
@@ -22,7 +22,7 @@ namespace BeastHunter
 
         public HubMapUIQuestService(IEnumerable<HubMapUIQuestData> quests)
         {
-            _player = Data.HubMapData.Player;
+            _world = Data.HubMapData.World;
 
             _notStartedQuests = new List<HubMapUIQuestModel>();
             _activeQuests = new List<HubMapUIQuestModel>();
@@ -44,7 +44,7 @@ namespace BeastHunter
                 }
             }
 
-            _player.OnChangeReputationHandler += OnChangeCityReputation;
+            _world.OnChangePlayerReputationHandler += OnChangePlayerReputation;
         }
 
         #endregion
@@ -52,14 +52,14 @@ namespace BeastHunter
 
         #region Methods
 
-        public void QuestProgressed(HubMapUIQuestData questData, HubMapUICitizen citizen)
+        public void QuestProgressed(HubMapUIQuestData questData, HubMapUICitizenModel citizen)
         {
             HubMapUIQuestModel quest = _activeQuests.Find(q => q.Data == questData);
             if (quest != null)
             {
-                if (quest.CurrentTask.TargetCitizen == citizen)
+                if (quest.CurrentTask.TargetCitizen.GetInstanceID() == citizen.DataInstanceId)
                 {
-                    HubMapUIQuestTask nextTask = Array.Find(quest.Data.Tasks, task => task.Id == quest.CurrentTask.NextQuestTaskId);
+                    HubMapUIQuestTaskData nextTask = Array.Find(quest.Data.Tasks, task => task.Id == quest.CurrentTask.NextQuestTaskId);
                     quest.CurrentTask = nextTask;
 
                     if (IsLastTaskComplete(quest))
@@ -74,7 +74,7 @@ namespace BeastHunter
             }
         }
 
-        public HubMapUIQuestMarkerType GetQuestMarker(HubMapUICitizen citizen)
+        public HubMapUIQuestMarkerType GetQuestMarker(HubMapUICitizenData citizen)
         {
             for (int i = 0; i < _activeQuests.Count; i++)
             {
@@ -145,7 +145,7 @@ namespace BeastHunter
         {
             if (quest.CurrentTask.IsNpcInitiatesDialogue)
             {
-                Data.HubMapData.DialogsController.SetNewDialogId(
+                Data.HubMapData.DialogsController.SetNewDialog(
                     quest.CurrentTask.TargetCitizen,
                     quest.CurrentTask.InitiatedDialogueId);
             }
@@ -158,20 +158,31 @@ namespace BeastHunter
 
         private bool CheckQuestForRequiredConditions(HubMapUIQuestModel quest)
         {
-            bool checkReputationRequirement = quest.Data.RequiredReputation.Reputation <= _player.GetCityReputation(quest.Data.RequiredReputation.City);
+            //bool checkReputationRequirement = quest.Data.RequiredReputation.Reputation <= _player.GetCityReputation(quest.Data.RequiredReputation.City);
+            HubMapUIQuestData quest.Data.RequiredReputation
+            bool checkReputationRequirement = quest.IsEnoughCityReputation(_world.GetCity);
+
             bool checkQuestRequirement = quest.Data.RequiredQuest == null
                     || _completedQuests.Find(q => q.Data == q.Data.RequiredQuest) != null;
 
             return checkReputationRequirement && checkQuestRequirement;
         }
 
-        private void OnChangeCityReputation(HubMapUICityReputation cityReputation)
+        private void OnChangePlayerReputation(HubMapUICityModel city)
         {
+            //for (int i = 0; i < _notStartedQuests.Count; i++)
+            //{
+            //    if (CheckQuestForRequiredConditions(_notStartedQuests[i]))
+            //    {
+            //        StartQuest(_notStartedQuests[i]);
+            //    }
+            //}
+
             for (int i = 0; i < _notStartedQuests.Count; i++)
             {
-                if (CheckQuestForRequiredConditions(_notStartedQuests[i]))
+                if (_notStartedQuests[i].HasCityRequirement(city.DataInstanceID))
                 {
-                    StartQuest(_notStartedQuests[i]);
+                    CheckQuestForRequiredConditions(_notStartedQuests[i]);
                 }
             }
         }

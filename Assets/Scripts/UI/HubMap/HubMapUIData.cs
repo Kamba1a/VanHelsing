@@ -28,13 +28,13 @@ namespace BeastHunter
         [SerializeField] private HubMapUILocation _location_4;
 
         [Header("Game content for UI")]
-        [SerializeField] private HubMapUINewPlayerData _newPlayerData;
+        [SerializeField] private HubMapUIWorldData _worldData;
         [SerializeField] private int _buyBackStorageSlotsAmount;
         [SerializeField] private int _shopSlotsAmount;
         [SerializeField] private List<HubMapUIQuestData> _quests;
         [SerializeField, ContextMenuItem("Reset ids", "DialogListResetIds")] private List<HubMapUIDialogNode> _dialogs;
 
-        private HubMapUIPlayerModel _player;
+        private HubMapUIWorldModel _world;
 
         #if UNITY_EDITOR
         private int _dialogsListCount;
@@ -56,7 +56,7 @@ namespace BeastHunter
 
         public bool MapOnStartEnabled => _mapOnStartEnabled;
 
-        public HubMapUICityData City => _city;
+        public HubMapUICityModel City => World.Cities.Find(city => city.DataInstanceID == _city.GetInstanceID());
         public HubMapUILocation Location_1 => _location_1;
         public HubMapUILocation Location_2 => _location_2;
         public HubMapUILocation Location_3 => _location_3;
@@ -66,19 +66,21 @@ namespace BeastHunter
         public List<HubMapUIDialogNode> Dialogs => _dialogs;
         public HubMapUIDialogsController DialogsController { get; private set; }
         public HubMapUIQuestService QuestService { get; private set; }
-        public HubMapUIPlayerModel Player 
+
+
+        public HubMapUIWorldModel World
         {
             get
             {
-                if (_player == null)
+                if (_world == null)
                 {
-                    _player = new HubMapUIPlayerModel(_newPlayerData);
+                    _world = new HubMapUIWorldModel(_worldData);
                 }
-                return _player;
+                return _world;
             }
             private set
             {
-                _player = value;
+                _world = value;
             }
         }
 

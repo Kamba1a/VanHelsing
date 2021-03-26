@@ -6,54 +6,42 @@ namespace BeastHunter
 {
     public class HubMapUIPlayerModel
     {
-        private List<HubMapUICityReputation> _citiesReputation;
-
-
         public int GoldAmount { get; set; }
         public HubMapUIStorage Inventory { get; private set; }
         public List<HubMapUICharacterModel> Characters { get; private set; }
         public int CharactersEquipmentSlotAmount { get; private set; }
 
 
-        public event Action<HubMapUICityReputation> OnChangeReputationHandler;
-
-
-        public HubMapUIPlayerModel(HubMapUINewPlayerData newPlayerData)
+        public HubMapUIPlayerModel(HubMapUIPlayerData data)
         {
-            GoldAmount = newPlayerData.GoldAmount;
-            CharactersEquipmentSlotAmount = newPlayerData.CharactersInventorySlotAmount;
+            GoldAmount = data.GoldAmount;
+            CharactersEquipmentSlotAmount = data.CharactersInventorySlotAmount;
 
-            Inventory = new HubMapUIStorage(newPlayerData.InventorySlotsAmount);
-            for (int i = 0; i < newPlayerData.InventoryItems.Length; i++)
+            Inventory = new HubMapUIStorage(data.InventorySlotsAmount);
+            for (int i = 0; i < data.InventoryItems.Length; i++)
             {
-                Inventory.PutItem(i, newPlayerData.InventoryItems[i]);
-            }
-
-            _citiesReputation = new List<HubMapUICityReputation>();
-            for (int i = 0; i < newPlayerData.CitiesReputation.Length; i++)
-            {
-                _citiesReputation.Add(newPlayerData.CitiesReputation[i]);
+                Inventory.PutItem(i, data.InventoryItems[i]);
             }
 
             Characters = new List<HubMapUICharacterModel>();
-            for (int i = 0; i < newPlayerData.Characters.Length; i++)
+            for (int i = 0; i < data.Characters.Length; i++)
             {
-                HubMapUICharacterModel character = new HubMapUICharacterModel(newPlayerData.Characters[i], CharactersEquipmentSlotAmount);
+                HubMapUICharacterModel character = new HubMapUICharacterModel(data.Characters[i], CharactersEquipmentSlotAmount);
                 Characters.Add(character);
             }
         }
 
 
-        public float GetCityReputation(HubMapUICityData city)
-        {
-            return _citiesReputation.Find(rep => rep.City == city).Reputation;
-        }
+        //public float GetCityReputation(HubMapUICityData city)
+        //{
+        //    return _citiesReputation.Find(rep => rep.City == city).Reputation;
+        //}
 
-        public void AddCityReputation(HubMapUICityData city, float reputationAmount)
-        {
-            HubMapUICityReputation cityReputation = _citiesReputation.Find(rep => rep.City == city);
-            cityReputation.Reputation += reputationAmount;
-            OnChangeReputationHandler?.Invoke(cityReputation);
-        }
+        //public void AddCityReputation(HubMapUICityData city, int reputationAmount)
+        //{
+        //    HubMapUICityReputation cityReputation = _citiesReputation.Find(rep => rep.City == city);
+        //    cityReputation.Reputation += reputationAmount;
+        //    OnChangeReputationHandler?.Invoke(cityReputation);
+        //}
     }
 }

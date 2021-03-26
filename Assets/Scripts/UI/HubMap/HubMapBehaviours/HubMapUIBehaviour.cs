@@ -216,11 +216,11 @@ namespace BeastHunter
         private List<HubMapUISlotBehaviour> _shopSlotsUIBehaviours;
         private List<HubMapUISlotBehaviour> _buyBackSlotsUIBehaviours;
         private List<HubMapUICharacterBehaviour> _charactersUIBehaviours;
-        private Dictionary<HubMapUICitizen, HubMapUICitizenBehaviour> _displayedCurrentCitizensUIBehaviours;
+        private Dictionary<HubMapUICitizenModel, HubMapUICitizenBehaviour> _displayedCurrentCitizensUIBehaviours;
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
         private HubMapUILocation _selectedLocation;
-        private HubMapUICityData _selectedCity;
+        private HubMapUICityModel _selectedCity;
         private HubMapUIStorage _inventory;
         private HubMapUIStorage _buyBackStorage;
         private SelectedElements _selected;
@@ -278,11 +278,11 @@ namespace BeastHunter
 
         private void Awake()
         {
-            _player = Data.HubMapData.Player;
+            _player = Data.HubMapData.World.Player;
             _inventory = _player.Inventory;
 
             _rightInfoPanelObjectsForDestroy = new List<GameObject>();
-            _displayedCurrentCitizensUIBehaviours = new Dictionary<HubMapUICitizen, HubMapUICitizenBehaviour>();
+            _displayedCurrentCitizensUIBehaviours = new Dictionary<HubMapUICitizenModel, HubMapUICitizenBehaviour>();
             _displayedDialogAnswerButtons = new List<GameObject>();
 
             _charactersUIBehaviours = new List<HubMapUICharacterBehaviour>();
@@ -386,7 +386,7 @@ namespace BeastHunter
             _hikePanel.SetActive(false);
         }
 
-        private void OnClick_CityButton(HubMapUICityData city)
+        private void OnClick_CityButton(HubMapUICityModel city)
         {
             _selectedCity = city;
 
@@ -403,7 +403,7 @@ namespace BeastHunter
         private void OnClick_OpenTradePanelButton()
         {
             SetScrollViewParentForInventoryItemsPanel(_shopInventoryScrollView);
-            _shopCityReputation.text = _player.GetCityReputation(_selectedCity).ToString();
+            _shopCityReputation.text = _selectedCity.PlayerReputation.ToString();
             _tradePanel.SetActive(true);
         }
 
@@ -435,7 +435,7 @@ namespace BeastHunter
             _locationInfoPanel.SetActive(true);
         }
 
-        private void OnClick_CitizenButton(HubMapUICitizen citizen)
+        private void OnClick_CitizenButton(HubMapUICitizenModel citizen)
         {
             FillDialogPanel(citizen);
             _dialogPanel.SetActive(true);
@@ -544,7 +544,7 @@ namespace BeastHunter
             }
         }
 
-        private void OnClick_DialogButton(HubMapUICitizen citizen, HubMapUIDialogAnswer dialogAnswer)
+        private void OnClick_DialogButton(HubMapUICitizenModel citizen, HubMapUIDialogAnswer dialogAnswer)
         {
             for (int i = 0; i < _displayedDialogAnswerButtons.Count; i++)
             {
@@ -552,7 +552,7 @@ namespace BeastHunter
             }
             _displayedDialogAnswerButtons.Clear();
 
-            Data.HubMapData.DialogsController.SetNewDialogId(citizen, dialogAnswer.NextDialogNodeId);
+            Data.HubMapData.DialogsController.SetNewDialog(citizen, dialogAnswer.NextDialogNodeId);
 
             if (dialogAnswer.IsProgressQuest)
             {
@@ -562,7 +562,7 @@ namespace BeastHunter
             if (dialogAnswer.IsDialogEnd)
             {
                 _dialogPanel.SetActive(false);
-                foreach (KeyValuePair<HubMapUICitizen, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
+                foreach (KeyValuePair<HubMapUICitizenModel, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
                 {
                     kvp.Value.UpdateInfo(kvp.Key);
                 }
@@ -816,7 +816,7 @@ namespace BeastHunter
             _buyBackSlotsUIBehaviours.Add(slotBehaviour);
         }
 
-        private void InitializeCitizenUI(HubMapUICitizen citizen)
+        private void InitializeCitizenUI(HubMapUICitizenModel citizen)
         {
             GameObject citizenUI = InstantiateUIObject(Data.HubMapData.CitizenUIPrefab, _citizenPanel);
 
@@ -830,7 +830,7 @@ namespace BeastHunter
             _displayedCurrentCitizensUIBehaviours.Add(citizen, citizenUIBehaviour);
         }
 
-        private void InitializeDialogAnswerButton(HubMapUICitizen citizen, HubMapUIDialogAnswer answer)
+        private void InitializeDialogAnswerButton(HubMapUICitizenModel citizen, HubMapUIDialogAnswer answer)
         {
             GameObject answerButton = InstantiateUIObject(Data.HubMapData.AnswerButtonUIPrefab, _answerButtonsPanel);
             answerButton.GetComponentInChildren<Text>().text = answer.Text;
@@ -896,16 +896,14 @@ namespace BeastHunter
             }
         }
 
-        private void FillCityPanel(HubMapUICityData city)
+        private void FillCityPanel(HubMapUICityModel city)
         {
             _cityFraction.sprite = city.Fraction.Logo;
             _cityName.text = city.Name;
             _cityDescription.text = city.Description;
+            _cityReputation.text = city.PlayerReputation.ToString();
 
-            float cityReputation = _player.GetCityReputation(city);
-            _cityReputation.text = cityReputation.ToString();
-
-            for (int i = 0; i < city.Citizens.Length; i++)
+            for (int i = 0; i < city.Citizens.Count; i++)
             {
                 InitializeCitizenUI(city.Citizens[i]);
             }
@@ -932,23 +930,29 @@ namespace BeastHunter
             }
         }
 
-        private void FillDialogPanel(HubMapUICitizen citizen)
+        private void FillDialogPanel(HubMapUICitizenModel citizen)
         {
-            HubMapUIDialogNode currentDialog = Data.HubMapData.Dialogs.Find(dialog => dialog.Id == Data.HubMapData.DialogsController.GetCurrentDialogId(citizen));
+            //HubMapUIDialogNode currentDialog = Data.HubMapData.Dialogs.Find(dialog => dialog.Id == Data.HubMapData.DialogsController.GetCurrentDialogId(citizen));
             _citizenName.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
-            _dialogText.text = currentDialog.Text;
+            //_dialogText.text = currentDialog.Text;
+            _dialogText.text = citizen.CurrentSpeechText;
 
-            for (int i = 0; i < currentDialog.Answers.Length; i++)
+            //for (int i = 0; i < currentDialog.Answers.Length; i++)
+            //{
+            //    InitializeDialogAnswerButton(citizen, currentDialog.Answers[i]);
+            //}
+
+            for (int i = 0; i < citizen.CurrentExpectedResponses.Count; i++)
             {
-                InitializeDialogAnswerButton(citizen, currentDialog.Answers[i]);
+                InitializeDialogAnswerButton(citizen, citizen.CurrentExpectedResponses[i]);
             }
 
-            HubMapUIDialogAnswer additionalQuestAnswer = Data.HubMapData.QuestService.GetAdditionalQuestAnswer(currentDialog.Id);
-            if (additionalQuestAnswer != null)
-            {
-                InitializeDialogAnswerButton(citizen, additionalQuestAnswer);
-            }
+            //HubMapUIDialogAnswer additionalQuestAnswer = Data.HubMapData.QuestService.GetAdditionalQuestAnswer(currentDialog.Id);
+            //if (additionalQuestAnswer != null)
+            //{
+            //    InitializeDialogAnswerButton(citizen, additionalQuestAnswer);
+            //}
         }
 
         #endregion
@@ -963,7 +967,7 @@ namespace BeastHunter
 
         private void ClearRightInfoPanel()
         {
-            foreach (KeyValuePair<HubMapUICitizen, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
+            foreach (KeyValuePair<HubMapUICitizenModel, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
             {
                 Data.HubMapData.QuestService.OnQuestIsActiveHandler -=
                     () => kvp.Value.UpdateInfo(kvp.Key);

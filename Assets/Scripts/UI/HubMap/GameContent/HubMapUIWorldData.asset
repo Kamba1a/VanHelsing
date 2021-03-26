@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1547fde60487a46b963d1e4498ab3a, type: 3}
+  m_Name: HubMapUIWorldData
+  m_EditorClassIdentifier: 
+  _cities:
+  - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
+  _locations:
+  - {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
+  - {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
+  - {fileID: 11400000, guid: 860d3696ec691de4e9302d6819bd9cda, type: 2}
+  - {fileID: 11400000, guid: 9b605ac1c7e3a6b458708df1317a7eaf, type: 2}

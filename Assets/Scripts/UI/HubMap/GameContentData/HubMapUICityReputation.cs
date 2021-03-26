@@ -6,9 +6,9 @@ namespace BeastHunter
     public class HubMapUICityReputation
     {
         [SerializeField] public HubMapUICityData City;
-        [SerializeField] public float Reputation;
+        [SerializeField] public int Reputation;
 
-        public HubMapUICityReputation(HubMapUICityData city, float rep)
+        public HubMapUICityReputation(HubMapUICityData city, int rep)
         {
             City = city;
             Reputation = rep;

@@ -36,3 +36,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92f5ea27fd6261a47ad984a545947ad3, type: 2}
   - {fileID: 11400000, guid: f15a4cf58e631ea46a185eb1f2594fd7, type: 2}
   - {fileID: 11400000, guid: 8682e87798a2cc54db3cb20ac3b3e13d, type: 2}
+  _startReputation: 35
+  _shopSlotAmount: 20
+  _minItemsAmountInShop: 4
