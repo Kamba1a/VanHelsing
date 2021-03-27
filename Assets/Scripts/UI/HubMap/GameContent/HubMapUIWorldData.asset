@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a1547fde60487a46b963d1e4498ab3a, type: 3}
   m_Name: HubMapUIWorldData
   m_EditorClassIdentifier: 
+  _player: {fileID: 11400000, guid: 6dc1beb443f3bb24db85b44c8bd1d503, type: 2}
   _cities:
   - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
   _locations:

@@ -66,5 +66,5 @@ MonoBehaviour:
   _emptyEndTaskId: 3
   _requiredReputation:
     City: {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
-    Reputation: 20
+    Reputation: 50
   _requiredQuest: {fileID: 0}

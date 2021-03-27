@@ -38,5 +38,21 @@ namespace BeastHunter
         {
             return Cities.Find(city => city.DataInstanceID == cityData.GetInstanceID());
         }
+
+        public HubMapUICitizenModel GetCitizen(HubMapUICitizenData citizenData)
+        {
+            int citizenDataInstanceID = citizenData.GetInstanceID();
+            for (int cityIndex = 0; cityIndex < Cities.Count; cityIndex++)
+            {
+                for (int citizenIndex = 0; citizenIndex < Cities[cityIndex].Citizens.Count; citizenIndex++)
+                {
+                    if (Cities[cityIndex].Citizens[citizenIndex].DataInstanceId == citizenDataInstanceID)
+                    {
+                        return Cities[cityIndex].Citizens[citizenIndex];
+                    }
+                }
+            }
+            return null;
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace BeastHunter
+﻿using System;
+
+namespace BeastHunter
 {
     public class HubMapUIQuestModel
     {
@@ -23,6 +25,15 @@
             return false;
         }
 
+        public bool IsRequirementQuestComleted(HubMapUIQuestModel requirementQuest)
+        {
+            if (HasQuestCompleteRequirement(requirementQuest.Data))
+            {
+                return requirementQuest.Status == HubMapUIQuestStatus.Completed;
+            }
+            return true;
+        }
+
         public bool IsEnoughCityReputation(HubMapUICityModel city)
         {
             if (HasCityRequirement(city.DataInstanceID))
@@ -39,6 +50,17 @@
                 return Data.RequiredReputation.City.GetInstanceID() == cityDataInstanceID;
             }
             return false;
+        }
+
+        public void NextTask()
+        {
+            HubMapUIQuestTaskData nextTask = Array.Find(Data.Tasks, task => task.Id == CurrentTask.NextQuestTaskId);
+            CurrentTask = nextTask;
+        }
+
+        public bool IsLastTaskComplete()
+        {
+            return CurrentTask.Id == Data.EmptyEndTaskId;
         }
     }
 }

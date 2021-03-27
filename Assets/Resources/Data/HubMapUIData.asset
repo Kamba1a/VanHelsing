@@ -32,23 +32,9 @@ MonoBehaviour:
   _location_2: {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
   _location_3: {fileID: 11400000, guid: 860d3696ec691de4e9302d6819bd9cda, type: 2}
   _location_4: {fileID: 11400000, guid: 9b605ac1c7e3a6b458708df1317a7eaf, type: 2}
-  _characters:
-  - {fileID: 11400000, guid: 4e3ca3341ad44d047b3985d33cb9bf09, type: 2}
-  - {fileID: 11400000, guid: 9fb474a159a104d49a106419732f29d4, type: 2}
-  - {fileID: 11400000, guid: 5bedb4bb121491a418e9a717db215ba4, type: 2}
-  - {fileID: 11400000, guid: 5e2a56911803eb640a1facc3389c8627, type: 2}
-  _charactersEquipmentSlotsAmount: 12
-  _inventorySlotsAmount: 48
+  _worldData: {fileID: 11400000, guid: 46231c97ed63f5743923c27178c11902, type: 2}
   _buyBackStorageSlotsAmount: 20
   _shopSlotsAmount: 20
-  _startInventoryItems:
-  - {fileID: 11400000, guid: bcf86c51ad05c2146a85fb9d5b5469fe, type: 2}
-  - {fileID: 11400000, guid: b5ebb6cfceec1f447b854382d3f33d9f, type: 2}
-  - {fileID: 11400000, guid: 8682e87798a2cc54db3cb20ac3b3e13d, type: 2}
-  - {fileID: 11400000, guid: 0bb8ff4f15e4c16428279f49ca2baec2, type: 2}
-  _startCitiesReputation:
-  - City: {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
-    Reputation: 40
   _quests:
   - {fileID: 11400000, guid: 81ad56c84f8679347b6301f8a566d862, type: 2}
   _dialogs:
@@ -227,4 +213,3 @@ MonoBehaviour:
       _nextDialogNodeId: 13
       _isProgressQuest: 0
       _progressQuest: {fileID: 0}
-  _newPlayerData: {fileID: 11400000, guid: 6dc1beb443f3bb24db85b44c8bd1d503, type: 2}

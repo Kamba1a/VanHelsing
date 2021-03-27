@@ -253,6 +253,8 @@ namespace BeastHunter
             _closeTradePanelButton.onClick.AddListener(OnClick_CloseTradePanelButton);
             _sellButton.onClick.AddListener(OnClick_SellItemButton);
             _buyBackButton.onClick.AddListener(OnClick_BuyBackItemButton);
+
+            Data.HubMapData.QuestService.OnQuestStartHandler += OnQuestStart;
         }
 
         private void OnDisable()
@@ -274,6 +276,8 @@ namespace BeastHunter
             _closeInventoryButton.onClick.RemoveAllListeners();
             _perkTreeButton.onClick.RemoveAllListeners();
             _shopButton.onClick.RemoveAllListeners();
+
+            Data.HubMapData.QuestService.OnQuestStartHandler -= OnQuestStart;
         }
 
         private void Awake()
@@ -552,7 +556,7 @@ namespace BeastHunter
             }
             _displayedDialogAnswerButtons.Clear();
 
-            Data.HubMapData.DialogsController.SetNewDialog(citizen, dialogAnswer.NextDialogNodeId);
+            Data.HubMapData.QuestService.SetNewDialog(citizen, dialogAnswer.NextDialogNodeId);
 
             if (dialogAnswer.IsProgressQuest)
             {
@@ -757,6 +761,14 @@ namespace BeastHunter
             }
         }
 
+        private void OnQuestStart(HubMapUIQuestModel quest)
+        {
+            foreach (KeyValuePair<HubMapUICitizenModel, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
+            {
+                kvp.Value.UpdateInfo(kvp.Key);
+            }
+        }
+
         #endregion
 
 
@@ -824,7 +836,7 @@ namespace BeastHunter
             citizenUIBehaviour.FillCitizenInfo(citizen);
             citizenUIBehaviour.OnClick_CitizenButtonHandler = OnClick_CitizenButton;
 
-            Data.HubMapData.QuestService.OnQuestIsActiveHandler += () => citizenUIBehaviour.UpdateInfo(citizen);
+            //Data.HubMapData.QuestService.OnQuestStartHandler += () => citizenUIBehaviour.UpdateInfo(citizen);
 
             _rightInfoPanelObjectsForDestroy.Add(citizenUI);
             _displayedCurrentCitizensUIBehaviours.Add(citizen, citizenUIBehaviour);
@@ -967,11 +979,11 @@ namespace BeastHunter
 
         private void ClearRightInfoPanel()
         {
-            foreach (KeyValuePair<HubMapUICitizenModel, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
-            {
-                Data.HubMapData.QuestService.OnQuestIsActiveHandler -=
-                    () => kvp.Value.UpdateInfo(kvp.Key);
-            }
+            //foreach (KeyValuePair<HubMapUICitizenModel, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
+            //{
+            //    Data.HubMapData.QuestService.OnQuestStartHandler -=
+            //        () => kvp.Value.UpdateInfo(kvp.Key);
+            //}
 
             for (int i=0; i< _rightInfoPanelObjectsForDestroy.Count; i++)
             {

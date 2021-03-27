@@ -34,8 +34,6 @@ namespace BeastHunter
         [SerializeField] private List<HubMapUIQuestData> _quests;
         [SerializeField, ContextMenuItem("Reset ids", "DialogListResetIds")] private List<HubMapUIDialogNode> _dialogs;
 
-        private HubMapUIWorldModel _world;
-
         #if UNITY_EDITOR
         private int _dialogsListCount;
         private int _nextDialogsListId;
@@ -64,25 +62,66 @@ namespace BeastHunter
 
         public int BuyBackStorageSlotsAmount => _buyBackStorageSlotsAmount;
         public List<HubMapUIDialogNode> Dialogs => _dialogs;
-        public HubMapUIDialogsController DialogsController { get; private set; }
-        public HubMapUIQuestService QuestService { get; private set; }
+        public HubMapUIWorldModel World { get; set; }
+        public HubMapUIQuestService QuestService { get; set; }
 
 
-        public HubMapUIWorldModel World
-        {
-            get
-            {
-                if (_world == null)
-                {
-                    _world = new HubMapUIWorldModel(_worldData);
-                }
-                return _world;
-            }
-            private set
-            {
-                _world = value;
-            }
-        }
+    //    public HubMapUIWorldModel World
+    //    {
+    //        get
+    //        {
+    //            if (_world == null)
+    //            {
+    //                _world = new HubMapUIWorldModel(_worldData);
+    //}
+    //            return _world;
+    //        }
+    //        private set
+    //        {
+    //            _world = value;
+    //        }
+    //    }
+
+        //    private HubMapUIDialogsController _dialogsController;
+        //    public HubMapUIDialogsController DialogsController
+        //    {
+        //        get
+        //        {
+        //            if (_dialogsController == null)
+        //            {
+        //                _dialogsController = new HubMapUIDialogsController();
+        //            }
+        //            return _dialogsController;
+        //        }
+        //        private set
+        //        {
+        //            _dialogsController = value;
+        //        }
+        //    }
+
+        //    Object questServiceLocker = new Object();
+        //    HubMapUIQuestService _questService;
+        //    public HubMapUIQuestService QuestService
+        //    {
+        //        get
+        //        {
+        //            if (_questService == null)
+        //            {
+        //                lock(questServiceLocker)
+        //                {
+        //                    if (_questService == null)
+        //                    {
+        //                        _questService = new HubMapUIQuestService(_quests);
+        //                    }
+        //                }
+        //            }
+        //            return _questService;
+        //        }
+        //        private set
+        //        {
+        //            _questService = value;
+        //        }
+        //    }
 
         #endregion
 
@@ -91,8 +130,9 @@ namespace BeastHunter
 
         private void OnEnable()
         {
-            DialogsController = new HubMapUIDialogsController();
+            World = new HubMapUIWorldModel(_worldData);
             QuestService = new HubMapUIQuestService(_quests);
+            //DialogsController = new HubMapUIDialogsController();
 
             #if UNITY_EDITOR
             _dialogsListCount = _dialogs.Count;
