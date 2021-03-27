@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HubMapUICity", menuName = "CreateData/HubMapUIData/HubMapUICity", order = 0)]
@@ -20,6 +21,7 @@ namespace BeastHunter
 
 
         #region Properties
+
         public string Name => _name;
         public string Description => _description;
         public HubMapUIFractionData Fraction => _fraction;

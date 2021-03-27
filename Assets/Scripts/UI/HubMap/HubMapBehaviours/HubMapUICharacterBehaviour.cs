@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
 namespace BeastHunter
 {
     public class HubMapUICharacterBehaviour: MonoBehaviour  //todo: delete class?

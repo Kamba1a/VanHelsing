@@ -2,17 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace BeastHunter
 {
     public class HubMapUIStorage
     {
+        #region Fields
+
         private BaseItem[] _items;
 
+        #endregion
+
+
+        #region Properties
+
         public Action<int, Sprite> OnChangeItemHandler { get; set; }
+
+        #endregion
+
+
+        #region ClassLifeCycle
 
         public HubMapUIStorage(int slotsAmount)
         {
             _items = new BaseItem[slotsAmount];
+        }
+
+        #endregion
+
+
+        #region Methods
+
+        public BaseItem TakeItem(int slotNumber)
+        {
+            BaseItem item = _items[slotNumber];
+            _items[slotNumber] = null;
+            OnChangeItem(slotNumber, null);
+            return item;
         }
 
         public bool PutItem(int slotNumber, BaseItem item)
@@ -37,12 +63,17 @@ namespace BeastHunter
             return isSucceful;
         }
 
-        public BaseItem TakeItem(int slotNumber)
+        public bool MovingItemToFirstEmptySlot(BaseItem item)
         {
-            BaseItem item = _items[slotNumber];
-            _items[slotNumber] = null;
-            OnChangeItem(slotNumber, null);
-            return item;
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] == null)
+                {
+                    PutItem(i, item);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public BaseItem GetItemBySlot(int slotNumber)
@@ -85,24 +116,6 @@ namespace BeastHunter
             return items;
         }
 
-        private void OnChangeItem(int slotNumber, BaseItem item)
-        {
-            OnChangeItemHandler?.Invoke(slotNumber, item?.ItemStruct.Icon);
-        }
-
-        public bool MovingItemToFirstEmptySlot(BaseItem item)
-        {
-            for (int i = 0; i < _items.Length; i++)
-            {
-                if (_items[i] == null)
-                {
-                    PutItem(i, item);
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public void Clear()
         {
             for (int i = 0; i < _items.Length; i++)
@@ -113,5 +126,12 @@ namespace BeastHunter
                 }
             }
         }
+
+        private void OnChangeItem(int slotNumber, BaseItem item)
+        {
+            OnChangeItemHandler?.Invoke(slotNumber, item?.ItemStruct.Icon);
+        }
+
+        #endregion
     }
 }

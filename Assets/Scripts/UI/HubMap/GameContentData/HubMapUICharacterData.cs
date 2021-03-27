@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HubMapUICharacter", menuName = "CreateData/HubMapUIData/HubMapUICharacter", order = 0)]

@@ -22,10 +22,10 @@ namespace BeastHunter
 
         [Header("Objects on map")]
         [SerializeField] private HubMapUICityData _city;
-        [SerializeField] private HubMapUILocation _location_1;
-        [SerializeField] private HubMapUILocation _location_2;
-        [SerializeField] private HubMapUILocation _location_3;
-        [SerializeField] private HubMapUILocation _location_4;
+        [SerializeField] private HubMapUILocationData _location_1;
+        [SerializeField] private HubMapUILocationData _location_2;
+        [SerializeField] private HubMapUILocationData _location_3;
+        [SerializeField] private HubMapUILocationData _location_4;
 
         [Header("Game content for UI")]
         [SerializeField] private HubMapUIWorldData _worldData;
@@ -57,10 +57,10 @@ namespace BeastHunter
         public bool MapOnStartEnabled => _mapOnStartEnabled;
 
         public HubMapUICityModel City => World.Cities.Find(city => city.DataInstanceID == _city.GetInstanceID());
-        public HubMapUILocation Location_1 => _location_1;
-        public HubMapUILocation Location_2 => _location_2;
-        public HubMapUILocation Location_3 => _location_3;
-        public HubMapUILocation Location_4 => _location_4;
+        public HubMapUILocationData Location_1 => _location_1;
+        public HubMapUILocationData Location_2 => _location_2;
+        public HubMapUILocationData Location_3 => _location_3;
+        public HubMapUILocationData Location_4 => _location_4;
 
         public HubMapUIWorldModel World { get; private set; }
         public int BuyBackStorageSlotsAmount => _buyBackStorageSlotsAmount;

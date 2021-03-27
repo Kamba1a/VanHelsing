@@ -1,14 +1,20 @@
 ﻿using UnityEngine;
 
+
 namespace BeastHunter
 {
     public class HubMapUICharacterModel
     {
-        public string Name { get; set; }
+        #region Properties
+
+        public string Name { get; private set; }
         public Sprite Portrait { get; private set; }
         public HubMapUIStorage Backpack { get; private set; }
-        //public HubMapUICharacterBehaviour HubMapUIBehaviour { get; private set; }
 
+        #endregion
+
+
+        #region ClassLifeCycle
 
         public HubMapUICharacterModel(HubMapUICharacterData data, int backpackSize)
         {
@@ -22,10 +28,6 @@ namespace BeastHunter
             }
         }
 
-        //public void HubMapUIBehaviourInitialize(GameObject UIGameObject)
-        //{
-        //    HubMapUIBehaviour = UIGameObject.GetComponentInChildren<HubMapUICharacterBehaviour>();
-        //    HubMapUIBehaviour.FillCharacterInfo(this);
-        //}
+        #endregion
     }
 }

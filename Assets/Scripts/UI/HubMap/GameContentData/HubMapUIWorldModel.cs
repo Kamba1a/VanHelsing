@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace BeastHunter
@@ -10,7 +10,7 @@ namespace BeastHunter
 
         public HubMapUIPlayerModel Player { get; private set; }
         public List<HubMapUICityModel> Cities { get; private set; }
-        public List<HubMapUILocation> Locations { get; private set; }
+        public List<HubMapUILocationData> Locations { get; private set; }
 
         #endregion
 
@@ -28,7 +28,7 @@ namespace BeastHunter
                 Cities.Add(newCity);
             }
 
-            Locations = new List<HubMapUILocation>();
+            Locations = new List<HubMapUILocationData>();
             for (int i = 0; i < data.Locations.Length; i++)
             {
                 Locations.Add(data.Locations[i]);
@@ -42,23 +42,39 @@ namespace BeastHunter
 
         public HubMapUICityModel GetCity(HubMapUICityData cityData)
         {
-            return Cities.Find(city => city.DataInstanceID == cityData.GetInstanceID());
+            if (cityData != null)
+            {
+                return Cities.Find(city => city.DataInstanceID == cityData.GetInstanceID());
+            }
+            else
+            {
+                Debug.LogError(this + ": input parameter is null");
+                return null;
+            }
         }
 
         public HubMapUICitizenModel GetCitizen(HubMapUICitizenData citizenData)
         {
-            int citizenDataInstanceID = citizenData.GetInstanceID();
-            for (int cityIndex = 0; cityIndex < Cities.Count; cityIndex++)
+            if (citizenData != null)
             {
-                for (int citizenIndex = 0; citizenIndex < Cities[cityIndex].Citizens.Count; citizenIndex++)
+                int citizenDataInstanceID = citizenData.GetInstanceID();
+                for (int cityIndex = 0; cityIndex < Cities.Count; cityIndex++)
                 {
-                    if (Cities[cityIndex].Citizens[citizenIndex].DataInstanceId == citizenDataInstanceID)
+                    for (int citizenIndex = 0; citizenIndex < Cities[cityIndex].Citizens.Count; citizenIndex++)
                     {
-                        return Cities[cityIndex].Citizens[citizenIndex];
+                        if (Cities[cityIndex].Citizens[citizenIndex].DataInstanceId == citizenDataInstanceID)
+                        {
+                            return Cities[cityIndex].Citizens[citizenIndex];
+                        }
                     }
                 }
+                return null;
             }
-            return null;
+            else
+            {
+                Debug.LogError(this + ": input parameter is null");
+                return null;
+            }
         }
 
         #endregion

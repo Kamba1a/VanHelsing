@@ -220,7 +220,7 @@ namespace BeastHunter
         private Dictionary<HubMapUICitizenModel, HubMapUICitizenBehaviour> _displayedCurrentCitizensUIBehaviours;
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
-        private HubMapUILocation _selectedLocation;
+        private HubMapUILocationData _selectedLocation;
         private HubMapUICityModel _selectedCity;
         private HubMapUIStorage _inventory;
         private HubMapUIStorage _buyBackStorage;
@@ -422,7 +422,7 @@ namespace BeastHunter
             _buybackItemPrice.text = "";
         }
 
-        private void OnClick_LocationButton(HubMapUILocation location)
+        private void OnClick_LocationButton(HubMapUILocationData location)
         {
             _selectedLocation = location;
 
@@ -901,7 +901,7 @@ namespace BeastHunter
             }
         }
 
-        private void FillLocationPanel(HubMapUILocation location)
+        private void FillLocationPanel(HubMapUILocationData location)
         {
             _locationScreen.sprite = location.Screenshot;
             _locationName.text = location.Name;

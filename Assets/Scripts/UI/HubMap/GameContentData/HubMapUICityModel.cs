@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+
 
 namespace BeastHunter
 {
     public class HubMapUICityModel
     {
+        #region Fields
+
         private int _minItemsAmountInShop;
         private int _playerReputation;
 
+        #endregion
+
+
+        #region Properties
 
         public Action<HubMapUICityModel> OnChangePlayerReputationHandler { get; set; }
-
 
         public int DataInstanceID { get; private set; }
         public string Name { get; private set; }
@@ -38,6 +43,10 @@ namespace BeastHunter
             }
         }
 
+        #endregion
+
+
+        #region ClassLifeCycle
 
         public HubMapUICityModel(HubMapUICityData data)
         {
@@ -67,6 +76,10 @@ namespace BeastHunter
             UpdateShopItems();
         }
 
+        #endregion
+
+
+        #region Methods
 
         public void UpdateShopItems()
         {
@@ -78,5 +91,7 @@ namespace BeastHunter
                 ShopStorage.PutItem(i, ShopItemsPool[randomItemIndex]);
             }
         }
+
+        #endregion
     }
 }

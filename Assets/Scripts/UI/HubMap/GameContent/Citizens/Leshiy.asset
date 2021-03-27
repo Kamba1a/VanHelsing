@@ -54,7 +54,7 @@ MonoBehaviour:
       _nextDialogNodeId: 13
   _questAnswers:
   - _id: 0
-    _dialogNodesForThisAnswer: 
+    _dialogNodesForThisAnswer: 0800000009000000
     _answer:
       _text: "\u042F \u0442\u0435\u0431\u0435 \u0442\u0443\u0442 \u043F\u043E\u0440\u043E\u0448\u043E\u0447\u043A\u0430
         \u043F\u0440\u0438\u043D\u0435\u0441..."

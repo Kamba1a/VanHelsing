@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
 namespace BeastHunter
 {
     public class HubMapUIPlayerModel
     {
+        #region Properties
+
         public int GoldAmount { get; set; }
         public HubMapUIStorage Inventory { get; private set; }
         public List<HubMapUICharacterModel> Characters { get; private set; }
         public int CharactersEquipmentSlotAmount { get; private set; }
 
+        #endregion
+
+
+        #region ClassLifeCycle
 
         public HubMapUIPlayerModel(HubMapUIPlayerData data)
         {
@@ -31,17 +36,6 @@ namespace BeastHunter
             }
         }
 
-
-        //public float GetCityReputation(HubMapUICityData city)
-        //{
-        //    return _citiesReputation.Find(rep => rep.City == city).Reputation;
-        //}
-
-        //public void AddCityReputation(HubMapUICityData city, int reputationAmount)
-        //{
-        //    HubMapUICityReputation cityReputation = _citiesReputation.Find(rep => rep.City == city);
-        //    cityReputation.Reputation += reputationAmount;
-        //    OnChangeReputationHandler?.Invoke(cityReputation);
-        //}
+        #endregion
     }
 }

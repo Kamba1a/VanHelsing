@@ -1,17 +1,24 @@
 ﻿using UnityEngine;
 
+
 namespace BeastHunter
 {
     [System.Serializable]
     public class HubMapUICityReputation
     {
-        [SerializeField] public HubMapUICityData City;
-        [SerializeField] public int Reputation;
+        #region Fields
 
-        public HubMapUICityReputation(HubMapUICityData city, int rep)
-        {
-            City = city;
-            Reputation = rep;
-        }
+        [SerializeField] public HubMapUICityData _city;
+        [SerializeField] public int _reputation;
+
+        #endregion
+
+
+        #region Properties
+
+        public HubMapUICityData City => _city;
+        public int Reputation => _reputation;
+
+        #endregion
     }
 }

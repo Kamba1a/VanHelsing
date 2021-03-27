@@ -10,7 +10,7 @@ namespace BeastHunter
 
         [SerializeField] private HubMapUIPlayerData _player;
         [SerializeField] private HubMapUICityData[] _cities;
-        [SerializeField] private HubMapUILocation[] _locations;
+        [SerializeField] private HubMapUILocationData[] _locations;
 
         #endregion
 
@@ -19,7 +19,7 @@ namespace BeastHunter
 
         public HubMapUIPlayerData Player => _player;
         public HubMapUICityData[] Cities => (HubMapUICityData[])_cities.Clone();
-        public HubMapUILocation[] Locations => (HubMapUILocation[])_locations.Clone();
+        public HubMapUILocationData[] Locations => (HubMapUILocationData[])_locations.Clone();
 
         #endregion
     }

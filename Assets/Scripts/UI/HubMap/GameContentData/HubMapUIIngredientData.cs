@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
+
 namespace BeastHunter
 {
-    [CreateAssetMenu(fileName = "HubMapUIDweller", menuName = "CreateData/HubMapUIData/HubMapUIDweller", order = 0)]
-    public class HubMapUIDweller : ScriptableObject
+    [CreateAssetMenu(fileName = "HubMapUIIngredient", menuName = "CreateData/HubMapUIData/HubMapUIIngredient", order = 0)]
+    public class HubMapUIIngredientData : ScriptableObject
     {
         #region Fields
 
