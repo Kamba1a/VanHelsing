@@ -1,28 +1,50 @@
 ﻿using System;
+using UnityEngine;
+
 
 namespace BeastHunter
 {
     public class HubMapUIQuestModel
     {
-        public HubMapUIQuestData Data { get; set; }
-        public HubMapUIQuestStatus Status { get; set; }
-        public HubMapUIQuestTaskData CurrentTask { get; set; }
+        #region Properties
 
+        public HubMapUIQuestData Data { get; private set; }
+        public HubMapUIQuestStatus Status { get; set; }
+        public HubMapUIQuestTaskData CurrentTask { get; private set; }
+
+        #endregion
+
+
+        #region ClassLifeCycle
 
         public HubMapUIQuestModel(HubMapUIQuestData data, HubMapUIQuestStatus status)
         {
             Data = data;
             Status = status;
-            CurrentTask = data.FirstTask;
+            CurrentTask = Array.Find(data.Tasks, task => task.Id == data.FirstTaskId);
         }
 
-        public bool HasQuestCompleteRequirement(HubMapUIQuestData questData)
+        #endregion
+
+
+        #region Methods
+
+        public HubMapUICitizenData GetCurrentTargetCitizen()
         {
-            if (Data.RequiredQuest != null)
+            return GetTargetCitizenSettings().Citizen;
+        }
+
+        public HubMapUIQuestCitizenDialogSettings GetTargetCitizenSettings()
+        {
+            for (int i = 0; i < CurrentTask.CitizenDialogSettings.Length; i++)
             {
-                return Data.RequiredQuest == questData;
+                if (CurrentTask.CitizenDialogSettings[i].IsTarget)
+                {
+                    return CurrentTask.CitizenDialogSettings[i];
+                }
             }
-            return false;
+            Debug.LogError(this + ": no target citizen. Quest title: " + this.Data.Title + " Task id: " + CurrentTask.Id);
+            return null;
         }
 
         public bool IsRequirementQuestComleted(HubMapUIQuestModel requirementQuest)
@@ -43,15 +65,6 @@ namespace BeastHunter
             return true;
         }
 
-        public bool HasCityRequirement(int cityDataInstanceID)
-        {
-            if (Data.RequiredReputation.City != null)
-            {
-                return Data.RequiredReputation.City.GetInstanceID() == cityDataInstanceID;
-            }
-            return false;
-        }
-
         public void NextTask()
         {
             HubMapUIQuestTaskData nextTask = Array.Find(Data.Tasks, task => task.Id == CurrentTask.NextQuestTaskId);
@@ -62,5 +75,25 @@ namespace BeastHunter
         {
             return CurrentTask.Id == Data.EmptyEndTaskId;
         }
+
+        private bool HasQuestCompleteRequirement(HubMapUIQuestData questData)
+        {
+            if (Data.RequiredQuest != null)
+            {
+                return Data.RequiredQuest == questData;
+            }
+            return false;
+        }
+
+        private bool HasCityRequirement(int cityDataInstanceID)
+        {
+            if (Data.RequiredReputation.City != null)
+            {
+                return Data.RequiredReputation.City.GetInstanceID() == cityDataInstanceID;
+            }
+            return false;
+        }
+
+        #endregion
     }
 }

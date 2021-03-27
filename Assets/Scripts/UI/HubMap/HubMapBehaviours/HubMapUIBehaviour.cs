@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 namespace BeastHunter
 {
     public class HubMapUIBehaviour : MonoBehaviour
@@ -253,8 +254,6 @@ namespace BeastHunter
             _closeTradePanelButton.onClick.AddListener(OnClick_CloseTradePanelButton);
             _sellButton.onClick.AddListener(OnClick_SellItemButton);
             _buyBackButton.onClick.AddListener(OnClick_BuyBackItemButton);
-
-            Data.HubMapData.QuestService.OnQuestStartHandler += OnQuestStart;
         }
 
         private void OnDisable()
@@ -276,8 +275,6 @@ namespace BeastHunter
             _closeInventoryButton.onClick.RemoveAllListeners();
             _perkTreeButton.onClick.RemoveAllListeners();
             _shopButton.onClick.RemoveAllListeners();
-
-            Data.HubMapData.QuestService.OnQuestStartHandler -= OnQuestStart;
         }
 
         private void Awake()
@@ -550,26 +547,17 @@ namespace BeastHunter
 
         private void OnClick_DialogButton(HubMapUICitizenModel citizen, HubMapUIDialogAnswer dialogAnswer)
         {
+            dialogAnswer.SelectedByPlayer();
+
             for (int i = 0; i < _displayedDialogAnswerButtons.Count; i++)
             {
                 Destroy(_displayedDialogAnswerButtons[i]);
             }
             _displayedDialogAnswerButtons.Clear();
 
-            Data.HubMapData.QuestService.SetNewDialog(citizen, dialogAnswer.NextDialogNodeId);
-
-            if (dialogAnswer.IsProgressQuest)
-            {
-                Data.HubMapData.QuestService.QuestProgressed(dialogAnswer.ProgressQuest, citizen);
-            }
-
             if (dialogAnswer.IsDialogEnd)
             {
                 _dialogPanel.SetActive(false);
-                foreach (KeyValuePair<HubMapUICitizenModel, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
-                {
-                    kvp.Value.UpdateInfo(kvp.Key);
-                }
             }
             else
             {
@@ -761,14 +749,6 @@ namespace BeastHunter
             }
         }
 
-        private void OnQuestStart(HubMapUIQuestModel quest)
-        {
-            foreach (KeyValuePair<HubMapUICitizenModel, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
-            {
-                kvp.Value.UpdateInfo(kvp.Key);
-            }
-        }
-
         #endregion
 
 
@@ -836,7 +816,7 @@ namespace BeastHunter
             citizenUIBehaviour.FillCitizenInfo(citizen);
             citizenUIBehaviour.OnClick_CitizenButtonHandler = OnClick_CitizenButton;
 
-            //Data.HubMapData.QuestService.OnQuestStartHandler += () => citizenUIBehaviour.UpdateInfo(citizen);
+            citizen.OnChangeQuestMarkerTypeHandler += citizenUIBehaviour.SetQuestMarker;
 
             _rightInfoPanelObjectsForDestroy.Add(citizenUI);
             _displayedCurrentCitizensUIBehaviours.Add(citizen, citizenUIBehaviour);
@@ -944,27 +924,15 @@ namespace BeastHunter
 
         private void FillDialogPanel(HubMapUICitizenModel citizen)
         {
-            //HubMapUIDialogNode currentDialog = Data.HubMapData.Dialogs.Find(dialog => dialog.Id == Data.HubMapData.DialogsController.GetCurrentDialogId(citizen));
             _citizenName.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
-            //_dialogText.text = currentDialog.Text;
-            _dialogText.text = citizen.CurrentSpeechText;
+            _dialogText.text = citizen.CurrentDialog.Text;
 
-            //for (int i = 0; i < currentDialog.Answers.Length; i++)
-            //{
-            //    InitializeDialogAnswerButton(citizen, currentDialog.Answers[i]);
-            //}
-
-            for (int i = 0; i < citizen.CurrentExpectedResponses.Count; i++)
+            List<HubMapUIDialogAnswer> answers = citizen.GetAllCurentAnswers();
+            for (int i = 0; i < answers.Count; i++)
             {
-                InitializeDialogAnswerButton(citizen, citizen.CurrentExpectedResponses[i]);
+                InitializeDialogAnswerButton(citizen, answers[i]);
             }
-
-            //HubMapUIDialogAnswer additionalQuestAnswer = Data.HubMapData.QuestService.GetAdditionalQuestAnswer(currentDialog.Id);
-            //if (additionalQuestAnswer != null)
-            //{
-            //    InitializeDialogAnswerButton(citizen, additionalQuestAnswer);
-            //}
         }
 
         #endregion
@@ -979,11 +947,10 @@ namespace BeastHunter
 
         private void ClearRightInfoPanel()
         {
-            //foreach (KeyValuePair<HubMapUICitizenModel, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
-            //{
-            //    Data.HubMapData.QuestService.OnQuestStartHandler -=
-            //        () => kvp.Value.UpdateInfo(kvp.Key);
-            //}
+            foreach (KeyValuePair<HubMapUICitizenModel, HubMapUICitizenBehaviour> kvp in _displayedCurrentCitizensUIBehaviours)
+            {
+                kvp.Key.OnChangeQuestMarkerTypeHandler -= kvp.Value.SetQuestMarker;
+            }
 
             for (int i=0; i< _rightInfoPanelObjectsForDestroy.Count; i++)
             {

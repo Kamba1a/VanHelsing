@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace BeastHunter
 {
-    public class HubMapUICharacterBehaviour: MonoBehaviour
+    public class HubMapUICharacterBehaviour: MonoBehaviour  //todo: delete class?
     {
         #region Properties
 

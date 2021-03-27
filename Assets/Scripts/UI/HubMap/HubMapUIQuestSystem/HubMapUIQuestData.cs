@@ -1,10 +1,12 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+
 
 namespace BeastHunter
 {
     public class HubMapUIQuestData : ScriptableObject
     {
+        #region Fields
+
         [SerializeField] private string _title;
         [SerializeField] private HubMapUIQuestTaskData[] _tasks;
         [SerializeField] private int _firstTaskId;
@@ -12,6 +14,10 @@ namespace BeastHunter
         [SerializeField] private HubMapUICityReputation _requiredReputation;
         [SerializeField] private HubMapUIQuestData _requiredQuest;
 
+        #endregion
+
+
+        #region Properties
 
         public string Title => _title;
         public int FirstTaskId => _firstTaskId;
@@ -20,13 +26,6 @@ namespace BeastHunter
         public HubMapUIQuestData RequiredQuest => _requiredQuest;
         public HubMapUIQuestTaskData[] Tasks => (HubMapUIQuestTaskData[])_tasks.Clone();
 
-
-        public HubMapUIQuestTaskData FirstTask { get; private set; }
-
-
-        private void OnEnable()
-        {
-            FirstTask = Array.Find(_tasks, task=> task.Id == _firstTaskId);
-        }
+        #endregion
     }
 }

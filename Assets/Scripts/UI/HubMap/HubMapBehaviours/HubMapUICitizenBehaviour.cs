@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
 namespace BeastHunter
 {
     class HubMapUICitizenBehaviour : MonoBehaviour
@@ -30,8 +31,7 @@ namespace BeastHunter
             _citizenNamePanel.text = citizen.Name;
             _citizenPortrait.sprite = citizen.Portrait;
             GetComponent<Button>().onClick.AddListener(() => OnClick_CitizenButton(citizen));
-            SetQuestMarker(Data.HubMapData.QuestService.GetQuestMarker(citizen));
-            //SetQuestMarker(citizen.QuestMarkerType);
+            SetQuestMarker(citizen.QuestMarkerType);
         }
 
         public void OnClick_CitizenButton(HubMapUICitizenModel citizen)
@@ -39,13 +39,7 @@ namespace BeastHunter
             OnClick_CitizenButtonHandler?.Invoke(citizen);
         }
 
-        public void UpdateInfo(HubMapUICitizenModel citizen)
-        {
-            SetQuestMarker(Data.HubMapData.QuestService.GetQuestMarker(citizen));
-            //SetQuestMarker(citizen.QuestMarkerType);
-        }
-
-        private void SetQuestMarker(HubMapUIQuestMarkerType questMarkerType)
+        public void SetQuestMarker(HubMapUIQuestMarkerType questMarkerType)
         {
             switch (questMarkerType)
             {

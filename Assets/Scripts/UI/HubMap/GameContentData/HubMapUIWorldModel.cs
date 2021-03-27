@@ -6,13 +6,17 @@ namespace BeastHunter
 {
     public class HubMapUIWorldModel
     {
+        #region Properties
+
         public HubMapUIPlayerModel Player { get; private set; }
         public List<HubMapUICityModel> Cities { get; private set; }
         public List<HubMapUILocation> Locations { get; private set; }
 
+        #endregion
 
-        public Action<HubMapUICityModel> OnChangePlayerReputationHandler { get; set; }
- 
+
+        #region ClassLifeCycle
+
         public HubMapUIWorldModel(HubMapUIWorldData data)
         {
             Player = new HubMapUIPlayerModel(data.Player);
@@ -21,8 +25,6 @@ namespace BeastHunter
             for (int i = 0; i< data.Cities.Length; i++)
             {
                 HubMapUICityModel newCity = new HubMapUICityModel(data.Cities[i]);
-                newCity.OnChangePlayerReputationHandler += (rep) => OnChangePlayerReputationHandler?.Invoke(rep);
-
                 Cities.Add(newCity);
             }
 
@@ -33,6 +35,10 @@ namespace BeastHunter
             }
         }
 
+        #endregion
+
+
+        #region Methods
 
         public HubMapUICityModel GetCity(HubMapUICityData cityData)
         {
@@ -54,5 +60,7 @@ namespace BeastHunter
             }
             return null;
         }
+
+        #endregion
     }
 }

@@ -1,24 +1,24 @@
-﻿using System;
-using UnityEngine;
+﻿//using System;
+//using UnityEngine;
 
-namespace BeastHunter
-{
-    [Serializable]
-    public class HubMapUIQuestDialogAnswer : HubMapUIDialogAnswer
-    {
-        #region Fields
+//namespace BeastHunter
+//{
+//    [Serializable]
+//    public class HubMapUIQuestDialogAnswer : HubMapUIDialogAnswer
+//    {
+//        #region Fields
 
-        [SerializeField] private bool _isProgressQuest;
-        [SerializeField] private HubMapUIQuestData _progressQuest;
+//        [SerializeField] private bool _isProgressQuest;
+//        [SerializeField] private HubMapUIQuestData _progressQuest;
 
-        #endregion
+//        #endregion
 
 
-        #region Properties
+//        #region Properties
 
-        public bool IsProgressQuest => _isProgressQuest;
-        public HubMapUIQuestData ProgressQuest => _progressQuest;
+//        public bool IsProgressQuest => _isProgressQuest;
+//        public HubMapUIQuestData ProgressQuest => _progressQuest;
 
-        #endregion
-    }
-}
+//        #endregion
+//    }
+//}

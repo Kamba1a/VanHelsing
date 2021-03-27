@@ -5,18 +5,21 @@ namespace BeastHunter
     [System.Serializable]
     public class HubMapUIQuestTaskData
     {
+        #region Fields
+
         [SerializeField] private int _id;
-        [SerializeField] private HubMapUICitizenData _targetCitizen;
-        [SerializeField] private bool _isNpcInitiatesDialogue;
-        [SerializeField] private int _initiatedDialogueId;
-        [SerializeField] private HubMapUIQuestTaskAnswers[] _taskAnswers;
+        [SerializeField] private HubMapUIQuestCitizenDialogSettings[] _citizenDialogSettings;
         [SerializeField] private int _nextQuestTaskId;
+
+        #endregion
+
+
+        #region Properties
 
         public int Id => _id;
         public int NextQuestTaskId => _nextQuestTaskId;
-        public HubMapUICitizenData TargetCitizen => _targetCitizen;
-        public bool IsNpcInitiatesDialogue => _isNpcInitiatesDialogue;
-        public int InitiatedDialogueId => _initiatedDialogueId;
-        public HubMapUIQuestTaskAnswers[] TaskAnswers => _taskAnswers;
+        public HubMapUIQuestCitizenDialogSettings[] CitizenDialogSettings => (HubMapUIQuestCitizenDialogSettings[])_citizenDialogSettings.Clone();
+
+        #endregion
     }
 }
