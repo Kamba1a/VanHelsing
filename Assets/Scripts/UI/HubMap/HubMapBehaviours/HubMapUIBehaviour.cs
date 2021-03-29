@@ -217,7 +217,6 @@ namespace BeastHunter
         private List<HubMapUISlotBehaviour> _inventorySlotsUIBehaviours;
         private List<HubMapUISlotBehaviour> _shopSlotsUIBehaviours;
         private List<HubMapUISlotBehaviour> _buyBackSlotsUIBehaviours;
-        private List<HubMapUICharacterBehaviour> _charactersUIBehaviours;
         private Dictionary<HubMapUICitizenModel, HubMapUICitizenBehaviour> _displayedCurrentCitizensUIBehaviours;
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
@@ -290,7 +289,6 @@ namespace BeastHunter
             _displayedCurrentCitizensUIBehaviours = new Dictionary<HubMapUICitizenModel, HubMapUICitizenBehaviour>();
             _displayedDialogAnswerButtons = new List<GameObject>();
 
-            _charactersUIBehaviours = new List<HubMapUICharacterBehaviour>();
             _equipmentSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
             _inventorySlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
             _buyBackSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
@@ -804,12 +802,8 @@ namespace BeastHunter
         private void InitializeCharacterUI(HubMapUICharacterModel character)
         {
             GameObject characterUI = InstantiateUIObject(Data.HubMapData.CharacterUIPrefab, _charactersPanel);
-
-            HubMapUICharacterBehaviour characterUIBehaviour = characterUI.GetComponentInChildren<HubMapUICharacterBehaviour>();
-            characterUIBehaviour.FillCharacterInfo(character);
-            characterUIBehaviour.OnClick_CharacterButtonHandler = OnClick_CharacterButton;
-
-            _charactersUIBehaviours.Add(characterUIBehaviour);
+            characterUI.GetComponent<Image>().sprite = character.Portrait;
+            characterUI.GetComponent<Button>().onClick.AddListener(() => OnClick_CharacterButton(character));
         }
 
         private void InitializeEquipmentSlotUI(int slotIndex)

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-
-
-namespace BeastHunter
+﻿namespace BeastHunter
 {
     public class HubMapUIPlayerModel
     {
