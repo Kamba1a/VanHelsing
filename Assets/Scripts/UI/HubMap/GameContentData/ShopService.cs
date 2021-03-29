@@ -13,14 +13,14 @@ namespace BeastHunter
             return CountSellPrice(GetItemPrice(item));
         }
 
+        public int GetItemPrice(BaseItem item)
+        {
+            return item.ItemStruct.ShopPrice;
+        }
+
         private int CountSellPrice(int fullPrice)
         {
             return Mathf.RoundToInt(fullPrice * SELL_PRICE_PERCENT);
-        }
-
-        private int GetItemPrice(BaseItem item)
-        {
-            return item.ItemStruct.ShopPrice;
         }
     }
 }

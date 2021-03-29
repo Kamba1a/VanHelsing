@@ -103,19 +103,6 @@ namespace BeastHunter
             return _items.Length;
         }
 
-        public List<BaseItem> GetItemsOnly()
-        {
-            List<BaseItem> items = new List<BaseItem>();
-            for (int i = 0; i < _items.Length; i++)
-            {
-                if (_items[i] != null)
-                {
-                    items.Add(_items[i]);
-                }
-            }
-            return items;
-        }
-
         public void Clear()
         {
             for (int i = 0; i < _items.Length; i++)
