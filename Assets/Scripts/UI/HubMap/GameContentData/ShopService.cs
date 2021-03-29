@@ -3,7 +3,7 @@
 
 namespace BeastHunter
 {
-    public class ShopService
+    public class HubMapUIShopService
     {
         private const float SELL_PRICE_PERCENT = 0.6f;
 

@@ -579,8 +579,9 @@ namespace BeastHunter
                 {
                     if (_buyBackStorage.MovingItemToFirstEmptySlot(sellingItem))
                     {
-                        _player.GoldAmount += Services.SharedInstance.ShopService.
+                        _player.GoldAmount += Data.HubMapData.ShopService.
                             CountSellPrice(sellingItem);
+                        _playerGoldAmount.text = _player.GoldAmount.ToString();
                     }
                     else
                     {
@@ -598,12 +599,13 @@ namespace BeastHunter
                 BaseItem buyingItem = _buyBackStorage.TakeItem(_selected.BuyBackSlotIndex.Value);
                 if (buyingItem != null)
                 {
-                    if (_player.GoldAmount >= Services.SharedInstance.ShopService.CountSellPrice(buyingItem)) 
+                    if (_player.GoldAmount >= Data.HubMapData.ShopService.CountSellPrice(buyingItem)) 
                     { 
-                        if (!_inventory.MovingItemToFirstEmptySlot(buyingItem))
+                        if (_inventory.MovingItemToFirstEmptySlot(buyingItem))
                         {
-                            _player.GoldAmount += Services.SharedInstance.ShopService.
+                            _player.GoldAmount -= Data.HubMapData.ShopService.
                                 CountSellPrice(buyingItem);
+                            _playerGoldAmount.text = _player.GoldAmount.ToString();
                         }
                         else
                         {
@@ -687,7 +689,7 @@ namespace BeastHunter
                 {
                     if (_inventory.GetItemBySlot(_selected.InventorySlotIndex.Value) != null)
                     {
-                        _sellingItemPrice.text = Services.SharedInstance.ShopService.
+                        _sellingItemPrice.text = Data.HubMapData.ShopService.
                             CountSellPrice(_inventory.GetItemBySlot(_selected.InventorySlotIndex.Value)).ToString();
                         _sellButton.interactable = true;
                     }
@@ -736,10 +738,10 @@ namespace BeastHunter
                 {
                     if (_buyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value) != null)
                     {
-                        _buybackItemPrice.text = Services.SharedInstance.ShopService.
-                            CountSellPrice(_inventory.GetItemBySlot(_selected.BuyBackSlotIndex.Value)).ToString();
+                        _buybackItemPrice.text = Data.HubMapData.ShopService.
+                            CountSellPrice(_buyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value)).ToString();
 
-                        _buyBackButton.interactable = _player.GoldAmount >= Services.SharedInstance.ShopService.
+                        _buyBackButton.interactable = _player.GoldAmount >= Data.HubMapData.ShopService.
                             CountSellPrice(_buyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value));
                     }
                     else

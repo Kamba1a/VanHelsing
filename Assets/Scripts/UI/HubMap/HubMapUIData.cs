@@ -62,6 +62,7 @@ namespace BeastHunter
         public HubMapUILocationData Location_3 => _location_3;
         public HubMapUILocationData Location_4 => _location_4;
 
+        public HubMapUIShopService ShopService { get; private set; }
         public HubMapUIWorldModel World { get; private set; }
         public int BuyBackStorageSlotsAmount => _buyBackStorageSlotsAmount;
 
@@ -73,7 +74,9 @@ namespace BeastHunter
         private void OnEnable()
         {
             World = new HubMapUIWorldModel(_worldData);
+            ShopService = new HubMapUIShopService();
             _questController = new HubMapUIQuestController(_quests);
+
 
             #if UNITY_EDITOR
             _dialogsListCount = _dialogs.Count;
