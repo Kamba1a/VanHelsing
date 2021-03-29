@@ -209,6 +209,7 @@ namespace BeastHunter
         [SerializeField] private Text _buyingItemPrice;
         [SerializeField] private Text _buybackItemPrice;
         [SerializeField] private Text _shopCityReputation;
+        [SerializeField] private Text _playerGoldAmount;
 
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
@@ -342,6 +343,8 @@ namespace BeastHunter
             _hikePreparePanel.SetActive(true);
             _hikeInventoryPanel.SetActive(false);
             _tradePanel.SetActive(false);
+            _sellButton.interactable = false;
+            _buyBackButton.interactable = false;
         }
 
         #endregion
@@ -404,6 +407,7 @@ namespace BeastHunter
         private void OnClick_OpenTradePanelButton()
         {
             SetScrollViewParentForInventoryItemsPanel(_shopInventoryScrollView);
+            _playerGoldAmount.text = _player.GoldAmount.ToString();
             _shopCityReputation.text = _selectedCity.PlayerReputation.ToString();
             _tradePanel.SetActive(true);
         }
@@ -573,7 +577,12 @@ namespace BeastHunter
 
                 if (sellingItem != null)
                 {
-                    if (!_buyBackStorage.MovingItemToFirstEmptySlot(sellingItem))
+                    if (_buyBackStorage.MovingItemToFirstEmptySlot(sellingItem))
+                    {
+                        _player.GoldAmount += Services.SharedInstance.ShopService.
+                            CountSellPrice(sellingItem);
+                    }
+                    else
                     {
                         _inventory.PutItem(_selected.InventorySlotIndex.Value, sellingItem);
                         Debug.Log("BuyBack storage is full");
@@ -587,13 +596,24 @@ namespace BeastHunter
             if (_selected.BuyBackSlotIndex.HasValue)
             {
                 BaseItem buyingItem = _buyBackStorage.TakeItem(_selected.BuyBackSlotIndex.Value);
-
                 if (buyingItem != null)
                 {
-                    if (!_inventory.MovingItemToFirstEmptySlot(buyingItem))
+                    if (_player.GoldAmount >= Services.SharedInstance.ShopService.CountSellPrice(buyingItem)) 
+                    { 
+                        if (!_inventory.MovingItemToFirstEmptySlot(buyingItem))
+                        {
+                            _player.GoldAmount += Services.SharedInstance.ShopService.
+                                CountSellPrice(buyingItem);
+                        }
+                        else
+                        {
+                            _buyBackStorage.PutItem(_selected.InventorySlotIndex.Value, buyingItem);
+                            Debug.Log("Inventory storage is full");
+                        }
+                    }
+                    else
                     {
-                        _buyBackStorage.PutItem(_selected.InventorySlotIndex.Value, buyingItem);
-                        Debug.Log("Inventory storage is full");
+                        Debug.Log("The player does not have enough gold ");
                     }
                 }
 
@@ -663,18 +683,28 @@ namespace BeastHunter
             {
                 _inventorySlotsUIBehaviours[_selected.InventorySlotIndex.Value].SelectFrameSwitcher(true);
 
-                if (_inventory.GetItemBySlot(_selected.InventorySlotIndex.Value) != null)
+                if (_tradePanel.activeSelf)
                 {
-                    _sellingItemPrice.text = _inventory.GetItemBySlot(_selected.InventorySlotIndex.Value).ItemStruct.ShopPrice.ToString();
-                }
-                else
-                {
-                    _sellingItemPrice.text = "0";
+                    if (_inventory.GetItemBySlot(_selected.InventorySlotIndex.Value) != null)
+                    {
+                        _sellingItemPrice.text = Services.SharedInstance.ShopService.
+                            CountSellPrice(_inventory.GetItemBySlot(_selected.InventorySlotIndex.Value)).ToString();
+                        _sellButton.interactable = true;
+                    }
+                    else
+                    {
+                        _sellButton.interactable = false;
+                        _sellingItemPrice.text = "0";
+                    }
                 }
             }
             else
             {
-                _sellingItemPrice.text = "";
+                if (_tradePanel.activeSelf)
+                {
+                    _sellButton.interactable = false;
+                    _sellingItemPrice.text = "";
+                }
             }
         }
 
@@ -702,18 +732,30 @@ namespace BeastHunter
             {
                 _buyBackSlotsUIBehaviours[_selected.BuyBackSlotIndex.Value].SelectFrameSwitcher(true);
 
-                if (_buyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value) != null)
+                if (_tradePanel.activeSelf)
                 {
-                    _buybackItemPrice.text = _buyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value).ItemStruct.ShopPrice.ToString();
-                }
-                else
-                {
-                    _buybackItemPrice.text = "0";
+                    if (_buyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value) != null)
+                    {
+                        _buybackItemPrice.text = Services.SharedInstance.ShopService.
+                            CountSellPrice(_inventory.GetItemBySlot(_selected.BuyBackSlotIndex.Value)).ToString();
+
+                        _buyBackButton.interactable = _player.GoldAmount >= Services.SharedInstance.ShopService.
+                            CountSellPrice(_buyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value));
+                    }
+                    else
+                    {
+                        _buyBackButton.interactable = false;
+                        _buybackItemPrice.text = "0";
+                    }
                 }
             }
             else
             {
-                _buybackItemPrice.text = "";
+                if (_tradePanel.activeSelf)
+                {
+                    _buyBackButton.interactable = false;
+                    _buybackItemPrice.text = "";
+                }
             }
         }
 
