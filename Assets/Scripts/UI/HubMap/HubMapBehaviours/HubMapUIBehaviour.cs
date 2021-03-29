@@ -223,10 +223,12 @@ namespace BeastHunter
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
         private HubMapUILocationData _selectedLocation;
         private HubMapUICityModel _selectedCity;
-        private HubMapUIStorage _inventory;
         private HubMapUIStorage _buyBackStorage;
         private SelectedElements _selected;
+
+        private HubMapUIContext _context;
         private HubMapUIPlayerModel _player;
+        private HubMapUIStorage _inventory;
 
         #endregion
 
@@ -280,7 +282,8 @@ namespace BeastHunter
 
         private void Awake()
         {
-            _player = Data.HubMapData.World.Player;
+            _context = Data.HubMapData.Context;
+            _player = _context.Player;
             _inventory = _player.Inventory;
 
             _rightInfoPanelObjectsForDestroy = new List<GameObject>();
@@ -293,18 +296,18 @@ namespace BeastHunter
             _buyBackSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
             _shopSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
 
-            _buyBackStorage = new HubMapUIStorage(Data.HubMapData.BuyBackStorageSlotsAmount);
+            _buyBackStorage = new HubMapUIStorage(_context.ShopsSlotsAmount);
             _selected = new SelectedElements();
         }
 
         private void Start()
         {
-            for (int i = 0; i < _player.Characters.Count; i++)
+            for (int i = 0; i < _context.Characters.Count; i++)
             {
-                InitializeCharacterUI(_player.Characters[i]);
+                InitializeCharacterUI(_context.Characters[i]);
             }
 
-            for (int i = 0; i < _player.CharactersEquipmentSlotAmount; i++)
+            for (int i = 0; i < _context.CharactersEquipmentSlotAmount; i++)
             {
                 InitializeEquipmentSlotUI(i);
             }

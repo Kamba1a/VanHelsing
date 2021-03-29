@@ -19,7 +19,7 @@ namespace BeastHunter
 
         #region Fields
 
-        private HubMapUIWorldModel _world;
+        private HubMapUIContext _context;
         private List<HubMapUIQuestModel> _notActiveQuests;
         private List<HubMapUIQuestModel> _activeQuests;
         private List<HubMapUIQuestModel> _completedQuests;
@@ -29,33 +29,30 @@ namespace BeastHunter
 
         #region ClassLifeCycle
 
-        public HubMapUIQuestController(IEnumerable<HubMapUIQuestData> quests)
+        public HubMapUIQuestController(HubMapUIContext context)
         {
-            _world = Data.HubMapData.World;
+            _context = context;
 
             _notActiveQuests = new List<HubMapUIQuestModel>();
             _activeQuests = new List<HubMapUIQuestModel>();
             _completedQuests = new List<HubMapUIQuestModel>();
 
-            if (quests != null)
+            for (int i = 0; i < _context.QuestsData.Length; i++)
             {
-                foreach (HubMapUIQuestData questData in quests)
-                {
-                    _notActiveQuests.Add(new HubMapUIQuestModel(questData, HubMapUIQuestStatus.NotActive));
-                }
+                _notActiveQuests.Add(new HubMapUIQuestModel(_context.QuestsData[i], HubMapUIQuestStatus.NotActive));
+            }
 
-                for (int i = 0; i < _notActiveQuests.Count; i++)
+            for (int i = 0; i < _notActiveQuests.Count; i++)
+            {
+                if (CheckQuestForAllRequirements(_notActiveQuests[i], RequirementCheckType.QuestComplete))
                 {
-                    if (CheckQuestForAllRequirements(_notActiveQuests[i], RequirementCheckType.QuestComplete))
-                    {
-                        QuestActivate(_notActiveQuests[i]);
-                    }
+                    QuestActivate(_notActiveQuests[i]);
                 }
             }
 
-            for (int i = 0; i < _world.Cities.Count; i++)
+            for (int i = 0; i < _context.Cities.Count; i++)
             {
-                _world.Cities[i].OnChangePlayerReputationHandler += OnChangePlayerReputation;
+                _context.Cities[i].OnChangePlayerReputationHandler += OnChangePlayerReputation;
             }
         }
 
@@ -148,7 +145,7 @@ namespace BeastHunter
             if (excludeCheckType != RequirementCheckType.CityReputation)
             {
                 HubMapUICityData cityData = quest.Data.RequiredReputation.City;
-                bool checkReputationRequirement = quest.IsEnoughCityReputation(_world.GetCity(cityData));
+                bool checkReputationRequirement = quest.IsEnoughCityReputation(_context.GetCity(cityData));
 
                 if (!checkReputationRequirement)
                 {
@@ -195,7 +192,7 @@ namespace BeastHunter
         {
             if (quest.GetTargetCitizenSettings().IsNpcInitiateDialog)
             {
-                _world.GetCitizen(quest.GetCurrentTargetCitizen()).
+                _context.GetCitizen(quest.GetCurrentTargetCitizen()).
                     SetCurrentDialogNode(quest.GetTargetCitizenSettings().InitiatedDialogId);
             }
         }
@@ -206,7 +203,7 @@ namespace BeastHunter
             {
                 for (int i = 0; i < quest.CurrentTask.CitizenDialogSettings.Length; i++)
                 {
-                    HubMapUIQuestAnswer questAnswer = _world.GetCitizen(quest.CurrentTask.CitizenDialogSettings[i].Citizen).
+                    HubMapUIQuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.CitizenDialogSettings[i].Citizen).
                         GetQuestAnswerById(quest.CurrentTask.CitizenDialogSettings[i].QuestAnswerId);
 
                     if (questAnswer != null)
@@ -232,7 +229,7 @@ namespace BeastHunter
             {
                 for (int i = 0; i < quest.CurrentTask.CitizenDialogSettings.Length; i++)
                 {
-                    HubMapUIQuestAnswer questAnswer = _world.GetCitizen(quest.CurrentTask.CitizenDialogSettings[i].Citizen).
+                    HubMapUIQuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.CitizenDialogSettings[i].Citizen).
                         GetQuestAnswerById(quest.CurrentTask.CitizenDialogSettings[i].QuestAnswerId);
 
                     questAnswer.IsActive = false;
@@ -247,7 +244,7 @@ namespace BeastHunter
 
         private void SetMarkerTypeToCitizen(HubMapUIQuestModel quest, HubMapUIQuestMarkerType questMarker)
         {
-            _world.GetCitizen(quest.GetCurrentTargetCitizen()).QuestMarkerType = questMarker;
+            _context.GetCitizen(quest.GetCurrentTargetCitizen()).QuestMarkerType = questMarker;
         }
 
         #endregion

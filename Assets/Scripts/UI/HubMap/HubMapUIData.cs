@@ -28,11 +28,8 @@ namespace BeastHunter
         [SerializeField] private HubMapUILocationData _location_4;
 
         [Header("Game content for UI")]
-        [SerializeField] private HubMapUIWorldData _worldData;
-        [SerializeField] private int _buyBackStorageSlotsAmount;
-        [SerializeField] private int _shopSlotsAmount;
-        [SerializeField] private List<HubMapUIQuestData> _quests;
-        [SerializeField, ContextMenuItem("Reset ids", "DialogListResetIds")] private List<HubMapUIDialogNode> _dialogs;
+        [SerializeField] private HubMapUIContextData _contextData;
+        [SerializeField, ContextMenuItem("Reset ids", "DialogListResetIds")] private List<HubMapUIDialogNode> _dialogs; //to delete
 
         private HubMapUIQuestController _questController;
 
@@ -56,15 +53,15 @@ namespace BeastHunter
 
         public bool MapOnStartEnabled => _mapOnStartEnabled;
 
-        public HubMapUICityModel City => World.Cities.Find(city => city.DataInstanceID == _city.GetInstanceID());
+        public HubMapUICityModel City => Context.Cities.Find(city => city.DataInstanceID == _city.GetInstanceID());
         public HubMapUILocationData Location_1 => _location_1;
         public HubMapUILocationData Location_2 => _location_2;
         public HubMapUILocationData Location_3 => _location_3;
         public HubMapUILocationData Location_4 => _location_4;
 
+        public HubMapUIContext Context { get; private set; }
         public HubMapUIShopService ShopService { get; private set; }
-        public HubMapUIWorldModel World { get; private set; }
-        public int BuyBackStorageSlotsAmount => _buyBackStorageSlotsAmount;
+
 
         #endregion
 
@@ -73,9 +70,9 @@ namespace BeastHunter
 
         private void OnEnable()
         {
-            World = new HubMapUIWorldModel(_worldData);
+            Context = new HubMapUIContext(_contextData);
+            _questController = new HubMapUIQuestController(Context);
             ShopService = new HubMapUIShopService();
-            _questController = new HubMapUIQuestController(_quests);
 
 
             #if UNITY_EDITOR
