@@ -675,6 +675,12 @@ namespace BeastHunter
         private void OnPointerEnter_Slot(int slotIndex, StorageType storageType)
         {
             FillTooltipByItemInfo(GetStorageByType(storageType).GetItemBySlot(slotIndex), storageType);
+
+            _tooltip.GetComponent<RectTransform>().pivot =
+                storageType == StorageType.BuyBackStorage || storageType == StorageType.Shop ?
+                new Vector2(1, 0) :
+                new Vector2(0, 0);
+
             _tooltip.transform.position = Input.mousePosition;
             _tooltip.SetActive(true);
         }
@@ -903,6 +909,7 @@ namespace BeastHunter
             slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.Equipment);
             slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.Equipment);
             slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.Equipment);
+            slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _equipmentSlotsUIBehaviours.Add(slotBehaviour);
         }
@@ -933,6 +940,7 @@ namespace BeastHunter
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_BuyBackSlot;
             slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.BuyBackStorage);
+            slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _buyBackSlotsUIBehaviours.Add(slotBehaviour);
         }
@@ -946,6 +954,7 @@ namespace BeastHunter
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_ShopSlot;
             slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.Shop);
+            slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _shopSlotsUIBehaviours.Add(slotBehaviour);
         }
@@ -994,10 +1003,10 @@ namespace BeastHunter
 
             if (storageType == StorageType.Shop)
             {
-                if (!IsPossibleToBuyShopItem(item))
+                if (!IsPossibleToBuyShopItem(item, out string message))
                 {
                     tooltipTexts[0].gameObject.SetActive(true);
-                    tooltipTexts[0].text = ImpossibleToBuyMessage(item);
+                    tooltipTexts[0].text = message;
                 }
             }
         }
@@ -1201,26 +1210,38 @@ namespace BeastHunter
             }
         }
 
-        private string ImpossibleToBuyMessage(BaseItem item)
+        private bool IsPossibleToBuyShopItem(BaseItem item, out string message)
         {
-            StringBuilder message = new StringBuilder(); 
+            bool flag = true;
+            StringBuilder sb = new StringBuilder();
 
-            if (item.ItemStruct.RequiredReputationForSaleInShop <= _selectedCity.PlayerReputation)
+            if (item != null)
             {
-                message.AppendLine("Недостаточно репутации для покупки.");
-                message.AppendLine($"Необходимая репутация: {item.ItemStruct.RequiredReputationForSaleInShop}.");
+                if (_selectedCity.PlayerReputation < item.ItemStruct.RequiredReputationForSaleInShop)
+                {
+                    flag = false;
+
+                    sb.AppendFormat("Недостаточно репутации для покупки");
+                    sb.AppendLine();
+                    sb.AppendFormat($"Необходимая репутация: {item.ItemStruct.RequiredReputationForSaleInShop}");
+                }
+                if (_player.GoldAmount < Data.HubMapData.ShopService.GetItemPrice(item))
+                {
+                    flag = false;
+
+                    if (sb.Length > 0)
+                    {
+                        sb.AppendLine();
+                    }
+                    sb.AppendFormat("Недостаточно денег");
+                }
             }
 
-            if (_player.GoldAmount >= Data.HubMapData.ShopService.GetItemPrice(item))
-            {
-                message.AppendLine($"Недостаточно денег.");
-            }
-
-            Debug.Log(message.ToString());
-            return message.ToString();
+            message = sb.ToString();
+            return flag;
         }
 
-        private void LocationLoad()
+         private void LocationLoad()
         {
             Debug.Log("Load location. Location: " + _selectedLocation);
         }
