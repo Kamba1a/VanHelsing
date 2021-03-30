@@ -154,6 +154,7 @@ namespace BeastHunter
         [SerializeField] private Button _hubButton;
         [SerializeField] private Button _mapButton;
         [SerializeField] private GameObject _inventoryItemsPanel;
+        [SerializeField] private GameObject _tooltip;
 
         [Header("City info panel")]
         [SerializeField] private GameObject _cityInfoPanel;
@@ -348,6 +349,7 @@ namespace BeastHunter
             _sellButton.interactable = false;
             _buyBackButton.interactable = false;
             _buyButton.interactable = false;
+            _tooltip.SetActive(false);
         }
 
         #endregion
@@ -901,8 +903,24 @@ namespace BeastHunter
             slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageType.Inventory);
             slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.Inventory);
             slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.Inventory);
+            slotBehaviour.OnPointerEnterHandler = OnPointerEnter_InvenotySlot;
+            slotBehaviour.OnPointerExitHandler = OnPointerExit_InvenotySlot;
 
             _inventorySlotsUIBehaviours.Add(slotBehaviour);
+        }
+
+        private void OnPointerEnter_InvenotySlot(int slotIndex)
+        {
+            Debug.Log("OnPointerEnter_InvenotySlot " + slotIndex);
+            _tooltip.SetActive(true);
+            _tooltip.transform.position = Input.mousePosition;
+        }
+
+
+        private void OnPointerExit_InvenotySlot(int slotIndex)
+        {
+            Debug.Log("OnPointerExit_InvenotySlot " + slotIndex);
+            _tooltip.SetActive(false);
         }
 
         private void InitializeBuyBackSlotUI(int slotIndex)

@@ -7,7 +7,7 @@ using Extensions;
 
 namespace BeastHunter
 {
-    class HubMapUISlotBehaviour : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerDownHandler
+    class HubMapUISlotBehaviour : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
     {
         #region Constants
 
@@ -36,6 +36,8 @@ namespace BeastHunter
         public Action<int> OnDraggedItemHandler { get; set; }
         public Action<int> OnEndDragItemHandler { get; set; }
         public Action<int> OnDroppedItemHandler { get; set; }
+        public Action<int> OnPointerEnterHandler { get; set; }
+        public Action<int> OnPointerExitHandler { get; set; }
 
         public int SlotIndex { get; private set; }
         public bool IsDragAndDropEnabled { get; set; }
@@ -198,6 +200,32 @@ namespace BeastHunter
             if (_slotButton.interactable)
             {
                 OnPointerDownHandler?.Invoke(SlotIndex);
+            }
+        }
+
+        #endregion
+
+
+        #region IPointerEnterHandler
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (_itemImage.sprite != null)
+            {
+                OnPointerEnterHandler?.Invoke(SlotIndex);
+            }
+        }
+
+        #endregion
+
+
+        #region IPointerExitHandler
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (_itemImage.sprite != null)
+            {
+                OnPointerExitHandler?.Invoke(SlotIndex);
             }
         }
 
