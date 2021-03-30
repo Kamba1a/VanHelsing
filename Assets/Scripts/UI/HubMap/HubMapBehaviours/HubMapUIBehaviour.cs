@@ -903,24 +903,42 @@ namespace BeastHunter
             slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageType.Inventory);
             slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.Inventory);
             slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.Inventory);
-            slotBehaviour.OnPointerEnterHandler = OnPointerEnter_InvenotySlot;
-            slotBehaviour.OnPointerExitHandler = OnPointerExit_InvenotySlot;
+            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.Inventory);
+            slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _inventorySlotsUIBehaviours.Add(slotBehaviour);
         }
 
-        private void OnPointerEnter_InvenotySlot(int slotIndex)
+        private void OnPointerEnter_Slot(int slotIndex, StorageType storageType)
         {
-            Debug.Log("OnPointerEnter_InvenotySlot " + slotIndex);
-            _tooltip.SetActive(true);
+            FillTooltipByItemInfo(GetStorageByType(storageType).GetItemBySlot(slotIndex), storageType);
             _tooltip.transform.position = Input.mousePosition;
+            _tooltip.SetActive(true);
         }
 
 
-        private void OnPointerExit_InvenotySlot(int slotIndex)
+        private void OnPointerExit_Slot(int slotIndex)
         {
-            Debug.Log("OnPointerExit_InvenotySlot " + slotIndex);
             _tooltip.SetActive(false);
+        }
+
+        private void FillTooltipByItemInfo(BaseItem item, StorageType storageType)
+        {
+            Text[] tooltipTexts = _tooltip.GetComponentsInChildren<Text>(true);
+
+            tooltipTexts[0].gameObject.SetActive(false);
+            tooltipTexts[1].text = item.ItemStruct.Name;
+            tooltipTexts[2].text = item.ItemStruct.Description;
+            tooltipTexts[3].text = "Цена: " + Data.HubMapData.ShopService.GetItemPrice(item).ToString();
+
+            if (storageType == StorageType.Shop)
+            {
+                if (!IsPossibleToBuyShopItem(item))
+                { 
+                    tooltipTexts[0].gameObject.SetActive(true);
+                    tooltipTexts[0].text = "Невозможно купить эту вещь..."; //todo: full message
+                }
+            }
         }
 
         private void InitializeBuyBackSlotUI(int slotIndex)
