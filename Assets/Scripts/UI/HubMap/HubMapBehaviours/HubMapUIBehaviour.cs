@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -671,7 +672,20 @@ namespace BeastHunter
             }
         }
 
-        private void OnDragItemFromSlot(int slotIndex, StorageType storageType)
+        private void OnPointerEnter_Slot(int slotIndex, StorageType storageType)
+        {
+            FillTooltipByItemInfo(GetStorageByType(storageType).GetItemBySlot(slotIndex), storageType);
+            _tooltip.transform.position = Input.mousePosition;
+            _tooltip.SetActive(true);
+        }
+
+
+        private void OnPointerExit_Slot(int slotIndex)
+        {
+            _tooltip.SetActive(false);
+        }
+
+         private void OnDragItemFromSlot(int slotIndex, StorageType storageType)
         {
             _draggedItemInfo.slotIndex = slotIndex;
             _draggedItemInfo.storageType = storageType;
@@ -888,6 +902,7 @@ namespace BeastHunter
             slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageType.Equipment);
             slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.Equipment);
             slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.Equipment);
+            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.Equipment);
 
             _equipmentSlotsUIBehaviours.Add(slotBehaviour);
         }
@@ -909,38 +924,6 @@ namespace BeastHunter
             _inventorySlotsUIBehaviours.Add(slotBehaviour);
         }
 
-        private void OnPointerEnter_Slot(int slotIndex, StorageType storageType)
-        {
-            FillTooltipByItemInfo(GetStorageByType(storageType).GetItemBySlot(slotIndex), storageType);
-            _tooltip.transform.position = Input.mousePosition;
-            _tooltip.SetActive(true);
-        }
-
-
-        private void OnPointerExit_Slot(int slotIndex)
-        {
-            _tooltip.SetActive(false);
-        }
-
-        private void FillTooltipByItemInfo(BaseItem item, StorageType storageType)
-        {
-            Text[] tooltipTexts = _tooltip.GetComponentsInChildren<Text>(true);
-
-            tooltipTexts[0].gameObject.SetActive(false);
-            tooltipTexts[1].text = item.ItemStruct.Name;
-            tooltipTexts[2].text = item.ItemStruct.Description;
-            tooltipTexts[3].text = "Цена: " + Data.HubMapData.ShopService.GetItemPrice(item).ToString();
-
-            if (storageType == StorageType.Shop)
-            {
-                if (!IsPossibleToBuyShopItem(item))
-                { 
-                    tooltipTexts[0].gameObject.SetActive(true);
-                    tooltipTexts[0].text = "Невозможно купить эту вещь..."; //todo: full message
-                }
-            }
-        }
-
         private void InitializeBuyBackSlotUI(int slotIndex)
         {
             GameObject buyBackSlotUI = InstantiateUIObject(Data.HubMapData.ShopSlotUIPrefab, _buyBackItemsPanel);
@@ -949,6 +932,7 @@ namespace BeastHunter
             slotBehaviour.FillSlotInfo(slotIndex, false);
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_BuyBackSlot;
+            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.BuyBackStorage);
 
             _buyBackSlotsUIBehaviours.Add(slotBehaviour);
         }
@@ -961,6 +945,7 @@ namespace BeastHunter
             slotBehaviour.FillSlotInfo(slotIndex, false);
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_ShopSlot;
+            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.Shop);
 
             _shopSlotsUIBehaviours.Add(slotBehaviour);
         }
@@ -997,6 +982,25 @@ namespace BeastHunter
 
 
         #region FillUIElementsByInfo
+
+        private void FillTooltipByItemInfo(BaseItem item, StorageType storageType)
+        {
+            Text[] tooltipTexts = _tooltip.GetComponentsInChildren<Text>(true);
+
+            tooltipTexts[0].gameObject.SetActive(false);
+            tooltipTexts[1].text = item.ItemStruct.Name;
+            tooltipTexts[2].text = item.ItemStruct.Description;
+            tooltipTexts[3].text = "Цена: " + Data.HubMapData.ShopService.GetItemPrice(item).ToString();
+
+            if (storageType == StorageType.Shop)
+            {
+                if (!IsPossibleToBuyShopItem(item))
+                {
+                    tooltipTexts[0].gameObject.SetActive(true);
+                    tooltipTexts[0].text = ImpossibleToBuyMessage(item);
+                }
+            }
+        }
 
         private void FillSlotUI(int slotIndex, BaseItem item, StorageType storageType)
         {
@@ -1195,6 +1199,25 @@ namespace BeastHunter
             {
                 return true;
             }
+        }
+
+        private string ImpossibleToBuyMessage(BaseItem item)
+        {
+            StringBuilder message = new StringBuilder(); 
+
+            if (item.ItemStruct.RequiredReputationForSaleInShop <= _selectedCity.PlayerReputation)
+            {
+                message.AppendLine("Недостаточно репутации для покупки.");
+                message.AppendLine($"Необходимая репутация: {item.ItemStruct.RequiredReputationForSaleInShop}.");
+            }
+
+            if (_player.GoldAmount >= Data.HubMapData.ShopService.GetItemPrice(item))
+            {
+                message.AppendLine($"Недостаточно денег.");
+            }
+
+            Debug.Log(message.ToString());
+            return message.ToString();
         }
 
         private void LocationLoad()
