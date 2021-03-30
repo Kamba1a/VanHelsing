@@ -8,9 +8,10 @@ namespace BeastHunter
     {
         [SerializeField] private Image _noReputationImage;
 
-        public void SetAvailability(bool isEnoughReputation)
+
+        public void SetAvailability(bool isAvailability)
         {
-            _noReputationImage.enabled = !isEnoughReputation;
+            _noReputationImage.enabled = !isAvailability;
         }
     }
 }

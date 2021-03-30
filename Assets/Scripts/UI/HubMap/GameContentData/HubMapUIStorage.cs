@@ -16,7 +16,7 @@ namespace BeastHunter
 
         #region Properties
 
-        public Action<int, Sprite> OnChangeItemHandler { get; set; }
+        public Action<int, BaseItem> OnChangeItemHandler { get; set; }
 
         #endregion
 
@@ -116,7 +116,7 @@ namespace BeastHunter
 
         private void OnChangeItem(int slotNumber, BaseItem item)
         {
-            OnChangeItemHandler?.Invoke(slotNumber, item?.ItemStruct.Icon);
+            OnChangeItemHandler?.Invoke(slotNumber, item);
         }
 
         #endregion

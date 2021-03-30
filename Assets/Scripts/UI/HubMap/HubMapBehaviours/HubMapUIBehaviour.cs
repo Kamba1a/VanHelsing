@@ -215,7 +215,7 @@ namespace BeastHunter
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
         private List<HubMapUISlotBehaviour> _equipmentSlotsUIBehaviours;
         private List<HubMapUISlotBehaviour> _inventorySlotsUIBehaviours;
-        private List<HubMapUISlotBehaviour> _shopSlotsUIBehaviours;
+        private List<HubMapUIShopSlotBehaviour> _shopSlotsUIBehaviours;
         private List<HubMapUISlotBehaviour> _buyBackSlotsUIBehaviours;
         private Dictionary<HubMapUICitizenModel, HubMapUICitizenBehaviour> _displayedCurrentCitizensUIBehaviours;
         private List<GameObject> _displayedDialogAnswerButtons;
@@ -295,7 +295,7 @@ namespace BeastHunter
             _equipmentSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
             _inventorySlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
             _buyBackSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            _shopSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
+            _shopSlotsUIBehaviours = new List<HubMapUIShopSlotBehaviour>();
 
             _selected = new SelectedElements();
         }
@@ -598,9 +598,7 @@ namespace BeastHunter
                 {
                     if (_currentBuyBackStorage.MovingItemToFirstEmptySlot(sellingItem))
                     {
-                        _player.GoldAmount += Data.HubMapData.ShopService.
-                            CountSellPrice(sellingItem);
-                        _playerGoldAmount.text = _player.GoldAmount.ToString();
+                        ChangePlayerGoldAmount(Data.HubMapData.ShopService.CountSellPrice(sellingItem));
                     }
                     else
                     {
@@ -624,9 +622,7 @@ namespace BeastHunter
                     { 
                         if (_inventory.MovingItemToFirstEmptySlot(buyingItem))
                         {
-                            _player.GoldAmount -= Data.HubMapData.ShopService.
-                                CountSellPrice(buyingItem);
-                            _playerGoldAmount.text = _player.GoldAmount.ToString();
+                            ChangePlayerGoldAmount(-Data.HubMapData.ShopService.CountSellPrice(buyingItem));
                         }
                         else
                         {
@@ -651,13 +647,11 @@ namespace BeastHunter
                 BaseItem buyingItem = _currentShopStorage.TakeItem(_selected.ShopSlotIndex.Value);
                 if (buyingItem != null)
                 {
-                    if (_player.GoldAmount >= Data.HubMapData.ShopService.GetItemPrice(buyingItem))
+                    if (IsPossibleToBuyShopItem(buyingItem))
                     {
                         if (_inventory.MovingItemToFirstEmptySlot(buyingItem))
                         {
-                            _player.GoldAmount -= Data.HubMapData.ShopService.
-                                GetItemPrice(buyingItem);
-                            _playerGoldAmount.text = _player.GoldAmount.ToString();
+                            ChangePlayerGoldAmount(-Data.HubMapData.ShopService.GetItemPrice(buyingItem));
                         }
                         else
                         {
@@ -683,7 +677,7 @@ namespace BeastHunter
 
         private void OnEndDragItem(int slotIndex, StorageType storageType)
         {
-            FillSlotUI(slotIndex, GetStorageByType(storageType).GetItemIconBySlot(slotIndex), storageType);
+            FillSlotUI(slotIndex, GetStorageByType(storageType).GetItemBySlot(slotIndex), storageType);
             _draggedItemInfo.slotIndex = null;
         }
 
@@ -826,13 +820,11 @@ namespace BeastHunter
 
                 if (_tradePanel.activeSelf)
                 {
-                    if (_currentShopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value) != null)
+                    BaseItem item = _currentShopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value);
+                    if (item != null)
                     {
-                        _buyingItemPrice.text = Data.HubMapData.ShopService.
-                            GetItemPrice(_currentShopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value)).ToString();
-
-                        _buyButton.interactable = _player.GoldAmount >= Data.HubMapData.ShopService.
-                            GetItemPrice(_currentShopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value));
+                        _buyingItemPrice.text = Data.HubMapData.ShopService.GetItemPrice(item).ToString();
+                        _buyButton.interactable = IsPossibleToBuyShopItem(item);
                     }
                     else
                     {
@@ -929,7 +921,7 @@ namespace BeastHunter
         {
             GameObject shopSlotUI = InstantiateUIObject(Data.HubMapData.ShopSlotUIPrefab, _buyingItemsPanel);
 
-            HubMapUISlotBehaviour slotBehaviour = shopSlotUI.GetComponent<HubMapUISlotBehaviour>();
+            HubMapUIShopSlotBehaviour slotBehaviour = shopSlotUI.GetComponent<HubMapUIShopSlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, false);
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_ShopSlot;
@@ -970,30 +962,39 @@ namespace BeastHunter
 
         #region FillUIElementsByInfo
 
-        private void FillSlotUI(int slotIndex, Sprite sprite, StorageType storageType)
+        private void FillSlotUI(int slotIndex, BaseItem item, StorageType storageType)
         {
+            Sprite sprite = item ? item.ItemStruct.Icon : null;
+
             switch (storageType)
             {
                 case StorageType.Equipment:
+
                     _equipmentSlotsUIBehaviours[slotIndex].FillSlot(sprite);
-                    break;
 
+                    break;
                 case StorageType.Inventory:
-                    _inventorySlotsUIBehaviours[slotIndex].FillSlot(sprite);
-                    break;
 
+                    _inventorySlotsUIBehaviours[slotIndex].FillSlot(sprite);
+
+                    break;
                 case StorageType.BuyBackStorage:
+
                     _buyBackSlotsUIBehaviours[slotIndex].FillSlot(sprite);
                     _buyBackSlotsUIBehaviours[slotIndex].SetInteractable(sprite != null);
-                    break;
 
+                    break;
                 case StorageType.Shop:
+
                     _shopSlotsUIBehaviours[slotIndex].FillSlot(sprite);
                     _shopSlotsUIBehaviours[slotIndex].SetInteractable(sprite != null);
-                    break;
+                    _shopSlotsUIBehaviours[slotIndex].SetAvailability(IsPossibleToBuyShopItem(item));
 
+                    break;
                 default:
+
                     Debug.LogError(this + ": incorrect StorageSlotType");
+
                     break;
             }
         }
@@ -1004,7 +1005,7 @@ namespace BeastHunter
 
             for (int i = 0; i < storage.GetSlotsCount(); i++)
             {
-                FillSlotUI(i, storage.GetItemIconBySlot(i), storageType);
+                FillSlotUI(i, storage.GetItemBySlot(i), storageType);
             }
         }
 
@@ -1133,6 +1134,31 @@ namespace BeastHunter
             objectUI.transform.SetParent(parent.transform, false);
             objectUI.transform.localScale = new Vector3(1, 1, 1);
             return objectUI;
+        }
+
+        private void ChangePlayerGoldAmount(int goldAmount)
+        {
+            _player.GoldAmount += goldAmount;
+            _playerGoldAmount.text = _player.GoldAmount.ToString();
+
+            for (int i = 0; i < _shopSlotsUIBehaviours.Count; i++)
+            {
+                _shopSlotsUIBehaviours[i].SetAvailability(IsPossibleToBuyShopItem(_currentShopStorage.GetItemBySlot(i)));
+            }
+        }
+
+        private bool IsPossibleToBuyShopItem(BaseItem item)
+        {
+            if (item != null)
+            {
+                return
+                    item.ItemStruct.RequiredReputationForSaleInShop <= _selectedCity.PlayerReputation &&
+                    _player.GoldAmount >= Data.HubMapData.ShopService.GetItemPrice(item);
+            }
+            else
+            {
+                return true;
+            }
         }
 
         private void LocationLoad()
