@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace BeastHunter
 {
-    public class HubMapUIBehaviour : MonoBehaviour
+    public class HubMapUIMainBehaviour : MonoBehaviour
     {
         #region PrivateData
 
@@ -230,6 +230,7 @@ namespace BeastHunter
         private HubMapUIStorage _currentShopStorage;
         private SelectedElements _selected;
 
+        private HubMapUIData _data;
         private HubMapUIContext _context;
         private HubMapUIPlayerModel _player;
         private HubMapUIStorage _inventory;
@@ -241,13 +242,6 @@ namespace BeastHunter
 
         private void OnEnable()
         {
-            _cityButton.onClick.AddListener(() => OnClick_CityButton(Data.HubMapData.City));
-            _locationButton_1.onClick.AddListener(() => OnClick_LocationButton(Data.HubMapData.Location_1));
-            _locationButton_2.onClick.AddListener(() => OnClick_LocationButton(Data.HubMapData.Location_2));
-            _locationButton_3.onClick.AddListener(() => OnClick_LocationButton(Data.HubMapData.Location_3));
-            _locationButton_4.onClick.AddListener(() => OnClick_LocationButton(Data.HubMapData.Location_4));
-            _locationButton_5.onClick.AddListener(() => OnClick_LocationButton(Data.HubMapData.Location_5));
-
             _hubButton.onClick.AddListener(OnClick_HubButton);
             _mapButton.onClick.AddListener(OnClick_MapButton);
             _hideInfoPanelButton.onClick.AddListener(OnClick_HideInfoPanelButton);
@@ -267,12 +261,6 @@ namespace BeastHunter
 
         private void OnDisable()
         {
-            _cityButton.onClick.RemoveAllListeners();
-            _locationButton_1.onClick.RemoveAllListeners();
-            _locationButton_2.onClick.RemoveAllListeners();
-            _locationButton_3.onClick.RemoveAllListeners();
-            _locationButton_4.onClick.RemoveAllListeners();
-
             _hubButton.onClick.RemoveAllListeners();
             _mapButton.onClick.RemoveAllListeners();
             _hideInfoPanelButton.onClick.RemoveAllListeners();
@@ -288,7 +276,8 @@ namespace BeastHunter
 
         private void Awake()
         {
-            _context = Data.HubMapData.Context;
+            _data = Data.HubMapData;
+            _context = _data.Context;
             _player = _context.Player;
             _inventory = _player.Inventory;
 
@@ -306,12 +295,19 @@ namespace BeastHunter
 
         private void Start()
         {
-            _cityButton.GetComponentInChildren<Text>().text = Data.HubMapData.City.Name;
-            _locationButton_1.GetComponentInChildren<Text>().text = Data.HubMapData.Location_1.Name;
-            _locationButton_2.GetComponentInChildren<Text>().text = Data.HubMapData.Location_2.Name;
-            _locationButton_3.GetComponentInChildren<Text>().text = Data.HubMapData.Location_3.Name;
-            _locationButton_4.GetComponentInChildren<Text>().text = Data.HubMapData.Location_4.Name;
-            _locationButton_5.GetComponentInChildren<Text>().text = Data.HubMapData.Location_5.Name;
+            _cityButton.onClick.AddListener(() => OnClick_CityButton(_data.City));
+            _locationButton_1.onClick.AddListener(() => OnClick_LocationButton(_data.Location_1));
+            _locationButton_2.onClick.AddListener(() => OnClick_LocationButton(_data.Location_2));
+            _locationButton_3.onClick.AddListener(() => OnClick_LocationButton(_data.Location_3));
+            _locationButton_4.onClick.AddListener(() => OnClick_LocationButton(_data.Location_4));
+            _locationButton_5.onClick.AddListener(() => OnClick_LocationButton(_data.Location_5));
+
+            _cityButton.GetComponentInChildren<Text>().text = _data.City.Name;
+            _locationButton_1.GetComponentInChildren<Text>().text = _data.Location_1.Name;
+            _locationButton_2.GetComponentInChildren<Text>().text = _data.Location_2.Name;
+            _locationButton_3.GetComponentInChildren<Text>().text = _data.Location_3.Name;
+            _locationButton_4.GetComponentInChildren<Text>().text = _data.Location_4.Name;
+            _locationButton_5.GetComponentInChildren<Text>().text = _data.Location_5.Name;
 
             for (int i = 0; i < _context.Characters.Count; i++)
             {
@@ -347,7 +343,7 @@ namespace BeastHunter
             _selected.OnChanged_ShopSlotIndex = OnChangedSelectedShopSlot;
             _selected.OnChanged_Character = OnChangedSelectedCharacter;
 
-            _mainPanel.SetActive(Data.HubMapData.MapOnStartEnabled);
+            _mainPanel.SetActive(_data.MapOnStartEnabled);
             _infoPanel.SetActive(false);
             _cityInfoPanel.SetActive(false);
             _dialogPanel.SetActive(false);
@@ -610,7 +606,7 @@ namespace BeastHunter
                 {
                     if (_currentBuyBackStorage.MovingItemToFirstEmptySlot(sellingItem))
                     {
-                        ChangePlayerGoldAmount(Data.HubMapData.ShopService.CountSellPrice(sellingItem));
+                        ChangePlayerGoldAmount(_data.ShopService.CountSellPrice(sellingItem));
                     }
                     else
                     {
@@ -630,11 +626,11 @@ namespace BeastHunter
                 BaseItem buyingItem = _currentBuyBackStorage.TakeItem(_selected.BuyBackSlotIndex.Value);
                 if (buyingItem != null)
                 {
-                    if (_player.GoldAmount >= Data.HubMapData.ShopService.CountSellPrice(buyingItem)) 
+                    if (_player.GoldAmount >= _data.ShopService.CountSellPrice(buyingItem)) 
                     { 
                         if (_inventory.MovingItemToFirstEmptySlot(buyingItem))
                         {
-                            ChangePlayerGoldAmount(-Data.HubMapData.ShopService.CountSellPrice(buyingItem));
+                            ChangePlayerGoldAmount(-_data.ShopService.CountSellPrice(buyingItem));
                         }
                         else
                         {
@@ -663,7 +659,7 @@ namespace BeastHunter
                     {
                         if (_inventory.MovingItemToFirstEmptySlot(buyingItem))
                         {
-                            ChangePlayerGoldAmount(-Data.HubMapData.ShopService.GetItemPrice(buyingItem));
+                            ChangePlayerGoldAmount(-_data.ShopService.GetItemPrice(buyingItem));
                         }
                         else
                         {
@@ -766,7 +762,7 @@ namespace BeastHunter
                 {
                     if (_inventory.GetItemBySlot(_selected.InventorySlotIndex.Value) != null)
                     {
-                        _sellingItemPrice.text = Data.HubMapData.ShopService.
+                        _sellingItemPrice.text = _data.ShopService.
                             CountSellPrice(_inventory.GetItemBySlot(_selected.InventorySlotIndex.Value)).ToString();
                         _sellButton.interactable = true;
                     }
@@ -815,10 +811,10 @@ namespace BeastHunter
                 {
                     if (_currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value) != null)
                     {
-                        _buybackItemPrice.text = Data.HubMapData.ShopService.
+                        _buybackItemPrice.text = _data.ShopService.
                             CountSellPrice(_currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value)).ToString();
 
-                        _buyBackButton.interactable = _player.GoldAmount >= Data.HubMapData.ShopService.
+                        _buyBackButton.interactable = _player.GoldAmount >= _data.ShopService.
                             CountSellPrice(_currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value));
                     }
                     else
@@ -854,7 +850,7 @@ namespace BeastHunter
                     BaseItem item = _currentShopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value);
                     if (item != null)
                     {
-                        _buyingItemPrice.text = Data.HubMapData.ShopService.GetItemPrice(item).ToString();
+                        _buyingItemPrice.text = _data.ShopService.GetItemPrice(item).ToString();
                         _buyButton.interactable = IsPossibleToBuyShopItem(item);
                     }
                     else
@@ -900,14 +896,14 @@ namespace BeastHunter
 
         private void InitializeCharacterUI(HubMapUICharacterModel character)
         {
-            GameObject characterUI = InstantiateUIObject(Data.HubMapData.CharacterUIPrefab, _charactersPanel);
+            GameObject characterUI = InstantiateUIObject(_data.CharacterUIPrefab, _charactersPanel);
             characterUI.GetComponent<Image>().sprite = character.Portrait;
             characterUI.GetComponent<Button>().onClick.AddListener(() => OnClick_CharacterButton(character));
         }
 
         private void InitializeEquipmentSlotUI(int slotIndex)
         {
-            GameObject equipSlotUI = InstantiateUIObject(Data.HubMapData.EquipmentSlotUIPrefab, _equipmentPanel);
+            GameObject equipSlotUI = InstantiateUIObject(_data.EquipmentSlotUIPrefab, _equipmentPanel);
 
             HubMapUISlotBehaviour slotBehaviour = equipSlotUI.GetComponent<HubMapUISlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, true);
@@ -925,7 +921,7 @@ namespace BeastHunter
 
         private void InitializeInventorySlotUI(int slotIndex)
         {
-            GameObject inventorySlotUI = InstantiateUIObject(Data.HubMapData.InventorySlotUIPrefab, _inventoryItemsPanel);
+            GameObject inventorySlotUI = InstantiateUIObject(_data.InventorySlotUIPrefab, _inventoryItemsPanel);
 
             HubMapUISlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<HubMapUISlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, true);
@@ -942,7 +938,7 @@ namespace BeastHunter
 
         private void InitializeBuyBackSlotUI(int slotIndex)
         {
-            GameObject buyBackSlotUI = InstantiateUIObject(Data.HubMapData.ShopSlotUIPrefab, _buyBackItemsPanel);
+            GameObject buyBackSlotUI = InstantiateUIObject(_data.ShopSlotUIPrefab, _buyBackItemsPanel);
 
             HubMapUISlotBehaviour slotBehaviour = buyBackSlotUI.GetComponent<HubMapUISlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, false);
@@ -956,7 +952,7 @@ namespace BeastHunter
 
         private void InitializeShopSlotUI(int slotIndex)
         {
-            GameObject shopSlotUI = InstantiateUIObject(Data.HubMapData.ShopSlotUIPrefab, _buyingItemsPanel);
+            GameObject shopSlotUI = InstantiateUIObject(_data.ShopSlotUIPrefab, _buyingItemsPanel);
 
             HubMapUIShopSlotBehaviour slotBehaviour = shopSlotUI.GetComponent<HubMapUIShopSlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, false);
@@ -970,7 +966,7 @@ namespace BeastHunter
 
         private void InitializeCitizenUI(HubMapUICitizenModel citizen)
         {
-            GameObject citizenUI = InstantiateUIObject(Data.HubMapData.CitizenUIPrefab, _citizenPanel);
+            GameObject citizenUI = InstantiateUIObject(_data.CitizenUIPrefab, _citizenPanel);
 
             HubMapUICitizenBehaviour citizenUIBehaviour = citizenUI.GetComponentInChildren<HubMapUICitizenBehaviour>();
             citizenUIBehaviour.FillCitizenInfo(citizen);
@@ -984,7 +980,7 @@ namespace BeastHunter
 
         private void InitializeDialogAnswerButton(HubMapUICitizenModel citizen, HubMapUIDialogAnswer answer)
         {
-            GameObject answerButton = InstantiateUIObject(Data.HubMapData.AnswerButtonUIPrefab, _answerButtonsPanel);
+            GameObject answerButton = InstantiateUIObject(_data.AnswerButtonUIPrefab, _answerButtonsPanel);
             answerButton.GetComponentInChildren<Text>().text = answer.Text;
 
             if (answer.IsDialogEnd)
@@ -1008,7 +1004,7 @@ namespace BeastHunter
             tooltipTexts[0].gameObject.SetActive(false);
             tooltipTexts[1].text = item.ItemStruct.Name;
             tooltipTexts[2].text = item.ItemStruct.Description;
-            tooltipTexts[3].text = "Цена: " + Data.HubMapData.ShopService.GetItemPrice(item).ToString();
+            tooltipTexts[3].text = "Цена: " + _data.ShopService.GetItemPrice(item).ToString();
 
             if (storageType == StorageType.Shop)
             {
@@ -1092,7 +1088,7 @@ namespace BeastHunter
 
                 for (int i = 0; i < location.Dwellers.Length; i++)
                 {
-                    GameObject dwellerUI = InstantiateUIObject(Data.HubMapData.LocationTextUIPrefab, _dwellersPanel);
+                    GameObject dwellerUI = InstantiateUIObject(_data.LocationTextUIPrefab, _dwellersPanel);
                     _rightInfoPanelObjectsForDestroy.Add(dwellerUI);
                     dwellerUI.GetComponentInChildren<Text>().text = location.Dwellers[i].Name;
                 }
@@ -1109,7 +1105,7 @@ namespace BeastHunter
 
                 for (int i = 0; i < location.Ingredients.Length; i++)
                 {
-                    GameObject ingredientUI = InstantiateUIObject(Data.HubMapData.LocationTextUIPrefab, _ingredientsPanel);
+                    GameObject ingredientUI = InstantiateUIObject(_data.LocationTextUIPrefab, _ingredientsPanel);
                     _rightInfoPanelObjectsForDestroy.Add(ingredientUI);
                     ingredientUI.GetComponentInChildren<Text>().text = location.Ingredients[i].Name;
                 }
@@ -1230,7 +1226,7 @@ namespace BeastHunter
             {
                 return
                     item.ItemStruct.RequiredReputationForSaleInShop <= _selectedCity.PlayerReputation &&
-                    _player.GoldAmount >= Data.HubMapData.ShopService.GetItemPrice(item);
+                    _player.GoldAmount >= _data.ShopService.GetItemPrice(item);
             }
             else
             {
@@ -1253,7 +1249,7 @@ namespace BeastHunter
                     sb.AppendLine();
                     sb.AppendFormat($"Необходимая репутация: {item.ItemStruct.RequiredReputationForSaleInShop}");
                 }
-                if (_player.GoldAmount < Data.HubMapData.ShopService.GetItemPrice(item))
+                if (_player.GoldAmount < _data.ShopService.GetItemPrice(item))
                 {
                     flag = false;
 

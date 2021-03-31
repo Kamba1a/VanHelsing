@@ -4,7 +4,7 @@
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HubMapUIItem", menuName = "CreateData/HubMapUIData/HubMapUIItem", order = 0)]
-    public class HubMapUIItem : BaseItem
+    public class HubMapUIItemData : BaseItem
     {
         //used for testing items in HubMapUI
     }
