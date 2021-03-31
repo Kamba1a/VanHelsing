@@ -210,6 +210,10 @@ namespace BeastHunter
         [SerializeField] private Text _shopCityReputation;
         [SerializeField] private Text _playerGoldAmount;
 
+        [Header("Perks panel")]
+        [SerializeField] private GameObject _perksPanel;
+        [SerializeField] private Button _closePerksPanelButton;
+
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
         private List<HubMapUISlotBehaviour> _equipmentSlotsUIBehaviours;
@@ -253,6 +257,7 @@ namespace BeastHunter
             _sellButton.onClick.AddListener(OnClick_SellItemButton);
             _buyBackButton.onClick.AddListener(OnClick_BuyBackItemButton);
             _buyButton.onClick.AddListener(OnClick_BuyItemButton);
+            _closePerksPanelButton.onClick.AddListener(OnClick_ClosePerksButton);
         }
 
         private void OnDisable()
@@ -268,6 +273,7 @@ namespace BeastHunter
             _closeInventoryButton.onClick.RemoveAllListeners();
             _perkTreeButton.onClick.RemoveAllListeners();
             _shopButton.onClick.RemoveAllListeners();
+            _closePerksPanelButton.onClick.RemoveAllListeners();
         }
 
         private void Awake()
@@ -379,6 +385,7 @@ namespace BeastHunter
             _buyBackButton.interactable = false;
             _buyButton.interactable = false;
             _tooltip.SetActive(false);
+            _perksPanel.SetActive(false);
         }
 
         #endregion
@@ -504,8 +511,14 @@ namespace BeastHunter
 
         private void OnClick_PerkTreeButton()
         {
-            //todo: show perk tree UI
-            Debug.Log("OnClick_PerkTreeButton");
+            _hikePanel.SetActive(false);
+            _perksPanel.SetActive(true);
+        }
+
+        private void OnClick_ClosePerksButton()
+        {
+            _perksPanel.SetActive(false);
+            _hikePanel.SetActive(true);
         }
 
         private void OnClick_CharacterButton(HubMapUICharacterModel character)
