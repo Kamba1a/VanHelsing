@@ -26,6 +26,7 @@ namespace BeastHunter
         [SerializeField] private HubMapUILocationData _location_2;
         [SerializeField] private HubMapUILocationData _location_3;
         [SerializeField] private HubMapUILocationData _location_4;
+        [SerializeField] private HubMapUILocationData _location_5;
 
         [Header("Game content for UI")]
         [SerializeField] private HubMapUIContextData _contextData;
@@ -58,6 +59,7 @@ namespace BeastHunter
         public HubMapUILocationData Location_2 => _location_2;
         public HubMapUILocationData Location_3 => _location_3;
         public HubMapUILocationData Location_4 => _location_4;
+        public HubMapUILocationData Location_5 => _location_5;
 
         public HubMapUIContext Context { get; private set; }
         public HubMapUIShopService ShopService { get; private set; }

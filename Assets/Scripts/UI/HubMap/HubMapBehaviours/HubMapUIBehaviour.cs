@@ -147,6 +147,7 @@ namespace BeastHunter
         [SerializeField] private Button _locationButton_2;
         [SerializeField] private Button _locationButton_3;
         [SerializeField] private Button _locationButton_4;
+        [SerializeField] private Button _locationButton_5;
 
         [Header("Hub map")]
         [SerializeField] private GameObject _mainPanel;
@@ -245,6 +246,7 @@ namespace BeastHunter
             _locationButton_2.onClick.AddListener(() => OnClick_LocationButton(Data.HubMapData.Location_2));
             _locationButton_3.onClick.AddListener(() => OnClick_LocationButton(Data.HubMapData.Location_3));
             _locationButton_4.onClick.AddListener(() => OnClick_LocationButton(Data.HubMapData.Location_4));
+            _locationButton_5.onClick.AddListener(() => OnClick_LocationButton(Data.HubMapData.Location_5));
 
             _hubButton.onClick.AddListener(OnClick_HubButton);
             _mapButton.onClick.AddListener(OnClick_MapButton);
@@ -304,6 +306,13 @@ namespace BeastHunter
 
         private void Start()
         {
+            _cityButton.GetComponentInChildren<Text>().text = Data.HubMapData.City.Name;
+            _locationButton_1.GetComponentInChildren<Text>().text = Data.HubMapData.Location_1.Name;
+            _locationButton_2.GetComponentInChildren<Text>().text = Data.HubMapData.Location_2.Name;
+            _locationButton_3.GetComponentInChildren<Text>().text = Data.HubMapData.Location_3.Name;
+            _locationButton_4.GetComponentInChildren<Text>().text = Data.HubMapData.Location_4.Name;
+            _locationButton_5.GetComponentInChildren<Text>().text = Data.HubMapData.Location_5.Name;
+
             for (int i = 0; i < _context.Characters.Count; i++)
             {
                 InitializeCharacterUI(_context.Characters[i]);
@@ -1077,18 +1086,37 @@ namespace BeastHunter
             _locationName.text = location.Name;
             _locationDescription.text = location.Description;
 
-            for (int i = 0; i < location.Dwellers.Length; i++)
+            if (location.Dwellers.Length > 0)
             {
-                GameObject dwellerUI = InstantiateUIObject(Data.HubMapData.LocationTextUIPrefab, _dwellersPanel);
-                _rightInfoPanelObjectsForDestroy.Add(dwellerUI);
-                dwellerUI.GetComponentInChildren<Text>().text = location.Dwellers[i].Name;
+                _dwellersPanel.transform.GetChild(0).gameObject.SetActive(false);
+
+                for (int i = 0; i < location.Dwellers.Length; i++)
+                {
+                    GameObject dwellerUI = InstantiateUIObject(Data.HubMapData.LocationTextUIPrefab, _dwellersPanel);
+                    _rightInfoPanelObjectsForDestroy.Add(dwellerUI);
+                    dwellerUI.GetComponentInChildren<Text>().text = location.Dwellers[i].Name;
+                }
+            }
+            else
+            {
+                _dwellersPanel.transform.GetChild(0).gameObject.SetActive(true);
             }
 
-            for (int i = 0; i < location.Ingredients.Length; i++)
+
+            if (location.Ingredients.Length > 0)
             {
-                GameObject ingredientUI = InstantiateUIObject(Data.HubMapData.LocationTextUIPrefab, _ingredientsPanel);
-                _rightInfoPanelObjectsForDestroy.Add(ingredientUI);
-                ingredientUI.GetComponentInChildren<Text>().text = location.Ingredients[i].Name;
+                _ingredientsPanel.transform.GetChild(0).gameObject.SetActive(false);
+
+                for (int i = 0; i < location.Ingredients.Length; i++)
+                {
+                    GameObject ingredientUI = InstantiateUIObject(Data.HubMapData.LocationTextUIPrefab, _ingredientsPanel);
+                    _rightInfoPanelObjectsForDestroy.Add(ingredientUI);
+                    ingredientUI.GetComponentInChildren<Text>().text = location.Ingredients[i].Name;
+                }
+            }
+            else
+            {
+                _ingredientsPanel.transform.GetChild(0).gameObject.SetActive(true);
             }
         }
 
