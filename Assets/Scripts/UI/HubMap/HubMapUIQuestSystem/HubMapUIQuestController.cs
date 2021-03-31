@@ -134,7 +134,7 @@ namespace BeastHunter
             }
             else
             {
-                SetQuestDialogToCitizen(quest);
+                SetQuestDialogToTargetCitizen(quest);
                 ActivateQuestAnswers(quest);
                 SetMarkerTypeToCitizen(quest, HubMapUIQuestMarkerType.Question);
             }
@@ -169,7 +169,7 @@ namespace BeastHunter
 
         private void OnQuestActivated(HubMapUIQuestModel quest)
         {
-            SetQuestDialogToCitizen(quest);
+            SetQuestDialogToTargetCitizen(quest);
             ActivateQuestAnswers(quest);
             SetMarkerTypeToCitizen(quest, HubMapUIQuestMarkerType.Exclamation);
         }
@@ -188,63 +188,65 @@ namespace BeastHunter
             }
         }
 
-        private void SetQuestDialogToCitizen(HubMapUIQuestModel quest)
+        private void SetQuestDialogToTargetCitizen(HubMapUIQuestModel quest)
         {
-            if (quest.GetTargetCitizenSettings().IsNpcInitiateDialog)
+            if (quest.CurrentTask.IsCitizenInitiateDialog)
             {
-                _context.GetCitizen(quest.GetCurrentTargetCitizen()).
-                    SetCurrentDialogNode(quest.GetTargetCitizenSettings().InitiatedDialogId);
+                _context.GetCitizen(quest.CurrentTask.TargetCitizen).
+                    SetCurrentDialogNode(quest.CurrentTask.InitiatedDialogId);
             }
         }
 
         private void ActivateQuestAnswers(HubMapUIQuestModel quest)
         {
-            if (quest.CurrentTask.CitizenDialogSettings.Length > 0)
+            HubMapUIQuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.TargetCitizen).
+                GetQuestAnswerById(quest.CurrentTask.TargetQuestAnswerId);
+
+            if (questAnswer != null)
             {
-                for (int i = 0; i < quest.CurrentTask.CitizenDialogSettings.Length; i++)
+                questAnswer.IsActive = true;
+            }
+            else
+            {
+                Debug.LogError(quest.CurrentTask.TargetCitizen.Name + " does not have requested quest answer id " + quest.CurrentTask.TargetQuestAnswerId);
+            }
+
+            questAnswer.Answer.OnAnswerSelectByPlayerHandler += (handlerValue) => QuestProgressing(quest);
+
+            for (int i = 0; i < quest.CurrentTask.AdditionalCitizensAnswers.Length; i++)
+            {
+                questAnswer = _context.GetCitizen(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen).
+                    GetQuestAnswerById(quest.CurrentTask.AdditionalCitizensAnswers[i].QuestAnswerId);
+                
+                if (questAnswer != null)
                 {
-                    HubMapUIQuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.CitizenDialogSettings[i].Citizen).
-                        GetQuestAnswerById(quest.CurrentTask.CitizenDialogSettings[i].QuestAnswerId);
-
-                    if (questAnswer != null)
-                    {
-                        questAnswer.IsActive = true;
-                    }
-                    else
-                    {
-                        Debug.LogError(quest.CurrentTask.CitizenDialogSettings[i].Citizen.Name + " does not have required quest answer id " + quest.CurrentTask.CitizenDialogSettings[i].QuestAnswerId);
-                    }
-
-                    if (quest.CurrentTask.CitizenDialogSettings[i].IsTarget)
-                    {
-                        questAnswer.Answer.OnAnswerSelectByPlayerHandler += (handlerValue) => QuestProgressing(quest);
-                    }
+                    questAnswer.IsActive = true;
+                }
+                else
+                {
+                    Debug.LogError(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen.Name + " does not have requested quest answer id " + quest.CurrentTask.AdditionalCitizensAnswers[i].QuestAnswerId);
                 }
             }
         }
 
         private void DeactivateQuestAnswers(HubMapUIQuestModel quest)
         {
-            if (quest.CurrentTask.CitizenDialogSettings.Length > 0)
+            HubMapUIQuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.TargetCitizen).
+                        GetQuestAnswerById(quest.CurrentTask.TargetQuestAnswerId);
+            questAnswer.IsActive = false;
+            questAnswer.Answer.OnAnswerSelectByPlayerHandler -= (handlerValue) => QuestProgressing(quest);
+
+            for (int i = 0; i < quest.CurrentTask.AdditionalCitizensAnswers.Length; i++)
             {
-                for (int i = 0; i < quest.CurrentTask.CitizenDialogSettings.Length; i++)
-                {
-                    HubMapUIQuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.CitizenDialogSettings[i].Citizen).
-                        GetQuestAnswerById(quest.CurrentTask.CitizenDialogSettings[i].QuestAnswerId);
-
-                    questAnswer.IsActive = false;
-
-                    if (quest.CurrentTask.CitizenDialogSettings[i].IsTarget)
-                    {
-                        questAnswer.Answer.OnAnswerSelectByPlayerHandler -= (handlerValue) => QuestProgressing(quest);
-                    }
-                }
+                questAnswer = _context.GetCitizen(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen).
+                    GetQuestAnswerById(quest.CurrentTask.AdditionalCitizensAnswers[i].QuestAnswerId);
+                questAnswer.IsActive = false;
             }
         }
 
         private void SetMarkerTypeToCitizen(HubMapUIQuestModel quest, HubMapUIQuestMarkerType questMarker)
         {
-            _context.GetCitizen(quest.GetCurrentTargetCitizen()).QuestMarkerType = questMarker;
+            _context.GetCitizen(quest.CurrentTask.TargetCitizen).QuestMarkerType = questMarker;
         }
 
         #endregion

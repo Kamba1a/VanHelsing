@@ -15,37 +15,35 @@ MonoBehaviour:
   _title: Example quest
   _tasks:
   - _id: 0
-    _citizenDialogSettings:
-    - _citizen: {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
-      _isTarget: 1
-      _isNpcInitiateDialog: 1
-      _initiatedDialogId: 0
-      _questAnswerId: 0
     _nextQuestTaskId: 1
+    _targetCitizen: {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
+    _targetQuestAnswerId: 0
+    _isCitizenInitiateDialog: 1
+    _initiatedDialogId: 0
+    _additionalCitizensAnswers: []
   - _id: 1
-    _citizenDialogSettings:
-    - _citizen: {fileID: 11400000, guid: 17a1729913f8bc2449a4c5893db22200, type: 2}
-      _isTarget: 1
-      _isNpcInitiateDialog: 0
-      _initiatedDialogId: 0
-      _questAnswerId: 0
-    - _citizen: {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
-      _isTarget: 0
-      _isNpcInitiateDialog: 0
-      _initiatedDialogId: 0
-      _questAnswerId: 2
     _nextQuestTaskId: 2
-  - _id: 2
-    _citizenDialogSettings:
+    _targetCitizen: {fileID: 11400000, guid: 17a1729913f8bc2449a4c5893db22200, type: 2}
+    _targetQuestAnswerId: 0
+    _isCitizenInitiateDialog: 0
+    _initiatedDialogId: 0
+    _additionalCitizensAnswers:
     - _citizen: {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
-      _isTarget: 1
-      _isNpcInitiateDialog: 0
-      _initiatedDialogId: 0
-      _questAnswerId: 1
+      _answerId: 2
+  - _id: 2
     _nextQuestTaskId: 3
+    _targetCitizen: {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
+    _targetQuestAnswerId: 1
+    _isCitizenInitiateDialog: 0
+    _initiatedDialogId: 0
+    _additionalCitizensAnswers: []
   - _id: 3
-    _citizenDialogSettings: []
     _nextQuestTaskId: 3
+    _targetCitizen: {fileID: 0}
+    _targetQuestAnswerId: 0
+    _isCitizenInitiateDialog: 0
+    _initiatedDialogId: 0
+    _additionalCitizensAnswers: []
   _firstTaskId: 0
   _emptyEndTaskId: 3
   _requiredReputation:
