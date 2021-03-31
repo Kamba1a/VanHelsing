@@ -29,24 +29,6 @@ namespace BeastHunter
 
         #region Methods
 
-        //public HubMapUICitizenData GetCurrentTargetCitizen()
-        //{
-        //    return GetTargetCitizenSettings().Citizen;
-        //}
-
-        //public HubMapUIQuestCitizenDialogSettings GetTargetCitizenSettings()
-        //{
-        //    for (int i = 0; i < CurrentTask.AdditionalCitizensDialogSettings.Length; i++)
-        //    {
-        //        if (CurrentTask.AdditionalCitizensDialogSettings[i].IsTarget)
-        //        {
-        //            return CurrentTask.AdditionalCitizensDialogSettings[i];
-        //        }
-        //    }
-        //    Debug.LogError(this + ": no target citizen. Quest title: " + this.Data.Title + " Task id: " + CurrentTask.Id);
-        //    return null;
-        //}
-
         public bool IsRequirementQuestComleted(HubMapUIQuestModel requirementQuest)
         {
             if (HasQuestCompleteRequirement(requirementQuest.Data))

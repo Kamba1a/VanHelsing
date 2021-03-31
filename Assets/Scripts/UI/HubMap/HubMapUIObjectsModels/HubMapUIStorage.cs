@@ -52,7 +52,7 @@ namespace BeastHunter
             }
             else
             {
-                isSucceful = MovingItemToFirstEmptySlot(item);
+                isSucceful = PutItemToFirstEmptySlot(item);
             }
 
             if (isSucceful)
@@ -63,7 +63,7 @@ namespace BeastHunter
             return isSucceful;
         }
 
-        public bool MovingItemToFirstEmptySlot(BaseItem item)
+        public bool PutItemToFirstEmptySlot(BaseItem item)
         {
             for (int i = 0; i < _items.Length; i++)
             {

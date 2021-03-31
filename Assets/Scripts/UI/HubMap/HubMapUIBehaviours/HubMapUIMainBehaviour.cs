@@ -567,7 +567,7 @@ namespace BeastHunter
                 }
                 else
                 {
-                    if (!_selected.Character.Backpack.MovingItemToFirstEmptySlot(inventoryItem))
+                    if (!_selected.Character.Backpack.PutItemToFirstEmptySlot(inventoryItem))
                     {
                         _inventory.PutItem(slotIndex, inventoryItem);
                         Debug.Log("Equipment is full");
@@ -640,7 +640,7 @@ namespace BeastHunter
 
                 if (sellingItem != null)
                 {
-                    if (_currentBuyBackStorage.MovingItemToFirstEmptySlot(sellingItem))
+                    if (_currentBuyBackStorage.PutItemToFirstEmptySlot(sellingItem))
                     {
                         ChangePlayerGoldAmount(_data.ShopService.CountSellPrice(sellingItem));
                     }
@@ -664,7 +664,7 @@ namespace BeastHunter
                 {
                     if (_player.GoldAmount >= _data.ShopService.CountSellPrice(buyingItem)) 
                     { 
-                        if (_inventory.MovingItemToFirstEmptySlot(buyingItem))
+                        if (_inventory.PutItemToFirstEmptySlot(buyingItem))
                         {
                             ChangePlayerGoldAmount(-_data.ShopService.CountSellPrice(buyingItem));
                         }
@@ -693,7 +693,7 @@ namespace BeastHunter
                 {
                     if (IsPossibleToBuyShopItem(buyingItem))
                     {
-                        if (_inventory.MovingItemToFirstEmptySlot(buyingItem))
+                        if (_inventory.PutItemToFirstEmptySlot(buyingItem))
                         {
                             ChangePlayerGoldAmount(-_data.ShopService.GetItemPrice(buyingItem));
                         }

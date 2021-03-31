@@ -126,7 +126,23 @@ namespace BeastHunter
         {
             DeactivateQuestAnswers(quest);
             SetMarkerTypeToCitizen(quest, HubMapUIQuestMarkerType.None);
-            quest.NextTask();
+
+            if (quest.CurrentTask.GivenItemData != null)
+            {
+                if (_context.Player.Inventory.PutItemToFirstEmptySlot(quest.CurrentTask.GivenItemData))
+                {
+                    Debug.Log("The player received the item " + quest.CurrentTask.GivenItemData.ItemStruct.Name);
+                    quest.NextTask();
+                }
+                else
+                {
+                    Debug.Log("The player inventory is full for get the quest item");
+                }
+            }
+            else
+            {
+                quest.NextTask();
+            }
 
             if (quest.IsLastTaskComplete())
             {
