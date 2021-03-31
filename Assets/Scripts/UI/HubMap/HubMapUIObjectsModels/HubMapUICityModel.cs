@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BeastHunter
 {
-    public class HubMapUICityModel
+    public class HubMapUICityModel : HubMapUIMapObjectModel
     {
         #region Fields
 
@@ -18,9 +18,6 @@ namespace BeastHunter
 
         public Action<HubMapUICityModel> OnChangePlayerReputationHandler { get; set; }
 
-        public int DataInstanceID { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
         public HubMapUIFractionData Fraction { get; private set; } 
         public List<HubMapUICitizenModel> Citizens { get; private set; }
         public List<BaseItem> ShopItemsPool { get; private set; }
@@ -51,9 +48,12 @@ namespace BeastHunter
         public HubMapUICityModel(HubMapUICityData data)
         {
             _minItemsAmountInShop = data.MinItemsAmountInShop;
+
             DataInstanceID = data.GetInstanceID();
             Name = data.Name;
             Description = data.Description;
+            IsBlocked = data.IsBlockedAtStart;
+
             Fraction = data.Fraction;
             PlayerReputation = data.StartReputation;
 

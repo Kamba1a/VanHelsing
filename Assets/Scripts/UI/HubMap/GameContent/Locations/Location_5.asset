@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5afc0c8ce82e2c6498a5df2b550de7ec, type: 3}
   m_Name: Location_5
   m_EditorClassIdentifier: 
-  _name: "\u0424\u043E\u0440\u0442"
+  _name: "\u041D\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043D\u0430\u044F \u043B\u043E\u043A\u0430\u0446\u0438\u044F"
   _description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
     mattis tellus vehicula aliquam dignissim. Praesent in elementum risus. Proin
     convallis cursus lacus, nec malesuada libero. Etiam malesuada in lacus nec finibus.
     Praesent aliquet faucibus urna, vel tempor tellus tempus ac.
   _screenshot: {fileID: 21300000, guid: 438c87f13301e464192b0dd0fe136ba9, type: 3}
+  _isBlockedAtStart: 1
   _dwellers: []
   _ingredients: []

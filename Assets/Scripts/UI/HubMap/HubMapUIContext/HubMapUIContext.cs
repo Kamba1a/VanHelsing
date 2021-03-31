@@ -13,7 +13,7 @@ namespace BeastHunter
         public HubMapUIPlayerModel Player { get; private set; }
         public List<HubMapUICharacterModel> Characters { get; private set; }
         public List<HubMapUICityModel> Cities { get; private set; }
-        public List<HubMapUILocationData> Locations { get; private set; }
+        public List<HubMapUILocationModel> Locations { get; private set; }
         public HubMapUIQuestData[] QuestsData { get; private set; }
 
         #endregion
@@ -38,14 +38,13 @@ namespace BeastHunter
             Cities = new List<HubMapUICityModel>();
             for (int i = 0; i< data.Cities.Length; i++)
             {
-                HubMapUICityModel newCity = new HubMapUICityModel(data.Cities[i]);
-                Cities.Add(newCity);
+                Cities.Add(new HubMapUICityModel(data.Cities[i]));
             }
 
-            Locations = new List<HubMapUILocationData>();
+            Locations = new List<HubMapUILocationModel>();
             for (int i = 0; i < data.Locations.Length; i++)
             {
-                Locations.Add(data.Locations[i]);
+                Locations.Add(new HubMapUILocationModel(data.Locations[i]));
             }
 
             QuestsData = data.Quests;
@@ -61,6 +60,19 @@ namespace BeastHunter
             if (cityData != null)
             {
                 return Cities.Find(city => city.DataInstanceID == cityData.GetInstanceID());
+            }
+            else
+            {
+                Debug.LogError(this + ": input parameter is null");
+                return null;
+            }
+        }
+
+        public HubMapUILocationModel GetLocation(HubMapUILocationData locationData)
+        {
+            if (locationData != null)
+            {
+                return Locations.Find(location => location.DataInstanceID == locationData.GetInstanceID());
             }
             else
             {

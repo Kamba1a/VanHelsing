@@ -143,11 +143,7 @@ namespace BeastHunter
 
         [Header("Map objects")]
         [SerializeField] private Button _cityButton;
-        [SerializeField] private Button _locationButton_1;
-        [SerializeField] private Button _locationButton_2;
-        [SerializeField] private Button _locationButton_3;
-        [SerializeField] private Button _locationButton_4;
-        [SerializeField] private Button _locationButton_5;
+        [SerializeField] private Button[] _locationsButtons;
 
         [Header("Hub map")]
         [SerializeField] private GameObject _mainPanel;
@@ -224,7 +220,7 @@ namespace BeastHunter
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
 
-        private HubMapUILocationData _selectedLocation;
+        private HubMapUILocationModel _selectedLocation;
         private HubMapUICityModel _selectedCity;
         private HubMapUIStorage _currentBuyBackStorage;
         private HubMapUIStorage _currentShopStorage;
@@ -295,19 +291,46 @@ namespace BeastHunter
 
         private void Start()
         {
-            _cityButton.onClick.AddListener(() => OnClick_CityButton(_data.City));
-            _locationButton_1.onClick.AddListener(() => OnClick_LocationButton(_data.Location_1));
-            _locationButton_2.onClick.AddListener(() => OnClick_LocationButton(_data.Location_2));
-            _locationButton_3.onClick.AddListener(() => OnClick_LocationButton(_data.Location_3));
-            _locationButton_4.onClick.AddListener(() => OnClick_LocationButton(_data.Location_4));
-            _locationButton_5.onClick.AddListener(() => OnClick_LocationButton(_data.Location_5));
+            HubMapUICityModel city = _context.GetCity(_data.City);
+            _cityButton.onClick.AddListener(() => OnClick_CityButton(city));
 
-            _cityButton.GetComponentInChildren<Text>().text = _data.City.Name;
-            _locationButton_1.GetComponentInChildren<Text>().text = _data.Location_1.Name;
-            _locationButton_2.GetComponentInChildren<Text>().text = _data.Location_2.Name;
-            _locationButton_3.GetComponentInChildren<Text>().text = _data.Location_3.Name;
-            _locationButton_4.GetComponentInChildren<Text>().text = _data.Location_4.Name;
-            _locationButton_5.GetComponentInChildren<Text>().text = _data.Location_5.Name;
+            if (city.IsBlocked)
+            {
+                _cityButton.GetComponentInChildren<Text>().text = "Заблокировано";
+                _cityButton.interactable = false;
+            }
+            else
+            {
+                _cityButton.GetComponentInChildren<Text>().text = city.Name;
+                _cityButton.interactable = true;
+            }
+
+
+            for (int i = 0; i < _locationsButtons.Length; i++)
+            {
+                HubMapUILocationModel location = _context.GetLocation(_data.Locations[i]);
+
+                if (location != null)
+                {
+                    _locationsButtons[i].onClick.AddListener(() => OnClick_LocationButton(location));
+
+                    if (location.IsBlocked)
+                    {
+                        _locationsButtons[i].GetComponentInChildren<Text>().text = "Заблокировано";
+                        _locationsButtons[i].interactable = false;
+                    }
+                    else
+                    {
+                        _locationsButtons[i].GetComponentInChildren<Text>().text = location.Name;
+                        _locationsButtons[i].interactable = true;
+                    }
+                }
+                else
+                {
+                    Debug.LogError(this + " HubMapUIContext not contain requested HubMapUILocationData. Location name: " + _data.Locations[i].Name);
+                }
+            }
+
 
             for (int i = 0; i < _context.Characters.Count; i++)
             {
@@ -407,7 +430,7 @@ namespace BeastHunter
 
             HideRightInfoPanels();
             ClearRightInfoPanel();
-            FillCityPanel(city);
+            FillCityPanel(_selectedCity);
 
             _infoPanel.GetComponent<ScrollRect>().content = _cityInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
@@ -448,13 +471,13 @@ namespace BeastHunter
             _currentShopStorage = null;
         }
 
-        private void OnClick_LocationButton(HubMapUILocationData location)
+        private void OnClick_LocationButton(HubMapUILocationModel location)
         {
             _selectedLocation = location;
 
             HideRightInfoPanels();
             ClearRightInfoPanel();
-            FillLocationPanel(location);
+            FillLocationPanel(_selectedLocation);
 
             _infoPanel.GetComponent<ScrollRect>().content = _locationInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
@@ -1076,7 +1099,7 @@ namespace BeastHunter
             }
         }
 
-        private void FillLocationPanel(HubMapUILocationData location)
+        private void FillLocationPanel(HubMapUILocationModel location)
         {
             _locationScreen.sprite = location.Screenshot;
             _locationName.text = location.Name;

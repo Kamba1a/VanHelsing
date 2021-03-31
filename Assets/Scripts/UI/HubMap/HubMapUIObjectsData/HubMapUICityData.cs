@@ -16,6 +16,7 @@ namespace BeastHunter
         [SerializeField] private int _startReputation;
         [SerializeField] private int _shopSlotAmount;
         [SerializeField] private int _minItemsAmountInShop;
+        [SerializeField] private bool _isBlockedAtStart;
 
         #endregion
 
@@ -30,6 +31,7 @@ namespace BeastHunter
         public int StartReputation => _startReputation;
         public int ShopSlotAmount => _shopSlotAmount;
         public int MinItemsAmountInShop => _minItemsAmountInShop;
+        public bool IsBlockedAtStart => _isBlockedAtStart;
 
         #endregion
     }
