@@ -127,19 +127,11 @@ namespace BeastHunter
             DeactivateQuestAnswers(quest);
             SetMarkerTypeToCitizen(quest, HubMapUIQuestMarkerType.None);
 
-            if (quest.CurrentTask.GivenItemData != null)
-            {
-                if (_context.Player.Inventory.PutItemToFirstEmptySlot(quest.CurrentTask.GivenItemData))
-                {
-                    Debug.Log("The player received the item " + quest.CurrentTask.GivenItemData.ItemStruct.Name);
-                    quest.NextTask();
-                }
-                else
-                {
-                    Debug.Log("The player inventory is full for get the quest item");
-                }
-            }
-            else
+            bool isTaskConditionCompleted =
+                IsGiveItemToPlayerTaskConditionComplete(quest) &&
+                IsTakeItemFromPlayerTaskConditionComplete(quest);
+
+            if (isTaskConditionCompleted)
             {
                 quest.NextTask();
             }
@@ -153,6 +145,48 @@ namespace BeastHunter
                 SetQuestDialogToTargetCitizen(quest);
                 ActivateQuestAnswers(quest);
                 SetMarkerTypeToCitizen(quest, HubMapUIQuestMarkerType.Question);
+            }
+        }
+
+        public bool IsTakeItemFromPlayerTaskConditionComplete(HubMapUIQuestModel quest)
+        {
+            if (quest.CurrentTask.TakenItemData != null)
+            {
+                if (_context.Player.Inventory.RemoveFirstItem(quest.CurrentTask.TakenItemData))
+                {
+                    Debug.Log("The player gave the item " + quest.CurrentTask.TakenItemData.ItemStruct.Name);
+                    return true;
+                }
+                else
+                {
+                    Debug.Log("The player does not have item for quest");
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public bool IsGiveItemToPlayerTaskConditionComplete(HubMapUIQuestModel quest)
+        {
+            if (quest.CurrentTask.GivenItemData != null)
+            {
+                if (_context.Player.Inventory.PutItemToFirstEmptySlot(quest.CurrentTask.GivenItemData))
+                {
+                    Debug.Log("The player received the item " + quest.CurrentTask.GivenItemData.ItemStruct.Name);
+                    return true;
+                }
+                else
+                {
+                    Debug.Log("The player inventory is full for get the quest item");
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
             }
         }
 
@@ -268,14 +302,12 @@ namespace BeastHunter
 
         private void SetInteractableQuestAnswer(HubMapUIQuestAnswer questAnswer, HubMapUIQuestModel quest)
         {
-            if (quest.CurrentTask.GivenItemData != null)
-            {
-                questAnswer.Answer.IsInteractable = _context.Player.Inventory.IsFull() ? false : true;
-            }
-            else
-            {
-                questAnswer.Answer.IsInteractable = true;
-            }
+            questAnswer.Answer.IsInteractable =
+                (quest.CurrentTask.GivenItemData == null ||
+                quest.CurrentTask.GivenItemData != null && !_context.Player.Inventory.IsFull())
+                &&
+                (quest.CurrentTask.TakenItemData == null ||
+                quest.CurrentTask.TakenItemData != null && _context.Player.Inventory.IsContainItem(quest.CurrentTask.TakenItemData));
         }
 
         #endregion

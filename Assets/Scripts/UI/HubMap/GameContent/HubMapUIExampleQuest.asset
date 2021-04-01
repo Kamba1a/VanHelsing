@@ -21,6 +21,7 @@ MonoBehaviour:
     _isCitizenInitiateDialog: 1
     _initiatedDialogId: 0
     _givenItemData: {fileID: 11400000, guid: 92f5ea27fd6261a47ad984a545947ad3, type: 2}
+    _takenItemData: {fileID: 0}
     _additionalCitizensAnswers: []
   - _id: 1
     _nextQuestTaskId: 2
@@ -29,6 +30,7 @@ MonoBehaviour:
     _isCitizenInitiateDialog: 0
     _initiatedDialogId: 0
     _givenItemData: {fileID: 0}
+    _takenItemData: {fileID: 11400000, guid: 92f5ea27fd6261a47ad984a545947ad3, type: 2}
     _additionalCitizensAnswers:
     - _citizen: {fileID: 11400000, guid: 71545226823a9ad438b5553d63687638, type: 2}
       _answerId: 2
@@ -39,6 +41,7 @@ MonoBehaviour:
     _isCitizenInitiateDialog: 0
     _initiatedDialogId: 0
     _givenItemData: {fileID: 0}
+    _takenItemData: {fileID: 0}
     _additionalCitizensAnswers: []
   - _id: 3
     _nextQuestTaskId: 3
@@ -47,6 +50,7 @@ MonoBehaviour:
     _isCitizenInitiateDialog: 0
     _initiatedDialogId: 0
     _givenItemData: {fileID: 0}
+    _takenItemData: {fileID: 0}
     _additionalCitizensAnswers: []
   _firstTaskId: 0
   _emptyEndTaskId: 3

@@ -126,6 +126,31 @@ namespace BeastHunter
             return true;
         }
 
+        public bool IsContainItem(BaseItem item)
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] == item)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool RemoveFirstItem(BaseItem item)
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] == item)
+                {
+                    TakeItem(i);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void OnChangeItem(int slotNumber, BaseItem item)
         {
             OnChangeItemHandler?.Invoke(slotNumber, item);

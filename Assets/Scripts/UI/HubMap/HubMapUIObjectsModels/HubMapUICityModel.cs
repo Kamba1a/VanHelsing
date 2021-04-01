@@ -83,6 +83,8 @@ namespace BeastHunter
 
         public void UpdateShopItems()
         {
+            ShopStorage.Clear();
+
             int itemAmount = UnityEngine.Random.Range(_minItemsAmountInShop, ShopStorage.GetSlotsCount());
 
             for (int i = 0; i < itemAmount; i++)
