@@ -23,8 +23,18 @@ namespace BeastHunter
         public string Text => _text;
         public bool IsDialogEnd => _isDialogEnd;
         public int NextDialogNodeId => _nextDialogNodeId;
+        public bool IsInteractable { get; set; }
 
         #endregion
+
+
+        public HubMapUIDialogAnswer(HubMapUIDialogAnswer answer)
+        {
+            _text = answer.Text;
+            _isDialogEnd = answer.IsDialogEnd;
+            _nextDialogNodeId = answer.NextDialogNodeId;
+            IsInteractable = true;
+        }
 
 
         #region Methods

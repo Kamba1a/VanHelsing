@@ -612,7 +612,7 @@ namespace BeastHunter
             }
         }
 
-        private void OnClick_DialogButton(HubMapUICitizenModel citizen, HubMapUIDialogAnswer dialogAnswer)
+        private void OnClick_AnswerButton(HubMapUICitizenModel citizen, HubMapUIDialogAnswer dialogAnswer)
         {
             dialogAnswer.SelectedByPlayer();
 
@@ -1024,7 +1024,8 @@ namespace BeastHunter
                 answerButton.GetComponentInChildren<Text>().text += " (ףיעט)";
             }
 
-            answerButton.GetComponentInChildren<Button>().onClick.AddListener(() => OnClick_DialogButton(citizen, answer));
+            answerButton.GetComponentInChildren<Button>().interactable = answer.IsInteractable;
+            answerButton.GetComponentInChildren<Button>().onClick.AddListener(() => OnClick_AnswerButton(citizen, answer));
             _displayedDialogAnswerButtons.Add(answerButton);
         }
 
@@ -1158,7 +1159,7 @@ namespace BeastHunter
             _citizenPortrait.sprite = citizen.Portrait;
             _dialogText.text = citizen.CurrentDialog.Text;
 
-            List<HubMapUIDialogAnswer> answers = citizen.GetAllCurentAnswers();
+            List<HubMapUIDialogAnswer> answers = citizen.GetAllCurrentAnswers();
             for (int i = 0; i < answers.Count; i++)
             {
                 InitializeDialogAnswerButton(citizen, answers[i]);

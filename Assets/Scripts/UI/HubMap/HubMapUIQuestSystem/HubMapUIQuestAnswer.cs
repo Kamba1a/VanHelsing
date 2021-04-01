@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 
 namespace BeastHunter
@@ -17,10 +18,12 @@ namespace BeastHunter
 
         #region Properties
 
+        public Action<HubMapUIQuestAnswer> SetIntractableHandler { get; set; }
+
         public int Id => _id;
         public int[] DialogNodesForThisAnswer => (int[])_dialogNodesForThisAnswer.Clone();
         public HubMapUIDialogAnswer Answer => _answer;
-        public bool IsActive { get; set; }
+        public bool IsActivated { get; set; }
 
         #endregion
 
@@ -31,8 +34,8 @@ namespace BeastHunter
         {
             _id = hubMapUIQuestAnswers.Id;
             _dialogNodesForThisAnswer = hubMapUIQuestAnswers.DialogNodesForThisAnswer;
-            _answer = hubMapUIQuestAnswers.Answer;
-            IsActive = false;
+            _answer = new HubMapUIDialogAnswer(hubMapUIQuestAnswers.Answer);
+            IsActivated = false;
         }
 
         #endregion
@@ -50,6 +53,11 @@ namespace BeastHunter
                 }
             }
             return false;
+        }
+
+        public void SetInteractableThroughHandler()
+        {
+            SetIntractableHandler?.Invoke(this);
         }
 
         #endregion

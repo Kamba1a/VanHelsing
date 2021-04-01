@@ -114,6 +114,18 @@ namespace BeastHunter
             }
         }
 
+        public bool IsFull()
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] == null)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private void OnChangeItem(int slotNumber, BaseItem item)
         {
             OnChangeItemHandler?.Invoke(slotNumber, item);

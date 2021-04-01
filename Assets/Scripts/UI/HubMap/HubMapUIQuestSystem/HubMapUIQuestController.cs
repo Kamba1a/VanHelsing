@@ -220,7 +220,8 @@ namespace BeastHunter
 
             if (questAnswer != null)
             {
-                questAnswer.IsActive = true;
+                questAnswer.IsActivated = true;
+                questAnswer.SetIntractableHandler += (answer) => SetInteractableQuestAnswer(answer, quest);
             }
             else
             {
@@ -236,7 +237,7 @@ namespace BeastHunter
                 
                 if (questAnswer != null)
                 {
-                    questAnswer.IsActive = true;
+                    questAnswer.IsActivated = true;
                 }
                 else
                 {
@@ -249,20 +250,32 @@ namespace BeastHunter
         {
             HubMapUIQuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.TargetCitizen).
                         GetQuestAnswerById(quest.CurrentTask.TargetQuestAnswerId);
-            questAnswer.IsActive = false;
+            questAnswer.IsActivated = false;
             questAnswer.Answer.OnAnswerSelectByPlayerHandler -= (handlerValue) => QuestProgressing(quest);
 
             for (int i = 0; i < quest.CurrentTask.AdditionalCitizensAnswers.Length; i++)
             {
                 questAnswer = _context.GetCitizen(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen).
                     GetQuestAnswerById(quest.CurrentTask.AdditionalCitizensAnswers[i].QuestAnswerId);
-                questAnswer.IsActive = false;
+                questAnswer.IsActivated = false;
             }
         }
 
         private void SetMarkerTypeToCitizen(HubMapUIQuestModel quest, HubMapUIQuestMarkerType questMarker)
         {
             _context.GetCitizen(quest.CurrentTask.TargetCitizen).QuestMarkerType = questMarker;
+        }
+
+        private void SetInteractableQuestAnswer(HubMapUIQuestAnswer questAnswer, HubMapUIQuestModel quest)
+        {
+            if (quest.CurrentTask.GivenItemData != null)
+            {
+                questAnswer.Answer.IsInteractable = _context.Player.Inventory.IsFull() ? false : true;
+            }
+            else
+            {
+                questAnswer.Answer.IsInteractable = true;
+            }
         }
 
         #endregion

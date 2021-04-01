@@ -60,9 +60,11 @@ namespace BeastHunter
                 QuestAnswers[i].Answer.OnAnswerSelectByPlayerHandler += SetCurrentDialogNode;
             }
 
-            Dialogs = data.Dialogs;
-            for (int i = 0; i < Dialogs.Count; i++)
+            Dialogs = new List<HubMapUIDialogNode>();
+            for (int i = 0; i < data.Dialogs.Count; i++)
             {
+                Dialogs.Add(new HubMapUIDialogNode(data.Dialogs[i]));
+
                 for (int j = 0; j < Dialogs[i].Answers.Count; j++)
                 {
                     Dialogs[i].Answers[j].OnAnswerSelectByPlayerHandler += SetCurrentDialogNode;
@@ -90,9 +92,9 @@ namespace BeastHunter
             }
         }
 
-        public List<HubMapUIDialogAnswer> GetAllCurentAnswers()
+        public List<HubMapUIDialogAnswer> GetAllCurrentAnswers()
         {
-            HubMapUIDialogAnswer additionalQuestAnswer = GetActiveQuestAnswersForCurrentDialog();
+            HubMapUIDialogAnswer additionalQuestAnswer = GetActiveQuestAnswerForCurrentDialog();
             if (additionalQuestAnswer == null)
             {
                 return CurrentDialog.Answers;
@@ -121,12 +123,13 @@ namespace BeastHunter
             return null;
         }
 
-        private HubMapUIDialogAnswer GetActiveQuestAnswersForCurrentDialog()
+        private HubMapUIDialogAnswer GetActiveQuestAnswerForCurrentDialog()
         {
             for (int i = 0; i < QuestAnswers.Count; i++)
             {
-                if (QuestAnswers[i].IsActive && QuestAnswers[i].IsBelongToDialogNode(CurrentDialog.Id))
+                if (QuestAnswers[i].IsActivated && QuestAnswers[i].IsBelongToDialogNode(CurrentDialog.Id))
                 {
+                    QuestAnswers[i].SetInteractableThroughHandler();
                     return QuestAnswers[i].Answer;
                 }
             }

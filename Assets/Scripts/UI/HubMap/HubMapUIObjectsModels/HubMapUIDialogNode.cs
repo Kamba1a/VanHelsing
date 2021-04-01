@@ -26,9 +26,30 @@ namespace BeastHunter
         #endregion
 
 
+        #region ClassLifeCycle
+
+        public HubMapUIDialogNode(HubMapUIDialogNode hubMapUIDialogNode)
+        {
+            _id = hubMapUIDialogNode.Id;
+            _text = hubMapUIDialogNode.Text;
+            _answers = new List<HubMapUIDialogAnswer>();
+
+            for (int i = 0; i < hubMapUIDialogNode.Answers.Count; i++)
+            {
+                _answers.Add(new HubMapUIDialogAnswer(hubMapUIDialogNode.Answers[i]));
+            }
+        }
+
+        #endregion
+
+
+        #region Methods
+
         public void SetId(int id)   //todo: auto id increment in citizens
         {
             _id = id;
         }
+
+        #endregion
     }
 }
