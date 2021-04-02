@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 namespace BeastHunter
@@ -153,6 +154,7 @@ namespace BeastHunter
         [SerializeField] private Button _mapButton;
         [SerializeField] private GameObject _inventoryItemsPanel;
         [SerializeField] private GameObject _tooltip;
+        [SerializeField] private GameObject _loadingPanel;
 
         [Header("City info panel")]
         [SerializeField] private GameObject _cityInfoPanel;
@@ -386,6 +388,8 @@ namespace BeastHunter
             _buyButton.interactable = false;
             _tooltip.SetActive(false);
             _perksPanel.SetActive(false);
+            _hikeAcceptButton.interactable = false;
+            _loadingPanel.SetActive(false);
         }
 
         #endregion
@@ -418,6 +422,8 @@ namespace BeastHunter
 
         private void OnClick_HikeAcceptButton()
         {
+            _loadingPanel.SetActive(true);
+            _mainPanel.SetActive(false);
             LocationLoad();
         }
 
@@ -915,12 +921,14 @@ namespace BeastHunter
 
             if (_selected.Character != null)
             {
+                _hikeAcceptButton.interactable = true;
                 FillItemsSlots(StorageType.Equipment);
                 SetEquipmentSlotsInteractable(true);
                 _selected.Character.Backpack.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Equipment);
             }
             else
             {
+                _hikeAcceptButton.interactable = false;
                 SetEquipmentSlotsInteractable(false);
             }
         }
@@ -1305,6 +1313,7 @@ namespace BeastHunter
          private void LocationLoad()
         {
             Debug.Log("Load location. Location: " + _selectedLocation);
+            SceneManager.LoadScene(0); //TODO: loading scenes depending on the selected location
         }
 
         #endregion
