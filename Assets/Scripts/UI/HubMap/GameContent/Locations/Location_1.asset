@@ -12,14 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5afc0c8ce82e2c6498a5df2b550de7ec, type: 3}
   m_Name: Location_1
   m_EditorClassIdentifier: 
-  _name: "\u041F\u0443\u0440\u043F\u0443\u0440\u043D\u0430\u044F \u043B\u043E\u043A\u0430\u0446\u0438\u044F"
-  _description: "\u0421\u0443\u043F\u0435\u0440 \u043F\u0443\u0440\u043F\u0443\u0440\u043D\u0430\u044F
-    \u043F\u0440\u0435\u043F\u0443\u0440\u043F\u0443\u0440\u043D\u0430\u044F \u043B\u043E\u043A\u0430\u0446\u0438\u044F,
-    \u043F\u043E\u0447\u0442\u0438 \u043D\u0435\u0442 \u043E\u0431\u0438\u0442\u0430\u0442\u0435\u043B\u0435\u0439"
+  _name: "\u0424\u043E\u0440\u0442"
+  _description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+    mattis tellus vehicula aliquam dignissim. Praesent in elementum risus. Proin
+    convallis cursus lacus, nec malesuada libero. Etiam malesuada in lacus nec finibus.
+    Praesent aliquet faucibus urna, vel tempor tellus tempus ac.
   _screenshot: {fileID: 21300000, guid: 95187df84f56c4247a4cf20c453fc85c, type: 3}
-  _dwellers:
-  - {fileID: 11400000, guid: f6bd733dd64bc8848af8e948b9990eb2, type: 2}
-  _ingredients:
-  - {fileID: 11400000, guid: 71051bc1691a8c04e8aeb95ce417e913, type: 2}
-  - {fileID: 11400000, guid: 901161d979e1f68409b8c92ca9851b6a, type: 2}
-  - {fileID: 11400000, guid: de62126637e7caf44ae06b1e64acf5cc, type: 2}
+  _isBlockedAtStart: 0
+  _dwellers: []
+  _ingredients: []
