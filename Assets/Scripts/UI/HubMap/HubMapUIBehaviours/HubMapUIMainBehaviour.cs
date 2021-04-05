@@ -28,12 +28,14 @@ namespace BeastHunter
             private int? _shopSlotIndex;
             private int? _buyBackSlotIndex;
             private HubMapUICharacterModel _character;
+            private HubMapUIMapObjectModel _mapObject;
 
             public Action<int?> OnChanged_EquipmentSlotIndex { get; set; }
             public Action<int?> OnChanged_InventorySlotIndex { get; set; }
             public Action<int?> OnChanged_ShopSlotIndex { get; set; }
             public Action<int?> OnChanged_BuyBackSlotIndex { get; set; }
             public Action<HubMapUICharacterModel> OnChanged_Character { get; set; }
+            public Action<HubMapUIMapObjectModel> OnChanged_MapObject { get; set; }
 
             public int? EquipmentSlotIndex
             {
@@ -120,6 +122,23 @@ namespace BeastHunter
                 }
             }
 
+            public HubMapUIMapObjectModel MapObject
+            {
+                get
+                {
+                    return _mapObject;
+                }
+                set
+                {
+                    if (value != _mapObject)
+                    {
+                        HubMapUIMapObjectModel previousValue = _mapObject;
+                        _mapObject = value;
+                        OnChanged_MapObject?.Invoke(previousValue);
+                    }
+                }
+            }
+
             public void RemoveAllListeners()
             {
                 OnChanged_EquipmentSlotIndex = null;
@@ -127,6 +146,7 @@ namespace BeastHunter
                 OnChanged_ShopSlotIndex = null;
                 OnChanged_BuyBackSlotIndex = null;
                 OnChanged_Character = null;
+                OnChanged_MapObject = null;
             }
         }
 
@@ -225,7 +245,6 @@ namespace BeastHunter
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
 
-        private HubMapUIMapObjectModel _selectedMapObject;
         private HubMapUIStorage _currentBuyBackStorage;
         private HubMapUIStorage _currentShopStorage;
         private SelectedElements _selected;
@@ -299,7 +318,7 @@ namespace BeastHunter
         {
             for (int i = 0; i < _mapObjectsButtons.Length; i++)
             {
-                FillMapObjectButton(_mapObjectsButtons[i], _data.MapObjects[i]);
+                FillMapObjectButton(i, _mapObjectsButtons[i], _data.MapObjects[i]);
             }
 
             for (int i = 0; i < _context.Characters.Count; i++)
@@ -335,6 +354,7 @@ namespace BeastHunter
             _selected.OnChanged_BuyBackSlotIndex = OnChangedSelectedBuyBackSlot;
             _selected.OnChanged_ShopSlotIndex = OnChangedSelectedShopSlot;
             _selected.OnChanged_Character = OnChangedSelectedCharacter;
+            _selected.OnChanged_MapObject = OnChangedSelectedMapObject;
 
             _mainPanel.SetActive(_data.MapOnStartEnabled);
             _infoPanel.SetActive(false);
@@ -399,9 +419,9 @@ namespace BeastHunter
             _hikePanel.SetActive(false);
         }
 
-        private void OnClick_CityButton(HubMapUICityModel city)
+        private void OnClick_CityButton(int mapObjectIndex, HubMapUICityModel city)
         {
-            _selectedMapObject = city;
+            _selected.MapObject = city;
 
             HideRightInfoPanels();
             ClearRightInfoPanel();
@@ -415,7 +435,7 @@ namespace BeastHunter
 
         private void OnClick_OpenTradePanelButton()
         {
-            HubMapUICityModel city = _selectedMapObject as HubMapUICityModel;
+            HubMapUICityModel city = _selected.MapObject as HubMapUICityModel;
 
             SetScrollViewParentForInventoryItemsPanel(_shopInventoryScrollView);
             _playerGoldAmount.text = _player.GoldAmount.ToString();
@@ -448,9 +468,9 @@ namespace BeastHunter
             _currentShopStorage = null;
         }
 
-        private void OnClick_LocationButton(HubMapUILocationModel location)
+        private void OnClick_LocationButton(int mapObjectIndex, HubMapUILocationModel location)
         {
-            _selectedMapObject = location;
+            _selected.MapObject = location;
 
             HideRightInfoPanels();
             ClearRightInfoPanel();
@@ -897,6 +917,19 @@ namespace BeastHunter
             }
         }
 
+        private void OnChangedSelectedMapObject(HubMapUIMapObjectModel previousMapObject)
+        {
+            if (_selected.MapObject != null)
+            {
+
+            }
+
+            if (previousMapObject != null)
+            {
+
+            }
+        }
+
         #endregion
 
 
@@ -1006,7 +1039,7 @@ namespace BeastHunter
 
         #region FillUIElementsByInfo
 
-        private void FillMapObjectButton(Button mapObjectButton, HubMapUIMapObjectData mapObjectdata)
+        private void FillMapObjectButton(int mapObjectIndex, Button mapObjectButton, HubMapUIMapObjectData mapObjectdata)
         {
             HubMapUIMapObjectModel mapObject = _context.GetMapObjectModel(mapObjectdata);
             if (mapObject != null)
@@ -1014,11 +1047,11 @@ namespace BeastHunter
                 switch (mapObjectdata.GetMapObjectType())
                 {
                     case HubMapUIMapObjectType.Location:
-                        mapObjectButton.onClick.AddListener(() => OnClick_LocationButton(mapObject as HubMapUILocationModel));
+                        mapObjectButton.onClick.AddListener(() => OnClick_LocationButton(mapObjectIndex, mapObject as HubMapUILocationModel));
                         break;
 
                     case HubMapUIMapObjectType.City:
-                        mapObjectButton.onClick.AddListener(() => OnClick_CityButton(mapObject as HubMapUICityModel));
+                        mapObjectButton.onClick.AddListener(() => OnClick_CityButton(mapObjectIndex, mapObject as HubMapUICityModel));
                         break;
 
                     default:
@@ -1273,7 +1306,7 @@ namespace BeastHunter
             if (item != null)
             {
                 return
-                    item.ItemStruct.RequiredReputationForSaleInShop <= (_selectedMapObject as HubMapUICityModel).PlayerReputation &&
+                    item.ItemStruct.RequiredReputationForSaleInShop <= (_selected.MapObject as HubMapUICityModel).PlayerReputation &&
                     _player.GoldAmount >= _data.ShopService.GetItemPrice(item);
             }
             else
@@ -1289,7 +1322,7 @@ namespace BeastHunter
 
             if (item != null)
             {
-                if ((_selectedMapObject as HubMapUICityModel).PlayerReputation < item.ItemStruct.RequiredReputationForSaleInShop)
+                if ((_selected.MapObject as HubMapUICityModel).PlayerReputation < item.ItemStruct.RequiredReputationForSaleInShop)
                 {
                     flag = false;
 
@@ -1315,8 +1348,8 @@ namespace BeastHunter
 
          private void LocationLoad()
         {
-            Debug.Log("Load location. ID: " + (_selectedMapObject as HubMapUILocationModel).LoadSceneId);
-            SceneManager.LoadScene((_selectedMapObject as HubMapUILocationModel).LoadSceneId);
+            Debug.Log("Load location. ID: " + (_selected.MapObject as HubMapUILocationModel).LoadSceneId);
+            SceneManager.LoadScene((_selected.MapObject as HubMapUILocationModel).LoadSceneId);
         }
 
         #endregion
