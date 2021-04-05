@@ -27,8 +27,8 @@ MonoBehaviour:
   _answerButtonUIPrefab: {fileID: 4532874562538034351, guid: d3bcb53cab92ad245a8f95bd2cb657e2,
     type: 3}
   _mapOnStartEnabled: 0
-  _city: {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
-  _locations:
+  _mapObjects:
+  - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
   - {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
   - {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
   - {fileID: 11400000, guid: 860d3696ec691de4e9302d6819bd9cda, type: 2}

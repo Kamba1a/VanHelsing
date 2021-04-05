@@ -143,8 +143,7 @@ namespace BeastHunter
         #region Fields
 
         [Header("Map objects")]
-        [SerializeField] private Button _cityButton;
-        [SerializeField] private Button[] _locationsButtons;
+        [SerializeField] private Button[] _mapObjectsButtons;
 
         [Header("Hub map")]
         [SerializeField] private GameObject _mainPanel;
@@ -298,46 +297,10 @@ namespace BeastHunter
 
         private void Start()
         {
-            HubMapUICityModel city = _context.GetCity(_data.City);
-            _cityButton.onClick.AddListener(() => OnClick_CityButton(city));
-
-            if (city.IsBlocked)
+            for (int i = 0; i < _mapObjectsButtons.Length; i++)
             {
-                _cityButton.GetComponentInChildren<Text>().text = "Заблокировано";
-                _cityButton.interactable = false;
+                FillMapObjectButton(_mapObjectsButtons[i], _data.MapObjects[i]);
             }
-            else
-            {
-                _cityButton.GetComponentInChildren<Text>().text = city.Name;
-                _cityButton.interactable = true;
-            }
-
-
-            for (int i = 0; i < _locationsButtons.Length; i++)
-            {
-                HubMapUILocationModel location = _context.GetLocation(_data.Locations[i]);
-
-                if (location != null)
-                {
-                    _locationsButtons[i].onClick.AddListener(() => OnClick_LocationButton(location));
-
-                    if (location.IsBlocked)
-                    {
-                        _locationsButtons[i].GetComponentInChildren<Text>().text = "Заблокировано";
-                        _locationsButtons[i].interactable = false;
-                    }
-                    else
-                    {
-                        _locationsButtons[i].GetComponentInChildren<Text>().text = location.Name;
-                        _locationsButtons[i].interactable = true;
-                    }
-                }
-                else
-                {
-                    Debug.LogError(this + " HubMapUIContext not contain requested HubMapUILocationData. Location name: " + _data.Locations[i].Name);
-                }
-            }
-
 
             for (int i = 0; i < _context.Characters.Count; i++)
             {
@@ -1042,6 +1005,43 @@ namespace BeastHunter
 
 
         #region FillUIElementsByInfo
+
+        private void FillMapObjectButton(Button mapObjectButton, HubMapUIMapObjectData mapObjectdata)
+        {
+            HubMapUIMapObjectModel mapObject = _context.GetMapObjectModel(mapObjectdata);
+            if (mapObject != null)
+            {
+                switch (mapObjectdata.GetMapObjectType())
+                {
+                    case HubMapUIMapObjectType.Location:
+                        mapObjectButton.onClick.AddListener(() => OnClick_LocationButton(mapObject as HubMapUILocationModel));
+                        break;
+
+                    case HubMapUIMapObjectType.City:
+                        mapObjectButton.onClick.AddListener(() => OnClick_CityButton(mapObject as HubMapUICityModel));
+                        break;
+
+                    default:
+                        Debug.LogError(this + " incorrect HubMapUIMapObjectType value");
+                        break;
+                }
+
+                if (mapObject.IsBlocked)
+                {
+                    mapObjectButton.GetComponentInChildren<Text>().text = "Заблокировано";
+                    mapObjectButton.interactable = false;
+                }
+                else
+                {
+                    mapObjectButton.GetComponentInChildren<Text>().text = mapObject.Name;
+                    mapObjectButton.interactable = true;
+                }
+            }
+            else
+            {
+                Debug.LogError(this + " HubMapUIContext not contain requested HubMapUIMapObjectModel: " + mapObject.Name);
+            }
+        }
 
         private void FillTooltipByItemInfo(BaseItem item, StorageType storageType)
         {

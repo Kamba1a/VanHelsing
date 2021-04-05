@@ -17,6 +17,7 @@ MonoBehaviour:
     mattis tellus vehicula aliquam dignissim. Praesent in elementum risus. Proin
     convallis cursus lacus, nec malesuada libero. Etiam malesuada in lacus nec finibus.
     Praesent aliquet faucibus urna, vel tempor tellus tempus ac.
+  _loadSceneId: 0
   _screenshot: {fileID: 21300000, guid: 95187df84f56c4247a4cf20c453fc85c, type: 3}
   _isBlockedAtStart: 0
   _dwellers: []

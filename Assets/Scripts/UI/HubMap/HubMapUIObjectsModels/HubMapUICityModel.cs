@@ -49,6 +49,7 @@ namespace BeastHunter
         {
             _minItemsAmountInShop = data.MinItemsAmountInShop;
 
+            MapObjectType = HubMapUIMapObjectType.City;
             DataInstanceID = data.GetInstanceID();
             Name = data.Name;
             Description = data.Description;

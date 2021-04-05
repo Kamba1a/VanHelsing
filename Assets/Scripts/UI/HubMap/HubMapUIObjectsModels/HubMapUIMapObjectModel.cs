@@ -15,6 +15,7 @@ namespace BeastHunter
 
         public Action<HubMapUIMapObjectModel> OnChangeBlockedStatus { get; set; }
 
+        public HubMapUIMapObjectType MapObjectType { get; protected set; }
         public int DataInstanceID { get; protected set; }
         public string Name { get; protected set; }
         public string Description { get; protected set; }

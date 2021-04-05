@@ -4,12 +4,10 @@
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HubMapUICity", menuName = "CreateData/HubMapUIData/HubMapUICity", order = 0)]
-    public class HubMapUICityData : ScriptableObject
+    public class HubMapUICityData : HubMapUIMapObjectData
     {
         #region Fields
 
-        [SerializeField] private string _name;
-        [SerializeField][TextArea(3,10)] private string _description;
         [SerializeField] private HubMapUIFractionData _fraction;
         [SerializeField] private HubMapUICitizenData[] _citizens;
         [SerializeField] private BaseItem[] _shopItemsPool;
@@ -23,8 +21,6 @@ namespace BeastHunter
 
         #region Properties
 
-        public string Name => _name;
-        public string Description => _description;
         public HubMapUIFractionData Fraction => _fraction;
         public HubMapUICitizenData[] Citizens => _citizens;
         public BaseItem[] ShopItemsPool => _shopItemsPool;
@@ -32,6 +28,16 @@ namespace BeastHunter
         public int ShopSlotAmount => _shopSlotAmount;
         public int MinItemsAmountInShop => _minItemsAmountInShop;
         public bool IsBlockedAtStart => _isBlockedAtStart;
+
+        #endregion
+
+
+        #region HubMapUIMapObjectData
+
+        public override HubMapUIMapObjectType GetMapObjectType()
+        {
+            return HubMapUIMapObjectType.City;
+        }
 
         #endregion
     }

@@ -55,6 +55,21 @@ namespace BeastHunter
 
         #region Methods
 
+        public HubMapUIMapObjectModel GetMapObjectModel(HubMapUIMapObjectData mapObjectData)
+        {
+            switch (mapObjectData.GetMapObjectType())
+            {
+                case HubMapUIMapObjectType.Location:
+                    return GetLocation(mapObjectData as HubMapUILocationData);
+
+                case HubMapUIMapObjectType.City:
+                    return GetCity(mapObjectData as HubMapUICityData);
+
+                default:
+                    return null;
+            }
+        }
+
         public HubMapUICityModel GetCity(HubMapUICityData cityData)
         {
             if (cityData != null)

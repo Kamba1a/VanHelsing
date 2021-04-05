@@ -17,6 +17,7 @@ namespace BeastHunter
 
         public HubMapUILocationModel(HubMapUILocationData data)
         {
+            MapObjectType = HubMapUIMapObjectType.Location;
             DataInstanceID = data.GetInstanceID();
             Name = data.Name;
             Description = data.Description;

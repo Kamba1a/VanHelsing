@@ -21,8 +21,7 @@ namespace BeastHunter
         [SerializeField] private bool _mapOnStartEnabled;
 
         [Header("Objects on map")]
-        [SerializeField] private HubMapUICityData _city;
-        [SerializeField] private HubMapUILocationData[] _locations;
+        [SerializeField] private HubMapUIMapObjectData[] _mapObjects;
 
         [Header("Game content for UI")]
         [SerializeField] private HubMapUIContextData _contextData;
@@ -50,8 +49,7 @@ namespace BeastHunter
 
         public bool MapOnStartEnabled => _mapOnStartEnabled;
 
-        public HubMapUICityData City => _city;
-        public HubMapUILocationData[] Locations => (HubMapUILocationData[])_locations.Clone();
+        public HubMapUIMapObjectData[] MapObjects => (HubMapUIMapObjectData[])_mapObjects.Clone();
 
         public HubMapUIContext Context { get; private set; }
         public HubMapUIShopService ShopService { get; private set; }
