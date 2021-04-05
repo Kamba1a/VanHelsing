@@ -7,6 +7,7 @@ namespace BeastHunter
     {
         #region Properties
 
+        public int LoadSceneId { get; private set; }
         public Sprite Screenshot { get; private set;}
         public HubMapUIDwellerData[] Dwellers { get; private set; }
         public HubMapUIIngredientData[] Ingredients { get; private set; }
@@ -21,6 +22,7 @@ namespace BeastHunter
             Description = data.Description;
             IsBlocked = data.IsBlockedAtStart;
 
+            LoadSceneId = data.LoadSceneId;
             Screenshot = data.Screenshot;
             Dwellers = data.Dwellers;
             Ingredients = data.Ingredients;

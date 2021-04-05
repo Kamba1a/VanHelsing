@@ -226,8 +226,7 @@ namespace BeastHunter
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
 
-        private HubMapUILocationModel _selectedLocation;
-        private HubMapUICityModel _selectedCity;
+        private HubMapUIMapObjectModel _selectedMapObject;
         private HubMapUIStorage _currentBuyBackStorage;
         private HubMapUIStorage _currentShopStorage;
         private SelectedElements _selected;
@@ -439,11 +438,11 @@ namespace BeastHunter
 
         private void OnClick_CityButton(HubMapUICityModel city)
         {
-            _selectedCity = city;
+            _selectedMapObject = city;
 
             HideRightInfoPanels();
             ClearRightInfoPanel();
-            FillCityPanel(_selectedCity);
+            FillCityPanel(city);
 
             _infoPanel.GetComponent<ScrollRect>().content = _cityInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
@@ -453,15 +452,17 @@ namespace BeastHunter
 
         private void OnClick_OpenTradePanelButton()
         {
+            HubMapUICityModel city = _selectedMapObject as HubMapUICityModel;
+
             SetScrollViewParentForInventoryItemsPanel(_shopInventoryScrollView);
             _playerGoldAmount.text = _player.GoldAmount.ToString();
-            _shopCityReputation.text = _selectedCity.PlayerReputation.ToString();
+            _shopCityReputation.text = city.PlayerReputation.ToString();
 
-            _currentShopStorage = _selectedCity.ShopStorage;
+            _currentShopStorage = city.ShopStorage;
             FillItemsSlots(StorageType.Shop);
             _currentShopStorage.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Shop);
 
-            _currentBuyBackStorage = _selectedCity.BuyBackStorage;
+            _currentBuyBackStorage = city.BuyBackStorage;
             FillItemsSlots(StorageType.BuyBackStorage);
             _currentBuyBackStorage.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.BuyBackStorage);
 
@@ -486,11 +487,11 @@ namespace BeastHunter
 
         private void OnClick_LocationButton(HubMapUILocationModel location)
         {
-            _selectedLocation = location;
+            _selectedMapObject = location;
 
             HideRightInfoPanels();
             ClearRightInfoPanel();
-            FillLocationPanel(_selectedLocation);
+            FillLocationPanel(location);
 
             _infoPanel.GetComponent<ScrollRect>().content = _locationInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
@@ -1267,10 +1268,12 @@ namespace BeastHunter
 
         private bool IsPossibleToBuyShopItem(BaseItem item)
         {
+
+
             if (item != null)
             {
                 return
-                    item.ItemStruct.RequiredReputationForSaleInShop <= _selectedCity.PlayerReputation &&
+                    item.ItemStruct.RequiredReputationForSaleInShop <= (_selectedMapObject as HubMapUICityModel).PlayerReputation &&
                     _player.GoldAmount >= _data.ShopService.GetItemPrice(item);
             }
             else
@@ -1286,7 +1289,7 @@ namespace BeastHunter
 
             if (item != null)
             {
-                if (_selectedCity.PlayerReputation < item.ItemStruct.RequiredReputationForSaleInShop)
+                if ((_selectedMapObject as HubMapUICityModel).PlayerReputation < item.ItemStruct.RequiredReputationForSaleInShop)
                 {
                     flag = false;
 
@@ -1312,8 +1315,8 @@ namespace BeastHunter
 
          private void LocationLoad()
         {
-            Debug.Log("Load location. Location: " + _selectedLocation);
-            SceneManager.LoadScene(0); //TODO: loading scenes depending on the selected location
+            Debug.Log("Load location. ID: " + (_selectedMapObject as HubMapUILocationModel).LoadSceneId);
+            SceneManager.LoadScene((_selectedMapObject as HubMapUILocationModel).LoadSceneId);
         }
 
         #endregion

@@ -17,7 +17,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _shopSlotUIPrefab;
         [SerializeField] private GameObject _answerButtonUIPrefab;
 
-        [Header("UI prefs")]
+        [Header("UI settings")]
         [SerializeField] private bool _mapOnStartEnabled;
 
         [Header("Objects on map")]
