@@ -236,6 +236,14 @@ namespace BeastHunter
         [SerializeField] private Button _closePerksPanelButton;
 
 
+        private HubMapUIContext _context;
+        private HubMapUIQuestController _questController;
+        private HubMapUIShopService _shopService;
+
+        private HubMapUIData _data;
+        private HubMapUIPlayerModel _player;
+        private HubMapUIStorage _inventory;
+
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
         private List<HubMapUISlotBehaviour> _equipmentSlotsUIBehaviours;
         private List<HubMapUISlotBehaviour> _inventorySlotsUIBehaviours;
@@ -248,11 +256,6 @@ namespace BeastHunter
         private HubMapUIStorage _currentBuyBackStorage;
         private HubMapUIStorage _currentShopStorage;
         private SelectedElements _selected;
-
-        private HubMapUIData _data;
-        private HubMapUIContext _context;
-        private HubMapUIPlayerModel _player;
-        private HubMapUIStorage _inventory;
 
         #endregion
 
@@ -292,13 +295,20 @@ namespace BeastHunter
             _closeInventoryButton.onClick.RemoveAllListeners();
             _perkTreeButton.onClick.RemoveAllListeners();
             _shopButton.onClick.RemoveAllListeners();
+            _closeTradePanelButton.onClick.RemoveAllListeners();
+            _sellButton.onClick.RemoveAllListeners();
+            _buyBackButton.onClick.RemoveAllListeners();
+            _buyButton.onClick.RemoveAllListeners();
             _closePerksPanelButton.onClick.RemoveAllListeners();
         }
 
         private void Awake()
         {
+            _context = new HubMapUIContext(Data.HubMapData.ContextData);
+            _questController = new HubMapUIQuestController(_context);
+            _shopService = new HubMapUIShopService();
+
             _data = Data.HubMapData;
-            _context = _data.Context;
             _player = _context.Player;
             _inventory = _player.Inventory;
 
@@ -634,7 +644,7 @@ namespace BeastHunter
                 {
                     if (_currentBuyBackStorage.PutItemToFirstEmptySlot(sellingItem))
                     {
-                        ChangePlayerGoldAmount(_data.ShopService.CountSellPrice(sellingItem));
+                        ChangePlayerGoldAmount(_shopService.CountSellPrice(sellingItem));
                     }
                     else
                     {
@@ -654,11 +664,11 @@ namespace BeastHunter
                 BaseItem buyingItem = _currentBuyBackStorage.TakeItem(_selected.BuyBackSlotIndex.Value);
                 if (buyingItem != null)
                 {
-                    if (_player.GoldAmount >= _data.ShopService.CountSellPrice(buyingItem)) 
+                    if (_player.GoldAmount >= _shopService.CountSellPrice(buyingItem)) 
                     { 
                         if (_inventory.PutItemToFirstEmptySlot(buyingItem))
                         {
-                            ChangePlayerGoldAmount(-_data.ShopService.CountSellPrice(buyingItem));
+                            ChangePlayerGoldAmount(-_shopService.CountSellPrice(buyingItem));
                         }
                         else
                         {
@@ -687,7 +697,7 @@ namespace BeastHunter
                     {
                         if (_inventory.PutItemToFirstEmptySlot(buyingItem))
                         {
-                            ChangePlayerGoldAmount(-_data.ShopService.GetItemPrice(buyingItem));
+                            ChangePlayerGoldAmount(-_shopService.GetItemPrice(buyingItem));
                         }
                         else
                         {
@@ -790,7 +800,7 @@ namespace BeastHunter
                 {
                     if (_inventory.GetItemBySlot(_selected.InventorySlotIndex.Value) != null)
                     {
-                        _sellingItemPrice.text = _data.ShopService.
+                        _sellingItemPrice.text = _shopService.
                             CountSellPrice(_inventory.GetItemBySlot(_selected.InventorySlotIndex.Value)).ToString();
                         _sellButton.interactable = true;
                     }
@@ -839,10 +849,10 @@ namespace BeastHunter
                 {
                     if (_currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value) != null)
                     {
-                        _buybackItemPrice.text = _data.ShopService.
+                        _buybackItemPrice.text = _shopService.
                             CountSellPrice(_currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value)).ToString();
 
-                        _buyBackButton.interactable = _player.GoldAmount >= _data.ShopService.
+                        _buyBackButton.interactable = _player.GoldAmount >= _shopService.
                             CountSellPrice(_currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value));
                     }
                     else
@@ -878,7 +888,7 @@ namespace BeastHunter
                     BaseItem item = _currentShopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value);
                     if (item != null)
                     {
-                        _buyingItemPrice.text = _data.ShopService.GetItemPrice(item).ToString();
+                        _buyingItemPrice.text = _shopService.GetItemPrice(item).ToString();
                         _buyButton.interactable = IsPossibleToBuyShopItem(item);
                     }
                     else
@@ -1088,7 +1098,7 @@ namespace BeastHunter
             tooltipTexts[0].gameObject.SetActive(false);
             tooltipTexts[1].text = item.ItemStruct.Name;
             tooltipTexts[2].text = item.ItemStruct.Description;
-            tooltipTexts[3].text = "Цена: " + _data.ShopService.GetItemPrice(item).ToString();
+            tooltipTexts[3].text = "Цена: " + _shopService.GetItemPrice(item).ToString();
 
             if (storageType == StorageType.Shop)
             {
@@ -1312,7 +1322,7 @@ namespace BeastHunter
             {
                 return
                     item.ItemStruct.RequiredReputationForSaleInShop <= (_selected.MapObject as HubMapUICityModel).PlayerReputation &&
-                    _player.GoldAmount >= _data.ShopService.GetItemPrice(item);
+                    _player.GoldAmount >= _shopService.GetItemPrice(item);
             }
             else
             {
@@ -1335,7 +1345,7 @@ namespace BeastHunter
                     sb.AppendLine();
                     sb.AppendFormat($"Необходимая репутация: {item.ItemStruct.RequiredReputationForSaleInShop}");
                 }
-                if (_player.GoldAmount < _data.ShopService.GetItemPrice(item))
+                if (_player.GoldAmount < _shopService.GetItemPrice(item))
                 {
                     flag = false;
 

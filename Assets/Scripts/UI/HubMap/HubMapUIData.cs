@@ -27,7 +27,6 @@ namespace BeastHunter
         [SerializeField] private HubMapUIContextData _contextData;
         [SerializeField, ContextMenuItem("Reset ids", "DialogListResetIds")] private List<HubMapUIDialogNode> _dialogs; //to delete
 
-        private HubMapUIQuestController _questController;
 
         #if UNITY_EDITOR
         private int _dialogsListCount;
@@ -51,9 +50,7 @@ namespace BeastHunter
 
         public HubMapUIMapObjectData[] MapObjects => (HubMapUIMapObjectData[])_mapObjects.Clone();
 
-        public HubMapUIContext Context { get; private set; }
-        public HubMapUIShopService ShopService { get; private set; }
-
+        public HubMapUIContextData ContextData => _contextData;
 
         #endregion
 
@@ -62,11 +59,6 @@ namespace BeastHunter
 
         private void OnEnable()
         {
-            Context = new HubMapUIContext(_contextData);
-            _questController = new HubMapUIQuestController(Context);
-            ShopService = new HubMapUIShopService();
-
-
             #if UNITY_EDITOR
             _dialogsListCount = _dialogs.Count;
             _nextDialogsListId = NextDialogsListId();
