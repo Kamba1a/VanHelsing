@@ -10,6 +10,7 @@ namespace BeastHunter
         public string Name { get; private set; }
         public Sprite Portrait { get; private set; }
         public HubMapUIStorage Backpack { get; private set; }
+        public HubMapUICharacterBehaviour Behaviour { get; set; }
 
         #endregion
 

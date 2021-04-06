@@ -902,11 +902,13 @@ namespace BeastHunter
         {
             if (previousCharacter != null)
             {
+                previousCharacter.Behaviour.SelectFrameSwitch(false);
                 previousCharacter.Backpack.OnChangeItemHandler = null;
             }
 
             if (_selected.Character != null)
             {
+                _selected.Character.Behaviour.SelectFrameSwitch(true);
                 _hikeAcceptButton.interactable = true;
                 FillItemsSlots(StorageType.Equipment);
                 SetEquipmentSlotsInteractable(true);
@@ -940,8 +942,10 @@ namespace BeastHunter
         private void InitializeCharacterUI(HubMapUICharacterModel character)
         {
             GameObject characterUI = InstantiateUIObject(_data.CharacterUIPrefab, _charactersPanel);
-            characterUI.GetComponent<Image>().sprite = character.Portrait;
-            characterUI.GetComponent<Button>().onClick.AddListener(() => OnClick_CharacterButton(character));
+            HubMapUICharacterBehaviour behaviourUI = characterUI.GetComponentInChildren<HubMapUICharacterBehaviour>();
+            character.Behaviour = behaviourUI;
+            behaviourUI.FillInfo(character);
+            behaviourUI.OnClick_ButtonHandler += OnClick_CharacterButton;
         }
 
         private void InitializeEquipmentSlotUI(int slotIndex)
