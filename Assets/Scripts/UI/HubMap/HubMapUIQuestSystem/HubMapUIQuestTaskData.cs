@@ -7,7 +7,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        [SerializeField] private int _id;
+        [SerializeField, ReadOnlyInUnityInspector] private int _id;
         [SerializeField] private int _nextQuestTaskId;
         [Space]
         [SerializeField] private HubMapUICitizenData _targetCitizen;
@@ -35,6 +35,16 @@ namespace BeastHunter
         public BaseItem TakenItemData => _takenItemData;
 
         public HubMapUIQuestTaskAdditionalCitizenAnswer[] AdditionalCitizensAnswers => (HubMapUIQuestTaskAdditionalCitizenAnswer[])_additionalCitizensAnswers.Clone();
+
+        #endregion
+
+
+        #region Methods
+
+        public void SetId(int id)
+        {
+            _id = id;
+        }
 
         #endregion
     }

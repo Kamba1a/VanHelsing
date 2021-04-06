@@ -10,7 +10,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        [SerializeField] private int _id;
+        [SerializeField, ReadOnlyInUnityInspector] private int _id;
         [SerializeField][TextArea(3, 10)] private string _text;
         [SerializeField] private List<HubMapUIDialogAnswer> _answers;
 
@@ -45,7 +45,7 @@ namespace BeastHunter
 
         #region Methods
 
-        public void SetId(int id)   //todo: auto id increment in citizens
+        public void SetId(int id)
         {
             _id = id;
         }

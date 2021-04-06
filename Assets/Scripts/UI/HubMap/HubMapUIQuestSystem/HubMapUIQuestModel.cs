@@ -21,7 +21,7 @@ namespace BeastHunter
         {
             Data = data;
             Status = status;
-            CurrentTask = Array.Find(data.Tasks, task => task.Id == data.FirstTaskId);
+            CurrentTask = data.Tasks.Find(task => task.Id == data.FirstTaskId);
         }
 
         #endregion
@@ -49,7 +49,7 @@ namespace BeastHunter
 
         public void NextTask()
         {
-            HubMapUIQuestTaskData nextTask = Array.Find(Data.Tasks, task => task.Id == CurrentTask.NextQuestTaskId);
+            HubMapUIQuestTaskData nextTask = Data.Tasks.Find (task => task.Id == CurrentTask.NextQuestTaskId);
             CurrentTask = nextTask;
         }
 

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Volod Imir
   _portrait: {fileID: 21300000, guid: bd65735d676f7a440a06fee6633d284c, type: 3}
-  _firstDialogId: 12
+  _firstDialogId: 7
   _dialogs:
   - _id: 0
     _text: "\u041F\u0440\u0438\u0432\u0435\u0442, \u0430 \u0442\u044B \u0433\u0435\u0440\u043E\u0439
@@ -97,14 +97,14 @@ MonoBehaviour:
     - _text: "\u041F\u043E\u043D\u044F\u043B!"
       _isDialogEnd: 1
       _nextDialogNodeId: 3
-  - _id: 12
+  - _id: 7
     _text: "\u0427\u0442\u043E \u0442\u044B \u0442\u0443\u0442 \u0445\u043E\u0434\u0438\u0448\u044C,
       \u043C\u0435\u0448\u0430\u0435\u0448\u044C \u0447\u0435\u0441\u0442\u043D\u044B\u043C
       \u043B\u044E\u0434\u044F\u043C \u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C?"
     _answers:
     - _text: "\u0425\u043E\u0447\u0443, \u0438 \u0445\u043E\u0436\u0443.."
       _isDialogEnd: 1
-      _nextDialogNodeId: 12
+      _nextDialogNodeId: 7
   _questAnswers:
   - _id: 0
     _dialogNodesForThisAnswer: 01000000

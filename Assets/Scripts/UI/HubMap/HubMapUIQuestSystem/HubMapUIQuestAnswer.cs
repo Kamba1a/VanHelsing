@@ -9,7 +9,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        [SerializeField] private int _id;
+        [SerializeField, ReadOnlyInUnityInspector] private int _id;
         [SerializeField] private int[] _dialogNodesForThisAnswer;
         [SerializeField] private HubMapUIDialogAnswer _answer;
 
@@ -58,6 +58,11 @@ namespace BeastHunter
         public void SetInteractableThroughHandler()
         {
             SetIntractableHandler?.Invoke(this);
+        }
+
+        public void SetId(int id)
+        {
+            _id = id;
         }
 
         #endregion

@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Ivan Pupkin
   _portrait: {fileID: 21300000, guid: b9311721a8cc7474384ce23a02e4515b, type: 3}
-  _firstDialogId: 10
+  _firstDialogId: 0
   _dialogs:
-  - _id: 10
+  - _id: 0
     _text: "\u041F\u0440\u0438\u0432\u0435\u0442, \u043A\u0430\u043A \u0434\u0435\u043B\u0430?"
     _answers:
     - _text: "\u041F\u0440\u044F\u043C\u043E \u043A\u0430\u043A \u0432 \u0441\u043A\u0430\u0437\u043A\u0435!"
       _isDialogEnd: 1
-      _nextDialogNodeId: 10
+      _nextDialogNodeId: 0
   _questAnswers: []
