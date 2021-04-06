@@ -163,7 +163,7 @@ namespace BeastHunter
         #region Fields
 
         [Header("Map objects")]
-        [SerializeField] private Button[] _mapObjectsButtons;
+        [SerializeField] private GameObject[] _mapObjects;
 
         [Header("Hub map")]
         [SerializeField] private GameObject _mainPanel;
@@ -316,9 +316,9 @@ namespace BeastHunter
 
         private void Start()
         {
-            for (int i = 0; i < _mapObjectsButtons.Length; i++)
+            for (int i = 0; i < _mapObjects.Length; i++)
             {
-                FillMapObjectButton(i, _mapObjectsButtons[i], _data.MapObjects[i]);
+                FillMapObject(_mapObjects[i], _data.MapObjects[i]);
             }
 
             for (int i = 0; i < _context.Characters.Count; i++)
@@ -419,18 +419,34 @@ namespace BeastHunter
             _hikePanel.SetActive(false);
         }
 
-        private void OnClick_CityButton(int mapObjectIndex, HubMapUICityModel city)
+        private void OnClick_CityButton(HubMapUIMapObjectModel mapObjectModel)
         {
-            _selected.MapObject = city;
+            _selected.MapObject = mapObjectModel;
+            HubMapUICityModel cityModel = mapObjectModel as HubMapUICityModel;
 
             HideRightInfoPanels();
             ClearRightInfoPanel();
-            FillCityPanel(city);
+            FillCityPanel(cityModel);
 
             _infoPanel.GetComponent<ScrollRect>().content = _cityInfoPanel.GetComponent<RectTransform>();
             _infoPanel.SetActive(true);
 
             _cityInfoPanel.SetActive(true);
+        }
+
+        private void OnClick_LocationButton(HubMapUIMapObjectModel mapObjectModel)
+        {
+            _selected.MapObject = mapObjectModel;
+            HubMapUILocationModel locationModel = mapObjectModel as HubMapUILocationModel;
+
+            HideRightInfoPanels();
+            ClearRightInfoPanel();
+            FillLocationPanel(locationModel);
+
+            _infoPanel.GetComponent<ScrollRect>().content = _locationInfoPanel.GetComponent<RectTransform>();
+            _infoPanel.SetActive(true);
+
+            _locationInfoPanel.SetActive(true);
         }
 
         private void OnClick_OpenTradePanelButton()
@@ -466,20 +482,6 @@ namespace BeastHunter
 
             _currentShopStorage.OnChangeItemHandler -= (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Shop);
             _currentShopStorage = null;
-        }
-
-        private void OnClick_LocationButton(int mapObjectIndex, HubMapUILocationModel location)
-        {
-            _selected.MapObject = location;
-
-            HideRightInfoPanels();
-            ClearRightInfoPanel();
-            FillLocationPanel(location);
-
-            _infoPanel.GetComponent<ScrollRect>().content = _locationInfoPanel.GetComponent<RectTransform>();
-            _infoPanel.SetActive(true);
-
-            _locationInfoPanel.SetActive(true);
         }
 
         private void OnClick_CitizenButton(HubMapUICitizenModel citizen)
@@ -919,14 +921,14 @@ namespace BeastHunter
 
         private void OnChangedSelectedMapObject(HubMapUIMapObjectModel previousMapObject)
         {
-            if (_selected.MapObject != null)
-            {
-
-            }
-
             if (previousMapObject != null)
             {
+                previousMapObject.Behaviour.SelectFrameSwitch(false);
+            }
 
+            if (_selected.MapObject != null)
+            {
+                _selected.MapObject.Behaviour.SelectFrameSwitch(true);
             }
         }
 
@@ -1039,40 +1041,39 @@ namespace BeastHunter
 
         #region FillUIElementsByInfo
 
-        private void FillMapObjectButton(int mapObjectIndex, Button mapObjectButton, HubMapUIMapObjectData mapObjectdata)
+        private void FillMapObject(GameObject mapObject, HubMapUIMapObjectData mapObjectdata)
         {
-            HubMapUIMapObjectModel mapObject = _context.GetMapObjectModel(mapObjectdata);
+            HubMapUIMapObjectModel mapObjectModel = _context.GetMapObjectModel(mapObjectdata);
+
             if (mapObject != null)
             {
+                HubMapUIMapObjectBehaviour mapObjectBehaviour = mapObject.GetComponent<HubMapUIMapObjectBehaviour>();
+                mapObjectModel.Behaviour = mapObjectBehaviour;
+
                 switch (mapObjectdata.GetMapObjectType())
                 {
                     case HubMapUIMapObjectType.Location:
-                        mapObjectButton.onClick.AddListener(() => OnClick_LocationButton(mapObjectIndex, mapObject as HubMapUILocationModel));
-                        break;
 
+                        mapObjectBehaviour.FillInfo(mapObjectModel as HubMapUILocationModel);
+                        mapObjectBehaviour.OnClick_ButtonHandler += OnClick_LocationButton;
+
+                        break;
                     case HubMapUIMapObjectType.City:
-                        mapObjectButton.onClick.AddListener(() => OnClick_CityButton(mapObjectIndex, mapObject as HubMapUICityModel));
-                        break;
 
+                        mapObjectBehaviour.FillInfo(mapObjectModel as HubMapUICityModel);
+                        mapObjectBehaviour.OnClick_ButtonHandler += OnClick_CityButton;
+
+                        break;
                     default:
-                        Debug.LogError(this + " incorrect HubMapUIMapObjectType value");
-                        break;
-                }
 
-                if (mapObject.IsBlocked)
-                {
-                    mapObjectButton.GetComponentInChildren<Text>().text = "Заблокировано";
-                    mapObjectButton.interactable = false;
-                }
-                else
-                {
-                    mapObjectButton.GetComponentInChildren<Text>().text = mapObject.Name;
-                    mapObjectButton.interactable = true;
+                        Debug.LogError(this + " incorrect HubMapUIMapObjectType value");
+
+                        break;
                 }
             }
             else
             {
-                Debug.LogError(this + " HubMapUIContext not contain requested HubMapUIMapObjectModel: " + mapObject.Name);
+                Debug.LogError(this + " HubMapUIContext not contain requested HubMapUIMapObjectModel: " + mapObjectModel.Name);
             }
         }
 

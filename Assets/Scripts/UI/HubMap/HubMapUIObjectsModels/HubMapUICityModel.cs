@@ -45,34 +45,30 @@ namespace BeastHunter
 
         #region ClassLifeCycle
 
-        public HubMapUICityModel(HubMapUICityData data)
+        public HubMapUICityModel(HubMapUIMapObjectData mapObjectData) : base(mapObjectData)
         {
-            _minItemsAmountInShop = data.MinItemsAmountInShop;
+            HubMapUICityData cityData = mapObjectData as HubMapUICityData;
 
-            MapObjectType = HubMapUIMapObjectType.City;
-            DataInstanceID = data.GetInstanceID();
-            Name = data.Name;
-            Description = data.Description;
-            IsBlocked = data.IsBlockedAtStart;
+            _minItemsAmountInShop = cityData.MinItemsAmountInShop;
 
-            Fraction = data.Fraction;
-            PlayerReputation = data.StartReputation;
+            Fraction = cityData.Fraction;
+            PlayerReputation = cityData.StartReputation;
 
             Citizens = new List<HubMapUICitizenModel>();
-            for (int i = 0; i < data.Citizens.Length; i++)
+            for (int i = 0; i < cityData.Citizens.Length; i++)
             {
-                HubMapUICitizenModel newCitizen = new HubMapUICitizenModel(data.Citizens[i]);
+                HubMapUICitizenModel newCitizen = new HubMapUICitizenModel(cityData.Citizens[i]);
                 Citizens.Add(newCitizen);
             }
 
             ShopItemsPool = new List<BaseItem>();
-            for (int i = 0; i < data.ShopItemsPool.Length; i++)
+            for (int i = 0; i < cityData.ShopItemsPool.Length; i++)
             {
-                ShopItemsPool.Add(data.ShopItemsPool[i]);
+                ShopItemsPool.Add(cityData.ShopItemsPool[i]);
             }
 
-            ShopStorage = new HubMapUIStorage(data.ShopSlotAmount);
-            BuyBackStorage = new HubMapUIStorage(data.ShopSlotAmount);
+            ShopStorage = new HubMapUIStorage(cityData.ShopSlotAmount);
+            BuyBackStorage = new HubMapUIStorage(cityData.ShopSlotAmount);
 
             UpdateShopItems();
         }

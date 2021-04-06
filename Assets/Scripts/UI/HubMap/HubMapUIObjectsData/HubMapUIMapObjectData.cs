@@ -6,6 +6,8 @@ namespace BeastHunter
     {
         #region Fields
 
+        [Header("Map object data")]
+        [SerializeField] private bool _isBlockedAtStart;
         [SerializeField] private string _name;
         [SerializeField] [TextArea(3, 10)] private string _description;
 
@@ -14,6 +16,7 @@ namespace BeastHunter
 
         #region Properties
 
+        public bool IsBlockedAtStart => _isBlockedAtStart;
         public string Name => _name;
         public string Description => _description;
 

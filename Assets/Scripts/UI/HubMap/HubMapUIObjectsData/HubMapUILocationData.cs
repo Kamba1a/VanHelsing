@@ -8,9 +8,9 @@ namespace BeastHunter
     {
         #region Fields
 
+        [Header("Location data")]
         [SerializeField] private int _loadSceneId;
         [SerializeField] private Sprite _screenshot;
-        [SerializeField] private bool _isBlockedAtStart;
         [SerializeField] private HubMapUIDwellerData[] _dwellers;
         [SerializeField] private HubMapUIIngredientData[] _ingredients;
 
@@ -21,7 +21,6 @@ namespace BeastHunter
 
         public int LoadSceneId => _loadSceneId;
         public Sprite Screenshot => _screenshot;
-        public bool IsBlockedAtStart => _isBlockedAtStart;
         public HubMapUIDwellerData[] Dwellers => _dwellers;
         public HubMapUIIngredientData[] Ingredients => _ingredients;
 

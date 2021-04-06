@@ -1,8 +1,9 @@
 ﻿using System;
 
+
 namespace BeastHunter
 {
-    public class HubMapUIMapObjectModel
+    public abstract class HubMapUIMapObjectModel
     {
         #region Fields
 
@@ -15,10 +16,11 @@ namespace BeastHunter
 
         public Action<HubMapUIMapObjectModel> OnChangeBlockedStatus { get; set; }
 
-        public HubMapUIMapObjectType MapObjectType { get; protected set; }
-        public int DataInstanceID { get; protected set; }
-        public string Name { get; protected set; }
-        public string Description { get; protected set; }
+        public HubMapUIMapObjectType MapObjectType { get; private set; }
+        public int DataInstanceID { get; private set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public HubMapUIMapObjectBehaviour Behaviour { get; set; }
 
         public bool IsBlocked
         {
@@ -34,6 +36,15 @@ namespace BeastHunter
                     OnChangeBlockedStatus?.Invoke(this);
                 }
             }
+        }
+
+        public HubMapUIMapObjectModel(HubMapUIMapObjectData mapObjectData)
+        {
+            MapObjectType = mapObjectData.GetMapObjectType();
+            DataInstanceID = mapObjectData.GetInstanceID();
+            Name = mapObjectData.Name;
+            Description = mapObjectData.Description;
+            IsBlocked = mapObjectData.IsBlockedAtStart;
         }
 
         #endregion

@@ -8,13 +8,13 @@ namespace BeastHunter
     {
         #region Fields
 
+        [Header("City data")]
         [SerializeField] private HubMapUIFractionData _fraction;
         [SerializeField] private HubMapUICitizenData[] _citizens;
         [SerializeField] private BaseItem[] _shopItemsPool;
         [SerializeField] private int _startReputation;
         [SerializeField] private int _shopSlotAmount;
         [SerializeField] private int _minItemsAmountInShop;
-        [SerializeField] private bool _isBlockedAtStart;
 
         #endregion
 
@@ -27,7 +27,6 @@ namespace BeastHunter
         public int StartReputation => _startReputation;
         public int ShopSlotAmount => _shopSlotAmount;
         public int MinItemsAmountInShop => _minItemsAmountInShop;
-        public bool IsBlockedAtStart => _isBlockedAtStart;
 
         #endregion
 

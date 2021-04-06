@@ -15,18 +15,14 @@ namespace BeastHunter
         #endregion
 
 
-        public HubMapUILocationModel(HubMapUILocationData data)
+        public HubMapUILocationModel(HubMapUIMapObjectData mapObjectData) : base(mapObjectData)
         {
-            MapObjectType = HubMapUIMapObjectType.Location;
-            DataInstanceID = data.GetInstanceID();
-            Name = data.Name;
-            Description = data.Description;
-            IsBlocked = data.IsBlockedAtStart;
+            HubMapUILocationData locationData = mapObjectData as HubMapUILocationData;
 
-            LoadSceneId = data.LoadSceneId;
-            Screenshot = data.Screenshot;
-            Dwellers = data.Dwellers;
-            Ingredients = data.Ingredients;
+            LoadSceneId = locationData.LoadSceneId;
+            Screenshot = locationData.Screenshot;
+            Dwellers = locationData.Dwellers;
+            Ingredients = locationData.Ingredients;
         }
     }
 }
