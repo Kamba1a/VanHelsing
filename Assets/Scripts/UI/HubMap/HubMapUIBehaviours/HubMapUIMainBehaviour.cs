@@ -215,6 +215,7 @@ namespace BeastHunter
         [SerializeField] private Button _charactersPanelNextButton;
         [SerializeField] private Button _charactersPanelPreviousButton;
         [SerializeField] private Button _perkTreeButton;
+        [SerializeField] private Text _travelTimeText;
 
         [Header("Trade panel")]
         [SerializeField] private GameObject _tradePanel;
@@ -239,6 +240,7 @@ namespace BeastHunter
         private HubMapUIContext _context;
         private HubMapUIQuestController _questController;
         private HubMapUIShopService _shopService;
+        private HubMapUITravelTimeService _travelTimeService;
 
         private HubMapUIData _data;
         private HubMapUIPlayerModel _player;
@@ -307,6 +309,7 @@ namespace BeastHunter
             _context = new HubMapUIContext(Data.HubMapData.ContextData);
             _questController = new HubMapUIQuestController(_context);
             _shopService = new HubMapUIShopService();
+            _travelTimeService = new HubMapUITravelTimeService();
 
             _data = Data.HubMapData;
             _player = _context.Player;
@@ -399,6 +402,7 @@ namespace BeastHunter
 
         private void OnClick_HikePanelButton()
         {
+            _travelTimeText.text = _travelTimeService.GetFullPhraseAboutTravelTime(_selected.MapObject as HubMapUILocationModel);
             _hikePanel.SetActive(true);
         }
 

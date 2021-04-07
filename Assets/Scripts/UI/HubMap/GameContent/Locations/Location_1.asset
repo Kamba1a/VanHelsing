@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5afc0c8ce82e2c6498a5df2b550de7ec, type: 3}
   m_Name: Location_1
   m_EditorClassIdentifier: 
+  _isBlockedAtStart: 0
   _name: "\u0424\u043E\u0440\u0442"
   _description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
     mattis tellus vehicula aliquam dignissim. Praesent in elementum risus. Proin
@@ -19,6 +20,6 @@ MonoBehaviour:
     Praesent aliquet faucibus urna, vel tempor tellus tempus ac.
   _loadSceneId: 0
   _screenshot: {fileID: 21300000, guid: 95187df84f56c4247a4cf20c453fc85c, type: 3}
-  _isBlockedAtStart: 0
+  _travelTime: 32
   _dwellers: []
   _ingredients: []

@@ -11,6 +11,7 @@ namespace BeastHunter
         [Header("Location data")]
         [SerializeField] private int _loadSceneId;
         [SerializeField] private Sprite _screenshot;
+        [SerializeField] private int _travelTime;
         [SerializeField] private HubMapUIDwellerData[] _dwellers;
         [SerializeField] private HubMapUIIngredientData[] _ingredients;
 
@@ -21,6 +22,7 @@ namespace BeastHunter
 
         public int LoadSceneId => _loadSceneId;
         public Sprite Screenshot => _screenshot;
+        public int TravelTime => _travelTime;
         public HubMapUIDwellerData[] Dwellers => _dwellers;
         public HubMapUIIngredientData[] Ingredients => _ingredients;
 

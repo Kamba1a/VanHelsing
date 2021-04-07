@@ -9,6 +9,7 @@ namespace BeastHunter
 
         public int LoadSceneId { get; private set; }
         public Sprite Screenshot { get; private set;}
+        public int TravelTime { get; private set; }
         public HubMapUIDwellerData[] Dwellers { get; private set; }
         public HubMapUIIngredientData[] Ingredients { get; private set; }
 
@@ -21,6 +22,7 @@ namespace BeastHunter
 
             LoadSceneId = locationData.LoadSceneId;
             Screenshot = locationData.Screenshot;
+            TravelTime = locationData.TravelTime;
             Dwellers = locationData.Dwellers;
             Ingredients = locationData.Ingredients;
         }
