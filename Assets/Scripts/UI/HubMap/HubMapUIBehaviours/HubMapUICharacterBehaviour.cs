@@ -1,21 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 namespace BeastHunter
 {
     public class HubMapUICharacterBehaviour : MonoBehaviour
     {
+        #region Fields
+
         [SerializeField] Image _selectFrameImage;
+
+        #endregion
+
+
+        #region Properties
 
         public Action<HubMapUICharacterModel> OnClick_ButtonHandler;
 
-        public void FillInfo(HubMapUICharacterModel character)
+        #endregion
+
+
+        #region Methods
+
+        public void Initialize(HubMapUICharacterModel character)
         {
+            character.Behaviour = this;
             _selectFrameImage.enabled = false;
             GetComponent<Image>().sprite = character.Portrait;
             GetComponent<Button>().onClick.AddListener(() => OnClick_Button(character));
@@ -30,5 +40,7 @@ namespace BeastHunter
         {
             OnClick_ButtonHandler?.Invoke(character);
         }
+
+        #endregion
     }
 }

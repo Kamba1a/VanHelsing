@@ -216,6 +216,7 @@ namespace BeastHunter
         [SerializeField] private Button _charactersPanelPreviousButton;
         [SerializeField] private Button _perkTreeButton;
         [SerializeField] private Text _travelTimeText;
+        [SerializeField] private RawImage _character3DViewModelRawImage;
 
         [Header("Trade panel")]
         [SerializeField] private GameObject _tradePanel;
@@ -258,6 +259,7 @@ namespace BeastHunter
         private HubMapUIStorage _currentBuyBackStorage;
         private HubMapUIStorage _currentShopStorage;
         private SelectedElements _selected;
+        private GameObject Character3DViewModelRendering;
 
         #endregion
 
@@ -306,12 +308,13 @@ namespace BeastHunter
 
         private void Awake()
         {
-            _context = new HubMapUIContext(Data.HubMapData.ContextData);
+            _data = Data.HubMapData;
+
+            _context = new HubMapUIContext(_data.ContextData);
             _questController = new HubMapUIQuestController(_context);
             _shopService = new HubMapUIShopService();
             _travelTimeService = new HubMapUITravelTimeService();
 
-            _data = Data.HubMapData;
             _player = _context.Player;
             _inventory = _player.Inventory;
 
@@ -329,6 +332,9 @@ namespace BeastHunter
 
         private void Start()
         {
+            Character3DViewModelRendering =
+                Instantiate(_data.Characters3DViewRenderingPrefab, _data.Characters3DViewRenderingObjectPosition, Quaternion.identity);
+
             for (int i = 0; i < _mapObjects.Length; i++)
             {
                 FillMapObject(_mapObjects[i], _data.MapObjects[i]);
@@ -385,6 +391,7 @@ namespace BeastHunter
             _perksPanel.SetActive(false);
             _hikeAcceptButton.interactable = false;
             _loadingPanel.SetActive(false);
+            _character3DViewModelRawImage.enabled = false;
         }
 
         #endregion
@@ -918,6 +925,7 @@ namespace BeastHunter
             {
                 previousCharacter.Behaviour.SelectFrameSwitch(false);
                 previousCharacter.Backpack.OnChangeItemHandler = null;
+                previousCharacter.View3DModelObjectOnScene.SetActive(false);
             }
 
             if (_selected.Character != null)
@@ -927,9 +935,13 @@ namespace BeastHunter
                 FillItemsSlots(StorageType.Equipment);
                 SetEquipmentSlotsInteractable(true);
                 _selected.Character.Backpack.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Equipment);
+
+                _selected.Character.View3DModelObjectOnScene.SetActive(true);
+                _character3DViewModelRawImage.enabled = true;
             }
             else
             {
+                _character3DViewModelRawImage.enabled = false;
                 _hikeAcceptButton.interactable = false;
                 SetEquipmentSlotsInteractable(false);
             }
@@ -957,9 +969,12 @@ namespace BeastHunter
         {
             GameObject characterUI = InstantiateUIObject(_data.CharacterUIPrefab, _charactersPanel);
             HubMapUICharacterBehaviour behaviourUI = characterUI.GetComponentInChildren<HubMapUICharacterBehaviour>();
-            character.Behaviour = behaviourUI;
-            behaviourUI.FillInfo(character);
+            behaviourUI.Initialize(character);
             behaviourUI.OnClick_ButtonHandler += OnClick_CharacterButton;
+
+            character.InitializeView3DModel(Character3DViewModelRendering.transform);
+            //character.View3DModelObjectOnScene = Instantiate(character.View3DModelPrefab, Character3DViewModelRendering.transform);
+            //character.View3DModelObjectOnScene.SetActive(false);
         }
 
         private void InitializeEquipmentSlotUI(int slotIndex)

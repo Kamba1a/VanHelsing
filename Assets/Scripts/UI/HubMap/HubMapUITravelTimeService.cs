@@ -5,7 +5,7 @@
         public string GetFullPhraseAboutTravelTime(HubMapUILocationModel location)
         {
             int travelTime = CountTravelTime(location);
-            return $"Время на поход: {travelTime} {GetHoursWord(travelTime)}";
+            return $"Время похода: {travelTime} {GetHoursWord(travelTime)}";
         }
 
         public int CountTravelTime(HubMapUILocationModel location)

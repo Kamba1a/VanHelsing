@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a77a23247dc3ae4faab1e37156d973f, type: 3}
   m_Name: Character
   m_EditorClassIdentifier: 
+  _name: 
   _portrait: {fileID: 21300000, guid: 298b8b86ad23542439b8608724e35925, type: 3}
+  _view3DModelPrefab: {fileID: 1858070653236386, guid: c098edf9bea2f674d9de7e42155fd196,
+    type: 3}
+  _view3DModelAnimatorController: {fileID: 9100000, guid: 4fde703d67cadff4a9a1c1dfb6de6662,
+    type: 2}
   _startItems:
   - {fileID: 11400000, guid: bcf86c51ad05c2146a85fb9d5b5469fe, type: 2}
   - {fileID: 11400000, guid: 0bb8ff4f15e4c16428279f49ca2baec2, type: 2}
