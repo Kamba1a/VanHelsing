@@ -937,6 +937,7 @@ namespace BeastHunter
                 previousCharacter.Behaviour.SelectFrameSwitch(false);
                 previousCharacter.Backpack.OnChangeItemHandler = null;
                 previousCharacter.View3DModelObjectOnScene.SetActive(false);
+                previousCharacter.View3DModelObjectOnScene.transform.rotation = Quaternion.identity;
             }
 
             if (_selected.Character != null)
@@ -949,6 +950,7 @@ namespace BeastHunter
 
                 _selected.Character.View3DModelObjectOnScene.SetActive(true);
                 _character3DViewModelRawImage.enabled = true;
+                _character3DViewModelRawImage.GetComponent<HubMapUIView3DModelBehaviour>().RotateObject = _selected.Character.View3DModelObjectOnScene;
             }
             else
             {
