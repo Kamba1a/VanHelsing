@@ -206,17 +206,21 @@ namespace BeastHunter
         [SerializeField] private Button _hikeAcceptButton;
         [SerializeField] private GameObject _hikePanel;
         [SerializeField] private GameObject _hikePreparePanel;
-        [SerializeField] private GameObject _charactersPanel;
+        [SerializeField] private GameObject _hikeCharactersPanel;
         [SerializeField] private GameObject _equipmentPanel;
         [SerializeField] private GameObject _hikeInventoryPanel;
         [SerializeField] private GameObject _hikeInventoryScrollView;
         [SerializeField] private Button _closeInventoryButton;
-        [SerializeField] private Scrollbar _charactersPanelScrollbar;
-        [SerializeField] private Button _charactersPanelNextButton;
-        [SerializeField] private Button _charactersPanelPreviousButton;
         [SerializeField] private Button _perkTreeButton;
         [SerializeField] private Text _travelTimeText;
         [SerializeField] private RawImage _character3DViewModelRawImage;
+
+        [Header("Characters panel relocatable")]
+        [SerializeField] private GameObject _charactersPanelRelocatable;
+        [SerializeField] private GameObject _charactersPanelFillable;
+        [SerializeField] private Scrollbar _charactersPanelScrollbar;
+        [SerializeField] private Button _charactersPanelNextButton;
+        [SerializeField] private Button _charactersPanelPreviousButton;
 
         [Header("Trade panel")]
         [SerializeField] private GameObject _tradePanel;
@@ -236,6 +240,7 @@ namespace BeastHunter
         [Header("Perks panel")]
         [SerializeField] private GameObject _perksPanel;
         [SerializeField] private Button _closePerksPanelButton;
+        [SerializeField] private GameObject _perksCharactersPanel;
 
 
         private HubMapUIContext _context;
@@ -474,7 +479,7 @@ namespace BeastHunter
         {
             HubMapUICityModel city = _selected.MapObject as HubMapUICityModel;
 
-            SetScrollViewParentForInventoryItemsPanel(_shopInventoryScrollView);
+            SetScrollViewParentForPanel(_inventoryItemsPanel, _shopInventoryScrollView);
             _playerGoldAmount.text = _player.GoldAmount.ToString();
             _shopCityReputation.text = city.PlayerReputation.ToString();
 
@@ -525,12 +530,18 @@ namespace BeastHunter
         private void OnClick_PerkTreeButton()
         {
             _hikePanel.SetActive(false);
+
+            SetOtherParentForPanel(_charactersPanelRelocatable, _perksCharactersPanel);
+
             _perksPanel.SetActive(true);
         }
 
         private void OnClick_ClosePerksButton()
         {
             _perksPanel.SetActive(false);
+
+            SetOtherParentForPanel(_charactersPanelRelocatable, _hikeCharactersPanel);
+
             _hikePanel.SetActive(true);
         }
 
@@ -550,7 +561,7 @@ namespace BeastHunter
 
             if (!_hikeInventoryPanel.activeSelf)
             {
-                SetScrollViewParentForInventoryItemsPanel(_hikeInventoryScrollView);
+                SetScrollViewParentForPanel(_inventoryItemsPanel, _hikeInventoryScrollView);
                 _hikeInventoryPanel.SetActive(true);
             }
         }
@@ -967,7 +978,7 @@ namespace BeastHunter
 
         private void InitializeCharacterUI(HubMapUICharacterModel character)
         {
-            GameObject characterUI = InstantiateUIObject(_data.CharacterUIPrefab, _charactersPanel);
+            GameObject characterUI = InstantiateUIObject(_data.CharacterUIPrefab, _charactersPanelFillable);
             HubMapUICharacterBehaviour behaviourUI = characterUI.GetComponentInChildren<HubMapUICharacterBehaviour>();
             behaviourUI.Initialize(character);
             behaviourUI.OnClick_ButtonHandler += OnClick_CharacterButton;
@@ -1308,10 +1319,15 @@ namespace BeastHunter
             return storage;
         }
 
-        private void SetScrollViewParentForInventoryItemsPanel(GameObject parentPanel)
+        private void SetScrollViewParentForPanel(GameObject panel, GameObject parentPanel)
         {
-            _inventoryItemsPanel.transform.SetParent(parentPanel.transform.Find("Viewport"), false);
-            parentPanel.GetComponent<ScrollRect>().content = _inventoryItemsPanel.GetComponent<RectTransform>();
+            panel.transform.SetParent(parentPanel.transform.Find("Viewport"), false);
+            parentPanel.GetComponent<ScrollRect>().content = panel.GetComponent<RectTransform>();
+        }
+
+        private void SetOtherParentForPanel(GameObject panel, GameObject parentPanel)
+        {
+            panel.transform.SetParent(parentPanel.transform, false);
         }
 
         private GameObject InstantiateUIObject(GameObject prefab, GameObject parent)
