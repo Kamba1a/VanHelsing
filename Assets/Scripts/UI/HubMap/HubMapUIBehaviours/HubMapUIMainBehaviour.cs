@@ -210,7 +210,7 @@ namespace BeastHunter
         [SerializeField] private GameObject _equipmentPanel;
         [SerializeField] private GameObject _hikeInventoryPanel;
         [SerializeField] private GameObject _hikeInventoryScrollView;
-        [SerializeField] private Button _closeInventoryButton;
+        //[SerializeField] private Button _closeInventoryButton;
         [SerializeField] private Button _perkTreeButton;
         [SerializeField] private Text _travelTimeText;
         [SerializeField] private RawImage _character3DViewModelRawImage;
@@ -281,7 +281,7 @@ namespace BeastHunter
             _hikePanelButton.onClick.AddListener(OnClick_HikePanelButton);
             _charactersPanelNextButton.onClick.AddListener(()=> OnClick_CharactersPanelNavigationButton(CHARACTERS_PANEL_SCROLLBAR_STEP));
             _charactersPanelPreviousButton.onClick.AddListener(() => OnClick_CharactersPanelNavigationButton(-CHARACTERS_PANEL_SCROLLBAR_STEP));
-            _closeInventoryButton.onClick.AddListener(OnClick_CloseInventoryButton);
+            //_closeInventoryButton.onClick.AddListener(OnClick_CloseInventoryButton);
             _perkTreeButton.onClick.AddListener(OnClick_PerkTreeButton);
             _shopButton.onClick.AddListener(OnClick_OpenTradePanelButton);
             _closeTradePanelButton.onClick.AddListener(OnClick_CloseTradePanelButton);
@@ -301,7 +301,7 @@ namespace BeastHunter
             _hikePanelButton.onClick.RemoveAllListeners();
             _charactersPanelNextButton.onClick.RemoveAllListeners();
             _charactersPanelPreviousButton.onClick.RemoveAllListeners();
-            _closeInventoryButton.onClick.RemoveAllListeners();
+            //_closeInventoryButton.onClick.RemoveAllListeners();
             _perkTreeButton.onClick.RemoveAllListeners();
             _shopButton.onClick.RemoveAllListeners();
             _closeTradePanelButton.onClick.RemoveAllListeners();
@@ -387,7 +387,7 @@ namespace BeastHunter
             _locationInfoPanel.SetActive(false);
             _hikePanel.SetActive(false);
             _hikePreparePanel.SetActive(true);
-            _hikeInventoryPanel.SetActive(false);
+            _hikeInventoryPanel.SetActive(true);
             _tradePanel.SetActive(false);
             _sellButton.interactable = false;
             _buyBackButton.interactable = false;

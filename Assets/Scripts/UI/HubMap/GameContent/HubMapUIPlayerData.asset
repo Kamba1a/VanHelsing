@@ -13,18 +13,9 @@ MonoBehaviour:
   m_Name: HubMapUIPlayerData
   m_EditorClassIdentifier: 
   _goldAmount: 200
-  _inventorySlotsAmount: 48
+  _inventorySlotsAmount: 50
   _inventoryItems:
   - {fileID: 11400000, guid: bcf86c51ad05c2146a85fb9d5b5469fe, type: 2}
   - {fileID: 11400000, guid: b5ebb6cfceec1f447b854382d3f33d9f, type: 2}
   - {fileID: 11400000, guid: a88050e6ffe574545a743ba522bf7661, type: 2}
   - {fileID: 11400000, guid: 09e14489a9a680e4db2c7bf0d6d94254, type: 2}
-  _citiesReputation:
-  - City: {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
-    Reputation: 30
-  _characters:
-  - {fileID: 11400000, guid: 9fb474a159a104d49a106419732f29d4, type: 2}
-  - {fileID: 11400000, guid: 5bedb4bb121491a418e9a717db215ba4, type: 2}
-  - {fileID: 11400000, guid: 5e2a56911803eb640a1facc3389c8627, type: 2}
-  - {fileID: 11400000, guid: 4e3ca3341ad44d047b3985d33cb9bf09, type: 2}
-  _charactersInventorySlotAmount: 12

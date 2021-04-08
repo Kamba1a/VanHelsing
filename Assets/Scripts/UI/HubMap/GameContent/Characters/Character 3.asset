@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: 
   _portrait: {fileID: 21300000, guid: 6f82c769d51ea504083832377e952d62, type: 3}
+  _charactersEquipment: {fileID: 11400000, guid: 948d3b17c58e34c428aeb1c2799652b4,
+    type: 2}
   _view3DModelPrefab: {fileID: 1097391477217198, guid: 88b2520545cecf64f82ab4d5e2c6e84f,
     type: 3}
   _view3DModelAnimatorController: {fileID: 9100000, guid: 4fde703d67cadff4a9a1c1dfb6de6662,
@@ -23,3 +25,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 09e14489a9a680e4db2c7bf0d6d94254, type: 2}
   - {fileID: 11400000, guid: b5ebb6cfceec1f447b854382d3f33d9f, type: 2}
   - {fileID: 11400000, guid: 7293ce42d6a7b2447894d96df81d0b04, type: 2}
+  _startEquipmentItems: []

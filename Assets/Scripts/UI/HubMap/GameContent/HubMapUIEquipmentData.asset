@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b40652c095726419b46c42444137ed, type: 3}
   m_Name: HubMapUIEquipmentData
   m_EditorClassIdentifier: 
-  _equipmentSlots: 
-  ItemSlotIcon: {fileID: 0}
+  _equipmentSlots: 04000000070000000b000000050000000300000002000000060000000c00000008000000090000000a0000000e0000000d0000000d000000
   WeaponSlotIcon: {fileID: 0}
   ArmLowerSlotIcon: {fileID: 0}
   ArmUpperSlotIcon: {fileID: 0}
@@ -26,3 +25,7 @@ MonoBehaviour:
   LegSlotIcon: {fileID: 0}
   ShoulderSlotIcon: {fileID: 0}
   TorsoSlotIcon: {fileID: 0}
+  RingSlotIcon: {fileID: 0}
+  AmuletSlotIcon: {fileID: 0}
+  BeltSlotIcon: {fileID: 0}
+  PocketItemSlotIcon: {fileID: 0}
