@@ -7,8 +7,9 @@ namespace BeastHunter
     {
         public BaseItem Item { get; private set; }
         public HubMapUIEquipmentType EquipmentType { get; private set; }
-
+        public HubMapUIEquipmentSlotBehaviour Behaviour { get; set; }
         private Sprite Icon; //to delete?
+        
 
 
         public HubMapUIEquipmentSlotModel(HubMapUIEquipmentType equipmentType, Sprite icon)

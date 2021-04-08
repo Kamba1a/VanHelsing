@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace BeastHunter
 {
-    class HubMapUIShopSlotBehaviour : HubMapUISlotBehaviour
+    class HubMapUIShopSlotBehaviour : HubMapUIStorageSlotBehaviour
     {
         [SerializeField] private Image _noReputationImage;
 

@@ -253,10 +253,10 @@ namespace BeastHunter
         private HubMapUIStorage _inventory;
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
-        private List<HubMapUISlotBehaviour> _equipmentSlotsUIBehaviours;
-        private List<HubMapUISlotBehaviour> _inventorySlotsUIBehaviours;
+        private List<HubMapUIStorageSlotBehaviour> _equipmentSlotsUIBehaviours;
+        private List<HubMapUIStorageSlotBehaviour> _inventorySlotsUIBehaviours;
         private List<HubMapUIShopSlotBehaviour> _shopSlotsUIBehaviours;
-        private List<HubMapUISlotBehaviour> _buyBackSlotsUIBehaviours;
+        private List<HubMapUIStorageSlotBehaviour> _buyBackSlotsUIBehaviours;
         private Dictionary<HubMapUICitizenModel, HubMapUICitizenBehaviour> _displayedCurrentCitizensUIBehaviours;
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
@@ -327,9 +327,9 @@ namespace BeastHunter
             _displayedCurrentCitizensUIBehaviours = new Dictionary<HubMapUICitizenModel, HubMapUICitizenBehaviour>();
             _displayedDialogAnswerButtons = new List<GameObject>();
 
-            _equipmentSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            _inventorySlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
-            _buyBackSlotsUIBehaviours = new List<HubMapUISlotBehaviour>();
+            _equipmentSlotsUIBehaviours = new List<HubMapUIStorageSlotBehaviour>();
+            _inventorySlotsUIBehaviours = new List<HubMapUIStorageSlotBehaviour>();
+            _buyBackSlotsUIBehaviours = new List<HubMapUIStorageSlotBehaviour>();
             _shopSlotsUIBehaviours = new List<HubMapUIShopSlotBehaviour>();
 
             _selected = new SelectedElements();
@@ -994,7 +994,7 @@ namespace BeastHunter
         {
             GameObject equipSlotUI = InstantiateUIObject(_data.EquipmentSlotUIPrefab, _equipmentPanel);
 
-            HubMapUISlotBehaviour slotBehaviour = equipSlotUI.GetComponent<HubMapUISlotBehaviour>();
+            HubMapUIStorageSlotBehaviour slotBehaviour = equipSlotUI.GetComponent<HubMapUIStorageSlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, true);
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_EquipmentSlot;
@@ -1012,7 +1012,7 @@ namespace BeastHunter
         {
             GameObject inventorySlotUI = InstantiateUIObject(_data.InventorySlotUIPrefab, _inventoryItemsPanel);
 
-            HubMapUISlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<HubMapUISlotBehaviour>();
+            HubMapUIStorageSlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<HubMapUIStorageSlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, true);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_InventorySlot;
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_InventorySlot;
@@ -1029,7 +1029,7 @@ namespace BeastHunter
         {
             GameObject buyBackSlotUI = InstantiateUIObject(_data.ShopSlotUIPrefab, _buyBackItemsPanel);
 
-            HubMapUISlotBehaviour slotBehaviour = buyBackSlotUI.GetComponent<HubMapUISlotBehaviour>();
+            HubMapUIStorageSlotBehaviour slotBehaviour = buyBackSlotUI.GetComponent<HubMapUIStorageSlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, false);
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_BuyBackSlot;

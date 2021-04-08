@@ -11,8 +11,7 @@ namespace BeastHunter
         //[SerializeField] private List<HubMapUIEquipmentType> _weaponSlots; //todo
         [Header("Slot type sprites")]
         [SerializeField] Sprite WeaponSlotIcon;
-        [SerializeField] Sprite ArmLowerSlotIcon;
-        [SerializeField] Sprite ArmUpperSlotIcon;
+        [SerializeField] Sprite ArmSlotIcon;
         [SerializeField] Sprite BackSlotIcon;
         [SerializeField] Sprite ElbowSlotIcon;
         [SerializeField] Sprite HandSlotIcon;
@@ -37,14 +36,11 @@ namespace BeastHunter
             {
                 case HubMapUIEquipmentType.None: return null;
                 case HubMapUIEquipmentType.Weapon: return WeaponSlotIcon;
-                case HubMapUIEquipmentType.ArmLower: return ArmLowerSlotIcon;
-                case HubMapUIEquipmentType.ArmUpper: return ArmUpperSlotIcon;
+                case HubMapUIEquipmentType.Arm: return ArmSlotIcon;
                 case HubMapUIEquipmentType.Back: return BackSlotIcon;
-                case HubMapUIEquipmentType.Elbow: return ElbowSlotIcon;
                 case HubMapUIEquipmentType.Hand: return HandSlotIcon;
                 case HubMapUIEquipmentType.Head: return HeadSlotIcon;
                 case HubMapUIEquipmentType.Hips: return HipsSlotIcon;
-                case HubMapUIEquipmentType.Knee: return KneeSlotIcon;
                 case HubMapUIEquipmentType.Leg: return LegSlotIcon;
                 case HubMapUIEquipmentType.Shoulder: return ShoulderSlotIcon;
                 case HubMapUIEquipmentType.Torso: return TorsoSlotIcon;
