@@ -31,8 +31,7 @@ namespace BeastHunter
             Characters = new List<HubMapUICharacterModel>();
             for (int i = 0; i < data.Characters.Length; i++)
             {
-                HubMapUICharacterModel character = new HubMapUICharacterModel(data.Characters[i], CharactersEquipmentSlotAmount);
-                Characters.Add(character);
+                Characters.Add(new HubMapUICharacterModel(data.Characters[i], CharactersEquipmentSlotAmount));
             }
 
             Cities = new List<HubMapUICityModel>();

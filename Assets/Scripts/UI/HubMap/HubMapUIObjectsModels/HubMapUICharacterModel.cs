@@ -19,6 +19,7 @@ namespace BeastHunter
         public Sprite Portrait { get; private set; }
         public GameObject View3DModelObjectOnScene { get; private set; }
         public HubMapUIStorage Backpack { get; private set; }
+        public HubMapUIEquipmentModel Equipment { get; private set; }
         public HubMapUICharacterBehaviour Behaviour { get; set; }
 
         #endregion
@@ -34,10 +35,13 @@ namespace BeastHunter
             _view3DModelAnimatorController = data.View3DModelAnimatorController;
 
             Backpack = new HubMapUIStorage(backpackSize);
-            for (int i = 0; i < data.StartItems.Length; i++)
+            for (int i = 0; i < data.StartBackpuckItems.Length; i++)
             {
-                Backpack.PutItem(i, data.StartItems[i]);
+                Backpack.PutItem(i, data.StartBackpuckItems[i]);
             }
+
+            Equipment = new HubMapUIEquipmentModel(data.CharactersEquipment);
+
         }
 
         #endregion

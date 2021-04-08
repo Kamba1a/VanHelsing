@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46b40652c095726419b46c42444137ed, type: 3}
+  m_Name: HubMapUIEquipmentData
+  m_EditorClassIdentifier: 
+  _equipmentSlots: 
+  ItemSlotIcon: {fileID: 0}
+  WeaponSlotIcon: {fileID: 0}
+  ArmLowerSlotIcon: {fileID: 0}
+  ArmUpperSlotIcon: {fileID: 0}
+  BackSlotIcon: {fileID: 0}
+  ElbowSlotIcon: {fileID: 0}
+  HandSlotIcon: {fileID: 0}
+  HeadSlotIcon: {fileID: 0}
+  HipsSlotIcon: {fileID: 0}
+  KneeSlotIcon: {fileID: 0}
+  LegSlotIcon: {fileID: 0}
+  ShoulderSlotIcon: {fileID: 0}
+  TorsoSlotIcon: {fileID: 0}
