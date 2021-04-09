@@ -346,7 +346,7 @@ namespace BeastHunter
             {
                 Sprite slotSprite = Data.HubMapData.GetClothSlotSpriteByType(_context.CharactersClothEquipment[i]);
                 _characterClothSlotsUIBehaviours[i].FillSlotInfo(i, true, slotSprite);
-                //todo: drag and drop activate/deactivate with visual
+                //todo: drag and drop deactivate when character not select with visual effect
             }
 
             Character3DViewModelRendering =

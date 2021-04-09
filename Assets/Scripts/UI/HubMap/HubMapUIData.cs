@@ -32,11 +32,9 @@ namespace BeastHunter
         [SerializeField] Sprite WeaponSlotIcon;
         [SerializeField] Sprite ArmSlotIcon;
         [SerializeField] Sprite BackSlotIcon;
-        [SerializeField] Sprite ElbowSlotIcon;
         [SerializeField] Sprite HandSlotIcon;
         [SerializeField] Sprite HeadSlotIcon;
         [SerializeField] Sprite HipsSlotIcon;
-        [SerializeField] Sprite KneeSlotIcon;
         [SerializeField] Sprite LegSlotIcon;
         [SerializeField] Sprite ShoulderSlotIcon;
         [SerializeField] Sprite TorsoSlotIcon;
