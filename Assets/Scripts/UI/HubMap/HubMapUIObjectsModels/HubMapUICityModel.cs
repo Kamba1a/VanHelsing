@@ -20,7 +20,7 @@ namespace BeastHunter
 
         public HubMapUIFractionData Fraction { get; private set; } 
         public List<HubMapUICitizenModel> Citizens { get; private set; }
-        public List<BaseItem> ShopItemsPool { get; private set; }
+        public List<HubMapUIBaseItemData> ShopItemsPool { get; private set; }
         public HubMapUIStorage ShopStorage { get; private set; }
         public HubMapUIStorage BuyBackStorage { get; private set; }
 
@@ -61,7 +61,7 @@ namespace BeastHunter
                 Citizens.Add(newCitizen);
             }
 
-            ShopItemsPool = new List<BaseItem>();
+            ShopItemsPool = new List<HubMapUIBaseItemData>();
             for (int i = 0; i < cityData.ShopItemsPool.Length; i++)
             {
                 ShopItemsPool.Add(cityData.ShopItemsPool[i]);
@@ -87,7 +87,9 @@ namespace BeastHunter
             for (int i = 0; i < itemAmount; i++)
             {
                 int randomItemIndex = UnityEngine.Random.Range(0, ShopItemsPool.Count-1);
-                ShopStorage.PutItem(i, ShopItemsPool[randomItemIndex]);
+                HubMapUIBaseItemModel itemModel = HubMapUIServices.SharedInstance.
+                    ItemInitializeService.InitializeItemModel(ShopItemsPool[randomItemIndex]);
+                ShopStorage.PutItem(i, itemModel);
             }
         }
 

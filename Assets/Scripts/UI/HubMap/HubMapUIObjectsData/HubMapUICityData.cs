@@ -11,7 +11,7 @@ namespace BeastHunter
         [Header("City data")]
         [SerializeField] private HubMapUIFractionData _fraction;
         [SerializeField] private HubMapUICitizenData[] _citizens;
-        [SerializeField] private BaseItem[] _shopItemsPool;
+        [SerializeField] private HubMapUIBaseItemData[] _shopItemsPool;
         [SerializeField] private int _startReputation;
         [SerializeField] private int _shopSlotAmount;
         [SerializeField] private int _minItemsAmountInShop;
@@ -23,7 +23,7 @@ namespace BeastHunter
 
         public HubMapUIFractionData Fraction => _fraction;
         public HubMapUICitizenData[] Citizens => _citizens;
-        public BaseItem[] ShopItemsPool => _shopItemsPool;
+        public HubMapUIBaseItemData[] ShopItemsPool => _shopItemsPool;
         public int StartReputation => _startReputation;
         public int ShopSlotAmount => _shopSlotAmount;
         public int MinItemsAmountInShop => _minItemsAmountInShop;

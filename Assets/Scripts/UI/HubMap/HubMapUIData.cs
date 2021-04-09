@@ -28,6 +28,23 @@ namespace BeastHunter
         [Header("Game content for UI")]
         [SerializeField] private HubMapUIContextData _contextData;
 
+        [Header("Equipment slot type sprites")]
+        [SerializeField] Sprite WeaponSlotIcon;
+        [SerializeField] Sprite ArmSlotIcon;
+        [SerializeField] Sprite BackSlotIcon;
+        [SerializeField] Sprite ElbowSlotIcon;
+        [SerializeField] Sprite HandSlotIcon;
+        [SerializeField] Sprite HeadSlotIcon;
+        [SerializeField] Sprite HipsSlotIcon;
+        [SerializeField] Sprite KneeSlotIcon;
+        [SerializeField] Sprite LegSlotIcon;
+        [SerializeField] Sprite ShoulderSlotIcon;
+        [SerializeField] Sprite TorsoSlotIcon;
+        [SerializeField] Sprite RingSlotIcon;
+        [SerializeField] Sprite AmuletSlotIcon;
+        [SerializeField] Sprite BeltSlotIcon;
+        [SerializeField] Sprite PocketItemSlotIcon;
+
         #endregion
 
 
@@ -48,6 +65,32 @@ namespace BeastHunter
         public HubMapUIMapObjectData[] MapObjects => (HubMapUIMapObjectData[])_mapObjects.Clone();
 
         public HubMapUIContextData ContextData => _contextData;
+
+        #endregion
+
+
+        #region Methods
+
+        public Sprite GetClothSlotSpriteByType(HubMapUIClothType clothType)
+        {
+            switch (clothType)
+            {
+                case HubMapUIClothType.Arm: return ArmSlotIcon;
+                case HubMapUIClothType.Back: return BackSlotIcon;
+                case HubMapUIClothType.Hand: return HandSlotIcon;
+                case HubMapUIClothType.Head: return HeadSlotIcon;
+                case HubMapUIClothType.Hips: return HipsSlotIcon;
+                case HubMapUIClothType.Leg: return LegSlotIcon;
+                case HubMapUIClothType.Shoulder: return ShoulderSlotIcon;
+                case HubMapUIClothType.Torso: return TorsoSlotIcon;
+                case HubMapUIClothType.Ring: return RingSlotIcon;
+                case HubMapUIClothType.Amulet: return AmuletSlotIcon;
+                case HubMapUIClothType.Belt: return BeltSlotIcon;
+                default:
+                    Debug.LogError(this + ": incorrect cloth type");
+                    return null;
+            }
+        }
 
         #endregion
     }

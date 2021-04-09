@@ -19,7 +19,12 @@ namespace BeastHunter
         public Sprite Portrait { get; private set; }
         public GameObject View3DModelObjectOnScene { get; private set; }
         public HubMapUIStorage Backpack { get; private set; }
-        public HubMapUIEquipmentModel Equipment { get; private set; }
+
+        //todo:
+        public HubMapUIClothEquipment ClothEquipment { get; private set; }
+        //public HubMapUIEquipmentModel Pockets { get; private set; }
+        //public HubMapUIEquipmentModel Weapon { get; private set; }
+
         public HubMapUICharacterBehaviour Behaviour { get; set; }
 
         #endregion
@@ -27,7 +32,7 @@ namespace BeastHunter
 
         #region ClassLifeCycle
 
-        public HubMapUICharacterModel(HubMapUICharacterData data, int backpackSize)
+        public HubMapUICharacterModel(HubMapUICharacterData data, int backpackSize, HubMapUIClothType[] clothEquipment)
         {
             Name = data.Name;
             Portrait = data.Portrait;
@@ -37,11 +42,11 @@ namespace BeastHunter
             Backpack = new HubMapUIStorage(backpackSize);
             for (int i = 0; i < data.StartBackpuckItems.Length; i++)
             {
-                Backpack.PutItem(i, data.StartBackpuckItems[i]);
+                HubMapUIBaseItemModel itemModel = HubMapUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartBackpuckItems[i]);
+                Backpack.PutItem(i, itemModel);
             }
 
-            Equipment = new HubMapUIEquipmentModel(data.CharactersEquipment);
-
+            ClothEquipment = new HubMapUIClothEquipment(clothEquipment);
         }
 
         #endregion

@@ -14,13 +14,9 @@ namespace BeastHunter
 
         [SerializeField] private SlotSize _slotSize;
         [SerializeField] private ItemType _itemType;
-        [SerializeField] private HubMapUIEquipmentType _equipmentType;
 
         [SerializeField] private Mesh _meshOfObject;
         [SerializeField] private Sprite _icon;
-
-        [SerializeField] private int _shopPrice;
-        [SerializeField] private int _requiredReputationForBuyInShop;
 
         #endregion
 
@@ -31,11 +27,8 @@ namespace BeastHunter
         public string Description => _description;
         public SlotSize SlotSize => _slotSize;
         public ItemType ItemType => _itemType;
-        public HubMapUIEquipmentType EquipmentType => _equipmentType;
         public Mesh MeshOfObject => _meshOfObject;
         public Sprite Icon => _icon;
-        public int ShopPrice => _shopPrice;
-        public int RequiredReputationForSaleInShop => _requiredReputationForBuyInShop;
 
         #endregion
     }

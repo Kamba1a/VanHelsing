@@ -154,7 +154,7 @@ namespace BeastHunter
             {
                 if (_context.Player.Inventory.RemoveFirstItem(quest.CurrentTask.TakenItemData))
                 {
-                    Debug.Log("The player gave the item " + quest.CurrentTask.TakenItemData.ItemStruct.Name);
+                    Debug.Log("The player gave the item " + quest.CurrentTask.TakenItemData.Name);
                     return true;
                 }
                 else
@@ -173,9 +173,11 @@ namespace BeastHunter
         {
             if (quest.CurrentTask.GivenItemData != null)
             {
-                if (_context.Player.Inventory.PutItemToFirstEmptySlot(quest.CurrentTask.GivenItemData))
+                HubMapUIBaseItemModel itemModel = HubMapUIServices.SharedInstance.
+                    ItemInitializeService.InitializeItemModel(quest.CurrentTask.GivenItemData);
+                if (_context.Player.Inventory.PutItemToFirstEmptySlot(itemModel))
                 {
-                    Debug.Log("The player received the item " + quest.CurrentTask.GivenItemData.ItemStruct.Name);
+                    Debug.Log("The player received the item " + quest.CurrentTask.GivenItemData.Name);
                     return true;
                 }
                 else

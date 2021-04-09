@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -9,14 +8,14 @@ namespace BeastHunter
     {
         #region Fields
 
-        private BaseItem[] _items;
+        private HubMapUIBaseItemModel[] _items;
 
         #endregion
 
 
         #region Properties
 
-        public Action<int, BaseItem> OnChangeItemHandler { get; set; }
+        public Action<int, HubMapUIBaseItemModel> OnChangeItemHandler { get; set; }
 
         #endregion
 
@@ -25,7 +24,7 @@ namespace BeastHunter
 
         public HubMapUIStorage(int slotsAmount)
         {
-            _items = new BaseItem[slotsAmount];
+            _items = new HubMapUIBaseItemModel[slotsAmount];
         }
 
         #endregion
@@ -33,15 +32,15 @@ namespace BeastHunter
 
         #region Methods
 
-        public BaseItem TakeItem(int slotNumber)
+        public HubMapUIBaseItemModel TakeItem(int slotNumber)
         {
-            BaseItem item = _items[slotNumber];
+            HubMapUIBaseItemModel item = _items[slotNumber];
             _items[slotNumber] = null;
             OnChangeItem(slotNumber, null);
             return item;
         }
 
-        public bool PutItem(int slotNumber, BaseItem item)
+        public bool PutItem(int slotNumber, HubMapUIBaseItemModel item)
         {
             bool isSucceful = false;
 
@@ -63,7 +62,7 @@ namespace BeastHunter
             return isSucceful;
         }
 
-        public bool PutItemToFirstEmptySlot(BaseItem item)
+        public bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item)
         {
             for (int i = 0; i < _items.Length; i++)
             {
@@ -76,7 +75,7 @@ namespace BeastHunter
             return false;
         }
 
-        public BaseItem GetItemBySlot(int slotNumber)
+        public HubMapUIBaseItemModel GetItemBySlot(int slotNumber)
         {
             return _items[slotNumber];
         }
@@ -85,7 +84,7 @@ namespace BeastHunter
         {
             if (_items[slotNumber] != null)
             {
-                return _items[slotNumber].ItemStruct.Icon;
+                return _items[slotNumber].Icon;
             }
             else
             {
@@ -93,9 +92,9 @@ namespace BeastHunter
             }
         }
 
-        public BaseItem[] GetAll()
+        public HubMapUIBaseItemModel[] GetAll()
         {
-            return (BaseItem[])_items.Clone();
+            return (HubMapUIBaseItemModel[])_items.Clone();
         }
 
         public int GetSlotsCount()
@@ -126,7 +125,19 @@ namespace BeastHunter
             return true;
         }
 
-        public bool IsContainItem(BaseItem item)
+        public bool IsContainItem(HubMapUIBaseItemData item)
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i].DataInstanceID == item.GetInstanceID())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsContainItem(HubMapUIBaseItemModel item)
         {
             for (int i = 0; i < _items.Length; i++)
             {
@@ -138,7 +149,20 @@ namespace BeastHunter
             return false;
         }
 
-        public bool RemoveFirstItem(BaseItem item)
+        public bool RemoveFirstItem(HubMapUIBaseItemData item)
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i].DataInstanceID == item.GetInstanceID())
+                {
+                    TakeItem(i);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool RemoveFirstItem(HubMapUIBaseItemModel item)
         {
             for (int i = 0; i < _items.Length; i++)
             {
@@ -151,7 +175,7 @@ namespace BeastHunter
             return false;
         }
 
-        private void OnChangeItem(int slotNumber, BaseItem item)
+        private void OnChangeItem(int slotNumber, HubMapUIBaseItemModel item)
         {
             OnChangeItemHandler?.Invoke(slotNumber, item);
         }

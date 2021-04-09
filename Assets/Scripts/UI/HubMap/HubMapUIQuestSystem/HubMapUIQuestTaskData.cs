@@ -14,8 +14,8 @@ namespace BeastHunter
         [SerializeField] private int _targetQuestAnswerId;
         [SerializeField] private bool _isCitizenInitiateDialog;
         [SerializeField] private int _initiatedDialogId;
-        [SerializeField] private BaseItem _givenItemData;
-        [SerializeField] private BaseItem _takenItemData;
+        [SerializeField] private HubMapUIBaseItemData _givenItemData;
+        [SerializeField] private HubMapUIBaseItemData _takenItemData;
         [Space]
         [SerializeField] private HubMapUIQuestTaskAdditionalCitizenAnswer[] _additionalCitizensAnswers;
 
@@ -31,8 +31,8 @@ namespace BeastHunter
         public int TargetQuestAnswerId => _targetQuestAnswerId;
         public bool IsCitizenInitiateDialog => _isCitizenInitiateDialog;
         public int InitiatedDialogId => _initiatedDialogId;
-        public BaseItem GivenItemData => _givenItemData;
-        public BaseItem TakenItemData => _takenItemData;
+        public HubMapUIBaseItemData GivenItemData => _givenItemData;
+        public HubMapUIBaseItemData TakenItemData => _takenItemData;
 
         public HubMapUIQuestTaskAdditionalCitizenAnswer[] AdditionalCitizensAnswers => (HubMapUIQuestTaskAdditionalCitizenAnswer[])_additionalCitizensAnswers.Clone();
 

@@ -10,7 +10,7 @@ namespace BeastHunter
 
         [SerializeField] private int _goldAmount;
         [SerializeField] private int _inventorySlotsAmount;
-        [SerializeField] private BaseItem[] _inventoryItems;
+        [SerializeField] private HubMapUIBaseItemData[] _inventoryItems;
 
         #endregion
 
@@ -19,7 +19,7 @@ namespace BeastHunter
 
         public int GoldAmount => _goldAmount;
         public int InventorySlotsAmount => _inventorySlotsAmount;
-        public BaseItem[] InventoryItems => (BaseItem[])_inventoryItems.Clone();
+        public HubMapUIBaseItemData[] InventoryItems => (HubMapUIBaseItemData[])_inventoryItems.Clone();
 
         #endregion
     }

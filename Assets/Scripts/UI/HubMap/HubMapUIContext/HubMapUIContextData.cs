@@ -11,6 +11,7 @@ namespace BeastHunter
         [SerializeField] private int _shopsSlotsAmount;
         [SerializeField] private HubMapUIPlayerData _player;
         [SerializeField] private int _charactersInventorySlotAmount;
+        [SerializeField] private HubMapUIClothType[] _charactersClothSlots;
         [SerializeField] private HubMapUICharacterData[] _characters;
         [SerializeField] private HubMapUICityData[] _cities;
         [SerializeField] private HubMapUILocationData[] _locations;
@@ -24,6 +25,7 @@ namespace BeastHunter
         public int ShopsSlotsAmount => _shopsSlotsAmount;
         public HubMapUIPlayerData Player => _player;
         public int CharactersInventorySlotAmount => _charactersInventorySlotAmount;
+        public HubMapUIClothType[] ClothSlots => (HubMapUIClothType[])_charactersClothSlots.Clone();
         public HubMapUICharacterData[] Characters => (HubMapUICharacterData[])_characters.Clone();
         public HubMapUICityData[] Cities => (HubMapUICityData[])_cities.Clone();
         public HubMapUILocationData[] Locations => (HubMapUILocationData[])_locations.Clone();

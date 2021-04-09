@@ -19,7 +19,9 @@
             Inventory = new HubMapUIStorage(data.InventorySlotsAmount);
             for (int i = 0; i < data.InventoryItems.Length; i++)
             {
-                Inventory.PutItem(i, data.InventoryItems[i]);
+                HubMapUIBaseItemModel itemModel = HubMapUIServices.SharedInstance.
+                    ItemInitializeService.InitializeItemModel(data.InventoryItems[i]);
+                Inventory.PutItem(i, itemModel);
             }
         }
 
