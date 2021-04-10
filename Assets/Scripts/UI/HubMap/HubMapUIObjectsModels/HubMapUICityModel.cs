@@ -21,8 +21,8 @@ namespace BeastHunter
         public HubMapUIFractionData Fraction { get; private set; } 
         public List<HubMapUICitizenModel> Citizens { get; private set; }
         public List<HubMapUIBaseItemData> ShopItemsPool { get; private set; }
-        public HubMapUIStorage ShopStorage { get; private set; }
-        public HubMapUIStorage BuyBackStorage { get; private set; }
+        public HubMapUIItemStorage ShopStorage { get; private set; }
+        public HubMapUIItemStorage BuyBackStorage { get; private set; }
 
         public int PlayerReputation
         {
@@ -67,8 +67,8 @@ namespace BeastHunter
                 ShopItemsPool.Add(cityData.ShopItemsPool[i]);
             }
 
-            ShopStorage = new HubMapUIStorage(cityData.ShopSlotAmount);
-            BuyBackStorage = new HubMapUIStorage(cityData.ShopSlotAmount);
+            ShopStorage = new HubMapUIItemStorage(cityData.ShopSlotAmount);
+            BuyBackStorage = new HubMapUIItemStorage(cityData.ShopSlotAmount);
 
             UpdateShopItems();
         }

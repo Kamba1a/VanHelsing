@@ -5,7 +5,7 @@
         #region Properties
 
         public int GoldAmount { get; set; }
-        public HubMapUIStorage Inventory { get; private set; }
+        public HubMapUIItemStorage Inventory { get; private set; }
 
         #endregion
 
@@ -16,7 +16,7 @@
         {
             GoldAmount = data.GoldAmount;
 
-            Inventory = new HubMapUIStorage(data.InventorySlotsAmount);
+            Inventory = new HubMapUIItemStorage(data.InventorySlotsAmount);
             for (int i = 0; i < data.InventoryItems.Length; i++)
             {
                 HubMapUIBaseItemModel itemModel = HubMapUIServices.SharedInstance.

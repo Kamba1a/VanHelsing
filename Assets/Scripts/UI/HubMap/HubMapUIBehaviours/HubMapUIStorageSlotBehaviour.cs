@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace BeastHunter
 {
-    class HubMapUIStorageSlotBehaviour : HubMapUISlotBehaviour, IPointerClickHandler,  IPointerDownHandler
+    class HubMapUIStorageSlotBehaviour : HubMapUIBaseSlotBehaviour, IPointerClickHandler,  IPointerDownHandler
     {
         #region Constants
 
@@ -36,9 +36,9 @@ namespace BeastHunter
 
         #region Methods
 
-        public override void FillSlotInfo(int slotIndex, bool isDragAndDropEnabled)
+        public override void FillSlotInfo(int slotIndex, bool isDragAndDropOn)
         {
-            base.FillSlotInfo(slotIndex, isDragAndDropEnabled);
+            base.FillSlotInfo(slotIndex, isDragAndDropOn);
             _slotButton.onClick.AddListener(() => OnClick_SlotButton());
         }
 
@@ -55,9 +55,15 @@ namespace BeastHunter
             _selectSlotFrame.enabled = flag;
         }
 
-        public void SetInteractable(bool flag)
+        public override void SetInteractable(bool flag)
         {
+            base.SetInteractable(flag);
             _slotButton.interactable = flag;
+
+            if (!flag)
+            {
+                FillSlot(null);
+            }
         }
 
         private void OnClick_SlotButton()

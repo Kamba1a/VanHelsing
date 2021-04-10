@@ -18,10 +18,10 @@ namespace BeastHunter
         public string Name { get; private set; }
         public Sprite Portrait { get; private set; }
         public GameObject View3DModelObjectOnScene { get; private set; }
-        public HubMapUIStorage Backpack { get; private set; }
+        public HubMapUIItemStorage Backpack { get; private set; }
 
         //todo:
-        public HubMapUIClothEquipment ClothEquipment { get; private set; }
+        public HubMapUIClothEquipmentStorage ClothEquipment { get; private set; }
         //public HubMapUIEquipmentModel Pockets { get; private set; }
         //public HubMapUIEquipmentModel Weapon { get; private set; }
 
@@ -39,14 +39,14 @@ namespace BeastHunter
             _view3DModelPrefab = data.View3DModelPrefab;
             _view3DModelAnimatorController = data.View3DModelAnimatorController;
 
-            Backpack = new HubMapUIStorage(backpackSize);
+            Backpack = new HubMapUIItemStorage(backpackSize);
             for (int i = 0; i < data.StartBackpuckItems.Length; i++)
             {
                 HubMapUIBaseItemModel itemModel = HubMapUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartBackpuckItems[i]);
                 Backpack.PutItem(i, itemModel);
             }
 
-            ClothEquipment = new HubMapUIClothEquipment(clothEquipment);
+            ClothEquipment = new HubMapUIClothEquipmentStorage(clothEquipment);
         }
 
         #endregion

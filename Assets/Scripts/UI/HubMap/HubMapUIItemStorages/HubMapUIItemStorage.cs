@@ -1,0 +1,90 @@
+﻿namespace BeastHunter
+{
+    public class HubMapUIItemStorage : HubMapUIBaseItemStorage
+    {
+        #region ClassLifeCycle
+
+        public HubMapUIItemStorage(int slotsAmount)
+        {
+            _items = new HubMapUIBaseItemModel[slotsAmount];
+        }
+
+        #endregion
+
+
+        #region Methods
+
+        public override bool PutItem(int slotNumber, HubMapUIBaseItemModel item)
+        {
+            bool isSucceful = false;
+
+            if (_items[slotNumber] == null)
+            {
+                _items[slotNumber] = item;
+                isSucceful = true;
+            }
+            else
+            {
+                isSucceful = PutItemToFirstEmptySlot(item);
+            }
+
+            if (isSucceful)
+            {
+                OnChangeItem(slotNumber, item);
+            }
+
+            return isSucceful;
+        }
+
+        public override bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item)
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] == null)
+                {
+                    return PutItem(i, item);
+                }
+            }
+            return false;
+        }
+
+        public bool IsFull()
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i] == null)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool IsContainItem(HubMapUIBaseItemData item)
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i].DataInstanceID == item.GetInstanceID())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool RemoveFirstItem(HubMapUIBaseItemData item)
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_items[i].DataInstanceID == item.GetInstanceID())
+                {
+                    TakeItem(i);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        #endregion
+    }
+}

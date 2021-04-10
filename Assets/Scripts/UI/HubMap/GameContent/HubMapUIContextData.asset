@@ -15,6 +15,7 @@ MonoBehaviour:
   _shopsSlotsAmount: 20
   _player: {fileID: 11400000, guid: 6dc1beb443f3bb24db85b44c8bd1d503, type: 2}
   _charactersInventorySlotAmount: 10
+  _charactersClothSlots: 0200000004000000080000000900000005000000060000000700000001000000030000000a0000000b0000000b000000
   _characters:
   - {fileID: 11400000, guid: 9fb474a159a104d49a106419732f29d4, type: 2}
   - {fileID: 11400000, guid: 5bedb4bb121491a418e9a717db215ba4, type: 2}

@@ -15,10 +15,11 @@ namespace BeastHunter
         private enum StorageType
         {
             None = 0,
-            Equipment = 1,
-            Inventory = 2,
-            Shop = 3,
+            CharacterInventory = 1,
+            GeneralInventory = 2,
+            ShopStorage = 3,
             BuyBackStorage = 4,
+            CharacterClothEquipment = 5,
         }
 
         private class SelectedElements
@@ -205,12 +206,9 @@ namespace BeastHunter
         [SerializeField] private Button _closeHikePanelButton;
         [SerializeField] private Button _hikeAcceptButton;
         [SerializeField] private GameObject _hikePanel;
-        //[SerializeField] private GameObject _hikePreparePanel;
         [SerializeField] private GameObject _hikeCharactersPanel;
         [SerializeField] private GameObject _characterInventoryPanel;
-        //[SerializeField] private GameObject _hikeInventoryPanel;
         [SerializeField] private GameObject _hikeInventoryScrollView;
-        //[SerializeField] private Button _closeInventoryButton;
         [SerializeField] private Button _perkTreeButton;
         [SerializeField] private Text _travelTimeText;
         [SerializeField] private RawImage _character3DViewModelRawImage;
@@ -249,7 +247,7 @@ namespace BeastHunter
 
         private HubMapUIData _data;
         private HubMapUIPlayerModel _player;
-        private HubMapUIStorage _generalInventory;
+        private HubMapUIItemStorage _generalInventory;
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
         private List<HubMapUIStorageSlotBehaviour> _characterInventorySlotsUIBehaviours;
@@ -261,8 +259,8 @@ namespace BeastHunter
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, StorageType storageType) _draggedItemInfo;
 
-        private HubMapUIStorage _currentBuyBackStorage;
-        private HubMapUIStorage _currentShopStorage;
+        private HubMapUIItemStorage _currentBuyBackStorage;
+        private HubMapUIItemStorage _currentShopStorage;
         private SelectedElements _selected;
         private GameObject Character3DViewModelRendering;
 
@@ -344,27 +342,17 @@ namespace BeastHunter
 
             for (int i = 0; i < _characterClothSlotsUIBehaviours.Length; i++)
             {
-                Sprite slotSprite = Data.HubMapData.GetClothSlotSpriteByType(_context.CharactersClothEquipment[i]);
-                _characterClothSlotsUIBehaviours[i].FillSlotInfo(i, true, slotSprite);
-                //todo: drag and drop deactivate when character not select with visual effect
+                FillCharacterClothSlot(i);
             }
-
-            Character3DViewModelRendering =
-                Instantiate(_data.Characters3DViewRenderingPrefab, _data.Characters3DViewRenderingObjectPosition, Quaternion.identity);
 
             for (int i = 0; i < _mapObjects.Length; i++)
             {
                 FillMapObject(_mapObjects[i], _data.MapObjects[i]);
             }
 
-            for (int i = 0; i < _context.Characters.Count; i++)
-            {
-                InitializeCharacterUI(_context.Characters[i]);
-            }
-
             for (int i = 0; i < _context.CharactersEquipmentSlotAmount; i++)
             {
-                InitializeEquipmentSlotUI(i);
+                InitializeCharacterInventorySlotUI(i);
             }
 
             for (int i = 0; i < _generalInventory.GetSlotsCount(); i++)
@@ -382,8 +370,15 @@ namespace BeastHunter
                 InitializeShopSlotUI(i);
             }
 
-            FillItemsSlots(StorageType.Inventory);
-            _generalInventory.OnChangeItemHandler = (slotIndex, item) => FillSlotUI(slotIndex, item, StorageType.Inventory);
+            Character3DViewModelRendering =
+                Instantiate(_data.Characters3DViewRenderingPrefab, _data.Characters3DViewRenderingObjectPosition, Quaternion.identity);
+            for (int i = 0; i < _context.Characters.Count; i++)
+            {
+                InitializeCharacterUI(_context.Characters[i]);
+            }
+
+            FillItemStorageSlots(StorageType.GeneralInventory);
+            _generalInventory.OnChangeItemHandler = (slotIndex, item) => FillSlotUI(slotIndex, item, StorageType.GeneralInventory);
 
             _selected.OnChanged_InventorySlotIndex = OnChangedSelectedInventorySlot;
             _selected.OnChanged_EquipmentSlotIndex = OnChangedSelectedEquipmentSlot;
@@ -398,8 +393,6 @@ namespace BeastHunter
             _dialogPanel.SetActive(false);
             _locationInfoPanel.SetActive(false);
             _hikePanel.SetActive(false);
-            //_hikePreparePanel.SetActive(true);
-            //_hikeInventoryPanel.SetActive(true);
             _tradePanel.SetActive(false);
             _sellButton.interactable = false;
             _buyBackButton.interactable = false;
@@ -426,6 +419,8 @@ namespace BeastHunter
 
         private void OnClick_HikePanelButton()
         {
+            SetScrollViewParentForPanel(_inventoryItemsPanel, _hikeInventoryScrollView);
+
             _travelTimeText.text = HubMapUIServices.SharedInstance.TravelTimeService.
                 GetFullPhraseAboutTravelTime(_selected.MapObject as HubMapUILocationModel);
             _hikePanel.SetActive(true);
@@ -454,7 +449,6 @@ namespace BeastHunter
             _selected.EquipmentSlotIndex = null;
             _selected.InventorySlotIndex = null;
 
-            //_hikeInventoryPanel.SetActive(false);
             _hikePanel.SetActive(false);
         }
 
@@ -497,11 +491,11 @@ namespace BeastHunter
             _shopCityReputation.text = city.PlayerReputation.ToString();
 
             _currentShopStorage = city.ShopStorage;
-            FillItemsSlots(StorageType.Shop);
-            _currentShopStorage.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Shop);
+            FillItemStorageSlots(StorageType.ShopStorage);
+            _currentShopStorage.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.ShopStorage);
 
             _currentBuyBackStorage = city.BuyBackStorage;
-            FillItemsSlots(StorageType.BuyBackStorage);
+            FillItemStorageSlots(StorageType.BuyBackStorage);
             _currentBuyBackStorage.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.BuyBackStorage);
 
             _tradePanel.SetActive(true);
@@ -519,7 +513,7 @@ namespace BeastHunter
             _currentBuyBackStorage.OnChangeItemHandler -= (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.BuyBackStorage);
             _currentBuyBackStorage = null;
 
-            _currentShopStorage.OnChangeItemHandler -= (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Shop);
+            _currentShopStorage.OnChangeItemHandler -= (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.ShopStorage);
             _currentShopStorage = null;
         }
 
@@ -751,10 +745,20 @@ namespace BeastHunter
         {
             FillTooltipByItemInfo(GetStorageByType(storageType).GetItemBySlot(slotIndex), storageType);
 
-            _tooltip.GetComponent<RectTransform>().pivot =
-                storageType == StorageType.BuyBackStorage || storageType == StorageType.Shop ?
-                new Vector2(1, 0) :
-                new Vector2(0, 0);
+            RectTransform tooltipRectTransform = _tooltip.GetComponent<RectTransform>();
+
+            if (storageType == StorageType.GeneralInventory && _hikePanel.activeSelf)
+            {
+                tooltipRectTransform.pivot = new Vector2(0, 1);
+            }
+            else if (storageType == StorageType.ShopStorage || storageType == StorageType.BuyBackStorage)
+            {
+                tooltipRectTransform.pivot = new Vector2(1, 0);
+            }
+            else
+            {
+                tooltipRectTransform.pivot = new Vector2(0, 0);
+            }
 
             _tooltip.transform.position = Input.mousePosition;
             _tooltip.SetActive(true);
@@ -766,7 +770,7 @@ namespace BeastHunter
             _tooltip.SetActive(false);
         }
 
-         private void OnDragItemFromSlot(int slotIndex, StorageType storageType)
+         private void OnBeginDragItemFromSlot(int slotIndex, StorageType storageType)
         {
             _draggedItemInfo.slotIndex = slotIndex;
             _draggedItemInfo.storageType = storageType;
@@ -782,23 +786,32 @@ namespace BeastHunter
         {
             if (_draggedItemInfo.slotIndex.HasValue)
             {
-                HubMapUIStorage dropItemStorage = GetStorageByType(dropStorageType); ;
-                HubMapUIStorage takeItemStorage = GetStorageByType(_draggedItemInfo.storageType);
+                HubMapUIBaseItemStorage dropItemStorage = GetStorageByType(dropStorageType); ;
+                HubMapUIBaseItemStorage takeItemStorage = GetStorageByType(_draggedItemInfo.storageType);
 
                 HubMapUIBaseItemModel draggedItem = takeItemStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
-                HubMapUIBaseItemModel droppedSlotItem = dropItemStorage.TakeItem(dropSlotIndex);
+                HubMapUIBaseItemModel itemInDroppedSlot = dropItemStorage.TakeItem(dropSlotIndex);
 
-                dropItemStorage.PutItem(dropSlotIndex, draggedItem);
-                takeItemStorage.PutItem(_draggedItemInfo.slotIndex.Value, droppedSlotItem);
+                bool isSuccefull =
+                    dropItemStorage.PutItem(dropSlotIndex, draggedItem) &&
+                    takeItemStorage.PutItem(_draggedItemInfo.slotIndex.Value, itemInDroppedSlot);
+                
+                if (!isSuccefull)
+                {
+                    dropItemStorage.TakeItem(dropSlotIndex);
+                    dropItemStorage.PutItem(dropSlotIndex, itemInDroppedSlot);
 
+                    takeItemStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
+                    takeItemStorage.PutItem(_draggedItemInfo.slotIndex.Value, draggedItem);
+                }
 
                 switch (dropStorageType)
                 {
-                    case StorageType.Equipment:
+                    case StorageType.CharacterInventory:
                         _selected.EquipmentSlotIndex = dropSlotIndex;
                         break;
 
-                    case StorageType.Inventory:
+                    case StorageType.GeneralInventory:
                         _selected.InventorySlotIndex = dropSlotIndex;
                         break;
 
@@ -806,12 +819,11 @@ namespace BeastHunter
                         _selected.BuyBackSlotIndex = dropSlotIndex;
                         break;
 
-                    case StorageType.Shop:
+                    case StorageType.ShopStorage:
                         _selected.ShopSlotIndex = dropSlotIndex;
                         break;
 
                     default:
-                        Debug.LogError("Incorrect storage type");
                         break;
                 }
             }
@@ -946,6 +958,7 @@ namespace BeastHunter
             {
                 previousCharacter.Behaviour.SelectFrameSwitch(false);
                 previousCharacter.Backpack.OnChangeItemHandler = null;
+                previousCharacter.ClothEquipment.OnChangeItemHandler = null;
                 previousCharacter.View3DModelObjectOnScene.SetActive(false);
                 previousCharacter.View3DModelObjectOnScene.transform.rotation = Quaternion.identity;
             }
@@ -954,9 +967,15 @@ namespace BeastHunter
             {
                 _selected.Character.Behaviour.SelectFrameSwitch(true);
                 _hikeAcceptButton.interactable = true;
-                FillItemsSlots(StorageType.Equipment);
-                SetEquipmentSlotsInteractable(true);
-                _selected.Character.Backpack.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.Equipment);
+
+                FillItemStorageSlots(StorageType.CharacterInventory);
+                SetStorageSlotsInteractable(true, _characterInventorySlotsUIBehaviours);
+
+                FillItemStorageSlots(StorageType.CharacterClothEquipment);
+                SetStorageSlotsInteractable(true, _characterClothSlotsUIBehaviours);
+
+                _selected.Character.Backpack.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.CharacterInventory);
+                _selected.Character.ClothEquipment.OnChangeItemHandler = (slotIndex, sprite) => FillSlotUI(slotIndex, sprite, StorageType.CharacterClothEquipment);
 
                 _selected.Character.View3DModelObjectOnScene.SetActive(true);
                 _character3DViewModelRawImage.enabled = true;
@@ -966,7 +985,8 @@ namespace BeastHunter
             {
                 _character3DViewModelRawImage.enabled = false;
                 _hikeAcceptButton.interactable = false;
-                SetEquipmentSlotsInteractable(false);
+                SetStorageSlotsInteractable(false, _characterInventorySlotsUIBehaviours);
+                SetStorageSlotsInteractable(false, _characterClothSlotsUIBehaviours);
             }
         }
 
@@ -996,11 +1016,9 @@ namespace BeastHunter
             behaviourUI.OnClick_ButtonHandler += OnClick_CharacterButton;
 
             character.InitializeView3DModel(Character3DViewModelRendering.transform);
-            //character.View3DModelObjectOnScene = Instantiate(character.View3DModelPrefab, Character3DViewModelRendering.transform);
-            //character.View3DModelObjectOnScene.SetActive(false);
         }
 
-        private void InitializeEquipmentSlotUI(int slotIndex)
+        private void InitializeCharacterInventorySlotUI(int slotIndex)
         {
             GameObject equipSlotUI = InstantiateUIObject(_data.EquipmentSlotUIPrefab, _characterInventoryPanel);
 
@@ -1009,10 +1027,10 @@ namespace BeastHunter
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_EquipmentSlot;
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_EquipmentSlot;
-            slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageType.Equipment);
-            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.Equipment);
-            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.Equipment);
-            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.Equipment);
+            slotBehaviour.OnBeginDragItemHandler = (slotIndex) => OnBeginDragItemFromSlot(slotIndex, StorageType.CharacterInventory);
+            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.CharacterInventory);
+            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.CharacterInventory);
+            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.CharacterInventory);
             slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _characterInventorySlotsUIBehaviours.Add(slotBehaviour);
@@ -1026,10 +1044,10 @@ namespace BeastHunter
             slotBehaviour.FillSlotInfo(slotIndex, true);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_InventorySlot;
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_InventorySlot;
-            slotBehaviour.OnDraggedItemHandler = (slotIndex) => OnDragItemFromSlot(slotIndex, StorageType.Inventory);
-            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.Inventory);
-            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.Inventory);
-            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.Inventory);
+            slotBehaviour.OnBeginDragItemHandler = (slotIndex) => OnBeginDragItemFromSlot(slotIndex, StorageType.GeneralInventory);
+            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.GeneralInventory);
+            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, StorageType.GeneralInventory);
+            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.GeneralInventory);
             slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _generalInventorySlotsUIBehaviours.Add(slotBehaviour);
@@ -1057,7 +1075,7 @@ namespace BeastHunter
             slotBehaviour.FillSlotInfo(slotIndex, false);
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_ShopSlot;
-            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.Shop);
+            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.ShopStorage);
             slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _shopSlotsUIBehaviours.Add(slotBehaviour);
@@ -1096,6 +1114,18 @@ namespace BeastHunter
 
 
         #region FillUIElementsByInfo
+
+        private void FillCharacterClothSlot(int slotIndex)
+        {
+            Sprite slotSprite = Data.HubMapData.GetClothSlotSpriteByType(_context.CharactersClothEquipment[slotIndex]);
+            _characterClothSlotsUIBehaviours[slotIndex].FillSlotInfo(slotIndex, true, slotSprite);
+            _characterClothSlotsUIBehaviours[slotIndex].SetInteractable(false);
+            _characterClothSlotsUIBehaviours[slotIndex].OnBeginDragItemHandler += (slotIndex) => OnBeginDragItemFromSlot(slotIndex, StorageType.CharacterClothEquipment);
+            _characterClothSlotsUIBehaviours[slotIndex].OnEndDragItemHandler += (slotIndex) => OnEndDragItem(slotIndex, StorageType.CharacterClothEquipment);
+            _characterClothSlotsUIBehaviours[slotIndex].OnDroppedItemHandler += (slotIndex) => OnDropItemToSlot(slotIndex, StorageType.CharacterClothEquipment);
+            _characterClothSlotsUIBehaviours[slotIndex].OnPointerEnterHandler += (slotIndex) => OnPointerEnter_Slot(slotIndex, StorageType.CharacterClothEquipment);
+            _characterClothSlotsUIBehaviours[slotIndex].OnPointerExitHandler += OnPointerExit_Slot;
+        }
 
         private void FillMapObject(GameObject mapObject, HubMapUIMapObjectData mapObjectdata)
         {
@@ -1142,7 +1172,7 @@ namespace BeastHunter
             tooltipTexts[2].text = item.Description;
             tooltipTexts[3].text = "Цена: " + HubMapUIServices.SharedInstance.ShopService.GetItemPrice(item).ToString();
 
-            if (storageType == StorageType.Shop)
+            if (storageType == StorageType.ShopStorage)
             {
                 if (!IsPossibleToBuyShopItem(item, out string message))
                 {
@@ -1158,12 +1188,12 @@ namespace BeastHunter
 
             switch (storageType)
             {
-                case StorageType.Equipment:
+                case StorageType.CharacterInventory:
 
                     _characterInventorySlotsUIBehaviours[slotIndex].FillSlot(sprite);
 
                     break;
-                case StorageType.Inventory:
+                case StorageType.GeneralInventory:
 
                     _generalInventorySlotsUIBehaviours[slotIndex].FillSlot(sprite);
 
@@ -1174,11 +1204,16 @@ namespace BeastHunter
                     _buyBackSlotsUIBehaviours[slotIndex].SetInteractable(sprite != null);
 
                     break;
-                case StorageType.Shop:
+                case StorageType.ShopStorage:
 
                     _shopSlotsUIBehaviours[slotIndex].FillSlot(sprite);
                     _shopSlotsUIBehaviours[slotIndex].SetInteractable(sprite != null);
                     _shopSlotsUIBehaviours[slotIndex].SetAvailability(IsPossibleToBuyShopItem(item));
+
+                    break;
+                case StorageType.CharacterClothEquipment:
+
+                    _characterClothSlotsUIBehaviours[slotIndex].FillSlot(sprite);
 
                     break;
                 default:
@@ -1189,9 +1224,9 @@ namespace BeastHunter
             }
         }
 
-         private void FillItemsSlots(StorageType storageType)
+         private void FillItemStorageSlots(StorageType storageType)
         {
-            HubMapUIStorage storage = GetStorageByType(storageType);
+            HubMapUIBaseItemStorage storage = GetStorageByType(storageType);
 
             for (int i = 0; i < storage.GetSlotsCount(); i++)
             {
@@ -1291,28 +1326,24 @@ namespace BeastHunter
             _displayedCurrentCitizensUIBehaviours.Clear();
         }
 
-        private void SetEquipmentSlotsInteractable(bool flag)
+        private void SetStorageSlotsInteractable<T>(bool flag, IEnumerable<T> slotBehaviours) where T : HubMapUIBaseSlotBehaviour
         {
-            for (int i = 0; i < _characterInventorySlotsUIBehaviours.Count; i++)
+            foreach (HubMapUIBaseSlotBehaviour slot in slotBehaviours)
             {
-                if (!flag)
-                { 
-                    _characterInventorySlotsUIBehaviours[i].FillSlot(null);
-                }
-                _characterInventorySlotsUIBehaviours[i].SetInteractable(flag);
+                slot.SetInteractable(flag);
             }
         }
 
-        private HubMapUIStorage GetStorageByType(StorageType storageType)
+        private HubMapUIBaseItemStorage GetStorageByType(StorageType storageType)
         {
-            HubMapUIStorage storage = null;
+            HubMapUIBaseItemStorage storage = null;
             switch (storageType)
             {
-                case StorageType.Equipment:
+                case StorageType.CharacterInventory:
                     storage = _selected.Character.Backpack;
                     break;
 
-                case StorageType.Inventory:
+                case StorageType.GeneralInventory:
                     storage = _generalInventory;
                     break;
 
@@ -1320,8 +1351,12 @@ namespace BeastHunter
                     storage = _currentBuyBackStorage;
                     break;
 
-                case StorageType.Shop:
+                case StorageType.ShopStorage:
                     storage = _currentShopStorage;
+                    break;
+
+                case StorageType.CharacterClothEquipment:
+                    storage = _selected.Character.ClothEquipment;
                     break;
 
                 default:

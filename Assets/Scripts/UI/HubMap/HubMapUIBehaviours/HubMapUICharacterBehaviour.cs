@@ -9,6 +9,7 @@ namespace BeastHunter
     {
         #region Fields
 
+        [SerializeField] Image _characterImage;
         [SerializeField] Image _selectFrameImage;
 
         #endregion
@@ -27,7 +28,7 @@ namespace BeastHunter
         {
             character.Behaviour = this;
             _selectFrameImage.enabled = false;
-            GetComponent<Image>().sprite = character.Portrait;
+            _characterImage.sprite = character.Portrait;
             GetComponent<Button>().onClick.AddListener(() => OnClick_Button(character));
         }
 
