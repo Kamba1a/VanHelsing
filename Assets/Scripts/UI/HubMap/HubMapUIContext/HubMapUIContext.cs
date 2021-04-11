@@ -10,7 +10,7 @@ namespace BeastHunter
 
         public int ShopsSlotsAmount { get; private set; }
         public int CharactersEquipmentSlotAmount { get; private set; }
-        public HubMapUIClothType[] CharactersClothEquipment { get; private set; }
+        public HubMapUIClothesType[] CharactersClothEquipment { get; private set; }
         public HubMapUIPlayerModel Player { get; private set; }
         public List<HubMapUICharacterModel> Characters { get; private set; }
         public List<HubMapUICityModel> Cities { get; private set; }

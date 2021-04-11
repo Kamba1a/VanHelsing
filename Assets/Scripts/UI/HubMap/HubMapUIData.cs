@@ -69,21 +69,21 @@ namespace BeastHunter
 
         #region Methods
 
-        public Sprite GetClothSlotSpriteByType(HubMapUIClothType clothType)
+        public Sprite GetClothSlotSpriteByType(HubMapUIClothesType clothType)
         {
             switch (clothType)
             {
-                case HubMapUIClothType.Arm: return ArmSlotIcon;
-                case HubMapUIClothType.Back: return BackSlotIcon;
-                case HubMapUIClothType.Hand: return HandSlotIcon;
-                case HubMapUIClothType.Head: return HeadSlotIcon;
-                case HubMapUIClothType.Hips: return HipsSlotIcon;
-                case HubMapUIClothType.Leg: return LegSlotIcon;
-                case HubMapUIClothType.Shoulder: return ShoulderSlotIcon;
-                case HubMapUIClothType.Torso: return TorsoSlotIcon;
-                case HubMapUIClothType.Ring: return RingSlotIcon;
-                case HubMapUIClothType.Amulet: return AmuletSlotIcon;
-                case HubMapUIClothType.Belt: return BeltSlotIcon;
+                case HubMapUIClothesType.Arms: return ArmSlotIcon;
+                case HubMapUIClothesType.Back: return BackSlotIcon;
+                case HubMapUIClothesType.Hands: return HandSlotIcon;
+                case HubMapUIClothesType.Head: return HeadSlotIcon;
+                case HubMapUIClothesType.Hips: return HipsSlotIcon;
+                case HubMapUIClothesType.Legs: return LegSlotIcon;
+                case HubMapUIClothesType.Shoulders: return ShoulderSlotIcon;
+                case HubMapUIClothesType.Torso: return TorsoSlotIcon;
+                case HubMapUIClothesType.Ring: return RingSlotIcon;
+                case HubMapUIClothesType.Amulet: return AmuletSlotIcon;
+                case HubMapUIClothesType.Belt: return BeltSlotIcon;
                 default:
                     Debug.LogError(this + ": incorrect cloth type");
                     return null;

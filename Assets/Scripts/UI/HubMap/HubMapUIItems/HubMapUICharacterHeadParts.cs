@@ -3,8 +3,9 @@
     public enum HubMapUICharacterHeadParts
     {
         None = 0,
-        Hair = 1,
-        Eyebrows = 2,
-        FacialHair = 3,
+        Head = 1,
+        Hair = 2,
+        Eyebrows = 3,
+        FacialHair = 4,
     }
 }

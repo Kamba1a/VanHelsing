@@ -1,22 +1,26 @@
 ﻿namespace BeastHunter
 {
-    public class HubMapUIClothItemModel : HubMapUIBaseItemModel
+    public class HubMapUIClothesItemModel : HubMapUIBaseItemModel
     {
         #region Properties
 
-        public HubMapUIClothType ClothType { get; private set; }
-        public string[] EquipmentPartsNames { get; private set; }
+        public HubMapUIClothesType ClothesType { get; private set; }
+        public string[] ClothesPartsNamesAllGender { get; private set; }
+        public string[] ClothesPartsNamesMale { get; private set; }
+        public string[] ClothesPartsNamesFemale { get; private set; }
         public HubMapUICharacterHeadParts[] DisabledHeadParts { get; private set; }
 
         #endregion
 
 
-        public HubMapUIClothItemModel(HubMapUIBaseItemData data) : base(data)
+        public HubMapUIClothesItemModel(HubMapUIBaseItemData data) : base(data)
         {
-            HubMapUIClothItemData clothData = data as HubMapUIClothItemData;
-            ClothType = clothData.ClothType;
-            EquipmentPartsNames = clothData.EquipmentPartsNames;
-            DisabledHeadParts = clothData.DisabledHeadParts;
+            HubMapUIClothesItemData clothesData = data as HubMapUIClothesItemData;
+            ClothesType = clothesData.ClothesType;
+            ClothesPartsNamesAllGender = clothesData.ClothesPartsNamesAllGender;
+            ClothesPartsNamesMale = clothesData.ClothesPartsNamesMale;
+            ClothesPartsNamesFemale = clothesData.ClothesPartsNamesFemale;
+            DisabledHeadParts = clothesData.DisabledHeadParts;
         }
     }
 }

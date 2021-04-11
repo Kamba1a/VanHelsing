@@ -3,19 +3,19 @@
 
 namespace BeastHunter
 {
-    public class HubMapUIClothEquipmentStorage : HubMapUIBaseItemStorage
+    public class HubMapUIClothesEquipmentStorage : HubMapUIBaseItemStorage
     {
         #region Fields
 
         public override HubMapUIItemStorageType StorageType { get; protected set; }
-        private HubMapUIClothType[] _slotTypes;
+        private HubMapUIClothesType[] _slotTypes;
 
         #endregion
 
   
         #region ClassLifeCycle
 
-        public HubMapUIClothEquipmentStorage(HubMapUIClothType[] clothTypes, HubMapUIItemStorageType storageType)
+        public HubMapUIClothesEquipmentStorage(HubMapUIClothesType[] clothTypes, HubMapUIItemStorageType storageType)
         {
             StorageType = storageType;
             _items = new HubMapUIBaseItemModel[clothTypes.Length];
@@ -35,7 +35,7 @@ namespace BeastHunter
             {
                 if (item.ItemType == HubMapUIItemType.Cloth)
                 {
-                    if ((item as HubMapUIClothItemModel).ClothType == _slotTypes[slotNumber])
+                    if ((item as HubMapUIClothesItemModel).ClothesType == _slotTypes[slotNumber])
                     {
                         if (_items[slotNumber] == null)
                         {
@@ -76,10 +76,10 @@ namespace BeastHunter
             {
                 if (item.ItemType == HubMapUIItemType.Cloth)
                 {
-                    HubMapUIClothItemModel clothItem = item as HubMapUIClothItemModel;
+                    HubMapUIClothesItemModel clothItem = item as HubMapUIClothesItemModel;
                     for (int i = 0; i < _items.Length; i++)
                     {
-                        if (_slotTypes[i] == clothItem.ClothType)
+                        if (_slotTypes[i] == clothItem.ClothesType)
                         {
                             if (_items[i] == null)
                             {

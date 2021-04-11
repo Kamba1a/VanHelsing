@@ -4,15 +4,19 @@
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HubMapUIClothItemData", menuName = "CreateData/HubMapUIData/Items/Cloth", order = 0)]
-    class HubMapUIClothItemData : HubMapUIBaseItemData
+    class HubMapUIClothesItemData : HubMapUIBaseItemData
     {
-        [SerializeField] private HubMapUIClothType _clothType;
-        [SerializeField] private string[] _equipmentPartsNames;
-        [SerializeField] private string[] _equipmentPartsNamesFemale;
+        [SerializeField] private HubMapUIClothesType _clothType;
+        [SerializeField] private string[] _clothesPartsNamesAllGender;
+        [SerializeField] private string[] _clothesPartsNamesMale;
+        [SerializeField] private string[] _clothesPartsNamesFemale;
         [SerializeField] private HubMapUICharacterHeadParts[] _disabledHeadParts;
+        //todo: clothes material
 
-        public HubMapUIClothType ClothType => _clothType;
-        public string[] EquipmentPartsNames => (string[])_equipmentPartsNames.Clone();
+        public HubMapUIClothesType ClothesType => _clothType;
+        public string[] ClothesPartsNamesAllGender => (string[])_clothesPartsNamesAllGender.Clone();
+        public string[] ClothesPartsNamesMale => (string[])_clothesPartsNamesMale.Clone();
+        public string[] ClothesPartsNamesFemale => (string[])_clothesPartsNamesFemale.Clone();
         public HubMapUICharacterHeadParts[] DisabledHeadParts => (HubMapUICharacterHeadParts[])_disabledHeadParts.Clone();
         public override HubMapUIItemType ItemType { get; protected set; }
 
