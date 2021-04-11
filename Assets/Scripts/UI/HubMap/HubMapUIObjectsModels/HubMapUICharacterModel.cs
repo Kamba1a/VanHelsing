@@ -39,14 +39,15 @@ namespace BeastHunter
             _view3DModelPrefab = data.View3DModelPrefab;
             _view3DModelAnimatorController = data.View3DModelAnimatorController;
 
-            Backpack = new HubMapUIItemStorage(backpackSize);
+            Backpack = new HubMapUIItemStorage(backpackSize, HubMapUIItemStorageType.CharacterInventory);
             for (int i = 0; i < data.StartBackpuckItems.Length; i++)
             {
                 HubMapUIBaseItemModel itemModel = HubMapUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartBackpuckItems[i]);
                 Backpack.PutItem(i, itemModel);
             }
 
-            ClothEquipment = new HubMapUIClothEquipmentStorage(clothEquipment);
+            ClothEquipment = new HubMapUIClothEquipmentStorage(clothEquipment, HubMapUIItemStorageType.CharacterClothEquipment);
+            //ClothEquipment.OnNewItemInSlotHandler += OnChangeClothEquipmentItem;
         }
 
         #endregion
@@ -59,6 +60,11 @@ namespace BeastHunter
             View3DModelObjectOnScene = GameObject.Instantiate(_view3DModelPrefab, parent);
             View3DModelObjectOnScene.GetComponent<Animator>().runtimeAnimatorController = _view3DModelAnimatorController;
             View3DModelObjectOnScene.SetActive(false);
+        }
+
+        private void OnChangeClothEquipmentItem(int slotIndex, HubMapUIBaseItemModel item)
+        {
+
         }
 
         #endregion

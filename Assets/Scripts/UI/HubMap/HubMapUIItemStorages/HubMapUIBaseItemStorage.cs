@@ -15,7 +15,10 @@ namespace BeastHunter
 
         #region Properties
 
-        public virtual Action<int, HubMapUIBaseItemModel> OnChangeItemHandler { get; set; }
+        public virtual Action<HubMapUIItemStorageType, int, HubMapUIBaseItemModel> OnPutItemToSlotHandler { get; set; }
+        public virtual Action<HubMapUIItemStorageType, int, HubMapUIBaseItemModel> OnTakeItemFromSlotHandler { get; set; }
+
+        public abstract HubMapUIItemStorageType StorageType { get; protected set; }
 
         #endregion
 
@@ -27,10 +30,10 @@ namespace BeastHunter
 
         public virtual HubMapUIBaseItemModel TakeItem(int slotNumber)
         {
-            HubMapUIBaseItemModel item = _items[slotNumber];
+            HubMapUIBaseItemModel takedItem = _items[slotNumber];
             _items[slotNumber] = null;
-            OnChangeItem(slotNumber, null);
-            return item;
+            OnTakeItemFromSlot(slotNumber, takedItem);
+            return takedItem;
         }
 
         public virtual HubMapUIBaseItemModel GetItemBySlot(int slotNumber)
@@ -71,9 +74,14 @@ namespace BeastHunter
             }
         }
 
-        protected virtual void OnChangeItem(int slotNumber, HubMapUIBaseItemModel item)
+        protected virtual void OnPutItemToSlot(int slotNumber, HubMapUIBaseItemModel newItem)
         {
-            OnChangeItemHandler?.Invoke(slotNumber, item);
+            OnPutItemToSlotHandler?.Invoke(StorageType, slotNumber, newItem);
+        }
+
+        protected virtual void OnTakeItemFromSlot(int slotNumber, HubMapUIBaseItemModel takedItem)
+        {
+            OnTakeItemFromSlotHandler?.Invoke(StorageType, slotNumber, takedItem);
         }
 
         #endregion

@@ -67,8 +67,8 @@ namespace BeastHunter
                 ShopItemsPool.Add(cityData.ShopItemsPool[i]);
             }
 
-            ShopStorage = new HubMapUIItemStorage(cityData.ShopSlotAmount);
-            BuyBackStorage = new HubMapUIItemStorage(cityData.ShopSlotAmount);
+            ShopStorage = new HubMapUIItemStorage(cityData.ShopSlotAmount, HubMapUIItemStorageType.ShopStorage);
+            BuyBackStorage = new HubMapUIItemStorage(cityData.ShopSlotAmount, HubMapUIItemStorageType.BuyBackStorage);
 
             UpdateShopItems();
         }

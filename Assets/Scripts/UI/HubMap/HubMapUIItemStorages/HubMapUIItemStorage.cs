@@ -2,10 +2,14 @@
 {
     public class HubMapUIItemStorage : HubMapUIBaseItemStorage
     {
+        public override HubMapUIItemStorageType StorageType { get; protected set; }
+
+
         #region ClassLifeCycle
 
-        public HubMapUIItemStorage(int slotsAmount)
+        public HubMapUIItemStorage(int slotsAmount, HubMapUIItemStorageType storageType)
         {
+            StorageType = storageType;
             _items = new HubMapUIBaseItemModel[slotsAmount];
         }
 
@@ -30,7 +34,7 @@
 
             if (isSucceful)
             {
-                OnChangeItem(slotNumber, item);
+                OnPutItemToSlot(slotNumber, item);
             }
 
             return isSucceful;

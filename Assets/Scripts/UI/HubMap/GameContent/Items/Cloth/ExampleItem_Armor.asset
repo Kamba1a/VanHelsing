@@ -18,3 +18,8 @@ MonoBehaviour:
   _shopPrice: 1
   _requiredReputationForBuyInShop: 0
   _clothType: 8
+  _equipmentPartsNames:
+  - Chr_Torso_Male_16
+  _equipmentPartsNamesFemale:
+  - Chr_Torso_Female_16
+  _disabledHeadParts: 
