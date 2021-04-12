@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace BeastHunter
@@ -15,6 +16,11 @@ namespace BeastHunter
         [SerializeField] private RuntimeAnimatorController _view3DModelAnimatorController;
         [SerializeField] private HubMapUIBaseItemData[] _startBackpuckItems;
         [SerializeField] private HubMapUIBaseItemData[] _startEquipmentItems;
+        [Header("Fantasy hero material")]
+        [SerializeField] private Material _defaultMaterial;
+
+        [SerializeField] public HubMapUICharacterClothesModuleParts[] DefaultModuleParts;
+        [SerializeField] public HubMapUICharacterHeadPart[] DefaultHeadParts;
 
         #endregion
 
@@ -28,6 +34,7 @@ namespace BeastHunter
         public RuntimeAnimatorController View3DModelAnimatorController => _view3DModelAnimatorController;
         public HubMapUIBaseItemData[] StartBackpuckItems => (HubMapUIBaseItemData[])_startBackpuckItems.Clone();
         public HubMapUIBaseItemData[] StartEquipmentItems => (HubMapUIBaseItemData[])_startEquipmentItems.Clone();
+        public Material DefaultMaterial => _defaultMaterial;
 
         #endregion
     }

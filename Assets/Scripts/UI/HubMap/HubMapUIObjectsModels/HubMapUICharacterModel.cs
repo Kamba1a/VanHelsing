@@ -14,6 +14,9 @@ namespace BeastHunter
         private Dictionary<HubMapUIClothesType, List<GameObject>> _defaultModuleParts;
         private Dictionary<HubMapUIClothesType, List<GameObject>> _clothesModuleParts;
 
+        //todo:
+        //private HubMapUICharacterClothesModuleParts[] _defaultModuleParts;
+        //private HubMapUICharacterHeadPart[] _defaultHeadParts;
 
         #endregion
 
@@ -110,13 +113,14 @@ namespace BeastHunter
             _defaultHeadParts.Add(HubMapUICharacterHeadParts.Hair, null);
             _defaultHeadParts.Add(HubMapUICharacterHeadParts.Head, null);
         }
-
+        
         private void InitializeModulePartsDictionary(ref Dictionary<HubMapUIClothesType, List<GameObject>> dictionary)
         {
             dictionary = new Dictionary<HubMapUIClothesType, List<GameObject>>();
             dictionary.Add(HubMapUIClothesType.Back, new List<GameObject>());
             dictionary.Add(HubMapUIClothesType.Head, new List<GameObject>());
             dictionary.Add(HubMapUIClothesType.Torso, new List<GameObject>());
+            dictionary.Add(HubMapUIClothesType.Belt, new List<GameObject>());
             dictionary.Add(HubMapUIClothesType.Hips, new List<GameObject>());
             dictionary.Add(HubMapUIClothesType.Legs, new List<GameObject>());
             dictionary.Add(HubMapUIClothesType.Shoulders, new List<GameObject>());
