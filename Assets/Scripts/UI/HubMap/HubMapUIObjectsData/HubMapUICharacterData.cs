@@ -18,9 +18,8 @@ namespace BeastHunter
         [SerializeField] private HubMapUIBaseItemData[] _startEquipmentItems;
         [Header("Fantasy hero material")]
         [SerializeField] private Material _defaultMaterial;
-
-        [SerializeField] public HubMapUICharacterClothesModuleParts[] DefaultModuleParts;
-        [SerializeField] public HubMapUICharacterHeadPart[] DefaultHeadParts;
+        [SerializeField] private HubMapUICharacterClothesModuleParts[] _defaultModuleParts;
+        [SerializeField] private HubMapUICharacterHeadPart[] _defaultHeadParts;
 
         #endregion
 
@@ -35,6 +34,23 @@ namespace BeastHunter
         public HubMapUIBaseItemData[] StartBackpuckItems => (HubMapUIBaseItemData[])_startBackpuckItems.Clone();
         public HubMapUIBaseItemData[] StartEquipmentItems => (HubMapUIBaseItemData[])_startEquipmentItems.Clone();
         public Material DefaultMaterial => _defaultMaterial;
+        public HubMapUICharacterClothesModuleParts[] DefaultModuleParts => (HubMapUICharacterClothesModuleParts[])_defaultModuleParts.Clone();
+        public HubMapUICharacterHeadPart[] DefaultHeadParts => (HubMapUICharacterHeadPart[])_defaultHeadParts.Clone();
+
+        #endregion
+
+
+        #region Methods
+
+        public void SetDefaultModuleParts(HubMapUICharacterClothesModuleParts[] defaultModuleParts)
+        {
+            _defaultModuleParts = defaultModuleParts;
+        }
+
+        public void SetDefaultHeadParts(HubMapUICharacterHeadPart[] defaultHeadParts)
+        {
+            _defaultHeadParts = defaultHeadParts;
+        }
 
         #endregion
     }
