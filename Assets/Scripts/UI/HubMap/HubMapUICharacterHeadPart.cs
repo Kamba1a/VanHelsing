@@ -15,5 +15,13 @@ namespace BeastHunter
         public HubMapUICharacterHeadParts Type => _type;
         public string Name => _name;
         public bool IsActivateByDefault => _isActivateByDefault;
+
+
+        public HubMapUICharacterHeadPart(HubMapUICharacterHeadParts type, string name)
+        {
+            _type = type;
+            _name = name;
+            _isActivateByDefault = true;
+        }
     }
 }

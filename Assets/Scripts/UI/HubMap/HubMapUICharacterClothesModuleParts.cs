@@ -7,11 +7,18 @@ namespace BeastHunter
     [Serializable]
     public class HubMapUICharacterClothesModuleParts
     {
-        [SerializeField] HubMapUIClothesType _clothesType;
-        [SerializeField] List<string> _modulePartsNames;
+        [SerializeField] HubMapUIClothesType _type;
+        [SerializeField] List<string> _names;
 
 
-        public HubMapUIClothesType ClothesType => _clothesType;
-        public List<string> ModulePartsNames => _modulePartsNames;
+        public HubMapUIClothesType Type => _type;
+        public List<string> Names => _names;
+
+
+        public HubMapUICharacterClothesModuleParts(HubMapUIClothesType type, List<string> names)
+        {
+            _type = type;
+            _names = names;
+        }
     }
 }

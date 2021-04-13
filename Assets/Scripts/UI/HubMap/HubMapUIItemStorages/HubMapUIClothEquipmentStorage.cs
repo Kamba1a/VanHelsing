@@ -35,7 +35,7 @@ namespace BeastHunter
             {
                 if (item.ItemType == HubMapUIItemType.Cloth)
                 {
-                    if ((item as HubMapUIClothesItemModel).ClothesType == _slotTypes[slotNumber])
+                    if ((item as HubMapUIClothesItemModel).Type == _slotTypes[slotNumber])
                     {
                         if (_items[slotNumber] == null)
                         {
@@ -79,7 +79,7 @@ namespace BeastHunter
                     HubMapUIClothesItemModel clothItem = item as HubMapUIClothesItemModel;
                     for (int i = 0; i < _items.Length; i++)
                     {
-                        if (_slotTypes[i] == clothItem.ClothesType)
+                        if (_slotTypes[i] == clothItem.Type)
                         {
                             if (_items[i] == null)
                             {

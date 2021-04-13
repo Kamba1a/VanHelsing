@@ -45,11 +45,27 @@ namespace BeastHunter
         public void SetDefaultModuleParts(HubMapUICharacterClothesModuleParts[] defaultModuleParts)
         {
             _defaultModuleParts = defaultModuleParts;
+            Debug.Log($"Set default module parts for character {Name} completed");
         }
 
         public void SetDefaultHeadParts(HubMapUICharacterHeadPart[] defaultHeadParts)
         {
             _defaultHeadParts = defaultHeadParts;
+            Debug.Log($"Set default head parts for character {Name} completed");
+        }
+
+        public void SetDefaultMaterial(Material material)
+        {
+            if(_defaultMaterial != null)
+            {
+                _defaultMaterial.shader = material.shader;
+                _defaultMaterial.CopyPropertiesFromMaterial(material);
+                Debug.Log($"Set default material for character {Name} completed");
+            }
+            else
+            {
+                Debug.LogError("First need to create new material for the character and drag it to character data!");
+            }
         }
 
         #endregion
