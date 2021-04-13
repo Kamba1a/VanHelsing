@@ -43,6 +43,7 @@ namespace BeastHunter
             }
 
             _characterData.SetDefaultModuleParts(defaultModulesParts);
+            _savedModuleParts.Clear();
         }
 
         [ContextMenu("SaveCharacterHeadPartsInCharacterData")]
@@ -57,6 +58,7 @@ namespace BeastHunter
             }
 
             _characterData.SetDefaultHeadParts(defaultHeadParts);
+            _savedHeadParts.Clear();
         }
 
 
@@ -93,7 +95,7 @@ namespace BeastHunter
                 GameObject moduleGroup = _modularCharacters.transform.FindDeep(moduleGroups[i]).gameObject;
                 if (moduleGroup.activeSelf)
                 {
-                    SkinnedMeshRenderer activeModulePart = GetComponentInChildren<SkinnedMeshRenderer>(false);
+                    SkinnedMeshRenderer activeModulePart = moduleGroup.GetComponentInChildren<SkinnedMeshRenderer>(false);
                     if (activeModulePart != null)
                     {
                         modulePartsNames.Add(activeModulePart.gameObject.name);
