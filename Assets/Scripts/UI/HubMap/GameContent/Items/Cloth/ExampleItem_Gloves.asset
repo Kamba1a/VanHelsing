@@ -18,3 +18,13 @@ MonoBehaviour:
   _shopPrice: 1
   _requiredReputationForBuyInShop: 0
   _clothType: 3
+  _fantasyHeroMaterial: {fileID: 2100000, guid: 3d8cf3a3ee92c054586ba27a00a8f0b2,
+    type: 2}
+  _clothesPartsNamesAllGender: []
+  _clothesPartsNamesMale:
+  - Chr_HandLeft_Male_09
+  - Chr_HandRight_Male_09
+  _clothesPartsNamesFemale:
+  - Chr_HandLeft_Female_09
+  - Chr_HandRight_Female_09
+  _disabledHeadParts: 

@@ -18,3 +18,11 @@ MonoBehaviour:
   _shopPrice: 1
   _requiredReputationForBuyInShop: 0
   _clothType: 5
+  _fantasyHeroMaterial: {fileID: 2100000, guid: e83e865a3b563f74782a7a9e8b2ff673,
+    type: 2}
+  _clothesPartsNamesAllGender: []
+  _clothesPartsNamesMale:
+  - Chr_Hips_Male_13
+  _clothesPartsNamesFemale:
+  - Chr_Hips_Female_13
+  _disabledHeadParts: 
