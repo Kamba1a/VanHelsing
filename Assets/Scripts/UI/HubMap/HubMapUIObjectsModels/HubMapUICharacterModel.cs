@@ -11,11 +11,12 @@ namespace BeastHunter
 
         private GameObject _view3DModelPrefab;
         private RuntimeAnimatorController _view3DModelAnimatorController;
+        private Material _defaultCharacterMaterial;
 
         private Dictionary<HubMapUICharacterHeadParts, (string name, bool isActiveByDefault)> _defaultHeadParts;
         private Dictionary<HubMapUIClothesType, List<string>> _defaultModuleParts;
 
-        //todo?:
+        //todo for optimization?
         //private Dictionary<HubMapUICharacterHeadParts, GameObject> _defaultHeadParts;
         //private Dictionary<HubMapUIClothesType, List<GameObject>> _defaultModuleParts;
         //private Dictionary<HubMapUIClothesType, List<GameObject>> _clothesModuleParts;
@@ -50,6 +51,7 @@ namespace BeastHunter
             IsFemale = data.IsFemale;
             _view3DModelPrefab = data.View3DModelPrefab;
             _view3DModelAnimatorController = data.View3DModelAnimatorController;
+            _defaultCharacterMaterial = data.DefaultMaterial;
 
             Backpack = new HubMapUIItemStorage(backpackSize, HubMapUIItemStorageType.CharacterInventory);
             for (int i = 0; i < data.StartBackpuckItems.Length; i++)
@@ -83,13 +85,14 @@ namespace BeastHunter
 
             foreach (KeyValuePair<HubMapUIClothesType, List<string>> kvp in _defaultModuleParts)
             {
-                SetActiveDefaultClothesByType(true, kvp.Key);
+                SetActiveToDefaultClothesByType(true, kvp.Key);
             }
 
             foreach (KeyValuePair<HubMapUICharacterHeadParts, (string name, bool isActiveByDefault)> kvp in _defaultHeadParts)
             {
-                SetActiveModulePart(kvp.Value.isActiveByDefault, kvp.Value.name);
+                SetMaterialToModulePart(FindModulePartByName(kvp.Value.name), _defaultCharacterMaterial);
             }
+            SetActiveToHeadPartsByDefault();
 
             for (int i = 0; i < ClothEquipment.GetSlotsCount(); i++)
             {
@@ -102,26 +105,10 @@ namespace BeastHunter
             View3DModelObjectOnScene.SetActive(false);
         }
 
-        private void OnTakeClothesEquipmentItem(HubMapUIItemStorageType storageType, int slotIndex, HubMapUIBaseItemModel item)
-        {
-            if (View3DModelObjectOnScene != null)
-            {
-                TakeOffClothes(item as HubMapUIClothesItemModel);
-            }
-        }
-
-        private void OnPutClothesEquipmentItem(HubMapUIItemStorageType storageType, int slotIndex, HubMapUIBaseItemModel item)
-        {
-            if (View3DModelObjectOnScene != null)
-            {
-                PutOnClothes(item as HubMapUIClothesItemModel);
-            }
-        }
-
         private void InitializeDefaultHeadPartsDictionary(HubMapUICharacterHeadPart[] characterHeadParts)
         {
             _defaultHeadParts = new Dictionary<HubMapUICharacterHeadParts, (string, bool)>();
-            
+
             for (int i = 0; i < characterHeadParts.Length; i++)
             {
                 HubMapUICharacterHeadPart headPart = characterHeadParts[i];
@@ -139,7 +126,7 @@ namespace BeastHunter
             for (int i = 0; i < clothesModuleParts.Length; i++)
             {
                 HubMapUICharacterClothesModuleParts clothesParts = clothesModuleParts[i];
-
+                
                 if (!_defaultModuleParts.ContainsKey(clothesParts.Type))
                 {
                     List<string> clothesNames = new List<string>();
@@ -147,8 +134,29 @@ namespace BeastHunter
                     {
                         clothesNames.Add(clothesParts.Names[j]);
                     }
-
                     _defaultModuleParts.Add(clothesParts.Type, clothesNames);
+                }
+            }
+        }
+
+        private void OnTakeClothesEquipmentItem(HubMapUIItemStorageType storageType, int slotIndex, HubMapUIBaseItemModel item)
+        {
+            if (View3DModelObjectOnScene != null)
+            {
+                if (item != null)
+                {
+                    TakeOffClothes(item as HubMapUIClothesItemModel);
+                }
+            }
+        }
+
+        private void OnPutClothesEquipmentItem(HubMapUIItemStorageType storageType, int slotIndex, HubMapUIBaseItemModel item)
+        {
+            if (View3DModelObjectOnScene != null)
+            {
+                if (item != null)
+                {
+                    PutOnClothes(item as HubMapUIClothesItemModel);
                 }
             }
         }
@@ -157,14 +165,11 @@ namespace BeastHunter
         {
             HubMapUIClothesType clothesType = clothes.Type;
 
-            SetActiveDefaultClothesByType(true, clothesType);
+            SetActiveToDefaultClothesByType(true, clothesType);
 
             if (clothesType == HubMapUIClothesType.Head)
             {
-                foreach (KeyValuePair<HubMapUICharacterHeadParts, (string name, bool isActiveByDefault)> kvp in _defaultHeadParts)
-                {
-                    SetActiveModulePart(kvp.Value.isActiveByDefault, kvp.Value.name);
-                }
+                SetActiveToHeadPartsByDefault();
             }
 
             SetActiveClothesModuleParts(false, clothes);
@@ -180,65 +185,110 @@ namespace BeastHunter
             {
                 foreach (KeyValuePair<HubMapUICharacterHeadParts, (string name, bool)> kvp in _defaultHeadParts)
                 {
-                    SetActiveModulePart(true, kvp.Value.name);
+                    FindModulePartByName(kvp.Value.name).SetActive(true);
                 }
 
                 for (int i = 0; i < clothes.DisabledHeadParts.Length; i++)
                 {
-                    SetActiveModulePart(false, _defaultHeadParts[clothes.DisabledHeadParts[i]].name);
+                    if (_defaultHeadParts.ContainsKey(clothes.DisabledHeadParts[i]))
+                    {
+                        FindModulePartByName(_defaultHeadParts[clothes.DisabledHeadParts[i]].name).SetActive(false);
+                    }
                 }
             }
 
-            SetActiveDefaultClothesByType(false, clothesType);
+            SetActiveToDefaultClothesByType(false, clothesType);
         }
 
         private void SetActiveClothesModuleParts(bool flag, HubMapUIClothesItemModel clothes)
         {
-            for (int i = 0; i < clothes.PartsNamesAllGender.Length; i++)
-            {
-                SetActiveModulePart(flag, clothes.PartsNamesAllGender[i]);
-            }
+            List<GameObject> moduleParts = new List<GameObject>();
+
+            moduleParts.AddRange(FindModulePartsByNames(clothes.PartsNamesAllGender));
 
             if (IsFemale)
             {
-                for (int i = 0; i < clothes.PartsNamesFemale.Length; i++)
-                {
-                    SetActiveModulePart(flag, clothes.PartsNamesFemale[i]);
-                }
+                moduleParts.AddRange(FindModulePartsByNames(clothes.PartsNamesFemale));
             }
             else
             {
-                for (int i = 0; i < clothes.PartsNamesMale.Length; i++)
+                moduleParts.AddRange(FindModulePartsByNames(clothes.PartsNamesMale));
+            }
+
+            if (moduleParts.Count > 0)
+            {
+                if (flag)
                 {
-                    SetActiveModulePart(flag, clothes.PartsNamesMale[i]);
+                    ActivatedModuleParts(moduleParts, clothes.FantasyHeroMaterial);
+                }
+                else
+                {
+                    DeactivatedModuleParts(moduleParts);
                 }
             }
         }
 
-        private void SetActiveDefaultClothesByType(bool flag, HubMapUIClothesType clothesType)
+        private void SetActiveToHeadPartsByDefault()
         {
-            for (int i = 0; i < _defaultModuleParts[clothesType].Count; i++)
+            foreach (KeyValuePair<HubMapUICharacterHeadParts, (string name, bool isActiveByDefault)> kvp in _defaultHeadParts)
             {
-                SetActiveModulePart(flag, _defaultModuleParts[clothesType][i]);
+                FindModulePartByName(kvp.Value.name).SetActive(kvp.Value.isActiveByDefault);
             }
-
         }
 
-        private void SetActiveModulePart(bool flag, string modulePartName)
+        private void SetActiveToDefaultClothesByType(bool flag, HubMapUIClothesType clothesType)
         {
-            View3DModelObjectOnScene.transform.FindDeep(modulePartName).gameObject.SetActive(flag);
+            if (_defaultModuleParts.ContainsKey(clothesType))
+            {
+                if (flag)
+                {
+                    ActivatedModuleParts(FindModulePartsByNames(_defaultModuleParts[clothesType]), _defaultCharacterMaterial);
+                }
+                else
+                {
+                    DeactivatedModuleParts(FindModulePartsByNames(_defaultModuleParts[clothesType]));
+                }
+            }
         }
 
-        private void ActivatedModulePartAndAssignMaterial(bool flag, string modulePartName, Material fantasyHeroMaterial)
+        private void ActivatedModuleParts(List<GameObject> moduleParts, Material fantasyHeroMaterial)
         {
-            GameObject modulePart = View3DModelObjectOnScene.transform.FindDeep(modulePartName).gameObject;
-            SetMaterial(modulePart, fantasyHeroMaterial);
-            modulePart.SetActive(true);
+            for (int i = 0; i < moduleParts.Count; i++)
+            {
+                SetMaterialToModulePart(moduleParts[i], fantasyHeroMaterial);
+                moduleParts[i].SetActive(true);
+            }
         }
 
-        private void SetMaterial(GameObject gameObject, Material fantasyHeroMaterial)
+        private void DeactivatedModuleParts(List<GameObject> moduleParts)
         {
-            gameObject.GetComponent<SkinnedMeshRenderer>().material = fantasyHeroMaterial;
+            for (int i = 0; i < moduleParts.Count; i++)
+            {
+                moduleParts[i].SetActive(false);
+            }
+        }
+
+        private List<GameObject> FindModulePartsByNames(IEnumerable<string> modulePartsNames)
+        {
+            List<GameObject> moduleParts = new List<GameObject>();
+            if (modulePartsNames != null)
+            {
+                foreach (string modulePartName in modulePartsNames)
+                {
+                    moduleParts.Add(FindModulePartByName(modulePartName));
+                }
+            }
+            return moduleParts;
+        }
+
+        private GameObject FindModulePartByName(string modulePartName)
+        {
+            return View3DModelObjectOnScene.transform.FindDeep(modulePartName).gameObject;
+        }
+
+        private void SetMaterialToModulePart(GameObject modulePart, Material fantasyHeroMaterial)
+        {
+            modulePart.GetComponent<SkinnedMeshRenderer>().material = fantasyHeroMaterial;
         }
 
         #endregion

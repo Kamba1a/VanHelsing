@@ -16,7 +16,7 @@ namespace BeastHunter
         [SerializeField] private RuntimeAnimatorController _view3DModelAnimatorController;
         [SerializeField] private HubMapUIBaseItemData[] _startBackpuckItems;
         [SerializeField] private HubMapUIBaseItemData[] _startEquipmentItems;
-        [Header("Fantasy hero material")]
+        [Tooltip("Sure to use fantasy hero material shader (SyntyStudios/CustomCharacter)")]
         [SerializeField] private Material _defaultMaterial;
         [SerializeField] private HubMapUICharacterClothesModuleParts[] _defaultModuleParts;
         [SerializeField] private HubMapUICharacterHeadPart[] _defaultHeadParts;

@@ -18,5 +18,7 @@ namespace BeastHunter
                 RotateObject.transform.Rotate(Vector3.up, -rotX);
             }
         }
+
+        //todo: equipment items find slots by drop on this object
     }
 }

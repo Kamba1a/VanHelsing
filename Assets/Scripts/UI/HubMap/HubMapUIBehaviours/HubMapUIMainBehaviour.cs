@@ -726,6 +726,7 @@ namespace BeastHunter
 
         private void OnPointerEnter_Slot(int slotIndex, HubMapUIItemStorageType storageType)
         {
+            //todo: tooltip not must activate when dragged item
             FillTooltipByItemInfo(slotIndex, storageType);
 
             RectTransform tooltipRectTransform = _tooltip.GetComponent<RectTransform>();
