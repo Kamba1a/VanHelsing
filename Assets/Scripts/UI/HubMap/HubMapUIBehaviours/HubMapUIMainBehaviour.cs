@@ -252,7 +252,9 @@ namespace BeastHunter
         private HubMapUIItemStorage _currentBuyBackStorage;
         private HubMapUIItemStorage _currentShopStorage;
         private SelectedElements _selected;
-        private GameObject Character3DViewModelRendering;
+
+        private GameObject _character3DViewModelRendering;
+        private HubMapUIView3DModelBehaviour _character3DViewModelRawImageBehaviour;
 
         #endregion
 
@@ -318,6 +320,8 @@ namespace BeastHunter
             _shopSlotsUIBehaviours = new List<HubMapUIShopSlotBehaviour>();
             _characterClothSlotsUIBehaviours = _characterClothPanel.GetComponentsInChildren<HubMapUIEquipmentSlotBehaviour>();
 
+            _character3DViewModelRawImageBehaviour = _character3DViewModelRawImage.GetComponent<HubMapUIView3DModelBehaviour>();
+
             _selected = new SelectedElements();
         }
 
@@ -358,7 +362,7 @@ namespace BeastHunter
                 InitializeShopSlotUI(i);
             }
 
-            Character3DViewModelRendering =
+            _character3DViewModelRendering =
                 Instantiate(_data.Characters3DViewRenderingPrefab, _data.Characters3DViewRenderingObjectPosition, Quaternion.identity);
             for (int i = 0; i < _context.Characters.Count; i++)
             {
@@ -375,6 +379,8 @@ namespace BeastHunter
             _selected.OnChanged_ShopSlotIndex = OnChangedSelectedShopSlot;
             _selected.OnChanged_Character = OnChangedSelectedCharacter;
             _selected.OnChanged_MapObject = OnChangedSelectedMapObject;
+
+            _character3DViewModelRawImageBehaviour.OnDropHandler += OnDropItemOn3DViewModelRawImage;
 
             _mainPanel.SetActive(_data.MapOnStartEnabled);
             _infoPanel.SetActive(false);
@@ -771,24 +777,8 @@ namespace BeastHunter
         {
             if (_draggedItemInfo.slotIndex.HasValue)
             {
-                HubMapUIBaseItemStorage dropItemStorage = GetStorageByType(dropStorageType); ;
-                HubMapUIBaseItemStorage takeItemStorage = GetStorageByType(_draggedItemInfo.storageType);
-
-                HubMapUIBaseItemModel draggedItem = takeItemStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
-                HubMapUIBaseItemModel itemInDroppedSlot = dropItemStorage.TakeItem(dropSlotIndex);
-
-                bool isSuccefull =
-                    dropItemStorage.PutItem(dropSlotIndex, draggedItem) &&
-                    takeItemStorage.PutItem(_draggedItemInfo.slotIndex.Value, itemInDroppedSlot);
-                
-                if (!isSuccefull)
-                {
-                    dropItemStorage.TakeItem(dropSlotIndex);
-                    dropItemStorage.PutItem(dropSlotIndex, itemInDroppedSlot);
-
-                    takeItemStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
-                    takeItemStorage.PutItem(_draggedItemInfo.slotIndex.Value, draggedItem);
-                }
+                HubMapUIBaseItemStorage dropItemStorage = GetStorageByType(dropStorageType);
+                DragAndDropSwapItems(dropItemStorage, dropSlotIndex);
 
                 switch (dropStorageType)
                 {
@@ -810,6 +800,26 @@ namespace BeastHunter
 
                     default:
                         break;
+                }
+            }
+        }
+
+         private void OnDropItemOn3DViewModelRawImage()
+        {
+            HubMapUIBaseItemStorage dragStorage = GetStorageByType(_draggedItemInfo.storageType);
+            HubMapUIBaseItemModel draggedItem = dragStorage.GetItemBySlot(_draggedItemInfo.slotIndex.Value);
+
+            if (draggedItem.ItemType == HubMapUIItemType.Cloth)
+            {
+                HubMapUIClothesEquipmentStorage dropStorage = _selected.Character.ClothEquipment;
+                if (!dropStorage.PutItemToFirstEmptySlot(draggedItem))
+                {
+                    int? firstSlot = dropStorage.GetFirstSlotIndexForItem(draggedItem as HubMapUIClothesItemModel);
+                    DragAndDropSwapItems(dropStorage, firstSlot.Value);
+                }
+                else
+                {
+                    dragStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
                 }
             }
         }
@@ -970,7 +980,7 @@ namespace BeastHunter
 
                 _selected.Character.View3DModelObjectOnScene.SetActive(true);
                 _character3DViewModelRawImage.enabled = true;
-                _character3DViewModelRawImage.GetComponent<HubMapUIView3DModelBehaviour>().RotateObject = _selected.Character.View3DModelObjectOnScene;
+                _character3DViewModelRawImageBehaviour.RotateObject = _selected.Character.View3DModelObjectOnScene;
             }
             else
             {
@@ -1006,7 +1016,7 @@ namespace BeastHunter
             behaviourUI.Initialize(character);
             behaviourUI.OnClick_ButtonHandler += OnClick_CharacterButton;
 
-            character.InitializeView3DModel(Character3DViewModelRendering.transform);
+            character.InitializeView3DModel(_character3DViewModelRendering.transform);
         }
 
         private void InitializeCharacterInventorySlotUI(int slotIndex)
@@ -1379,6 +1389,28 @@ namespace BeastHunter
             objectUI.transform.SetParent(parent.transform, false);
             objectUI.transform.localScale = new Vector3(1, 1, 1);
             return objectUI;
+        }
+
+        private void DragAndDropSwapItems(HubMapUIBaseItemStorage dropItemStorage, int dropSlotIndex)
+        {
+            HubMapUIBaseItemStorage dragItemStorage = GetStorageByType(_draggedItemInfo.storageType);
+            HubMapUIBaseItemModel draggedItem = dragItemStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
+            HubMapUIBaseItemModel dropSlotItem = dropItemStorage.TakeItem(dropSlotIndex);
+
+            bool isSuccefull =
+                dropItemStorage.PutItem(dropSlotIndex, draggedItem) &&
+                dragItemStorage.PutItem(_draggedItemInfo.slotIndex.Value, dropSlotItem);
+
+            if (!isSuccefull)
+            {
+                dropItemStorage.TakeItem(dropSlotIndex);
+                dropItemStorage.PutItem(dropSlotIndex, dropSlotItem);
+
+                dragItemStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
+                dragItemStorage.PutItem(_draggedItemInfo.slotIndex.Value, draggedItem);
+
+                Debug.LogWarning("Drag and drop swap items operation was not successful");
+            }
         }
 
         private void ChangePlayerGoldAmount(int goldAmount)

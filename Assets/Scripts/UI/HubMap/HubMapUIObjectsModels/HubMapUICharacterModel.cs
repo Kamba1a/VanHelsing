@@ -163,7 +163,7 @@ namespace BeastHunter
 
         private void TakeOffClothes(HubMapUIClothesItemModel clothes)
         {
-            HubMapUIClothesType clothesType = clothes.Type;
+            HubMapUIClothesType clothesType = clothes.ClothesType;
 
             SetActiveToDefaultClothesByType(true, clothesType);
 
@@ -177,7 +177,7 @@ namespace BeastHunter
 
         private void PutOnClothes(HubMapUIClothesItemModel clothes)
         {
-            HubMapUIClothesType clothesType = clothes.Type;
+            HubMapUIClothesType clothesType = clothes.ClothesType;
 
             SetActiveClothesModuleParts(true, clothes);
 

@@ -6,7 +6,7 @@ namespace BeastHunter
     {
         #region Properties
 
-        public HubMapUIClothesType Type { get; private set; }
+        public HubMapUIClothesType ClothesType { get; private set; }
         public Material FantasyHeroMaterial { get; private set; }
         public string[] PartsNamesAllGender { get; private set; }
         public string[] PartsNamesMale { get; private set; }
@@ -19,7 +19,7 @@ namespace BeastHunter
         public HubMapUIClothesItemModel(HubMapUIBaseItemData data) : base(data)
         {
             HubMapUIClothesItemData clothesData = data as HubMapUIClothesItemData;
-            Type = clothesData.ClothesType;
+            ClothesType = clothesData.ClothesType;
             FantasyHeroMaterial = clothesData.FantasyHeroMaterial;
             PartsNamesAllGender = clothesData.ClothesPartsNamesAllGender;
             PartsNamesMale = clothesData.ClothesPartsNamesMale;
