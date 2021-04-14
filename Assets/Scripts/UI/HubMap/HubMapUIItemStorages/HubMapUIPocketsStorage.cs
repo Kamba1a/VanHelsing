@@ -11,15 +11,17 @@ namespace BeastHunter
 
         public HubMapUIPocketsStorage() : base(0, HubMapUIItemStorageType.PocketsStorage) { }
 
-
         public void AddPockets(int amount)
         {
-            for (int i = 0; i < amount; i++)
+            if(amount > 0)
             {
-                _items.Add(null);
-            }
+                for (int i = 0; i < amount; i++)
+                {
+                    _items.Add(null);
+                }
 
-            OnChangeSlotsAmountHandler?.Invoke();
+                OnChangeSlotsAmountHandler?.Invoke();
+            }
         }
 
         public bool IsEnoughFreeSlots(int amount)
@@ -41,34 +43,36 @@ namespace BeastHunter
 
         public bool RemovePockets(int amount)
         {
-            List<int> slotsToDelete = new List<int>();
-            for (int i = 0; i < _items.Count; i++)
+            if (amount > 0)
             {
-                if (_items[i] == null)
+                List<int> slotsToDelete = new List<int>();
+                for (int i = 0; i < _items.Count; i++)
                 {
-                    slotsToDelete.Add(i);
-                    if (slotsToDelete.Count >= amount)
+                    if (_items[i] == null)
                     {
-                        break;
+                        slotsToDelete.Add(i);
+                        if (slotsToDelete.Count >= amount)
+                        {
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (slotsToDelete.Count < amount)
-            {
-                CustomDebug.Log("RemovePockets is NOT succeful");
-                return false;
-            }
-            else
-            {
-                for (int i = slotsToDelete.Count-1; i >= 0; i--)
+                if (slotsToDelete.Count < amount)
                 {
-                    _items.RemoveAt(slotsToDelete[i]);
+                    return false;
                 }
-                CustomDebug.Log("RemovePockets is succeful");
-                OnChangeSlotsAmountHandler?.Invoke();
-                return true;
+                else
+                {
+                    for (int i = slotsToDelete.Count - 1; i >= 0; i--)
+                    {
+                        _items.RemoveAt(slotsToDelete[i]);
+                    }
+                    OnChangeSlotsAmountHandler?.Invoke();
+                    return true;
+                }
             }
+            return true;
         }
     }
 }
