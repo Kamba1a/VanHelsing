@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.InputSystem;
 
 namespace BeastHunter
 {
@@ -751,7 +751,7 @@ namespace BeastHunter
                 tooltipRectTransform.pivot = new Vector2(0, 0);
             }
 
-            _tooltip.transform.position = Input.mousePosition;
+            _tooltip.transform.position = Mouse.current.position.ReadValue();
             _tooltip.SetActive(true);
         }
 
@@ -807,20 +807,23 @@ namespace BeastHunter
 
          private void OnDropItemOn3DViewModelRawImage()
         {
-            HubMapUIBaseItemStorage dragStorage = GetStorageByType(_draggedItemInfo.storageType);
-            HubMapUIBaseItemModel draggedItem = dragStorage.GetItemBySlot(_draggedItemInfo.slotIndex.Value);
-
-            if (draggedItem.ItemType == HubMapUIItemType.Cloth)
+            if (_draggedItemInfo.slotIndex.HasValue)
             {
-                HubMapUIClothesEquipmentStorage dropStorage = _selected.Character.ClothesEquipment;
-                if (!dropStorage.PutItemToFirstEmptySlot(draggedItem))
+                HubMapUIBaseItemStorage dragStorage = GetStorageByType(_draggedItemInfo.storageType);
+                HubMapUIBaseItemModel draggedItem = dragStorage.GetItemBySlot(_draggedItemInfo.slotIndex.Value);
+
+                if (draggedItem.ItemType == HubMapUIItemType.Cloth)
                 {
-                    int? firstSlot = dropStorage.GetFirstSlotIndexForItem(draggedItem as HubMapUIClothesItemModel);
-                    DragAndDropSwapItems(dropStorage, firstSlot.Value);
-                }
-                else
-                {
-                    dragStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
+                    HubMapUIClothesEquipmentStorage dropStorage = _selected.Character.ClothesEquipment;
+                    if (!dropStorage.PutItemToFirstEmptySlot(draggedItem))
+                    {
+                        int? firstSlot = dropStorage.GetFirstSlotIndexForItem(draggedItem as HubMapUIClothesItemModel);
+                        DragAndDropSwapItems(dropStorage, firstSlot.Value);
+                    }
+                    else
+                    {
+                        dragStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
+                    }
                 }
             }
         }

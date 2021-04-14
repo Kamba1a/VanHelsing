@@ -18,9 +18,9 @@ namespace BeastHunter
         public HubMapUIClothesType ClothesType => _clothType;
         public int PocketsAmount => _pocketsAmount;
         public Material FantasyHeroMaterial => _fantasyHeroMaterial;
-        public string[] ClothesPartsNamesAllGender => (string[])_clothesPartsNamesAllGender.Clone();
-        public string[] ClothesPartsNamesMale => (string[])_clothesPartsNamesMale.Clone();
-        public string[] ClothesPartsNamesFemale => (string[])_clothesPartsNamesFemale.Clone();
+        public string[] ClothesPartsNamesAllGender => (string[])_clothesPartsNamesAllGender?.Clone();
+        public string[] ClothesPartsNamesMale => (string[])_clothesPartsNamesMale?.Clone();
+        public string[] ClothesPartsNamesFemale => (string[])_clothesPartsNamesFemale?.Clone();
         public HubMapUICharacterHeadParts[] DisabledHeadParts => (HubMapUICharacterHeadParts[])_disabledHeadParts.Clone();
         public override HubMapUIItemType ItemType { get; protected set; }
 

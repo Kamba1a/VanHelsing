@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.InputSystem;
 
 namespace BeastHunter
 {
@@ -16,7 +16,7 @@ namespace BeastHunter
         {
             if (RotateObject != null)
             {
-                float rotX = Input.GetAxis("Mouse X") * ROTATE_SPEED * Mathf.Deg2Rad;
+                float rotX = Mouse.current.position.x.ReadValue() * ROTATE_SPEED * Mathf.Deg2Rad; //Input.GetAxis("Mouse X")
                 RotateObject.transform.Rotate(Vector3.up, -rotX);
             }
         }
