@@ -32,6 +32,7 @@ namespace BeastHunter
         public GameObject View3DModelObjectOnScene { get; private set; }
         public HubMapUIItemStorage Backpack { get; private set; }
         public HubMapUIClothesEquipmentStorage ClothEquipment { get; private set; }
+        public HubMapUIPocketsStorage Pockets { get; private set; }
 
         //todo: Pockets and Weapon storages
         //public HubMapUIEquipmentModel Pockets { get; private set; }
@@ -71,6 +72,15 @@ namespace BeastHunter
 
             InitializeDefaultHeadPartsDictionary(data.DefaultHeadParts);
             InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);
+
+            Pockets = new HubMapUIPocketsStorage();
+            for (int i = 0; i < ClothEquipment.GetSlotsCount(); i++)
+            {
+                if (ClothEquipment.GetItemBySlot(i) != null)
+                {
+                    Pockets.AddPockets((ClothEquipment.GetItemBySlot(i) as HubMapUIClothesItemModel).PocketsAmount);
+                }
+            }
         }
 
         #endregion
@@ -96,9 +106,9 @@ namespace BeastHunter
 
             for (int i = 0; i < ClothEquipment.GetSlotsCount(); i++)
             {
-                if (ClothEquipment.GetAll()[i] != null)
+                if (ClothEquipment.GetItemBySlot(i) != null)
                 {
-                    PutOnClothes(ClothEquipment.GetAll()[i] as HubMapUIClothesItemModel);
+                    PutOnClothes(ClothEquipment.GetItemBySlot(i) as HubMapUIClothesItemModel);
                 }
             }
 
@@ -141,22 +151,33 @@ namespace BeastHunter
 
         private void OnTakeClothesEquipmentItem(HubMapUIItemStorageType storageType, int slotIndex, HubMapUIBaseItemModel item)
         {
-            if (View3DModelObjectOnScene != null)
+            if (item != null)
             {
-                if (item != null)
+                HubMapUIClothesItemModel clothes = item as HubMapUIClothesItemModel;
+
+                if (!Pockets.RemovePockets(clothes.PocketsAmount))
                 {
-                    TakeOffClothes(item as HubMapUIClothesItemModel);
+                    //TODO
+                }
+
+                if (View3DModelObjectOnScene != null)
+                {
+                    TakeOffClothes(clothes);
                 }
             }
         }
 
         private void OnPutClothesEquipmentItem(HubMapUIItemStorageType storageType, int slotIndex, HubMapUIBaseItemModel item)
         {
-            if (View3DModelObjectOnScene != null)
+            if (item != null)
             {
-                if (item != null)
+                HubMapUIClothesItemModel clothes = item as HubMapUIClothesItemModel;
+
+                Pockets.AddPockets(clothes.PocketsAmount);
+
+                if (View3DModelObjectOnScene != null)
                 {
-                    PutOnClothes(item as HubMapUIClothesItemModel);
+                    PutOnClothes(clothes);
                 }
             }
         }

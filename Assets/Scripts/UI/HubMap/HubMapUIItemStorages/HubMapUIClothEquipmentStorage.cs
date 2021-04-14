@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 
 namespace BeastHunter
@@ -18,7 +19,13 @@ namespace BeastHunter
         public HubMapUIClothesEquipmentStorage(HubMapUIClothesType[] clothTypes, HubMapUIItemStorageType storageType)
         {
             StorageType = storageType;
-            _items = new HubMapUIBaseItemModel[clothTypes.Length];
+
+            _items = new List<HubMapUIBaseItemModel>();
+            for (int i = 0; i < clothTypes.Length; i++)
+            {
+                _items.Add(null);
+            }
+
             _slotTypes = clothTypes;
         }
 
@@ -77,7 +84,7 @@ namespace BeastHunter
                 if (item.ItemType == HubMapUIItemType.Cloth)
                 {
                     HubMapUIClothesItemModel clothItem = item as HubMapUIClothesItemModel;
-                    for (int i = 0; i < _items.Length; i++)
+                    for (int i = 0; i < _items.Count; i++)
                     {
                         if (_slotTypes[i] == clothItem.ClothesType)
                         {
@@ -100,7 +107,7 @@ namespace BeastHunter
 
         public int? GetFirstSlotIndexForItem(HubMapUIClothesItemModel item)
         {
-            for (int i = 0; i < _items.Length; i++)
+            for (int i = 0; i < _items.Count; i++)
             {
                 if (_slotTypes[i] == item.ClothesType)
                 {

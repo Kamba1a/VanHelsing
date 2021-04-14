@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace BeastHunter
 {
-    class HubMapUIStorageSlotBehaviour : HubMapUIBaseSlotBehaviour, IPointerClickHandler,  IPointerDownHandler
+    public class HubMapUIStorageSlotBehaviour : HubMapUIBaseSlotBehaviour, IPointerClickHandler,  IPointerDownHandler
     {
         #region Constants
 

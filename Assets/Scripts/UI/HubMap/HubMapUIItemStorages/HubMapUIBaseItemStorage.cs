@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -8,7 +9,7 @@ namespace BeastHunter
     {
         #region Fields
 
-        protected HubMapUIBaseItemModel[] _items;
+        protected List<HubMapUIBaseItemModel> _items;
 
         #endregion
 
@@ -53,19 +54,14 @@ namespace BeastHunter
             }
         }
 
-        public virtual HubMapUIBaseItemModel[] GetAll()
-        {
-            return (HubMapUIBaseItemModel[])_items.Clone();
-        }
-
         public virtual int GetSlotsCount()
         {
-            return _items.Length;
+            return _items.Count;
         }
 
         public virtual void Clear()
         {
-            for (int i = 0; i < _items.Length; i++)
+            for (int i = 0; i < _items.Count; i++)
             {
                 if (_items[i] != null)
                 {

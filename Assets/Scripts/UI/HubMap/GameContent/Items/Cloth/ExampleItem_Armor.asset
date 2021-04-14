@@ -18,6 +18,7 @@ MonoBehaviour:
   _shopPrice: 1
   _requiredReputationForBuyInShop: 0
   _clothType: 8
+  _pocketsAmount: 2
   _fantasyHeroMaterial: {fileID: 2100000, guid: d21f7d42ba6ee034081b42e3c8c26b8d,
     type: 2}
   _clothesPartsNamesAllGender: []

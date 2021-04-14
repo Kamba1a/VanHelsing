@@ -1,4 +1,6 @@
-﻿namespace BeastHunter
+﻿using System.Collections.Generic;
+
+namespace BeastHunter
 {
     public class HubMapUIItemStorage : HubMapUIBaseItemStorage
     {
@@ -10,7 +12,11 @@
         public HubMapUIItemStorage(int slotsAmount, HubMapUIItemStorageType storageType)
         {
             StorageType = storageType;
-            _items = new HubMapUIBaseItemModel[slotsAmount];
+            _items = new List<HubMapUIBaseItemModel>();
+            for (int i = 0; i < slotsAmount; i++)
+            {
+                _items.Add(null);
+            }
         }
 
         #endregion
@@ -42,7 +48,7 @@
 
         public override bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item)
         {
-            for (int i = 0; i < _items.Length; i++)
+            for (int i = 0; i < _items.Count; i++)
             {
                 if (_items[i] == null)
                 {
@@ -54,7 +60,7 @@
 
         public bool IsFull()
         {
-            for (int i = 0; i < _items.Length; i++)
+            for (int i = 0; i < _items.Count; i++)
             {
                 if (_items[i] == null)
                 {
@@ -66,7 +72,7 @@
 
         public bool IsContainItem(HubMapUIBaseItemData item)
         {
-            for (int i = 0; i < _items.Length; i++)
+            for (int i = 0; i < _items.Count; i++)
             {
                 if (_items[i].DataInstanceID == item.GetInstanceID())
                 {
@@ -78,7 +84,7 @@
 
         public bool RemoveFirstItem(HubMapUIBaseItemData item)
         {
-            for (int i = 0; i < _items.Length; i++)
+            for (int i = 0; i < _items.Count; i++)
             {
                 if (_items[i].DataInstanceID == item.GetInstanceID())
                 {

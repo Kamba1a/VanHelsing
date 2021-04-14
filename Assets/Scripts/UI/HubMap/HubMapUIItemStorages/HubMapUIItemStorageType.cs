@@ -8,5 +8,6 @@
         ShopStorage = 3,
         BuyBackStorage = 4,
         CharacterClothEquipment = 5,
+        PocketsStorage,
     }
 }
