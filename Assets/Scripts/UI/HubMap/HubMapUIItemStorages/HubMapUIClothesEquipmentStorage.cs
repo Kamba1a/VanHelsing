@@ -76,12 +76,12 @@ namespace BeastHunter
                     }
                     else
                     {
-                        Debug.Log("The clothing is not the right type");
+                        Debug.Log("The clothes is not the right type");
                     }
                 }
                 else
                 {
-                    Debug.Log("The item is not clothing");
+                    Debug.Log("Putting item is not clothes");
                 }
             }
             else
@@ -115,13 +115,18 @@ namespace BeastHunter
                         }
                     }
                 }
+                else
+                {
+                    Debug.Log("Putting item is not clothes");
+                    return false;
+                }
             }
             else
             {
                 return true;
             }
 
-            Debug.Log("No free slot of suitable cloth type found");
+            Debug.Log("No free slot of suitable clothes type found");
             return false;
         }
 
