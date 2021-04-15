@@ -265,6 +265,8 @@ namespace BeastHunter
 
         private void OnEnable()
         {
+            HubMapUIServices.SharedInstance.MainInput.Enable();
+
             _hubButton.onClick.AddListener(OnClick_HubButton);
             _mapButton.onClick.AddListener(OnClick_MapButton);
             _hideInfoPanelButton.onClick.AddListener(OnClick_HideInfoPanelButton);
@@ -284,6 +286,8 @@ namespace BeastHunter
 
         private void OnDisable()
         {
+            HubMapUIServices.SharedInstance.MainInput.Disable();
+
             _hubButton.onClick.RemoveAllListeners();
             _mapButton.onClick.RemoveAllListeners();
             _hideInfoPanelButton.onClick.RemoveAllListeners();
