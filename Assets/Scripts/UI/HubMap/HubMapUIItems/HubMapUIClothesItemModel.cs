@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+
 namespace BeastHunter
 {
     public class HubMapUIClothesItemModel : HubMapUIBaseItemModel
