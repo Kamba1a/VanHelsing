@@ -4,7 +4,7 @@
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "HubMapUIClothItemData", menuName = "CreateData/HubMapUIData/Items/Cloth", order = 0)]
-    class HubMapUIClothesItemData : HubMapUIBaseItemData
+    public class HubMapUIClothesItemData : HubMapUIBaseItemData
     {
         [SerializeField] private HubMapUIClothesType _clothType;
         [SerializeField] private int _pocketsAmount;

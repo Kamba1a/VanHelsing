@@ -37,24 +37,27 @@ namespace BeastHunter
 
         public Func<int, bool> IsEnoughEmptyPocketsFunc { get; set; }
 
-        public override HubMapUIBaseItemModel TakeItem(int slotNumber)
+        public override bool RemoveItem(int slotIndex)
         {
-            HubMapUIClothesItemModel takenItem = _items[slotNumber] as HubMapUIClothesItemModel;
+            HubMapUIClothesItemModel itemInSlot = _items[slotIndex] as HubMapUIClothesItemModel;
 
-            if (takenItem != null)
+            if (itemInSlot != null)
             {
-                if (IsEnoughEmptyPocketsFunc.Invoke(takenItem.PocketsAmount))
+                if (IsEnoughEmptyPocketsFunc.Invoke(itemInSlot.PocketsAmount))
                 {
-                    return base.TakeItem(slotNumber);
+                    return base.RemoveItem(slotIndex);
                 }
                 //todo: UI message about need to free pocket slots
-                Debug.LogWarning($"For taking off that clothes {takenItem.PocketsAmount} pockets slots need to be emptied");
-                return null;
+                Debug.LogWarning($"For taking off that clothes {itemInSlot.PocketsAmount} pockets slots need to be emptied");
+                return false;
             }
-            return null;
+            else
+            {
+                return true;
+            }
         }
 
-        public override bool PutItem(int slotNumber, HubMapUIBaseItemModel item)
+        public override bool PutItem(int slotIndex, HubMapUIBaseItemModel item)
         {
             bool isSucceful = false;
 
@@ -62,11 +65,11 @@ namespace BeastHunter
             {
                 if (item.ItemType == HubMapUIItemType.Cloth)
                 {
-                    if ((item as HubMapUIClothesItemModel).ClothesType == _slotTypes[slotNumber])
+                    if ((item as HubMapUIClothesItemModel).ClothesType == _slotTypes[slotIndex])
                     {
-                        if (_items[slotNumber] == null)
+                        if (_items[slotIndex] == null)
                         {
-                            _items[slotNumber] = item;
+                            _items[slotIndex] = item;
                             isSucceful = true;
                         }
                         else
@@ -91,7 +94,7 @@ namespace BeastHunter
 
             if (isSucceful)
             {
-                OnPutItemToSlot(slotNumber, item);
+                OnPutItemToSlot(slotIndex, item);
             }
 
             return isSucceful;

@@ -17,6 +17,7 @@
             TravelTimeService = new HubMapUITravelTimeService();
             ItemInitializeService = new HubMapUIItemInitializeService();
             MainInput = new MainInput();
+            MainInput.Enable(); //todo: inputController instead mainInput
         }
     }
 }

@@ -245,8 +245,6 @@ namespace BeastHunter
 
         private void OnEnable()
         {
-            HubMapUIServices.SharedInstance.MainInput.Enable();
-
             _hubButton.onClick.AddListener(OnClick_HubButton);
             _mapButton.onClick.AddListener(OnClick_MapButton);
             _hideInfoPanelButton.onClick.AddListener(OnClick_HideInfoPanelButton);
@@ -266,8 +264,6 @@ namespace BeastHunter
 
         private void OnDisable()
         {
-            HubMapUIServices.SharedInstance.MainInput.Disable();
-
             _hubButton.onClick.RemoveAllListeners();
             _mapButton.onClick.RemoveAllListeners();
             _hideInfoPanelButton.onClick.RemoveAllListeners();
@@ -633,17 +629,17 @@ namespace BeastHunter
         {
             if (_selected.GeneralInventorySlotIndex.HasValue)
             {
-                HubMapUIBaseItemModel sellingItem = _generalInventory.TakeItem(_selected.GeneralInventorySlotIndex.Value);
+                HubMapUIBaseItemModel sellingItem = _generalInventory.GetItemBySlot(_selected.GeneralInventorySlotIndex.Value);
 
                 if (sellingItem != null)
                 {
                     if (_currentBuyBackStorage.PutItemToFirstEmptySlot(sellingItem))
                     {
+                        _generalInventory.RemoveItem(_selected.GeneralInventorySlotIndex.Value);
                         ChangePlayerGoldAmount(HubMapUIServices.SharedInstance.ShopService.CountSellPrice(sellingItem));
                     }
                     else
                     {
-                        _generalInventory.PutItem(_selected.GeneralInventorySlotIndex.Value, sellingItem);
                         Debug.Log("BuyBack storage is full");
                     }
                 }
@@ -656,18 +652,18 @@ namespace BeastHunter
         {
             if (_selected.BuyBackSlotIndex.HasValue)
             {
-                HubMapUIBaseItemModel buyingItem = _currentBuyBackStorage.TakeItem(_selected.BuyBackSlotIndex.Value);
+                HubMapUIBaseItemModel buyingItem = _currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value);
                 if (buyingItem != null)
                 {
                     if (_player.GoldAmount >= HubMapUIServices.SharedInstance.ShopService.CountSellPrice(buyingItem)) 
                     { 
                         if (_generalInventory.PutItemToFirstEmptySlot(buyingItem))
                         {
+                            _currentBuyBackStorage.RemoveItem(_selected.BuyBackSlotIndex.Value);
                             ChangePlayerGoldAmount(-HubMapUIServices.SharedInstance.ShopService.CountSellPrice(buyingItem));
                         }
                         else
                         {
-                            _currentBuyBackStorage.PutItem(_selected.BuyBackSlotIndex.Value, buyingItem);
                             Debug.Log("Inventory storage is full");
                         }
                     }
@@ -685,18 +681,19 @@ namespace BeastHunter
         {
             if (_selected.ShopSlotIndex.HasValue)
             {
-                HubMapUIBaseItemModel buyingItem = _currentShopStorage.TakeItem(_selected.ShopSlotIndex.Value);
+                HubMapUIBaseItemModel buyingItem = _currentShopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value);
+
                 if (buyingItem != null)
                 {
                     if (IsPossibleToBuyShopItem(buyingItem))
                     {
                         if (_generalInventory.PutItemToFirstEmptySlot(buyingItem))
                         {
+                            _currentShopStorage.RemoveItem(_selected.ShopSlotIndex.Value);
                             ChangePlayerGoldAmount(-HubMapUIServices.SharedInstance.ShopService.GetItemPrice(buyingItem));
                         }
                         else
                         {
-                            _currentShopStorage.PutItem(_selected.ShopSlotIndex.Value, buyingItem);
                             Debug.Log("Inventory storage is full");
                         }
                     }
@@ -790,7 +787,7 @@ namespace BeastHunter
                     }
                     else
                     {
-                        dragStorage.TakeItem(_draggedItemInfo.slotIndex.Value);
+                        dragStorage.RemoveItem(_draggedItemInfo.slotIndex.Value);
                     }
                 }
             }
@@ -1401,23 +1398,44 @@ namespace BeastHunter
             return objectUI;
         }
 
-        private void SwapItems(HubMapUIBaseItemStorage putItemStorage, int putSlotIndex, HubMapUIBaseItemStorage takeItemStorage, int takeSlotIndex)
+        private void SwapItems(HubMapUIBaseItemStorage inStorage, int inStorageSlotIndex, HubMapUIBaseItemStorage outStorage, int outStorageSlotIndex)
         {
-            HubMapUIBaseItemModel takeItem = takeItemStorage.TakeItem(takeSlotIndex);
-            HubMapUIBaseItemModel putSlotItem = putItemStorage.TakeItem(putSlotIndex);
+            HubMapUIBaseItemModel outStorageItem = outStorage.GetItemBySlot(outStorageSlotIndex);
+            HubMapUIBaseItemModel inStorageItem = inStorage.GetItemBySlot(inStorageSlotIndex);
+            bool isSuccefulTakeItems = false;
+            bool isSuccefullPutItems = false;
 
-            bool isSuccefull =
-                putItemStorage.PutItem(putSlotIndex, takeItem) &&
-                takeItemStorage.PutItem(takeSlotIndex, putSlotItem);
 
-            if (!isSuccefull)
+            if (inStorage.RemoveItem(inStorageSlotIndex))
             {
-                putItemStorage.TakeItem(putSlotIndex);
-                putItemStorage.PutItem(putSlotIndex, putSlotItem);
+                if (outStorage.RemoveItem(outStorageSlotIndex))
+                {
+                    isSuccefulTakeItems = true;
+                }
+                else
+                {
+                    inStorage.PutItem(inStorageSlotIndex, inStorageItem);
+                }
+            }
 
-                takeItemStorage.TakeItem(takeSlotIndex);
-                takeItemStorage.PutItem(takeSlotIndex, takeItem);
+            if (isSuccefulTakeItems)
+            {
+                isSuccefullPutItems =
+                    inStorage.PutItem(inStorageSlotIndex, outStorageItem) &&
+                    outStorage.PutItem(outStorageSlotIndex, inStorageItem);
 
+                if (!isSuccefullPutItems)
+                {
+                    inStorage.RemoveItem(inStorageSlotIndex);
+                    inStorage.PutItem(inStorageSlotIndex, inStorageItem);
+
+                    outStorage.RemoveItem(outStorageSlotIndex);
+                    outStorage.PutItem(outStorageSlotIndex, outStorageItem);
+                }
+            }
+           
+            if (!(isSuccefulTakeItems && isSuccefullPutItems))
+            {
                 Debug.LogWarning("Drag and drop swap items operation was not successful");
             }
         }
