@@ -43,6 +43,10 @@ namespace BeastHunter
             {
                 OnPutItemToSlot(slotIndex, item);
             }
+            else
+            {
+                HubMapUIServices.SharedInstance.GameMessages.Notice(StorageType + " is full");
+            }
 
             return isSucceful;
         }

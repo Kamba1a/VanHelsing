@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace BeastHunter
@@ -77,6 +78,26 @@ namespace BeastHunter
                 }
             }
             return true;
+        }
+
+        public override bool PutItem(int slotIndex, HubMapUIBaseItemModel item)
+        {
+            if (item != null)
+            {
+                if (item.ItemType == HubMapUIItemType.PocketItem)
+                {
+                    return base.PutItem(slotIndex, item);
+                }
+                else
+                {
+                    HubMapUIServices.SharedInstance.GameMessages.Notice("This is not a pocket thing");
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }

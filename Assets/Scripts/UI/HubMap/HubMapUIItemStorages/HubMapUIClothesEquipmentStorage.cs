@@ -47,8 +47,7 @@ namespace BeastHunter
                 {
                     return base.RemoveItem(slotIndex);
                 }
-                //todo: UI message about need to free pocket slots
-                Debug.LogWarning($"For taking off that clothes {itemInSlot.PocketsAmount} pockets slots need to be emptied");
+                HubMapUIServices.SharedInstance.GameMessages.Notice($"For taking off that clothes {itemInSlot.PocketsAmount} pockets slots need to be emptied");
                 return false;
             }
             else
@@ -79,12 +78,12 @@ namespace BeastHunter
                     }
                     else
                     {
-                        Debug.Log("The clothes is not the right type");
+                        HubMapUIServices.SharedInstance.GameMessages.Notice("The clothes is not the right type");
                     }
                 }
                 else
                 {
-                    Debug.Log("Putting item is not clothes");
+                    HubMapUIServices.SharedInstance.GameMessages.Notice("Putting item is not clothes");
                 }
             }
             else
@@ -120,7 +119,7 @@ namespace BeastHunter
                 }
                 else
                 {
-                    Debug.Log("Putting item is not clothes");
+                    HubMapUIServices.SharedInstance.GameMessages.Notice("Putting item is not clothes");
                     return false;
                 }
             }
