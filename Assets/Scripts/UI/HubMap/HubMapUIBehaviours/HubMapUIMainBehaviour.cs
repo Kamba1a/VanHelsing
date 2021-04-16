@@ -548,61 +548,18 @@ namespace BeastHunter
 
         private void OnDoubleClick_InventorySlot(int slotIndex)
         {
-            //TODO: doubleclick inventoryslot
-            //if (!_tradePanel.activeSelf)
-            //{
-            //    HubMapUIBaseItemModel inventoryItem = _generalInventory.TakeItem(slotIndex);
-
-            //    if (_selected.CharacterBackpuckSlotIndex.HasValue)
-            //    {
-            //        HubMapUIBaseItemModel equipmentItem = _selected.Character.Backpack.TakeItem(_selected.CharacterBackpuckSlotIndex.Value);
-
-            //        _generalInventory.PutItem(slotIndex, equipmentItem);
-            //        _selected.Character.Backpack.PutItem(_selected.CharacterBackpuckSlotIndex.Value, inventoryItem);
-            //    }
-            //    else
-            //    {
-            //        if (!_selected.Character.Backpack.PutItemToFirstEmptySlot(inventoryItem))
-            //        {
-            //            _generalInventory.PutItem(slotIndex, inventoryItem);
-            //            Debug.Log("Equipment is full");
-            //        }
-            //    }
-            //}
+            if (_hikePanel.activeSelf && _selected.Character != null)
+            {
+                MoveItemToClothesEquipment(_generalInventory, slotIndex);
+            }
         }
 
         private void OnDoubleClick_CharacterBackpuckSlot(int slotIndex)
         {
-            //todo: doubleclick on backpuck slot
-            //HubMapUIBaseItemModel backpuckItem = _selected.Character.Backpack.TakeItem(slotIndex);
-
-            //if (_selected.GeneralInventorySlotIndex.HasValue)
-            //{
-            //    HubMapUIBaseItemModel inventoryItem = _generalInventory.TakeItem(_selected.GeneralInventorySlotIndex.Value);
-
-            //    _generalInventory.PutItem(_selected.GeneralInventorySlotIndex.Value, backpuckItem);
-            //    _selected.Character.Backpack.PutItem(slotIndex, inventoryItem);
-            //}
-            //else
-            //{
-            //    bool isFoundEmptySlot = false;
-
-            //    for (int i = 0; i < _generalInventory.GetSlotsCount(); i++)
-            //    {
-            //        if (_generalInventory.GetItemBySlot(i) == null)
-            //        {
-            //            _generalInventory.PutItem(i, backpuckItem);
-            //            isFoundEmptySlot = true;
-            //            break;
-            //        }
-            //    }
-
-            //    if (!isFoundEmptySlot)
-            //    {
-            //        _selected.Character.Backpack.PutItem(slotIndex, backpuckItem);
-            //        Debug.Log("Inventory is full");
-            //    }
-            //}
+            if (_selected.Character != null)
+            {
+                MoveItemToClothesEquipment(_selected.Character.Backpack, slotIndex);
+            }
         }
 
         private void OnClick_AnswerButton(HubMapUICitizenModel citizen, HubMapUIDialogAnswer dialogAnswer)
@@ -772,24 +729,26 @@ namespace BeastHunter
 
          private void OnDropItemOn3DViewModelRawImage()
         {
+
             if (_draggedItemInfo.slotIndex.HasValue)
             {
-                HubMapUIBaseItemStorage dragStorage = GetStorageByType(_draggedItemInfo.storageType);
-                HubMapUIBaseItemModel draggedItem = dragStorage.GetItemBySlot(_draggedItemInfo.slotIndex.Value);
+                MoveItemToClothesEquipment(GetStorageByType(_draggedItemInfo.storageType), _draggedItemInfo.slotIndex.Value);
+                //HubMapUIBaseItemStorage dragStorage = GetStorageByType(_draggedItemInfo.storageType);
+                //HubMapUIBaseItemModel draggedItem = dragStorage.GetItemBySlot(_draggedItemInfo.slotIndex.Value);
 
-                if (draggedItem.ItemType == HubMapUIItemType.Cloth)
-                {
-                    HubMapUIClothesEquipmentStorage dropStorage = _selected.Character.ClothesEquipment;
-                    if (!dropStorage.PutItemToFirstEmptySlot(draggedItem))
-                    {
-                        int? firstSlot = dropStorage.GetFirstSlotIndexForItem(draggedItem as HubMapUIClothesItemModel);
-                        SwapItems(dropStorage, firstSlot.Value, dragStorage, _draggedItemInfo.slotIndex.Value);
-                    }
-                    else
-                    {
-                        dragStorage.RemoveItem(_draggedItemInfo.slotIndex.Value);
-                    }
-                }
+                //if (draggedItem.ItemType == HubMapUIItemType.Cloth)
+                //{
+                //    HubMapUIClothesEquipmentStorage dropStorage = _selected.Character.ClothesEquipment;
+                //    if (!dropStorage.PutItemToFirstEmptySlot(draggedItem))
+                //    {
+                //        int? firstSlot = dropStorage.GetFirstSlotIndexForItem(draggedItem as HubMapUIClothesItemModel);
+                //        SwapItems(dropStorage, firstSlot.Value, dragStorage, _draggedItemInfo.slotIndex.Value);
+                //    }
+                //    else
+                //    {
+                //        dragStorage.RemoveItem(_draggedItemInfo.slotIndex.Value);
+                //    }
+                //}
             }
         }
 
@@ -1333,6 +1292,27 @@ namespace BeastHunter
 
             _rightInfoPanelObjectsForDestroy.Clear();
             _displayedCurrentCitizensUIBehaviours.Clear();
+        }
+
+        private void MoveItemToClothesEquipment(HubMapUIBaseItemStorage outStorage, int outStorageSlotIndex)
+        {
+            HubMapUIBaseItemModel itemInClickedSlot = outStorage.GetItemBySlot(outStorageSlotIndex);
+            if (itemInClickedSlot != null &&
+                itemInClickedSlot.ItemType == HubMapUIItemType.Cloth &&
+                _selected.Character != null)
+            {
+                HubMapUIClothesEquipmentStorage clothesEquipmentStorage = _selected.Character.ClothesEquipment;
+                if (!clothesEquipmentStorage.PutItemToFirstEmptySlot(itemInClickedSlot))
+                {
+                    int? firstSlot = clothesEquipmentStorage.GetFirstSlotIndexForItem(itemInClickedSlot as HubMapUIClothesItemModel);
+                    SwapItems(clothesEquipmentStorage, firstSlot.Value, outStorage, outStorageSlotIndex);
+                }
+                else
+                {
+                    outStorage.RemoveItem(outStorageSlotIndex);
+                }
+
+            }
         }
 
         private void SetStorageSlotsInteractable<T>(bool flag, IEnumerable<T> slotBehaviours) where T : HubMapUIBaseSlotBehaviour
