@@ -10,6 +10,7 @@ namespace BeastHunter
 
         public int ShopsSlotsAmount { get; private set; }
         public int CharactersEquipmentSlotAmount { get; private set; }
+        public int CharactersWeaponSetsAmount { get; private set; }
         public HubMapUIClothesType[] CharactersClothEquipment { get; private set; }
         public HubMapUIPlayerModel Player { get; private set; }
         public List<HubMapUICharacterModel> Characters { get; private set; }
@@ -26,6 +27,7 @@ namespace BeastHunter
         {
             ShopsSlotsAmount = data.ShopsSlotsAmount;
             CharactersEquipmentSlotAmount = data.CharactersInventorySlotAmount;
+            CharactersWeaponSetsAmount = data.CharactersWeaponSetsAmount;
             CharactersClothEquipment = data.ClothSlots;
 
             Player = new HubMapUIPlayerModel(data.Player);
@@ -33,7 +35,7 @@ namespace BeastHunter
             Characters = new List<HubMapUICharacterModel>();
             for (int i = 0; i < data.Characters.Length; i++)
             {
-                Characters.Add(new HubMapUICharacterModel(data.Characters[i], CharactersEquipmentSlotAmount, data.ClothSlots));
+                Characters.Add(new HubMapUICharacterModel(data.Characters[i], CharactersEquipmentSlotAmount, data.ClothSlots, data.CharactersWeaponSetsAmount));
             }
 
             Cities = new List<HubMapUICityModel>();

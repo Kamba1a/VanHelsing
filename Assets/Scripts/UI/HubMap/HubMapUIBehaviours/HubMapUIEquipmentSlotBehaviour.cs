@@ -40,5 +40,35 @@ namespace BeastHunter
 
             _slotImage.enabled = flag;
         }
+
+        public void FillSlotAsSecondary(Sprite sprite)
+        {
+            FillSlot(sprite);
+
+            if (sprite != null)
+            {
+                _itemImage.color = GetTranslucentColor(true, _itemImage.color);
+                base.SetInteractable(false);
+            }
+            else
+            {
+                _itemImage.color = GetTranslucentColor(false, _itemImage.color);
+                base.SetInteractable(true);
+            }
+        }
+
+        private Color GetTranslucentColor(bool isTranslucent, Color color)
+        {
+            Color newColor;
+            if (isTranslucent)
+            {
+                newColor = new Color(color.r, color.g, color.b, 0.5f);
+            }
+            else
+            {
+                newColor = new Color(color.r, color.g, color.b, 1.0f);
+            }
+            return newColor;
+        }
     }
 }

@@ -15,7 +15,8 @@
                 case HubMapUIItemType.PocketItem:
                     return new HubMapUIPocketItemModel(data as HubMapUIPocketItemData);
 
-                //todo other cases
+                case HubMapUIItemType.Weapon:
+                    return new HubMapUIWeaponItemModel(data as HubMapUIWeaponItemData);
 
                 default:
                     CustomDebug.LogError(this + ": incorrect HubMapUIItemType");

@@ -17,9 +17,9 @@ namespace BeastHunter
   
         #region ClassLifeCycle
 
-        public HubMapUIClothesEquipmentStorage(HubMapUIClothesType[] clothTypes, HubMapUIItemStorageType storageType)
+        public HubMapUIClothesEquipmentStorage(HubMapUIClothesType[] clothTypes)
         {
-            StorageType = storageType;
+            StorageType = HubMapUIItemStorageType.ClothesEquipment;
 
             _items = new List<HubMapUIBaseItemModel>();
             for (int i = 0; i < clothTypes.Length; i++)
@@ -99,7 +99,7 @@ namespace BeastHunter
             return isSucceful;
         }
 
-        public override bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item)
+        public bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item)
         {
             if (item != null)
             {

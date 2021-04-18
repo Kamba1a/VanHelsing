@@ -184,6 +184,7 @@ namespace BeastHunter
         [SerializeField] private RawImage _character3DViewModelRawImage;
         [SerializeField] private GameObject _characterClothPanel;
         [SerializeField] private GameObject _pocketSlotsPanel;
+        [SerializeField] private GameObject _weaponSetsPanel;
 
         [Header("Characters panel relocatable")]
         [SerializeField] private GameObject _charactersPanelRelocatable;
@@ -225,7 +226,8 @@ namespace BeastHunter
         private List<HubMapUIStorageSlotBehaviour> _generalInventorySlotsUIBehaviours;
         private List<HubMapUIShopSlotBehaviour> _shopSlotsUIBehaviours;
         private List<HubMapUIStorageSlotBehaviour> _buyBackSlotsUIBehaviours;
-        private HubMapUIEquipmentSlotBehaviour[] _characterClothSlotsUIBehaviours;
+        private HubMapUIEquipmentSlotBehaviour[] _characterClothesSlotsUIBehaviours;
+        private HubMapUIEquipmentSlotBehaviour[] _characterWeaponSlotsUIBehaviours;
         private List<HubMapUIEquipmentSlotBehaviour> _characterPocketsSlotsBehaviours;
         private Dictionary<HubMapUICitizenModel, HubMapUICitizenBehaviour> _displayedCurrentCitizensUIBehaviours;
         private List<GameObject> _displayedDialogAnswerButtons;
@@ -300,8 +302,9 @@ namespace BeastHunter
             _generalInventorySlotsUIBehaviours = new List<HubMapUIStorageSlotBehaviour>();
             _buyBackSlotsUIBehaviours = new List<HubMapUIStorageSlotBehaviour>();
             _shopSlotsUIBehaviours = new List<HubMapUIShopSlotBehaviour>();
-            _characterClothSlotsUIBehaviours = _characterClothPanel.GetComponentsInChildren<HubMapUIEquipmentSlotBehaviour>();
+            _characterClothesSlotsUIBehaviours = _characterClothPanel.GetComponentsInChildren<HubMapUIEquipmentSlotBehaviour>();
             _characterPocketsSlotsBehaviours = new List<HubMapUIEquipmentSlotBehaviour>();
+            _characterWeaponSlotsUIBehaviours = _weaponSetsPanel.GetComponentsInChildren<HubMapUIEquipmentSlotBehaviour>();
 
             _character3DViewModelRawImageBehaviour = _character3DViewModelRawImage.GetComponent<HubMapUIView3DModelBehaviour>();
 
@@ -310,14 +313,24 @@ namespace BeastHunter
 
         private void Start()
         {
-            if (_characterClothSlotsUIBehaviours.Length != _context.CharactersClothEquipment.Length)
+            if (_characterClothesSlotsUIBehaviours.Length != _context.CharactersClothEquipment.Length)
             {
                 Debug.LogError("The number of cloth UI slots does not match the equipment of the characters!");
             }
 
-            for (int i = 0; i < _characterClothSlotsUIBehaviours.Length; i++)
+            for (int i = 0; i < _characterClothesSlotsUIBehaviours.Length; i++)
             {
                 FillCharacterClothesSlot(i);
+            }
+
+            if (_characterWeaponSlotsUIBehaviours.Length != _context.CharactersWeaponSetsAmount * 2)
+            {
+                Debug.LogError("The number of weapon UI slots does not match the equipment of the characters!");
+            }
+
+            for (int i = 0; i < _characterWeaponSlotsUIBehaviours.Length; i++)
+            {
+                FillWeaponSlot(i);
             }
 
             for (int i = 0; i < _mapObjects.Length; i++)
@@ -854,17 +867,31 @@ namespace BeastHunter
 
                 previousCharacter.Backpack.OnPutItemToSlotHandler -= FillSlotUI;
                 previousCharacter.Backpack.OnTakeItemFromSlotHandler -= FillSlotUI;
+
                 previousCharacter.ClothesEquipment.OnPutItemToSlotHandler -= FillSlotUI;
                 previousCharacter.ClothesEquipment.OnTakeItemFromSlotHandler -= FillSlotUI;
+
+                previousCharacter.WeaponEquipment.OnPutItemToSlotHandler -= FillSlotUI;
+                previousCharacter.WeaponEquipment.OnTakeItemFromSlotHandler -= FillSlotUI;
+                previousCharacter.WeaponEquipment.OnTwoHandedWeaponHandler -= FillWeaponSlotUIAsSecondary;
 
                 previousCharacter.Pockets.OnPutItemToSlotHandler -= FillSlotUI;
                 previousCharacter.Pockets.OnTakeItemFromSlotHandler -= FillSlotUI;
                 previousCharacter.Pockets.OnChangeSlotsAmountHandler -= OnChangePocketsSlotsAmount;
-                
+
                 DestroyPocketsSlotsUI();
 
                 previousCharacter.View3DModelObjectOnScene.SetActive(false);
                 previousCharacter.View3DModelObjectOnScene.transform.rotation = Quaternion.identity;
+            }
+            else
+            {
+                if (_selected.Character != null)
+                {
+                    SetStorageSlotsInteractable(true, _characterBackpuckSlotsUIBehaviours);
+                    SetStorageSlotsInteractable(true, _characterClothesSlotsUIBehaviours);
+                    SetStorageSlotsInteractable(true, _characterWeaponSlotsUIBehaviours);
+                }
             }
 
             if (_selected.Character != null)
@@ -873,14 +900,17 @@ namespace BeastHunter
                 _hikeAcceptButton.interactable = true;
 
                 FillItemStorageSlots(HubMapUIItemStorageType.CharacterBackpuck);
-                SetStorageSlotsInteractable(true, _characterBackpuckSlotsUIBehaviours);
                 _selected.Character.Backpack.OnPutItemToSlotHandler += FillSlotUI;
                 _selected.Character.Backpack.OnTakeItemFromSlotHandler += FillSlotUI;
 
-                FillItemStorageSlots(HubMapUIItemStorageType.CharacterClothEquipment);
-                SetStorageSlotsInteractable(true, _characterClothSlotsUIBehaviours);
+                FillItemStorageSlots(HubMapUIItemStorageType.ClothesEquipment);
                 _selected.Character.ClothesEquipment.OnPutItemToSlotHandler += FillSlotUI;
                 _selected.Character.ClothesEquipment.OnTakeItemFromSlotHandler += FillSlotUI;
+
+                FillItemStorageSlots(HubMapUIItemStorageType.WeaponEquipment);
+                _selected.Character.WeaponEquipment.OnPutItemToSlotHandler += FillSlotUI;
+                _selected.Character.WeaponEquipment.OnTakeItemFromSlotHandler += FillSlotUI;
+                _selected.Character.WeaponEquipment.OnTwoHandedWeaponHandler += FillWeaponSlotUIAsSecondary;
 
                 InitializePocketsSlotsUI(_selected.Character.Pockets.GetSlotsCount());
                 _selected.Character.Pockets.OnPutItemToSlotHandler += FillSlotUI;
@@ -896,7 +926,8 @@ namespace BeastHunter
                 _character3DViewModelRawImage.enabled = false;
                 _hikeAcceptButton.interactable = false;
                 SetStorageSlotsInteractable(false, _characterBackpuckSlotsUIBehaviours);
-                SetStorageSlotsInteractable(false, _characterClothSlotsUIBehaviours);
+                SetStorageSlotsInteractable(false, _characterClothesSlotsUIBehaviours);
+                SetStorageSlotsInteractable(false, _characterWeaponSlotsUIBehaviours);
             }
         }
 
@@ -1058,14 +1089,26 @@ namespace BeastHunter
 
         private void FillCharacterClothesSlot(int slotIndex)
         {
-            Sprite slotSprite = Data.HubMapData.GetClothSlotSpriteByType(_context.CharactersClothEquipment[slotIndex]);
-            _characterClothSlotsUIBehaviours[slotIndex].FillSlotInfo(slotIndex, true, slotSprite);
-            _characterClothSlotsUIBehaviours[slotIndex].SetInteractable(false);
-            _characterClothSlotsUIBehaviours[slotIndex].OnBeginDragItemHandler += (slotIndex) => OnBeginDragItemFromSlot(slotIndex, HubMapUIItemStorageType.CharacterClothEquipment);
-            _characterClothSlotsUIBehaviours[slotIndex].OnEndDragItemHandler += (slotIndex) => OnEndDragItem(slotIndex, HubMapUIItemStorageType.CharacterClothEquipment);
-            _characterClothSlotsUIBehaviours[slotIndex].OnDroppedItemHandler += (slotIndex) => OnDropItemToSlot(slotIndex, HubMapUIItemStorageType.CharacterClothEquipment);
-            _characterClothSlotsUIBehaviours[slotIndex].OnPointerEnterHandler += (slotIndex) => OnPointerEnter_Slot(slotIndex, HubMapUIItemStorageType.CharacterClothEquipment);
-            _characterClothSlotsUIBehaviours[slotIndex].OnPointerExitHandler += OnPointerExit_Slot;
+            Sprite slotSprite = _data.GetClothSlotSpriteByType(_context.CharactersClothEquipment[slotIndex]);
+            _characterClothesSlotsUIBehaviours[slotIndex].FillSlotInfo(slotIndex, true, slotSprite);
+            _characterClothesSlotsUIBehaviours[slotIndex].SetInteractable(false);
+            _characterClothesSlotsUIBehaviours[slotIndex].OnBeginDragItemHandler += (slotIndex) => OnBeginDragItemFromSlot(slotIndex, HubMapUIItemStorageType.ClothesEquipment);
+            _characterClothesSlotsUIBehaviours[slotIndex].OnEndDragItemHandler += (slotIndex) => OnEndDragItem(slotIndex, HubMapUIItemStorageType.ClothesEquipment);
+            _characterClothesSlotsUIBehaviours[slotIndex].OnDroppedItemHandler += (slotIndex) => OnDropItemToSlot(slotIndex, HubMapUIItemStorageType.ClothesEquipment);
+            _characterClothesSlotsUIBehaviours[slotIndex].OnPointerEnterHandler += (slotIndex) => OnPointerEnter_Slot(slotIndex, HubMapUIItemStorageType.ClothesEquipment);
+            _characterClothesSlotsUIBehaviours[slotIndex].OnPointerExitHandler += OnPointerExit_Slot;
+        }
+
+        private void FillWeaponSlot(int slotIndex)
+        {
+            Sprite slotSprite = _data.WeaponSlotIcon;
+            _characterWeaponSlotsUIBehaviours[slotIndex].FillSlotInfo(slotIndex, true, slotSprite);
+            _characterWeaponSlotsUIBehaviours[slotIndex].SetInteractable(false);
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnBeginDragItemHandler += (slotIndex) => OnBeginDragItemFromSlot(slotIndex, HubMapUIItemStorageType.WeaponEquipment);
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnEndDragItemHandler += (slotIndex) => OnEndDragItem(slotIndex, HubMapUIItemStorageType.WeaponEquipment);
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnDroppedItemHandler += (slotIndex) => OnDropItemToSlot(slotIndex, HubMapUIItemStorageType.WeaponEquipment);
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnPointerEnterHandler += (slotIndex) => OnPointerEnter_Slot(slotIndex, HubMapUIItemStorageType.WeaponEquipment);
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnPointerExitHandler += OnPointerExit_Slot;
         }
 
         private void FillMapObject(GameObject mapObject, HubMapUIMapObjectData mapObjectdata)
@@ -1158,14 +1201,19 @@ namespace BeastHunter
                     _shopSlotsUIBehaviours[slotIndex].SetAvailability(IsPossibleToBuyShopItem(storage.GetItemBySlot(slotIndex)));
 
                     break;
-                case HubMapUIItemStorageType.CharacterClothEquipment:
+                case HubMapUIItemStorageType.ClothesEquipment:
 
-                    _characterClothSlotsUIBehaviours[slotIndex].FillSlot(sprite);
+                    _characterClothesSlotsUIBehaviours[slotIndex].FillSlot(sprite);
 
                     break;
                 case HubMapUIItemStorageType.PocketsStorage:
 
                     _characterPocketsSlotsBehaviours[slotIndex].FillSlot(sprite);
+
+                    break;
+                case HubMapUIItemStorageType.WeaponEquipment:
+
+                    _characterWeaponSlotsUIBehaviours[slotIndex].FillSlot(sprite);
 
                     break;
                 default:
@@ -1176,6 +1224,11 @@ namespace BeastHunter
             }
         }
 
+        private void FillWeaponSlotUIAsSecondary(int slotIndex, Sprite sprite)
+        {
+            _characterWeaponSlotsUIBehaviours[slotIndex].FillSlotAsSecondary(sprite);
+        }
+
         private void FillItemStorageSlots(HubMapUIItemStorageType storageType)
         {
             HubMapUIBaseItemStorage storage = GetStorageByType(storageType);
@@ -1183,6 +1236,18 @@ namespace BeastHunter
             for (int i = 0; i < storage.GetSlotsCount(); i++)
             {
                 FillSlotUI(storageType, i, storage.GetItemBySlot(i));
+            }
+
+            if (storageType == HubMapUIItemStorageType.WeaponEquipment)
+            {
+                for (int i = 1; i < storage.GetSlotsCount(); i += 2)
+                {
+                    HubMapUIWeaponItemModel adjacentWeapon = (storage as HubMapUIWeaponEquipmentStorage).AdjacentWeapon(i);
+                    if (adjacentWeapon != null && adjacentWeapon.IsTwoHanded)
+                    {
+                        FillWeaponSlotUIAsSecondary(i, adjacentWeapon.Icon);
+                    }
+                }
             }
         }
 
@@ -1328,12 +1393,16 @@ namespace BeastHunter
                     storage = _currentShopStorage;
                     break;
 
-                case HubMapUIItemStorageType.CharacterClothEquipment:
+                case HubMapUIItemStorageType.ClothesEquipment:
                     storage = _selected.Character.ClothesEquipment;
                     break;
 
                 case HubMapUIItemStorageType.PocketsStorage:
                     storage = _selected.Character.Pockets;
+                    break;
+
+                case HubMapUIItemStorageType.WeaponEquipment:
+                    storage = _selected.Character.WeaponEquipment;
                     break;
 
                 default:

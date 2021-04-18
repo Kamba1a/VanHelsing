@@ -142,7 +142,7 @@ namespace BeastHunter
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            if (_itemImage.sprite != null)
+            if (_itemImage.sprite != null && _isInteractable)
             {
                 OnPointerEnterHandler?.Invoke(_slotIndex);
             }

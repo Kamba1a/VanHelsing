@@ -27,13 +27,15 @@ namespace BeastHunter
         #region Methods
 
         public abstract bool PutItem(int slotIndex, HubMapUIBaseItemModel item);
-        public abstract bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item);
 
         public virtual bool RemoveItem(int slotIndex)
         {
-            HubMapUIBaseItemModel takenItem = _items[slotIndex];
-            _items[slotIndex] = null;
-            OnTakeItemFromSlot(slotIndex, takenItem);
+            if (_items[slotIndex] != null)
+            {
+                HubMapUIBaseItemModel takenItem = _items[slotIndex];
+                _items[slotIndex] = null;
+                OnTakeItemFromSlot(slotIndex, takenItem);
+            }
             return true;
         }
 

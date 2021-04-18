@@ -51,7 +51,7 @@ namespace BeastHunter
             return isSucceful;
         }
 
-        public override bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item)
+        public bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item)
         {
             for (int i = 0; i < _items.Count; i++)
             {

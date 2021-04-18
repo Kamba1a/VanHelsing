@@ -33,11 +33,7 @@ namespace BeastHunter
         public HubMapUIItemStorage Backpack { get; private set; }
         public HubMapUIClothesEquipmentStorage ClothesEquipment { get; private set; }
         public HubMapUIPocketsStorage Pockets { get; private set; }
-
-        //todo: Pockets and Weapon storages
-        //public HubMapUIEquipmentModel Pockets { get; private set; }
-        //public HubMapUIEquipmentModel Weapon { get; private set; }
-
+        public HubMapUIWeaponEquipmentStorage WeaponEquipment { get; private set; }
         public HubMapUICharacterBehaviour Behaviour { get; set; }
 
         #endregion
@@ -45,7 +41,7 @@ namespace BeastHunter
 
         #region ClassLifeCycle
 
-        public HubMapUICharacterModel(HubMapUICharacterData data, int backpackSize, HubMapUIClothesType[] clothEquipment)
+        public HubMapUICharacterModel(HubMapUICharacterData data, int backpackSize, HubMapUIClothesType[] clothEquipment, int weaponSetsAmount)
         {
             Name = data.Name;
             Portrait = data.Portrait;
@@ -55,25 +51,34 @@ namespace BeastHunter
             _defaultCharacterMaterial = data.DefaultMaterial;
 
             Backpack = new HubMapUIItemStorage(backpackSize, HubMapUIItemStorageType.CharacterBackpuck);
-            for (int i = 0; i < data.StartBackpuckItems.Length; i++)
+            if (data.StartBackpuckItems != null)
             {
-                HubMapUIBaseItemModel itemModel = HubMapUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartBackpuckItems[i]);
-                Backpack.PutItem(i, itemModel);
+                for (int i = 0; i < data.StartBackpuckItems.Length; i++)
+                {
+                    HubMapUIBaseItemModel itemModel = HubMapUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartBackpuckItems[i]);
+                    Backpack.PutItem(i, itemModel);
+                }
             }
 
             Pockets = new HubMapUIPocketsStorage();
 
-            ClothesEquipment = new HubMapUIClothesEquipmentStorage(clothEquipment, HubMapUIItemStorageType.CharacterClothEquipment);
+            ClothesEquipment = new HubMapUIClothesEquipmentStorage(clothEquipment);
             ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
 
             ClothesEquipment.OnTakeItemFromSlotHandler += OnTakeClothesEquipmentItem;
             ClothesEquipment.OnPutItemToSlotHandler += OnPutClothesEquipmentItem;
 
-            for (int i = 0; i < data.StartEquipmentItems.Length; i++)
+            if (data.StartClothesEquipmentItems != null)
             {
-                HubMapUIBaseItemModel clothes = HubMapUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartEquipmentItems[i]);
-                ClothesEquipment.PutItemToFirstEmptySlot(clothes);
+                for (int i = 0; i < data.StartClothesEquipmentItems.Length; i++)
+                {
+                    HubMapUIBaseItemModel clothes = HubMapUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartClothesEquipmentItems[i]);
+                    ClothesEquipment.PutItemToFirstEmptySlot(clothes);
+                }
             }
+
+            WeaponEquipment = new HubMapUIWeaponEquipmentStorage(weaponSetsAmount);
+            //todo: fill weapon storage by start weapon equipment
 
             InitializeDefaultHeadPartsDictionary(data.DefaultHeadParts);
             InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);

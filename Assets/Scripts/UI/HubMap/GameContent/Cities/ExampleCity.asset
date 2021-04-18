@@ -63,6 +63,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5c85a6f9efa72f442aa3990239013733, type: 2}
   - {fileID: 11400000, guid: b2764ecbd1fcbd94fb45cfeee1f80140, type: 2}
   - {fileID: 11400000, guid: 7188440d0dd19614882227cf7c80e002, type: 2}
+  - {fileID: 11400000, guid: f6e185ac30a19194cbf45439c92e3b36, type: 2}
+  - {fileID: 11400000, guid: 3624a46c93231c840a317cef98d92a07, type: 2}
+  - {fileID: 11400000, guid: 2aadd9546a993ac4c962f5bfb2c48ebc, type: 2}
+  - {fileID: 11400000, guid: 8460c4d8fab1f4d4399d4e7e715de911, type: 2}
+  - {fileID: 11400000, guid: 899f376411d00d646aeb701d5ddb4f7e, type: 2}
   _startReputation: 50
   _shopSlotAmount: 20
   _minItemsAmountInShop: 4
