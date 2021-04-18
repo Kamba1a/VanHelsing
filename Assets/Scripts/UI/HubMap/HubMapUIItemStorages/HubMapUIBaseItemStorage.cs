@@ -27,6 +27,7 @@ namespace BeastHunter
         #region Methods
 
         public abstract bool PutItem(int slotIndex, HubMapUIBaseItemModel item);
+        public abstract bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item);
 
         public virtual bool RemoveItem(int slotIndex)
         {

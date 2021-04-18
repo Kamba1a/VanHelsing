@@ -33,7 +33,7 @@ namespace BeastHunter
         public RuntimeAnimatorController View3DModelAnimatorController => _view3DModelAnimatorController;
         public HubMapUIBaseItemData[] StartBackpuckItems => (HubMapUIBaseItemData[])_startBackpuckItems?.Clone();
         public HubMapUIClothesItemData[] StartClothesEquipmentItems => (HubMapUIClothesItemData[])_startClothesEquipmentItems?.Clone();
-        public HubMapUIClothesItemData[] StartWeaponEquipmentItems => (HubMapUIClothesItemData[])_startWeaponEquipmentItems?.Clone();
+        public HubMapUIWeaponItemData[] StartWeaponEquipmentItems => (HubMapUIWeaponItemData[])_startWeaponEquipmentItems?.Clone();
         public Material DefaultMaterial => _defaultMaterial;
         public HubMapUICharacterClothesModuleParts[] DefaultModuleParts => (HubMapUICharacterClothesModuleParts[])_defaultModuleParts?.Clone();
         public HubMapUICharacterHeadPart[] DefaultHeadParts => (HubMapUICharacterHeadPart[])_defaultHeadParts?.Clone();

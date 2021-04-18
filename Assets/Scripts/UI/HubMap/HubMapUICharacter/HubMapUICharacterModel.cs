@@ -78,7 +78,15 @@ namespace BeastHunter
             }
 
             WeaponEquipment = new HubMapUIWeaponEquipmentStorage(weaponSetsAmount);
-            //todo: fill weapon storage by start weapon equipment
+
+            if (data.StartWeaponEquipmentItems != null)
+            {
+                for (int i = 0; i < data.StartWeaponEquipmentItems.Length; i++)
+                {
+                    HubMapUIBaseItemModel weapon = HubMapUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartWeaponEquipmentItems[i]);
+                    WeaponEquipment.PutItemToFirstEmptySlot(weapon);
+                }
+            }
 
             InitializeDefaultHeadPartsDictionary(data.DefaultHeadParts);
             InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);

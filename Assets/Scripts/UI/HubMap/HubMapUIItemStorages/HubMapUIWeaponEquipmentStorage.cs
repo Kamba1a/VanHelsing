@@ -111,6 +111,62 @@ namespace BeastHunter
             return isSucceful;
         }
 
+        public override bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item)
+        {
+            if (item != null)
+            {
+                if (item.ItemType == HubMapUIItemType.Weapon)
+                {
+                    HubMapUIWeaponItemModel weapon = item as HubMapUIWeaponItemModel;
+
+                    if (FindFirstEmptySlotByWeaponGripType(weapon.IsTwoHanded, out int? emptySlot))
+                    {
+                        return PutItem(emptySlot.Value, item);
+                    }
+                }
+                else
+                {
+                    Debug.Log($"PutItemToFirstEmptySlot: {item.Name} is not weapon");
+                }
+            }
+            else
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool FindFirstEmptySlotByWeaponGripType(bool isTwoHandedWeapon, out int? slotIndex)
+        {
+            slotIndex = null;
+
+            if (isTwoHandedWeapon)
+            {
+                for (int i = 0; i < _items.Count; i++)
+                {
+                    if (_items[i] == null && AdjacentWeapon(i) == null)
+                    {
+                        slotIndex = i;
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _items.Count; i++)
+                {
+                    if (_items[i] == null && (AdjacentWeapon(i) == null || !AdjacentWeapon(i).IsTwoHanded))
+                    {
+                        slotIndex = i;
+                        return true;
+                    }
+                }
+            }
+
+            Debug.Log($"No empty slots for {(isTwoHandedWeapon? "two-handed" : "one-handed")} weapon");
+            return false;
+        }
+
         public HubMapUIWeaponItemModel AdjacentWeapon(int slotIndex)
         {
             return GetItemBySlot(AdjacentSlotIndex(slotIndex)) as HubMapUIWeaponItemModel;

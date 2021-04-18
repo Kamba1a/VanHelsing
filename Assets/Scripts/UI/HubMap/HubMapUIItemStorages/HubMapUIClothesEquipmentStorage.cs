@@ -99,7 +99,7 @@ namespace BeastHunter
             return isSucceful;
         }
 
-        public bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item)
+        public override bool PutItemToFirstEmptySlot(HubMapUIBaseItemModel item)
         {
             if (item != null)
             {

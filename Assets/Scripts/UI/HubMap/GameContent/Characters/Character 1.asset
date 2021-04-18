@@ -20,7 +20,14 @@ MonoBehaviour:
   _view3DModelAnimatorController: {fileID: 9100000, guid: 4fde703d67cadff4a9a1c1dfb6de6662,
     type: 2}
   _startBackpuckItems: []
-  _startEquipmentItems: []
+  _startClothesEquipmentItems:
+  - {fileID: 11400000, guid: 4ef6411f36ddde84e85833d692065971, type: 2}
+  - {fileID: 11400000, guid: d251bc27e1e3b004db86ee0f06a83739, type: 2}
+  - {fileID: 11400000, guid: 2f80044f5c527464e90eead336176198, type: 2}
+  - {fileID: 11400000, guid: b82379ba5dbb65c4a9c24795aacbca77, type: 2}
+  _startWeaponEquipmentItems:
+  - {fileID: 11400000, guid: 899f376411d00d646aeb701d5ddb4f7e, type: 2}
+  - {fileID: 11400000, guid: 8460c4d8fab1f4d4399d4e7e715de911, type: 2}
   _defaultMaterial: {fileID: 2100000, guid: 5f3e0cdb8949ede4992d6471c3fbf042, type: 2}
   _defaultModuleParts:
   - _type: 8
