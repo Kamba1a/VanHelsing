@@ -570,17 +570,33 @@ namespace BeastHunter
 
         private void OnDoubleClick_InventorySlot(int slotIndex)
         {
-            if (_hikePanel.activeSelf && _selected.Character != null)
+            HubMapUIBaseItemModel item = _generalInventory.GetItemBySlot(slotIndex);
+            if (_hikePanel.activeSelf && item != null && _selected.Character != null)
             {
-                MoveItemToClothesEquipment(_generalInventory, slotIndex);
+                if(item.ItemType == HubMapUIItemType.Cloth)
+                {
+                    EquipSelectedCharacterWithClothes(_generalInventory, slotIndex);
+                }
+                else if (item.ItemType == HubMapUIItemType.Weapon)
+                {
+                    EquipSelectedCharacterWithWeapon(_generalInventory, slotIndex);
+                }
             }
         }
 
         private void OnDoubleClick_CharacterBackpuckSlot(int slotIndex)
         {
-            if (_selected.Character != null)
+            HubMapUIBaseItemModel item = _selected.Character.Backpack.GetItemBySlot(slotIndex);
+            if (item != null && _selected.Character != null)
             {
-                MoveItemToClothesEquipment(_selected.Character.Backpack, slotIndex);
+                if (item.ItemType == HubMapUIItemType.Cloth)
+                {
+                    EquipSelectedCharacterWithClothes(_selected.Character.Backpack, slotIndex);
+                }
+                else if (item.ItemType == HubMapUIItemType.Weapon)
+                {
+                    EquipSelectedCharacterWithWeapon(_selected.Character.Backpack, slotIndex);
+                }
             }
         }
 
@@ -753,7 +769,7 @@ namespace BeastHunter
 
             if (_draggedItemInfo.slotIndex.HasValue)
             {
-                MoveItemToClothesEquipment(GetStorageByType(_draggedItemInfo.storageType), _draggedItemInfo.slotIndex.Value);
+                EquipSelectedCharacterWithClothes(GetStorageByType(_draggedItemInfo.storageType), _draggedItemInfo.slotIndex.Value);
             }
         }
 
@@ -1351,7 +1367,27 @@ namespace BeastHunter
             _displayedCurrentCitizensUIBehaviours.Clear();
         }
 
-        private void MoveItemToClothesEquipment(HubMapUIBaseItemStorage outStorage, int outStorageSlotIndex)
+        private void EquipSelectedCharacterWithWeapon(HubMapUIBaseItemStorage outStorage, int outStorageSlotIndex)
+        {
+            HubMapUIBaseItemModel itemInClickedSlot = outStorage.GetItemBySlot(outStorageSlotIndex);
+            if (itemInClickedSlot != null &&
+                itemInClickedSlot.ItemType == HubMapUIItemType.Weapon &&
+                _selected.Character != null)
+            {
+                HubMapUIWeaponEquipmentStorage weaponEquipmentStorage = _selected.Character.WeaponEquipment;
+                if (!weaponEquipmentStorage.PutItemToFirstEmptySlot(itemInClickedSlot))
+                {
+                    HubMapUIServices.SharedInstance.GameMessages.Notice("There is no free slots for this weapon");
+                }
+                else
+                {
+                    outStorage.RemoveItem(outStorageSlotIndex);
+                }
+
+            }
+        }
+
+        private void EquipSelectedCharacterWithClothes(HubMapUIBaseItemStorage outStorage, int outStorageSlotIndex)
         {
             HubMapUIBaseItemModel itemInClickedSlot = outStorage.GetItemBySlot(outStorageSlotIndex);
             if (itemInClickedSlot != null &&
