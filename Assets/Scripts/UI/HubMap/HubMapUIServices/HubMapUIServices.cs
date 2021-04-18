@@ -17,9 +17,15 @@
             ShopService = new HubMapUIShopService();
             TravelTimeService = new HubMapUITravelTimeService();
             ItemInitializeService = new HubMapUIItemInitializeService();
-            MainInput = new MainInput();
-            MainInput.Enable(); //todo: inputController instead mainInput
             GameMessages = new HubMapUIGameMessages();
+
+            MainInput = new MainInput();
+            MainInput.Enable();
+        }
+
+        public void DisposeGameServices()
+        {
+            MainInput.Disable();
         }
     }
 }
