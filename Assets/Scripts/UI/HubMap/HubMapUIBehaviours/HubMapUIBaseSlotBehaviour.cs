@@ -6,13 +6,21 @@ using UnityEngine.InputSystem;
 
 namespace BeastHunter
 {
-    public abstract class HubMapUIBaseSlotBehaviour : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+    public abstract class HubMapUIBaseSlotBehaviour : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
+        #region Constants
+
+        private const float DOUBLECLICK_TIME = 0.75f;
+
+        #endregion
+
+
         #region Fields
 
         [SerializeField] protected Image _itemImage;
 
         private GameObject _draggedObject;
+        private float _lastClickTime;
         protected int _slotIndex;
         protected bool _isInteractable;
         protected bool _isDragAndDropOn;
@@ -27,6 +35,7 @@ namespace BeastHunter
         public Action<int> OnDroppedItemHandler { get; set; }
         public Action<int> OnPointerEnterHandler { get; set; }
         public Action<int> OnPointerExitHandler { get; set; }
+        public Action<int> OnDoubleClickButtonHandler { get; set; }
 
         #endregion
 
@@ -40,6 +49,7 @@ namespace BeastHunter
             _slotIndex = slotIndex;
             _isDragAndDropOn = isDragAndDropOn;
         }
+
         public virtual void FillSlot(Sprite sprite)
         {
             if (sprite != null)
@@ -65,6 +75,22 @@ namespace BeastHunter
             OnEndDragItemHandler = null;
             OnPointerEnterHandler = null;
             OnPointerExitHandler = null;
+        }
+
+        #endregion
+
+        #region IPointerClickHandler
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (_isInteractable)
+            {
+                if (Time.time < _lastClickTime + DOUBLECLICK_TIME)
+                {
+                    OnDoubleClickButtonHandler?.Invoke(_slotIndex);
+                }
+                _lastClickTime = Time.time;
+            }
         }
 
         #endregion

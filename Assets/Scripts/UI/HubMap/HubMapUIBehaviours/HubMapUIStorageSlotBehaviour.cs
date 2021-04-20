@@ -6,21 +6,12 @@ using UnityEngine.EventSystems;
 
 namespace BeastHunter
 {
-    public class HubMapUIStorageSlotBehaviour : HubMapUIBaseSlotBehaviour, IPointerClickHandler,  IPointerDownHandler
+    public class HubMapUIStorageSlotBehaviour : HubMapUIBaseSlotBehaviour, IPointerDownHandler
     {
-        #region Constants
-
-        private const float DOUBLECLICK_TIME = 0.75f;
-
-        #endregion
-
-
         #region Fields
 
         [SerializeField] private Button _slotButton;
         [SerializeField] private Image _selectSlotFrame;
-
-        private float _lastClickTime;
 
         #endregion
 
@@ -29,7 +20,6 @@ namespace BeastHunter
 
         public Action<int> OnClick_SlotButtonHandler { get; set; }
         public Action<int> OnPointerDownHandler { get; set; }
-        public Action<int> OnDoubleClickButtonHandler { get; set; }
 
         #endregion
 
@@ -71,23 +61,6 @@ namespace BeastHunter
             if (_slotButton.interactable)
             {
                 OnClick_SlotButtonHandler?.Invoke(_slotIndex);
-            }
-        }
-
-        #endregion
-
-
-        #region IPointerClickHandler
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (_slotButton.IsInteractable())
-            {
-                if (Time.time < _lastClickTime + DOUBLECLICK_TIME)
-                {
-                    OnDoubleClickButtonHandler?.Invoke(_slotIndex);
-                }
-                _lastClickTime = Time.time;
             }
         }
 

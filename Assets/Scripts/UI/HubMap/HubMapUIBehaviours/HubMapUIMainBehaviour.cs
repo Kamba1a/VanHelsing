@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
-using DG.Tweening;
+
 
 namespace BeastHunter
 {
@@ -568,34 +568,27 @@ namespace BeastHunter
             _selected.ShopSlotIndex = slotIndex;
         }
 
-        private void OnDoubleClick_InventorySlot(int slotIndex)
+        private void OnDoubleClick_CharacterEquipmentSlot(int slotIndex, HubMapUIItemStorageType storageType)
         {
-            HubMapUIBaseItemModel item = _generalInventory.GetItemBySlot(slotIndex);
+            if (_selected.Character != null)
+            {
+                MoveItemToGeneralInventoryStorage(GetStorageByType(storageType), slotIndex);
+            }
+        }
+
+        private void OnDoubleClick_StorageSlot(int slotIndex, HubMapUIItemStorageType storageType)
+        {
+            HubMapUIBaseItemStorage storage = GetStorageByType(storageType);
+            HubMapUIBaseItemModel item = storage.GetItemBySlot(slotIndex);
             if (_hikePanel.activeSelf && item != null && _selected.Character != null)
             {
                 if(item.ItemType == HubMapUIItemType.Cloth)
                 {
-                    EquipSelectedCharacterWithClothes(_generalInventory, slotIndex);
+                    EquipSelectedCharacterWithClothes(storage, slotIndex);
                 }
                 else if (item.ItemType == HubMapUIItemType.Weapon)
                 {
-                    EquipSelectedCharacterWithWeapon(_generalInventory, slotIndex);
-                }
-            }
-        }
-
-        private void OnDoubleClick_CharacterBackpuckSlot(int slotIndex)
-        {
-            HubMapUIBaseItemModel item = _selected.Character.Backpack.GetItemBySlot(slotIndex);
-            if (item != null && _selected.Character != null)
-            {
-                if (item.ItemType == HubMapUIItemType.Cloth)
-                {
-                    EquipSelectedCharacterWithClothes(_selected.Character.Backpack, slotIndex);
-                }
-                else if (item.ItemType == HubMapUIItemType.Weapon)
-                {
-                    EquipSelectedCharacterWithWeapon(_selected.Character.Backpack, slotIndex);
+                    EquipSelectedCharacterWithWeapon(storage, slotIndex);
                 }
             }
         }
@@ -1022,7 +1015,7 @@ namespace BeastHunter
             HubMapUIStorageSlotBehaviour slotBehaviour = equipSlotUI.GetComponent<HubMapUIStorageSlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, true);
             slotBehaviour.SetInteractable(false);
-            slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_CharacterBackpuckSlot;
+            slotBehaviour.OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_StorageSlot(slotIndex, HubMapUIItemStorageType.CharacterBackpuck);
             slotBehaviour.OnBeginDragItemHandler = (slotIndex) => OnBeginDragItemFromSlot(slotIndex, HubMapUIItemStorageType.CharacterBackpuck);
             slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, HubMapUIItemStorageType.CharacterBackpuck);
             slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, HubMapUIItemStorageType.CharacterBackpuck);
@@ -1039,7 +1032,7 @@ namespace BeastHunter
             HubMapUIStorageSlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<HubMapUIStorageSlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, true);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_InventorySlot;
-            slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_InventorySlot;
+            slotBehaviour.OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_StorageSlot(slotIndex, HubMapUIItemStorageType.GeneralInventory);
             slotBehaviour.OnBeginDragItemHandler = (slotIndex) => OnBeginDragItemFromSlot(slotIndex, HubMapUIItemStorageType.GeneralInventory);
             slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, HubMapUIItemStorageType.GeneralInventory);
             slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, HubMapUIItemStorageType.GeneralInventory);
@@ -1116,6 +1109,7 @@ namespace BeastHunter
             Sprite slotSprite = _data.GetClothSlotSpriteByType(_context.CharactersClothEquipment[slotIndex]);
             _characterClothesSlotsUIBehaviours[slotIndex].FillSlotInfo(slotIndex, true, slotSprite);
             _characterClothesSlotsUIBehaviours[slotIndex].SetInteractable(false);
+            _characterClothesSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_CharacterEquipmentSlot(slotIndex, HubMapUIItemStorageType.ClothesEquipment);
             _characterClothesSlotsUIBehaviours[slotIndex].OnBeginDragItemHandler += (slotIndex) => OnBeginDragItemFromSlot(slotIndex, HubMapUIItemStorageType.ClothesEquipment);
             _characterClothesSlotsUIBehaviours[slotIndex].OnEndDragItemHandler += (slotIndex) => OnEndDragItem(slotIndex, HubMapUIItemStorageType.ClothesEquipment);
             _characterClothesSlotsUIBehaviours[slotIndex].OnDroppedItemHandler += (slotIndex) => OnDropItemToSlot(slotIndex, HubMapUIItemStorageType.ClothesEquipment);
@@ -1128,6 +1122,7 @@ namespace BeastHunter
             Sprite slotSprite = _data.WeaponSlotIcon;
             _characterWeaponSlotsUIBehaviours[slotIndex].FillSlotInfo(slotIndex, true, slotSprite);
             _characterWeaponSlotsUIBehaviours[slotIndex].SetInteractable(false);
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_CharacterEquipmentSlot(slotIndex, HubMapUIItemStorageType.WeaponEquipment);
             _characterWeaponSlotsUIBehaviours[slotIndex].OnBeginDragItemHandler += (slotIndex) => OnBeginDragItemFromSlot(slotIndex, HubMapUIItemStorageType.WeaponEquipment);
             _characterWeaponSlotsUIBehaviours[slotIndex].OnEndDragItemHandler += (slotIndex) => OnEndDragItem(slotIndex, HubMapUIItemStorageType.WeaponEquipment);
             _characterWeaponSlotsUIBehaviours[slotIndex].OnDroppedItemHandler += (slotIndex) => OnDropItemToSlot(slotIndex, HubMapUIItemStorageType.WeaponEquipment);
@@ -1365,6 +1360,22 @@ namespace BeastHunter
 
             _rightInfoPanelObjectsForDestroy.Clear();
             _displayedCurrentCitizensUIBehaviours.Clear();
+        }
+
+        private void MoveItemToGeneralInventoryStorage(HubMapUIBaseItemStorage outStorage, int outStorageSlotIndex)
+        {
+            HubMapUIBaseItemModel item = outStorage.GetItemBySlot(outStorageSlotIndex);
+            if (item != null)
+            {
+                if (_generalInventory.PutItemToFirstEmptySlot(item))
+                {
+                    outStorage.RemoveItem(outStorageSlotIndex);
+                }
+                else
+                {
+                    HubMapUIServices.SharedInstance.GameMessages.Notice("Inventory is full");
+                }
+            }
         }
 
         private void EquipSelectedCharacterWithWeapon(HubMapUIBaseItemStorage outStorage, int outStorageSlotIndex)
