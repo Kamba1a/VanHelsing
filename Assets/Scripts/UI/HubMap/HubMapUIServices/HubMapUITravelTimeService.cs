@@ -2,6 +2,8 @@
 {
     public class HubMapUITravelTimeService
     {
+        #region Methods
+
         public string GetFullPhraseAboutTravelTime(HubMapUILocationModel location)
         {
             int travelTime = CountTravelTime(location);
@@ -32,5 +34,7 @@
                     return "часов";
             }
         }
+
+        #endregion
     }
 }
