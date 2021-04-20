@@ -10,7 +10,7 @@ namespace BeastHunter
     {
         #region Constants
 
-        private const float DOUBLECLICK_TIME = 0.75f;
+        private const float DOUBLECLICK_TIME = 0.5f;
 
         #endregion
 
@@ -21,6 +21,7 @@ namespace BeastHunter
 
         private GameObject _draggedObject;
         private float _lastClickTime;
+        private int _clickAmount;
         protected int _slotIndex;
         protected bool _isInteractable;
         protected bool _isDragAndDropOn;
@@ -75,6 +76,7 @@ namespace BeastHunter
             OnEndDragItemHandler = null;
             OnPointerEnterHandler = null;
             OnPointerExitHandler = null;
+            OnDoubleClickButtonHandler = null;
         }
 
         #endregion
@@ -85,12 +87,21 @@ namespace BeastHunter
         {
             if (_isInteractable)
             {
+                _clickAmount++;
                 if (Time.time < _lastClickTime + DOUBLECLICK_TIME)
                 {
-                    OnDoubleClickButtonHandler?.Invoke(_slotIndex);
+                    if(_clickAmount >= 2)
+                    {
+                        _clickAmount = 0;
+                        OnDoubleClickButtonHandler?.Invoke(_slotIndex);
+                    }
+                }
+                else
+                {
+                    _clickAmount = 0;
                 }
                 _lastClickTime = Time.time;
-            }
+             }
         }
 
         #endregion
