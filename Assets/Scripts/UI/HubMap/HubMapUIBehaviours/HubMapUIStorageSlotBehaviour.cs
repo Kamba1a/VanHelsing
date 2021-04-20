@@ -18,7 +18,6 @@ namespace BeastHunter
 
         #region Properties
 
-        public Action<int> OnClick_SlotButtonHandler { get; set; }
         public Action<int> OnPointerDownHandler { get; set; }
 
         #endregion
@@ -29,15 +28,12 @@ namespace BeastHunter
         public override void FillSlotInfo(int slotIndex, bool isDragAndDropOn)
         {
             base.FillSlotInfo(slotIndex, isDragAndDropOn);
-            _slotButton.onClick.AddListener(() => OnClick_SlotButton());
         }
 
         public override void RemoveAllListeners()
         {
             base.RemoveAllListeners();
-            OnClick_SlotButtonHandler = null;
             OnPointerDownHandler = null;
-            OnDoubleClickButtonHandler = null;
         }
 
         public void SelectFrameSwitcher(bool flag)
@@ -56,14 +52,6 @@ namespace BeastHunter
             }
         }
 
-        private void OnClick_SlotButton()
-        {
-            if (_slotButton.interactable)
-            {
-                OnClick_SlotButtonHandler?.Invoke(_slotIndex);
-            }
-        }
-
         #endregion
 
 
@@ -71,7 +59,7 @@ namespace BeastHunter
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (_slotButton.interactable)
+            if (_isInteractable)
             {
                 OnPointerDownHandler?.Invoke(_slotIndex);
             }
