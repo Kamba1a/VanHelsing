@@ -234,8 +234,6 @@ namespace BeastHunter
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, HubMapUIItemStorageType storageType) _draggedItemInfo;
 
-        private HubMapUIItemStorage _currentBuyBackStorage;
-        private HubMapUIItemStorage _currentShopStorage;
         private SelectedElements _selected;
 
         private GameObject _character3DViewModelRendering;
@@ -488,15 +486,13 @@ namespace BeastHunter
             _playerGoldAmount.text = _player.GoldAmount.ToString();
             _shopCityReputation.text = city.PlayerReputation.ToString();
 
-            _currentShopStorage = city.ShopStorage;
             FillItemStorageSlots(HubMapUIItemStorageType.ShopStorage);
-            _currentShopStorage.OnPutItemToSlotHandler += FillSlotUI;
-            _currentShopStorage.OnTakeItemFromSlotHandler += FillSlotUI;
+            city.ShopStorage.OnPutItemToSlotHandler += FillSlotUI;
+            city.ShopStorage.OnTakeItemFromSlotHandler += FillSlotUI;
 
-            _currentBuyBackStorage = city.BuyBackStorage;
             FillItemStorageSlots(HubMapUIItemStorageType.BuyBackStorage);
-            _currentBuyBackStorage.OnPutItemToSlotHandler += FillSlotUI;
-            _currentBuyBackStorage.OnTakeItemFromSlotHandler += FillSlotUI;
+            city.BuyBackStorage.OnPutItemToSlotHandler += FillSlotUI;
+            city.BuyBackStorage.OnTakeItemFromSlotHandler += FillSlotUI;
 
             _tradePanel.SetActive(true);
         }
@@ -509,14 +505,12 @@ namespace BeastHunter
 
             _tradePanel.SetActive(false);
 
-            _currentBuyBackStorage.Clear();
-            _currentBuyBackStorage.OnPutItemToSlotHandler -= FillSlotUI;
-            _currentBuyBackStorage.OnTakeItemFromSlotHandler -= FillSlotUI;
-            _currentBuyBackStorage = null;
-
-            _currentShopStorage.OnPutItemToSlotHandler -= FillSlotUI;
-            _currentShopStorage.OnTakeItemFromSlotHandler -= FillSlotUI;
-            _currentShopStorage = null;
+            HubMapUICityModel selectedCity = _selected.MapObject as HubMapUICityModel;
+            selectedCity.BuyBackStorage.Clear();
+            selectedCity.BuyBackStorage.OnPutItemToSlotHandler -= FillSlotUI;
+            selectedCity.BuyBackStorage.OnTakeItemFromSlotHandler -= FillSlotUI;
+            selectedCity.ShopStorage.OnPutItemToSlotHandler -= FillSlotUI;
+            selectedCity.ShopStorage.OnTakeItemFromSlotHandler -= FillSlotUI;
         }
 
         private void OnClick_CitizenButton(HubMapUICitizenModel citizen)
@@ -621,7 +615,7 @@ namespace BeastHunter
 
                 if (sellingItem != null)
                 {
-                    if (_currentBuyBackStorage.PutItemToFirstEmptySlot(sellingItem))
+                    if ((_selected.MapObject as HubMapUICityModel).BuyBackStorage.PutItemToFirstEmptySlot(sellingItem))
                     {
                         _generalInventory.RemoveItem(_selected.GeneralInventorySlotIndex.Value);
                         ChangePlayerGoldAmount(HubMapUIServices.SharedInstance.ShopService.CountSellPrice(sellingItem));
@@ -640,14 +634,15 @@ namespace BeastHunter
         {
             if (_selected.BuyBackSlotIndex.HasValue)
             {
-                HubMapUIBaseItemModel buyingItem = _currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value);
+                HubMapUIItemStorage buyBackStorage = (_selected.MapObject as HubMapUICityModel).BuyBackStorage;
+                HubMapUIBaseItemModel buyingItem = buyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value);
                 if (buyingItem != null)
                 {
                     if (_player.GoldAmount >= HubMapUIServices.SharedInstance.ShopService.CountSellPrice(buyingItem)) 
                     { 
                         if (_generalInventory.PutItemToFirstEmptySlot(buyingItem))
                         {
-                            _currentBuyBackStorage.RemoveItem(_selected.BuyBackSlotIndex.Value);
+                            buyBackStorage.RemoveItem(_selected.BuyBackSlotIndex.Value);
                             ChangePlayerGoldAmount(-HubMapUIServices.SharedInstance.ShopService.CountSellPrice(buyingItem));
                         }
                         else
@@ -669,7 +664,8 @@ namespace BeastHunter
         {
             if (_selected.ShopSlotIndex.HasValue)
             {
-                HubMapUIBaseItemModel buyingItem = _currentShopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value);
+                HubMapUIItemStorage shopStorage = (_selected.MapObject as HubMapUICityModel).ShopStorage;
+                HubMapUIBaseItemModel buyingItem = shopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value);
 
                 if (buyingItem != null)
                 {
@@ -677,7 +673,7 @@ namespace BeastHunter
                     {
                         if (_generalInventory.PutItemToFirstEmptySlot(buyingItem))
                         {
-                            _currentShopStorage.RemoveItem(_selected.ShopSlotIndex.Value);
+                            shopStorage.RemoveItem(_selected.ShopSlotIndex.Value);
                             ChangePlayerGoldAmount(-HubMapUIServices.SharedInstance.ShopService.GetItemPrice(buyingItem));
                         }
                         else
@@ -815,13 +811,13 @@ namespace BeastHunter
 
                 if (_tradePanel.activeSelf)
                 {
-                    if (_currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value) != null)
-                    {
-                        _buybackItemPrice.text = HubMapUIServices.SharedInstance.ShopService.
-                            CountSellPrice(_currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value)).ToString();
+                    HubMapUIBaseItemModel item = (_selected.MapObject as HubMapUICityModel).BuyBackStorage.
+                        GetItemBySlot(_selected.BuyBackSlotIndex.Value);
 
-                        _buyBackButton.interactable = _player.GoldAmount >= HubMapUIServices.SharedInstance.ShopService.
-                            CountSellPrice(_currentBuyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value));
+                    if (item != null)
+                    {
+                        _buybackItemPrice.text = HubMapUIServices.SharedInstance.ShopService.CountSellPrice(item).ToString();
+                        _buyBackButton.interactable = _player.GoldAmount >= HubMapUIServices.SharedInstance.ShopService.CountSellPrice(item);
                     }
                     else
                     {
@@ -853,7 +849,9 @@ namespace BeastHunter
 
                 if (_tradePanel.activeSelf)
                 {
-                    HubMapUIBaseItemModel item = _currentShopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value);
+                    HubMapUIBaseItemModel item = (_selected.MapObject as HubMapUICityModel).ShopStorage.
+                        GetItemBySlot(_selected.ShopSlotIndex.Value);
+
                     if (item != null)
                     {
                         _buyingItemPrice.text = HubMapUIServices.SharedInstance.ShopService.GetItemPrice(item).ToString();
@@ -1441,11 +1439,11 @@ namespace BeastHunter
                     break;
 
                 case HubMapUIItemStorageType.BuyBackStorage:
-                    storage = _currentBuyBackStorage;
+                    storage = (_selected.MapObject as HubMapUICityModel).BuyBackStorage;
                     break;
 
                 case HubMapUIItemStorageType.ShopStorage:
-                    storage = _currentShopStorage;
+                    storage = (_selected.MapObject as HubMapUICityModel).ShopStorage;
                     break;
 
                 case HubMapUIItemStorageType.ClothesEquipment:
@@ -1535,7 +1533,8 @@ namespace BeastHunter
 
             for (int i = 0; i < _shopSlotsUIBehaviours.Count; i++)
             {
-                _shopSlotsUIBehaviours[i].SetAvailability(IsPossibleToBuyShopItem(_currentShopStorage.GetItemBySlot(i)));
+                _shopSlotsUIBehaviours[i].SetAvailability
+                    (IsPossibleToBuyShopItem((_selected.MapObject as HubMapUICityModel).ShopStorage.GetItemBySlot(i)));
             }
         }
 
