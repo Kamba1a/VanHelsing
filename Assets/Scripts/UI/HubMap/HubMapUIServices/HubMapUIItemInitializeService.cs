@@ -2,6 +2,8 @@
 {
     public class HubMapUIItemInitializeService
     {
+        #region Methods
+
         public HubMapUIBaseItemModel InitializeItemModel(HubMapUIBaseItemData data)
         {
             switch (data.ItemType)
@@ -23,6 +25,8 @@
                     return null;
             }
         }
+
+        #endregion
 
     }
 }

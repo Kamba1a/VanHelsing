@@ -5,8 +5,14 @@ namespace BeastHunter
 {
     public class HubMapUIShopService
     {
+        #region Constants
+
         private const float SELL_PRICE_PERCENT = 0.6f;
 
+        #endregion
+
+
+        #region Methods
 
         public int CountSellPrice(HubMapUIBaseItemModel item)
         {
@@ -22,5 +28,7 @@ namespace BeastHunter
         {
             return Mathf.RoundToInt(fullPrice * SELL_PRICE_PERCENT);
         }
+
+        #endregion
     }
 }

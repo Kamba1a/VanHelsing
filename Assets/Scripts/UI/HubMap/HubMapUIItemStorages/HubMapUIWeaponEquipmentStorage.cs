@@ -7,13 +7,23 @@ namespace BeastHunter
 {
     public class HubMapUIWeaponEquipmentStorage : HubMapUIBaseItemStorage
     {
+        #region Constants
+
         private const int SLOTS_AMOUNT_IN_WEAPON_SET = 2;
 
+        #endregion
+
+
+        #region Properties
 
         public Action<int, Sprite> OnTwoHandedWeaponHandler;
 
         public override HubMapUIItemStorageType StorageType { get; protected set; }
 
+        #endregion
+
+
+        #region ClassLifeCycle
 
         public HubMapUIWeaponEquipmentStorage(int weaponSetsAmount)
         {
@@ -27,15 +37,10 @@ namespace BeastHunter
             }
         }
 
+        #endregion
 
-        public override bool RemoveItem(int slotIndex)
-        {
-            if (_items[slotIndex] != null && (_items[slotIndex] as HubMapUIWeaponItemModel).IsTwoHanded)
-            {
-                OnTwoHandedWeapon(AdjacentSlotIndex(slotIndex), null);
-            }
-            return base.RemoveItem(slotIndex);
-        }
+
+        #region Methods
 
         public override bool PutItem(int slotIndex, HubMapUIBaseItemModel item)
         {
@@ -136,6 +141,15 @@ namespace BeastHunter
             return false;
         }
 
+        public override bool RemoveItem(int slotIndex)
+        {
+            if (_items[slotIndex] != null && (_items[slotIndex] as HubMapUIWeaponItemModel).IsTwoHanded)
+            {
+                OnTwoHandedWeapon(AdjacentSlotIndex(slotIndex), null);
+            }
+            return base.RemoveItem(slotIndex);
+        }
+
         private bool FindFirstEmptySlotByWeaponGripType(bool isTwoHandedWeapon, out int? slotIndex)
         {
             slotIndex = null;
@@ -193,5 +207,7 @@ namespace BeastHunter
         {
             OnTwoHandedWeaponHandler?.Invoke(adjacentSlotIndex, sprite);
         }
+
+        #endregion
     }
 }

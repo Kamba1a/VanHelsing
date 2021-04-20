@@ -18,6 +18,8 @@ namespace BeastHunter
         #endregion
 
 
+        #region ClassLifeCycle
+
         public HubMapUIClothesItemModel(HubMapUIClothesItemData data) : base(data)
         {
             ClothesType = data.ClothesType;
@@ -28,5 +30,7 @@ namespace BeastHunter
             PartsNamesFemale = data.ClothesPartsNamesFemale;
             DisabledHeadParts = data.DisabledHeadParts;
         }
+
+        #endregion
     }
 }

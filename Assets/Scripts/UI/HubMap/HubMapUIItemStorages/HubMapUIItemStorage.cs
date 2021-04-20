@@ -5,7 +5,11 @@ namespace BeastHunter
 {
     public class HubMapUIItemStorage : HubMapUIBaseItemStorage
     {
+        #region Properties
+
         public override HubMapUIItemStorageType StorageType { get; protected set; }
+
+        #endregion
 
 
         #region ClassLifeCycle

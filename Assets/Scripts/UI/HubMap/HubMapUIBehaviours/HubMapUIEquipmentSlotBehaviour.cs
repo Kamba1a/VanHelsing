@@ -6,7 +6,14 @@ namespace BeastHunter
 {
     public class HubMapUIEquipmentSlotBehaviour : HubMapUIBaseSlotBehaviour
     {
+        #region Fields
+
         [SerializeField] Image _slotImage;
+
+        #endregion
+
+
+        #region Methods
 
         public void FillSlotInfo(int slotIndex, bool isDragAndDropOn, Sprite slotSprite)
         {
@@ -70,5 +77,7 @@ namespace BeastHunter
             }
             return newColor;
         }
+
+        #endregion
     }
 }

@@ -7,10 +7,21 @@ namespace BeastHunter
 {
     public class HubMapUIPocketsStorage : HubMapUIItemStorage
     {
+        #region Properties
+
         public Action OnChangeSlotsAmountHandler { get; set; }
 
+        #endregion
+
+
+        #region ClassLifeCycle
 
         public HubMapUIPocketsStorage() : base(0, HubMapUIItemStorageType.PocketsStorage) { }
+
+        #endregion
+
+
+        #region Methods
 
         public void AddPockets(int amount)
         {
@@ -99,5 +110,7 @@ namespace BeastHunter
                 return true;
             }
         }
+
+        #endregion
     }
 }

@@ -3,15 +3,26 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-
 namespace BeastHunter
 {
     class HubMapUIView3DModelBehaviour : MonoBehaviour, IDragHandler, IDropHandler
     {
+        #region Constants
+
         private const float ROTATE_SPEED = 100.0f;
+
+        #endregion
+
+
+        #region Properties
 
         public Action OnDropHandler { get; set; }
         public GameObject RotateObject { get; set; }
+
+        #endregion
+
+
+        #region IDragHandler
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -22,9 +33,16 @@ namespace BeastHunter
             }
         }
 
+        #endregion
+
+
+        #region IDropHandler
+
         public void OnDrop(PointerEventData eventData)
         {
             OnDropHandler?.Invoke();
         }
+
+        #endregion
     }
 }

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace BeastHunter
 {
     class CharacterSaver : MonoBehaviour
     {
+        #region Fields
+
         [SerializeField] HubMapUICharacterData _characterData;
         [SerializeField] private Material _fantasyHeroMaterial;
 
@@ -15,6 +18,10 @@ namespace BeastHunter
         private Dictionary<HubMapUIClothesType, List<string>> _modulePartsGroups;
         private Dictionary<HubMapUICharacterHeadParts, List<string>> _headPartsGroups;
 
+        #endregion
+
+
+        #region UnityMethods
 
         private void Start()
         {
@@ -24,6 +31,11 @@ namespace BeastHunter
             InitializeHeadPartsTypesDictionary();
             InitializeModulePartsTypesDictionary();
         }
+
+        #endregion
+
+
+        #region Methods
 
         [ContextMenu("SaveCharacterMaterial")]
         public void SaveCharacterMaterial()
@@ -60,7 +72,6 @@ namespace BeastHunter
             _characterData.SetDefaultHeadParts(defaultHeadParts);
             _savedHeadParts.Clear();
         }
-
 
         private void SaveCharacterActiveModulePartsInList()
         {
@@ -260,6 +271,8 @@ namespace BeastHunter
             };
             _modulePartsGroups.Add(HubMapUIClothesType.Belt, beltList);
         }
+
+        #endregion
 
 
         ////WIP
