@@ -34,11 +34,11 @@ MonoBehaviour:
   _characters3DViewRenderingObjectPosition: {x: 1000, y: 1000, z: 1000}
   _mapObjects:
   - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
-  - {fileID: 11400000, guid: a4953306eee0c584a8c7fc514f731fbb, type: 2}
   - {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
   - {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
   - {fileID: 11400000, guid: 860d3696ec691de4e9302d6819bd9cda, type: 2}
   - {fileID: 11400000, guid: 9b605ac1c7e3a6b458708df1317a7eaf, type: 2}
+  - {fileID: 11400000, guid: a4953306eee0c584a8c7fc514f731fbb, type: 2}
   _contextData: {fileID: 11400000, guid: 46231c97ed63f5743923c27178c11902, type: 2}
   _weaponSlotIcon: {fileID: 21300000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
   _armSlotIcon: {fileID: 21300000, guid: 70a77abda853dd941a0c8debf1de9b04, type: 3}

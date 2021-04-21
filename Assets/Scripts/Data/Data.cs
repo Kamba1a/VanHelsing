@@ -88,7 +88,7 @@ namespace BeastHunter
         private static FallingTreeData _fallingTreeData;
         private static EnemyHealthBarData _enemyHealthBarData;
         private static SpawnpointsData _spawnpointsData;
-        private static HubMapUIData _hubMapUIData;
+        private static BeastHunterHubUI.HubUIMapData _hubMapUIData;
         private static OneHandedThrowableWeapon _LureMeatData;
         private static OneHandedThrowableWeapon _LureCharcoalData;
 
@@ -525,13 +525,13 @@ namespace BeastHunter
             }
         }
 
-        public static HubMapUIData HubMapData
+        public static BeastHunterHubUI.HubUIMapData HubMapData
         {
             get
             {
                 if (_hubMapUIData == null)
                 {
-                    _hubMapUIData = Resources.Load<HubMapUIData>("Data/" + Instance._hubMapUIDataPath);
+                    _hubMapUIData = Resources.Load<BeastHunterHubUI.HubUIMapData>("Data/" + Instance._hubMapUIDataPath);
                 }
                 return _hubMapUIData;
             }
