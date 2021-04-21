@@ -14,7 +14,7 @@
 
         public void InitializeServices(HubUIContext context)
         {
-            ShopService = new ShopService();
+            ShopService = new ShopService(context);
             TravelTimeService = new TravelTimeService();
             ItemInitializeService = new ItemInitializeService();
             GameMessages = new GameMessages();

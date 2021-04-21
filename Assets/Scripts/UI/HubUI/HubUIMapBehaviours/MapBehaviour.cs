@@ -629,7 +629,7 @@ namespace BeastHunterHubUI
 
                 if (buyingItem != null)
                 {
-                    if (IsPossibleToBuyShopItem(buyingItem))
+                    if (HubUIServices.SharedInstance.ShopService.IsPossibleToBuyShopItem(buyingItem, _selected.MapObject as CityModel))
                     {
                         if (_generalInventory.PutItemToFirstEmptySlot(buyingItem))
                         {
@@ -870,7 +870,7 @@ namespace BeastHunterHubUI
                     if (item != null)
                     {
                         _buyingItemPrice.text = HubUIServices.SharedInstance.ShopService.GetItemPrice(item).ToString();
-                        _buyButton.interactable = IsPossibleToBuyShopItem(item);
+                        _buyButton.interactable = HubUIServices.SharedInstance.ShopService.IsPossibleToBuyShopItem(item, _selected.MapObject as CityModel);
                     }
                     else
                     {
@@ -1196,7 +1196,7 @@ namespace BeastHunterHubUI
 
                 if (storageType == ItemStorageType.ShopStorage)
                 {
-                    if (!IsPossibleToBuyShopItem(item, out string message))
+                    if(!HubUIServices.SharedInstance.ShopService.IsPossibleToBuyShopItem(item, _selected.MapObject as CityModel, out string message))
                     {
                         tooltipTexts[0].gameObject.SetActive(true);
                         tooltipTexts[0].text = message;
@@ -1232,7 +1232,8 @@ namespace BeastHunterHubUI
 
                     _shopSlotsUIBehaviours[slotIndex].FillSlot(sprite);
                     _shopSlotsUIBehaviours[slotIndex].SetInteractable(sprite != null);
-                    _shopSlotsUIBehaviours[slotIndex].SetAvailability(IsPossibleToBuyShopItem(storage.GetItemBySlot(slotIndex)));
+                    _shopSlotsUIBehaviours[slotIndex].SetAvailability(HubUIServices.SharedInstance.ShopService.IsPossibleToBuyShopItem
+                        (storage.GetItemBySlot(slotIndex), _selected.MapObject as CityModel));
 
                     break;
                 case ItemStorageType.ClothesEquipment:
@@ -1550,61 +1551,17 @@ namespace BeastHunterHubUI
 
             for (int i = 0; i < _shopSlotsUIBehaviours.Count; i++)
             {
+                CityModel selectedCity = _selected.MapObject as CityModel;
                 _shopSlotsUIBehaviours[i].SetAvailability
-                    (IsPossibleToBuyShopItem((_selected.MapObject as CityModel).ShopStorage.GetItemBySlot(i)));
+                    (HubUIServices.SharedInstance.ShopService.IsPossibleToBuyShopItem(selectedCity.ShopStorage.GetItemBySlot(i), selectedCity));
             }
-        }
-
-        private bool IsPossibleToBuyShopItem(BaseItemModel item)
-        {
-            if (item != null)
-            {
-                return
-                    item.RequiredReputationForSaleInShop <= (_selected.MapObject as CityModel).PlayerReputation &&
-                    _player.GoldAmount >= HubUIServices.SharedInstance.ShopService.GetItemPrice(item);
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        private bool IsPossibleToBuyShopItem(BaseItemModel item, out string message)
-        {
-            bool flag = true;
-            StringBuilder sb = new StringBuilder();
-
-            if (item != null)
-            {
-                if ((_selected.MapObject as CityModel).PlayerReputation < item.RequiredReputationForSaleInShop)
-                {
-                    flag = false;
-
-                    sb.AppendFormat("Недостаточно репутации для покупки");
-                    sb.AppendLine();
-                    sb.AppendFormat($"Необходимая репутация: {item.RequiredReputationForSaleInShop}");
-                }
-                if (_player.GoldAmount < HubUIServices.SharedInstance.ShopService.GetItemPrice(item))
-                {
-                    flag = false;
-
-                    if (sb.Length > 0)
-                    {
-                        sb.AppendLine();
-                    }
-                    sb.AppendFormat("Недостаточно денег");
-                }
-            }
-
-            message = sb.ToString();
-            return flag;
         }
 
          private void LocationLoad()
-        {
+         {
             Debug.Log("Load location. ID: " + (_selected.MapObject as LocationModel).LoadSceneId);
             SceneManager.LoadScene((_selected.MapObject as LocationModel).LoadSceneId);
-        }
+         }
 
         #endregion
     }
