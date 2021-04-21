@@ -22,7 +22,6 @@ namespace BeastHunterHubUI
 
         private GameObject _draggedObject;
         private float _lastClickTime;
-        private int _clickAmount;
         protected int _slotIndex;
         protected bool _isInteractable;
         protected bool _isDragAndDropOn;
@@ -82,24 +81,16 @@ namespace BeastHunterHubUI
 
         #endregion
 
+
         #region IPointerClickHandler
 
         public void OnPointerClick(PointerEventData eventData)
         {
             if (_isInteractable)
             {
-                _clickAmount++;
                 if (Time.time < _lastClickTime + DOUBLECLICK_TIME)
                 {
-                    if(_clickAmount >= 2)
-                    {
-                        _clickAmount = 0;
                         OnDoubleClickButtonHandler?.Invoke(_slotIndex);
-                    }
-                }
-                else
-                {
-                    _clickAmount = 0;
                 }
                 _lastClickTime = Time.time;
              }
