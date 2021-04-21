@@ -4,7 +4,7 @@
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "HubUIGameContent", menuName = "CreateData/HubUIData/HubUIGameContent", order = 0)]
-    public class HubUIGameContentData : ScriptableObject
+    public class HubUIContextData : ScriptableObject
     {
         #region Fields
 

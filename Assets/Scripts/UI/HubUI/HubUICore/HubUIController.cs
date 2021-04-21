@@ -4,30 +4,38 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    class HubUIGameController : MonoBehaviour
+    class HubUIController : MonoBehaviour
     {
-        private HubUIContext _context;
+        #region Fields
+
         private List<IStart> _startBehaviours;
         private List<IUpdate> _updateBehaviours;
         private List<IDestroy> _destroyBehaviours;
 
+        private MapBehaviour _mapBehaviour;
+
+        #endregion
+
+
+        #region UnityMethods
 
         private void Awake()
         {
-            _context = new HubUIContext();
             _startBehaviours = new List<IStart>();
             _updateBehaviours = new List<IUpdate>();
             _destroyBehaviours = new List<IDestroy>();
+
+            _mapBehaviour = GetComponentInChildren<MapBehaviour>();
+            Add(_mapBehaviour);
         }
 
         private void Start()
         {
-            HubUIServices.SharedInstance.InitializeServices(_context);
-            new HubUIGameContentInitializeController(_context);
-            new QuestController(_context);
-
-            Add(GameObject.Find("HubUI").GetComponentInChildren<MapBehaviour>());
-            Initialize();
+            HubUIContext context = new HubUIContext();
+            HubUIServices.SharedInstance.InitializeServices(context);
+            context.Initialize(BeastHunter.Data.HubMapData.ContextData);
+            new QuestController(context);
+            StartBehaviours(context);
         }
 
         private void Update()
@@ -48,11 +56,16 @@ namespace BeastHunterHubUI
             HubUIServices.SharedInstance.DisposeGameServices();
         }
 
-        private void Initialize()
+        #endregion
+
+
+        #region Methods
+
+        private void StartBehaviours(HubUIContext context)
         {
             for (int i = 0; i < _startBehaviours.Count; i++)
             {
-                _startBehaviours[i].Starting(_context);
+                _startBehaviours[i].Starting(context);
             }
         }
 
@@ -73,5 +86,7 @@ namespace BeastHunterHubUI
                 _destroyBehaviours.Add(destroyBehaviour);
             }
         }
+
+        #endregion
     }
 }

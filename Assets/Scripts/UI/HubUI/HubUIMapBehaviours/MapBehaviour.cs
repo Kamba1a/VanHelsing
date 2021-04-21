@@ -1607,6 +1607,5 @@ namespace BeastHunterHubUI
         }
 
         #endregion
-
     }
 }

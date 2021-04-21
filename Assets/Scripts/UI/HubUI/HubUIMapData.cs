@@ -27,7 +27,7 @@ namespace BeastHunterHubUI
         [SerializeField] private MapObjectData[] _mapObjects;
 
         [Header("Game content for UI")]
-        [SerializeField] private HubUIGameContentData _contextData;
+        [SerializeField] private HubUIContextData _contextData;
 
         [Header("Equipment slot type sprites")]
         [SerializeField] Sprite _weaponSlotIcon;
@@ -64,7 +64,7 @@ namespace BeastHunterHubUI
 
         public MapObjectData[] MapObjects => (MapObjectData[])_mapObjects.Clone();
 
-        public HubUIGameContentData ContextData => _contextData;
+        public HubUIContextData ContextData => _contextData;
 
         public Sprite WeaponSlotIcon => _weaponSlotIcon;
         public Sprite PocketItemSlotIcon => _pocketItemSlotIcon;
