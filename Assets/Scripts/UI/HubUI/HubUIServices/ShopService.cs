@@ -84,7 +84,7 @@ namespace BeastHunterHubUI
             return flag;
         }
 
-        private void SellItem(CityModel city, int inventorySlotIndex)
+        public void SellItem(CityModel city, int inventorySlotIndex)
         {
             ItemStorage playerInventory = _context.Player.Inventory;
             BaseItemModel sellingItem = playerInventory.GetItemBySlot(inventorySlotIndex);
@@ -94,11 +94,62 @@ namespace BeastHunterHubUI
                 if (city.BuyBackStorage.PutItemToFirstEmptySlot(sellingItem))
                 {
                     playerInventory.RemoveItem(inventorySlotIndex);
-                    _context.Player.GoldAmount += CountSellPrice(sellingItem);
+                    _context.Player.AddGold(CountSellPrice(sellingItem));
                 }
                 else
                 {
-                    Debug.Log("BuyBack storage is full");
+                    HubUIServices.SharedInstance.GameMessages.Notice("BuyBack storage is full");
+                }
+            }
+        }
+
+        public void BuyBackItem(CityModel city, int buyBackStorageSlotIndex)
+        {
+            ItemStorage buyBackStorage = city.BuyBackStorage;
+            BaseItemModel buyingItem = buyBackStorage.GetItemBySlot(buyBackStorageSlotIndex);
+            if (buyingItem != null)
+            {
+                if (_context.Player.GoldAmount >= CountSellPrice(buyingItem))
+                {
+                    if (_context.Player.Inventory.PutItemToFirstEmptySlot(buyingItem))
+                    {
+                        buyBackStorage.RemoveItem(buyBackStorageSlotIndex);
+                        _context.Player.TakeGold(CountSellPrice(buyingItem));
+                    }
+                    else
+                    {
+                        HubUIServices.SharedInstance.GameMessages.Notice("Inventory storage is full");
+                    }
+                }
+                else
+                {
+                    HubUIServices.SharedInstance.GameMessages.Notice("Not enough gold");
+                }
+            }
+        }
+
+        public void BuyItem(CityModel city, int shopStorageSlotIndex)
+        {
+            ItemStorage shopStorage = city.ShopStorage;
+            BaseItemModel buyingItem = shopStorage.GetItemBySlot(shopStorageSlotIndex);
+
+            if (buyingItem != null)
+            {
+                if (IsPossibleToBuyShopItem(buyingItem, city))
+                {
+                    if (_context.Player.Inventory.PutItemToFirstEmptySlot(buyingItem))
+                    {
+                        shopStorage.RemoveItem(shopStorageSlotIndex);
+                        _context.Player.TakeGold(GetItemPrice(buyingItem));
+                    }
+                    else
+                    {
+                        HubUIServices.SharedInstance.GameMessages.Notice("Inventory storage is full");
+                    }
+                }
+                else
+                {
+                    HubUIServices.SharedInstance.GameMessages.Notice("Not enough gold");
                 }
             }
         }

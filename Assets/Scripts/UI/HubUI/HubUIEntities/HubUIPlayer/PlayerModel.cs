@@ -1,10 +1,15 @@
-﻿namespace BeastHunterHubUI
+﻿using System;
+using UnityEngine;
+
+namespace BeastHunterHubUI
 {
     public class PlayerModel
     {
         #region Properties
 
-        public int GoldAmount { get; set; }
+        public Action<int> OnChangeGoldAmount { get; set; }
+
+        public int GoldAmount { get; private set; }
         public ItemStorage Inventory { get; private set; }
 
         #endregion
@@ -26,5 +31,29 @@
         }
 
         #endregion
+
+        public bool AddGold(int goldAmount)
+        {
+            if(goldAmount > 0)
+            {
+                GoldAmount += goldAmount;
+                OnChangeGoldAmount?.Invoke(GoldAmount);
+                return true;
+            }
+            Debug.LogError("goldAmount parameter is less than or equal to zero");
+            return false;
+        }
+
+        public bool TakeGold(int goldAmount)
+        {
+            if (goldAmount > 0)
+            {
+                GoldAmount -= goldAmount;
+                OnChangeGoldAmount?.Invoke(GoldAmount);
+                return true;
+            }
+            Debug.LogError("goldAmount parameter is less than or equal to zero");
+            return false;
+        }
     }
 }

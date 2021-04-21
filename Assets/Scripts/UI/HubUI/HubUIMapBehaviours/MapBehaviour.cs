@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -365,6 +364,8 @@ namespace BeastHunterHubUI
             _generalInventory.OnPutItemToSlotHandler += FillSlotUI;
             _generalInventory.OnTakeItemFromSlotHandler += FillSlotUI;
 
+            _player.OnChangeGoldAmount += OnChangedPlayerGoldAmount;
+
             _selected.OnChanged_GeneralInventorySlotIndex = OnSelectedInventorySlot;
             _selected.OnChanged_BuyBackSlotIndex = OnSelectedBuyBackSlot;
             _selected.OnChanged_ShopSlotIndex = OnSelectedShopSlot;
@@ -397,6 +398,7 @@ namespace BeastHunterHubUI
 
         public void Destroying()
         {
+            _player.OnChangeGoldAmount -= OnChangedPlayerGoldAmount;
             _generalInventory.OnPutItemToSlotHandler -= FillSlotUI;
             _generalInventory.OnTakeItemFromSlotHandler -= FillSlotUI;
             _character3DViewModelRawImageBehaviour.OnDropHandler -= OnDropItemOn3DViewModelRawImage;
@@ -527,18 +529,14 @@ namespace BeastHunterHubUI
         private void OnClick_PerkTreeButton()
         {
             _hikePanel.SetActive(false);
-
             SetOtherParentForPanel(_charactersPanelRelocatable, _perksCharactersPanel);
-
             _perksPanel.SetActive(true);
         }
 
         private void OnClick_ClosePerksButton()
         {
             _perksPanel.SetActive(false);
-
             SetOtherParentForPanel(_charactersPanelRelocatable, _hikeCharactersPanel);
-
             _hikePanel.SetActive(true);
         }
 
@@ -571,21 +569,7 @@ namespace BeastHunterHubUI
         {
             if (_selected.GeneralInventorySlotIndex.HasValue)
             {
-                BaseItemModel sellingItem = _generalInventory.GetItemBySlot(_selected.GeneralInventorySlotIndex.Value);
-
-                if (sellingItem != null)
-                {
-                    if ((_selected.MapObject as CityModel).BuyBackStorage.PutItemToFirstEmptySlot(sellingItem))
-                    {
-                        _generalInventory.RemoveItem(_selected.GeneralInventorySlotIndex.Value);
-                        ChangePlayerGoldAmount(HubUIServices.SharedInstance.ShopService.CountSellPrice(sellingItem));
-                    }
-                    else
-                    {
-                        Debug.Log("BuyBack storage is full");
-                    }
-                }
-
+                HubUIServices.SharedInstance.ShopService.SellItem(_selected.MapObject as CityModel, _selected.GeneralInventorySlotIndex.Value);
                 _selected.GeneralInventorySlotIndex = null;
             }
         }
@@ -594,28 +578,7 @@ namespace BeastHunterHubUI
         {
             if (_selected.BuyBackSlotIndex.HasValue)
             {
-                ItemStorage buyBackStorage = (_selected.MapObject as CityModel).BuyBackStorage;
-                BaseItemModel buyingItem = buyBackStorage.GetItemBySlot(_selected.BuyBackSlotIndex.Value);
-                if (buyingItem != null)
-                {
-                    if (_player.GoldAmount >= HubUIServices.SharedInstance.ShopService.CountSellPrice(buyingItem))
-                    {
-                        if (_generalInventory.PutItemToFirstEmptySlot(buyingItem))
-                        {
-                            buyBackStorage.RemoveItem(_selected.BuyBackSlotIndex.Value);
-                            ChangePlayerGoldAmount(-HubUIServices.SharedInstance.ShopService.CountSellPrice(buyingItem));
-                        }
-                        else
-                        {
-                            Debug.Log("Inventory storage is full");
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("The player does not have enough gold ");
-                    }
-                }
-
+                HubUIServices.SharedInstance.ShopService.BuyBackItem(_selected.MapObject as CityModel, _selected.BuyBackSlotIndex.Value);
                 _selected.BuyBackSlotIndex = null;
             }
         }
@@ -624,29 +587,7 @@ namespace BeastHunterHubUI
         {
             if (_selected.ShopSlotIndex.HasValue)
             {
-                ItemStorage shopStorage = (_selected.MapObject as CityModel).ShopStorage;
-                BaseItemModel buyingItem = shopStorage.GetItemBySlot(_selected.ShopSlotIndex.Value);
-
-                if (buyingItem != null)
-                {
-                    if (HubUIServices.SharedInstance.ShopService.IsPossibleToBuyShopItem(buyingItem, _selected.MapObject as CityModel))
-                    {
-                        if (_generalInventory.PutItemToFirstEmptySlot(buyingItem))
-                        {
-                            shopStorage.RemoveItem(_selected.ShopSlotIndex.Value);
-                            ChangePlayerGoldAmount(-HubUIServices.SharedInstance.ShopService.GetItemPrice(buyingItem));
-                        }
-                        else
-                        {
-                            Debug.Log("Inventory storage is full");
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("The player does not have enough gold ");
-                    }
-                }
-
+                HubUIServices.SharedInstance.ShopService.BuyItem(_selected.MapObject as CityModel, _selected.ShopSlotIndex.Value);
                 _selected.ShopSlotIndex = null;
             }
         }
@@ -982,6 +923,18 @@ namespace BeastHunterHubUI
         {
             DestroyPocketsSlotsUI();
             InitializePocketsSlotsUI(_selected.Character.Pockets.GetSlotsCount());
+        }
+
+        private void OnChangedPlayerGoldAmount(int goldAmount)
+        {
+            _playerGoldAmount.text = goldAmount.ToString();
+
+            for (int i = 0; i < _shopSlotsUIBehaviours.Count; i++)
+            {
+                CityModel selectedCity = _selected.MapObject as CityModel;
+                _shopSlotsUIBehaviours[i].SetAvailability
+                    (HubUIServices.SharedInstance.ShopService.IsPossibleToBuyShopItem(selectedCity.ShopStorage.GetItemBySlot(i), selectedCity));
+            }
         }
 
         #endregion
@@ -1541,19 +1494,6 @@ namespace BeastHunterHubUI
             if (!(isSuccefulTakeItems && isSuccefullPutItems))
             {
                 Debug.LogWarning("Drag and drop swap items operation was not successful");
-            }
-        }
-
-        private void ChangePlayerGoldAmount(int goldAmount)
-        {
-            _player.GoldAmount += goldAmount;
-            _playerGoldAmount.text = _player.GoldAmount.ToString();
-
-            for (int i = 0; i < _shopSlotsUIBehaviours.Count; i++)
-            {
-                CityModel selectedCity = _selected.MapObject as CityModel;
-                _shopSlotsUIBehaviours[i].SetAvailability
-                    (HubUIServices.SharedInstance.ShopService.IsPossibleToBuyShopItem(selectedCity.ShopStorage.GetItemBySlot(i), selectedCity));
             }
         }
 
