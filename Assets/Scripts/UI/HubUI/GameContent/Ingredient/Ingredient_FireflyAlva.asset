@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07d7feadb4e9be949acaee9d22083f16, type: 3}
+  m_Script: {fileID: 11500000, guid: 824d42d03cfd9244cac4cd009c52c779, type: 3}
   m_Name: Ingredient_FireflyAlva
   m_EditorClassIdentifier: 
   _name: "\u0421\u0432\u0435\u0442\u043B\u044F\u0447\u043E\u043A \u0410\u043B\u044C\u0432\u0430"

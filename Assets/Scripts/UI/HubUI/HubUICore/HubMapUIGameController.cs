@@ -26,7 +26,7 @@ namespace BeastHunter
             new HubMapUIGameContentInitializeController(_context);
             new HubMapUIQuestController(_context);
 
-            Add(GameObject.Find("HubMap").GetComponent<HubMapUIMainBehaviour>());
+            Add(GameObject.Find("HubUI").GetComponentInChildren<HubMapUIMainBehaviour>());
             Initialize();
         }
 
