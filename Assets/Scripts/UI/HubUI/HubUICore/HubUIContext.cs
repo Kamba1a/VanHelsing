@@ -17,6 +17,7 @@ namespace BeastHunterHubUI
         public List<CityModel> Cities { get; private set; }
         public List<LocationModel> Locations { get; private set; }
         public QuestData[] QuestsData { get; private set; }
+        public GameTimeModel GameTime { get; private set; }
 
         #endregion
 
@@ -43,6 +44,7 @@ namespace BeastHunterHubUI
             CharactersClothEquipment = data.ClothSlots;
 
             Player = new PlayerModel(data.Player);
+            GameTime = new GameTimeModel(data.HoursAmountPerDay, data.DayOnStartGame, data.HoursOnStartGame);
 
             for (int i = 0; i < data.Characters.Length; i++)
             {

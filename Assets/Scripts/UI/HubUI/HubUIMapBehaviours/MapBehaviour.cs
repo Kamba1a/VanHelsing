@@ -129,6 +129,7 @@ namespace BeastHunterHubUI
 
         private const float CHARACTERS_PANEL_SCROLLBAR_STEP = 1.0f;
         private const float SHOW_TOOLTIP_DELAY = 2.0f;
+        private const int DEFAULT_TIME_SKIP_HOURS_AMOUNT = 1;
 
         #endregion
 
@@ -147,6 +148,8 @@ namespace BeastHunterHubUI
         [SerializeField] private GameObject _inventoryItemsPanel;
         [SerializeField] private GameObject _tooltip;
         [SerializeField] private GameObject _loadingPanel;
+        [SerializeField] private Button _clockButton;
+        [SerializeField] private Text _clockText;
 
         [Header("City info panel")]
         [SerializeField] private GameObject _cityInfoPanel;
@@ -215,6 +218,15 @@ namespace BeastHunterHubUI
         [SerializeField] private Button _closePerksPanelButton;
         [SerializeField] private GameObject _perksCharactersPanel;
 
+        [Header("Time skip panel")]
+        [SerializeField] private GameObject _timeSkipPanel;
+        [SerializeField] private Button _reduceHoursAmountButton;
+        [SerializeField] private Button _addHoursAmountButton;
+        [SerializeField] private Text _timeSkipHoursAmountText;
+        [SerializeField] private Button _timeSkipButton;
+        [SerializeField] private Button _closeTimeSkipPanelButton;
+
+
 
         private HubUIContext _context;
         private HubUIMapData _data;
@@ -239,6 +251,7 @@ namespace BeastHunterHubUI
         private MapCharacterView3DModelBehaviour _character3DViewModelRawImageBehaviour;
 
         private Coroutine _showTooltipCoroutine; //Yeah, this is coroutine. No one reviews my code anyway..
+        private int _timeSkipHoursAmountValue;
 
         #endregion
 
@@ -253,7 +266,7 @@ namespace BeastHunterHubUI
             _hikeAcceptButton.onClick.AddListener(OnClick_HikeAcceptButton);
             _closeHikePanelButton.onClick.AddListener(OnClick_CloseHikePanelButton);
             _hikePanelButton.onClick.AddListener(OnClick_HikePanelButton);
-            _charactersPanelNextButton.onClick.AddListener(()=> OnClick_CharactersPanelNavigationButton(CHARACTERS_PANEL_SCROLLBAR_STEP));
+            _charactersPanelNextButton.onClick.AddListener(() => OnClick_CharactersPanelNavigationButton(CHARACTERS_PANEL_SCROLLBAR_STEP));
             _charactersPanelPreviousButton.onClick.AddListener(() => OnClick_CharactersPanelNavigationButton(-CHARACTERS_PANEL_SCROLLBAR_STEP));
             _perkTreeButton.onClick.AddListener(OnClick_PerkTreeButton);
             _shopButton.onClick.AddListener(OnClick_OpenTradePanelButton);
@@ -393,6 +406,8 @@ namespace BeastHunterHubUI
             _hikeAcceptButton.interactable = false;
             _loadingPanel.SetActive(false);
             _character3DViewModelRawImage.enabled = false;
+
+            _clockText.text = _context.GameTime.CurrentHour.ToString() + ":00";
         }
 
         #endregion
@@ -410,10 +425,31 @@ namespace BeastHunterHubUI
 
         #endregion
 
-  
+
         #region Methods
 
         #region OnClick
+
+        private void OnClick_ClockButton()
+        {
+            _timeSkipHoursAmountValue = DEFAULT_TIME_SKIP_HOURS_AMOUNT;
+            _timeSkipPanel.SetActive(true);
+        }
+
+        private void OnClick_CloseTimeSkipPanel()
+        {
+            _timeSkipPanel.SetActive(false);
+        }
+
+        private void OnClick_ChangeTimeSkipHoursAmount(int hoursAmount)
+        {
+
+        }
+
+        private void OnClick_TimeSkipButton()
+        {
+
+        }
 
         private void OnClick_MapButton()
         {

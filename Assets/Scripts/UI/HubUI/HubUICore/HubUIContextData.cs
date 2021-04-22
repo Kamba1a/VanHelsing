@@ -18,6 +18,11 @@ namespace BeastHunterHubUI
         [SerializeField] private LocationData[] _locations;
         [SerializeField] private QuestData[] _quests;
 
+        [Header("Game Time")]
+        [SerializeField] private int _hoursAmountPerDay;
+        [SerializeField] private int _hoursOnStartGame;
+        [SerializeField] private int _dayOnStartGame;
+
         #endregion
 
 
@@ -32,6 +37,9 @@ namespace BeastHunterHubUI
         public CityData[] Cities => (CityData[])_cities.Clone();
         public LocationData[] Locations => (LocationData[])_locations.Clone();
         public QuestData[] Quests => (QuestData[])_quests.Clone();
+        public int HoursAmountPerDay => _hoursAmountPerDay;
+        public int HoursOnStartGame => _hoursOnStartGame;
+        public int DayOnStartGame => _dayOnStartGame;
 
         #endregion
     }
