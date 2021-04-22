@@ -1,9 +1,10 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 
 namespace BeastHunterHubUI
@@ -127,6 +128,7 @@ namespace BeastHunterHubUI
         #region Constants
 
         private const float CHARACTERS_PANEL_SCROLLBAR_STEP = 1.0f;
+        private const float SHOW_TOOLTIP_DELAY = 2.0f;
 
         #endregion
 
@@ -235,6 +237,8 @@ namespace BeastHunterHubUI
 
         private GameObject _character3DViewModelRendering;
         private MapCharacterView3DModelBehaviour _character3DViewModelRawImageBehaviour;
+
+        private Coroutine _showTooltipCoroutine; //Yeah, this is coroutine. No one reviews my code anyway..
 
         #endregion
 
@@ -613,29 +617,19 @@ namespace BeastHunterHubUI
 
         private void OnPointerEnter_Slot(int slotIndex, ItemStorageType storageType)
         {
-            FillTooltipByItemInfo(slotIndex, storageType);
-
-            RectTransform tooltipRectTransform = _tooltip.GetComponent<RectTransform>();
-
-            if (storageType == ItemStorageType.GeneralInventory && _hikePanel.activeSelf)
+            if(_showTooltipCoroutine != null)
             {
-                tooltipRectTransform.pivot = new Vector2(0, 1);
+                StopCoroutine(_showTooltipCoroutine);
             }
-            else if (storageType == ItemStorageType.ShopStorage || storageType == ItemStorageType.BuyBackStorage)
-            {
-                tooltipRectTransform.pivot = new Vector2(1, 0);
-            }
-            else
-            {
-                tooltipRectTransform.pivot = new Vector2(0, 0);
-            }
-
-            _tooltip.transform.position = Mouse.current.position.ReadValue();
-            _tooltip.SetActive(true);
+            _showTooltipCoroutine = StartCoroutine(ShowTooltip(slotIndex, storageType));
         }
 
         private void OnPointerExit_Slot(int slotIndex)
         {
+            if (_showTooltipCoroutine != null)
+            {
+                StopCoroutine(_showTooltipCoroutine);
+            }
             _tooltip.SetActive(false);
         }
 
@@ -675,6 +669,10 @@ namespace BeastHunterHubUI
         private void OnBeginDragItemFromSlot(int slotIndex, ItemStorageType storageType)
         {
             _tooltip.SetActive(false);
+            if(_showTooltipCoroutine != null)
+            {
+                StopCoroutine(_showTooltipCoroutine);
+            }
             _draggedItemInfo.slotIndex = slotIndex;
             _draggedItemInfo.storageType = storageType;
         }
@@ -1060,7 +1058,7 @@ namespace BeastHunterHubUI
 
             if (answer.IsDialogEnd)
             {
-                answerButton.GetComponentInChildren<Text>().text += " (ÛÈÚË)";
+                answerButton.GetComponentInChildren<Text>().text += " (—É–π—Ç–∏)";
             }
 
             answerButton.GetComponentInChildren<Button>().interactable = answer.IsInteractable;
@@ -1145,7 +1143,7 @@ namespace BeastHunterHubUI
                 tooltipTexts[0].gameObject.SetActive(false);
                 tooltipTexts[1].text = item.Name;
                 tooltipTexts[2].text = item.Description;
-                tooltipTexts[3].text = "÷ÂÌ‡: " + HubUIServices.SharedInstance.ShopService.GetItemPrice(item).ToString();
+                tooltipTexts[3].text = "–¶–µ–Ω–∞: " + HubUIServices.SharedInstance.ShopService.GetItemPrice(item).ToString();
 
                 if (storageType == ItemStorageType.ShopStorage)
                 {
@@ -1495,6 +1493,33 @@ namespace BeastHunterHubUI
             {
                 Debug.LogWarning("Drag and drop swap items operation was not successful");
             }
+        }
+
+        private IEnumerator ShowTooltip(int slotIndex, ItemStorageType storageType)
+        {
+            yield return new WaitForSeconds(SHOW_TOOLTIP_DELAY);
+
+            FillTooltipByItemInfo(slotIndex, storageType);
+
+            RectTransform tooltipRectTransform = _tooltip.GetComponent<RectTransform>();
+
+            if (storageType == ItemStorageType.GeneralInventory && _hikePanel.activeSelf)
+            {
+                tooltipRectTransform.pivot = new Vector2(0, 1);
+            }
+            else if (storageType == ItemStorageType.ShopStorage || storageType == ItemStorageType.BuyBackStorage)
+            {
+                tooltipRectTransform.pivot = new Vector2(1, 0);
+            }
+            else
+            {
+                tooltipRectTransform.pivot = new Vector2(0, 0);
+            }
+
+            _tooltip.transform.position = Mouse.current.position.ReadValue();
+            _tooltip.SetActive(true);
+
+            yield return null;
         }
 
          private void LocationLoad()
