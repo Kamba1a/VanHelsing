@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-
+﻿using System;
+using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    [CreateAssetMenu(fileName = "MapData", menuName = "CreateData/HubUIData/MapData", order = 0)]
-    public class HubUIMapData : ScriptableObject
+    [Serializable]
+    public struct MapDataStruct
     {
         #region Fields
 
-        [Header("UI prefabs")]
+        [Header("Prefabs")]
         [SerializeField] private GameObject _citizenUIPrefab;
         [SerializeField] private GameObject _locationTextUIPrefab;
         [SerializeField] private GameObject _characterUIPrefab;
@@ -19,15 +19,12 @@ namespace BeastHunterHubUI
         [SerializeField] private GameObject _characters3DViewRenderingPrefab;
         [SerializeField] private GameObject _characterBackpuckSlotUIPrefab;
 
-        [Header("UI settings")]
+        [Header("Settings")]
         [SerializeField] private bool _mapOnStartEnabled;
         [SerializeField] private Vector3 _characters3DViewRenderingObjectPosition;
 
         [Header("Objects on map")]
         [SerializeField] private MapObjectData[] _mapObjects;
-
-        [Header("Game content for UI")]
-        [SerializeField] private HubUIContextData _contextData;
 
         [Header("Equipment slot type sprites")]
         [SerializeField] Sprite _weaponSlotIcon;
@@ -59,13 +56,8 @@ namespace BeastHunterHubUI
         public GameObject Characters3DViewRenderingPrefab => _characters3DViewRenderingPrefab;
         public Vector3 Characters3DViewRenderingObjectPosition => _characters3DViewRenderingObjectPosition;
         public GameObject CharacterBackpuckSlotUIPrefab => _characterBackpuckSlotUIPrefab;
-
         public bool MapOnStartEnabled => _mapOnStartEnabled;
-
-        public MapObjectData[] MapObjects => (MapObjectData[])_mapObjects.Clone();
-
-        public HubUIContextData ContextData => _contextData;
-
+        public MapObjectData[] MapObjects => _mapObjects;
         public Sprite WeaponSlotIcon => _weaponSlotIcon;
         public Sprite PocketItemSlotIcon => _pocketItemSlotIcon;
 
