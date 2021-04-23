@@ -129,7 +129,7 @@ namespace BeastHunterHubUI
 
         private const float CHARACTERS_PANEL_SCROLLBAR_STEP = 1.0f;
         private const float SHOW_TOOLTIP_DELAY = 2.0f;
-        private const int DEFAULT_TIME_SKIP_HOURS_AMOUNT = 1;
+        private const float SKIP_TIME_DELAY = 1.0f;
 
         #endregion
 
@@ -149,7 +149,6 @@ namespace BeastHunterHubUI
         [SerializeField] private GameObject _tooltip;
         [SerializeField] private GameObject _loadingPanel;
         [SerializeField] private Button _clockButton;
-        [SerializeField] private Text _clockText;
 
         [Header("City info panel")]
         [SerializeField] private GameObject _cityInfoPanel;
@@ -218,14 +217,14 @@ namespace BeastHunterHubUI
         [SerializeField] private Button _closePerksPanelButton;
         [SerializeField] private GameObject _perksCharactersPanel;
 
-        [Header("Time skip panel")]
+        [Header("Time skip panel (PROTOTYPE)")]
         [SerializeField] private GameObject _timeSkipPanel;
-        [SerializeField] private Button _reduceHoursAmountButton;
-        [SerializeField] private Button _addHoursAmountButton;
-        [SerializeField] private Text _timeSkipHoursAmountText;
-        [SerializeField] private Button _timeSkipButton;
-        [SerializeField] private Button _closeTimeSkipPanelButton;
-
+        [SerializeField] private Button _closeTimeSkipPanel;
+        [SerializeField] private Button _startTimeSkipButton;
+        [SerializeField] private Button _stopTimeSkipButton;
+        [SerializeField] private Text _currentDayText;
+        [SerializeField] private Text _currentHourText;
+        [SerializeField] private Button _orderButton;
 
 
         private HubUIContext _context;
@@ -251,7 +250,8 @@ namespace BeastHunterHubUI
         private MapCharacterView3DModelBehaviour _character3DViewModelRawImageBehaviour;
 
         private Coroutine _showTooltipCoroutine; //Yeah, this is coroutine. No one reviews my code anyway..
-        private int _timeSkipHoursAmountValue;
+        private Coroutine _timeSkipCoroutine;
+        private bool _isTimeSkipCoroutineActive;
 
         #endregion
 
@@ -266,7 +266,7 @@ namespace BeastHunterHubUI
             _hikeAcceptButton.onClick.AddListener(OnClick_HikeAcceptButton);
             _closeHikePanelButton.onClick.AddListener(OnClick_CloseHikePanelButton);
             _hikePanelButton.onClick.AddListener(OnClick_HikePanelButton);
-            _charactersPanelNextButton.onClick.AddListener(() => OnClick_CharactersPanelNavigationButton(CHARACTERS_PANEL_SCROLLBAR_STEP));
+            _charactersPanelNextButton.onClick.AddListener(()=> OnClick_CharactersPanelNavigationButton(CHARACTERS_PANEL_SCROLLBAR_STEP));
             _charactersPanelPreviousButton.onClick.AddListener(() => OnClick_CharactersPanelNavigationButton(-CHARACTERS_PANEL_SCROLLBAR_STEP));
             _perkTreeButton.onClick.AddListener(OnClick_PerkTreeButton);
             _shopButton.onClick.AddListener(OnClick_OpenTradePanelButton);
@@ -275,6 +275,10 @@ namespace BeastHunterHubUI
             _buyBackButton.onClick.AddListener(OnClick_BuyBackItemButton);
             _buyButton.onClick.AddListener(OnClick_BuyItemButton);
             _closePerksPanelButton.onClick.AddListener(OnClick_ClosePerksButton);
+            _clockButton.onClick.AddListener(OnClick_ClockButton);
+            _closeTimeSkipPanel.onClick.AddListener(OnClick_CloseTimeSkipPanelButton);
+            _startTimeSkipButton.onClick.AddListener(OnClick_StartTimeSkipButton);
+            _stopTimeSkipButton.onClick.AddListener(OnClick_StopTimeSkipButton);
         }
 
         private void OnDisable()
@@ -294,6 +298,10 @@ namespace BeastHunterHubUI
             _buyBackButton.onClick.RemoveAllListeners();
             _buyButton.onClick.RemoveAllListeners();
             _closePerksPanelButton.onClick.RemoveAllListeners();
+            _clockButton.onClick.RemoveAllListeners();
+            _closeTimeSkipPanel.onClick.RemoveAllListeners();
+            _startTimeSkipButton.onClick.RemoveAllListeners();
+            _stopTimeSkipButton.onClick.RemoveAllListeners();
         }
 
         #endregion
@@ -381,15 +389,18 @@ namespace BeastHunterHubUI
             _generalInventory.OnPutItemToSlotHandler += FillSlotUI;
             _generalInventory.OnTakeItemFromSlotHandler += FillSlotUI;
 
-            _player.OnChangeGoldAmount += OnChangedPlayerGoldAmount;
-
             _selected.OnChanged_GeneralInventorySlotIndex = OnSelectedInventorySlot;
             _selected.OnChanged_BuyBackSlotIndex = OnSelectedBuyBackSlot;
             _selected.OnChanged_ShopSlotIndex = OnSelectedShopSlot;
             _selected.OnChanged_Character = OnSelectedCharacter;
             _selected.OnChanged_MapObject = OnSelectedMapObject;
 
+            _player.OnChangeGoldAmount += OnChangedPlayerGoldAmount;
             _character3DViewModelRawImageBehaviour.OnDropHandler += OnDropItemOn3DViewModelRawImage;
+            _context.GameTime.OnChangeTimeHandler += OnChanged_GameTime;
+
+            _currentDayText.text = context.GameTime.CurrentTime.Day.ToString();
+            _currentHourText.text = context.GameTime.CurrentTime.Hour.ToString();
 
             _mainPanel.SetActive(_data.MapOnStartEnabled);
             _infoPanel.SetActive(false);
@@ -406,8 +417,7 @@ namespace BeastHunterHubUI
             _hikeAcceptButton.interactable = false;
             _loadingPanel.SetActive(false);
             _character3DViewModelRawImage.enabled = false;
-
-            _clockText.text = _context.GameTime.CurrentHour.ToString() + ":00";
+            _timeSkipPanel.SetActive(false);
         }
 
         #endregion
@@ -421,34 +431,43 @@ namespace BeastHunterHubUI
             _generalInventory.OnPutItemToSlotHandler -= FillSlotUI;
             _generalInventory.OnTakeItemFromSlotHandler -= FillSlotUI;
             _character3DViewModelRawImageBehaviour.OnDropHandler -= OnDropItemOn3DViewModelRawImage;
+            _context.GameTime.OnChangeTimeHandler -= OnChanged_GameTime;
         }
 
         #endregion
 
-
+  
         #region Methods
 
         #region OnClick
 
+        private void OnClick_OrderButton()
+        {
+            _context.Characters[0].GetOrder(new OrderStruct(OrderType.Alchemy, 4));
+        }
+
+        private void OnClick_StartTimeSkipButton()
+        {
+            if (!_isTimeSkipCoroutineActive)
+            {
+                _isTimeSkipCoroutineActive = true;
+                _timeSkipCoroutine = StartCoroutine(StartTimeSkip());
+            }
+        }
+
+        private void OnClick_StopTimeSkipButton()
+        {
+            StopTimeSkip();
+        }
+
         private void OnClick_ClockButton()
         {
-            _timeSkipHoursAmountValue = DEFAULT_TIME_SKIP_HOURS_AMOUNT;
             _timeSkipPanel.SetActive(true);
         }
 
-        private void OnClick_CloseTimeSkipPanel()
+        private void OnClick_CloseTimeSkipPanelButton()
         {
             _timeSkipPanel.SetActive(false);
-        }
-
-        private void OnClick_ChangeTimeSkipHoursAmount(int hoursAmount)
-        {
-
-        }
-
-        private void OnClick_TimeSkipButton()
-        {
-
         }
 
         private void OnClick_MapButton()
@@ -953,6 +972,12 @@ namespace BeastHunterHubUI
 
         #region OnChanged
 
+        private void OnChanged_GameTime(GameTimeStruct currentTime)
+        {
+            _currentDayText.text = currentTime.Day.ToString();
+            _currentHourText.text = currentTime.Hour.ToString();
+        }
+
         private void OnChangedPocketsSlotsAmount()
         {
             DestroyPocketsSlotsUI();
@@ -1341,6 +1366,23 @@ namespace BeastHunterHubUI
 
         #endregion
 
+        private IEnumerator StartTimeSkip()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(SKIP_TIME_DELAY);
+                _context.GameTime.OneHourPass();
+            }
+        }
+
+        private void StopTimeSkip()
+        {
+            if(_isTimeSkipCoroutineActive && _timeSkipCoroutine != null)
+            {
+                StopCoroutine(_timeSkipCoroutine);
+                _isTimeSkipCoroutineActive = false;
+            }
+        }
 
         private void HideRightInfoPanels()
         {
