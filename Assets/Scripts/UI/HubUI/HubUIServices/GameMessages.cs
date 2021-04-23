@@ -12,6 +12,11 @@ namespace BeastHunterHubUI
             Debug.Log(msg);
         }
 
+        public void Window(string msg)
+        {
+            Debug.Log(msg);
+        }
+
         #endregion
     }
 }
