@@ -12,7 +12,7 @@ namespace BeastHunterHubUI
         [SerializeField] private int _pocketsAmount;
         [Tooltip("Sure to use fantasy hero material shader (SyntyStudios/CustomCharacter)")]
         [SerializeField] private Material _fantasyHeroMaterial;
-        [SerializeField] private string[] _clothesPartsNamesAllGender;
+        [SerializeField] private string[] _clothesPartsNamesAllGender;  //todo: quick clothes saver for game designers ?
         [SerializeField] private string[] _clothesPartsNamesMale;
         [SerializeField] private string[] _clothesPartsNamesFemale;
         [SerializeField] private CharacterHeadPartType[] _disabledHeadParts;

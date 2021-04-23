@@ -129,7 +129,6 @@ namespace BeastHunterHubUI
 
         private const float CHARACTERS_PANEL_SCROLLBAR_STEP = 1.0f;
         private const float SHOW_TOOLTIP_DELAY = 2.0f;
-        private const float SKIP_TIME_DELAY = 1.0f;
 
         #endregion
 
@@ -249,9 +248,8 @@ namespace BeastHunterHubUI
         private GameObject _character3DViewModelRendering;
         private MapCharacterView3DModelBehaviour _character3DViewModelRawImageBehaviour;
 
-        private Coroutine _showTooltipCoroutine; //Yeah, this is coroutine. No one reviews my code anyway..
-        private Coroutine _timeSkipCoroutine;
-        private bool _isTimeSkipCoroutineActive;
+        //Yeah, this is coroutine. No one reviews my code anyway..
+        private Coroutine _showTooltipCoroutine;
 
         #endregion
 
@@ -276,9 +274,11 @@ namespace BeastHunterHubUI
             _buyButton.onClick.AddListener(OnClick_BuyItemButton);
             _closePerksPanelButton.onClick.AddListener(OnClick_ClosePerksButton);
             _clockButton.onClick.AddListener(OnClick_ClockButton);
+
             _closeTimeSkipPanel.onClick.AddListener(OnClick_CloseTimeSkipPanelButton);
             _startTimeSkipButton.onClick.AddListener(OnClick_StartTimeSkipButton);
             _stopTimeSkipButton.onClick.AddListener(OnClick_StopTimeSkipButton);
+            _orderButton.onClick.AddListener(OnClick_OrderButton);
         }
 
         private void OnDisable()
@@ -299,9 +299,11 @@ namespace BeastHunterHubUI
             _buyButton.onClick.RemoveAllListeners();
             _closePerksPanelButton.onClick.RemoveAllListeners();
             _clockButton.onClick.RemoveAllListeners();
+
             _closeTimeSkipPanel.onClick.RemoveAllListeners();
             _startTimeSkipButton.onClick.RemoveAllListeners();
             _stopTimeSkipButton.onClick.RemoveAllListeners();
+            _orderButton.onClick.RemoveAllListeners();
         }
 
         #endregion
@@ -436,28 +438,35 @@ namespace BeastHunterHubUI
 
         #endregion
 
-  
+
         #region Methods
 
         #region OnClick
 
-        private void OnClick_OrderButton()
+        private void OnClick_OrderButton()  //WIP, just for testing order and event system
         {
-            _context.Characters[0].GetOrder(new OrderStruct(OrderType.Alchemy, 4));
+            if (!_context.Characters[0].IsHaveOrder)
+            {
+                OrderModel testOrder = new OrderModel(OrderType.Alchemy, 4);
+                testOrder.AssignCharacter(_context.Characters[0]);
+                testOrder.OnCompleteHandler += (order) => Debug.Log($"Order {order.OrderType} is completed");
+            }
         }
 
         private void OnClick_StartTimeSkipButton()
         {
-            if (!_isTimeSkipCoroutineActive)
+            if (!_context.GameTime.IsTimePassing)
             {
-                _isTimeSkipCoroutineActive = true;
-                _timeSkipCoroutine = StartCoroutine(StartTimeSkip());
+                StartCoroutine(_context.GameTime.StartTimeSkip());
             }
         }
 
         private void OnClick_StopTimeSkipButton()
         {
-            StopTimeSkip();
+            if (_context.GameTime.IsTimePassing)
+            {
+                _context.GameTime.StopTimeSkip();
+            }
         }
 
         private void OnClick_ClockButton()
@@ -1366,23 +1375,6 @@ namespace BeastHunterHubUI
 
         #endregion
 
-        private IEnumerator StartTimeSkip()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(SKIP_TIME_DELAY);
-                _context.GameTime.OneHourPass();
-            }
-        }
-
-        private void StopTimeSkip()
-        {
-            if(_isTimeSkipCoroutineActive && _timeSkipCoroutine != null)
-            {
-                StopCoroutine(_timeSkipCoroutine);
-                _isTimeSkipCoroutineActive = false;
-            }
-        }
 
         private void HideRightInfoPanels()
         {

@@ -8,6 +8,8 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
+        HubUIContext _context;
+
         private List<IStart> _startBehaviours;
         private List<IUpdate> _updateBehaviours;
         private List<IDestroy> _destroyBehaviours;
@@ -31,11 +33,12 @@ namespace BeastHunterHubUI
 
         private void Start()
         {
-            HubUIContext context = new HubUIContext();
-            HubUIServices.SharedInstance.InitializeServices(context);
-            context.Initialize(BeastHunter.Data.HubMapData.ContextData);
-            new QuestController(context);
-            StartBehaviours(context);
+            _context = new HubUIContext();
+            HubUIServices.SharedInstance.InitializeServices(_context);
+            _context.Initialize(BeastHunter.Data.HubMapData.ContextData);
+            _context.GameTime.OnChangeTimeHandler += HubUIServices.SharedInstance.EventsService.OnChangedGameTime;
+            new QuestController(_context);
+            StartBehaviours(_context);
         }
 
         private void Update()
@@ -53,6 +56,7 @@ namespace BeastHunterHubUI
                 _destroyBehaviours[i].Destroying();
             }
 
+            _context.GameTime.OnChangeTimeHandler -= HubUIServices.SharedInstance.EventsService.OnChangedGameTime;
             HubUIServices.SharedInstance.DisposeGameServices();
         }
 

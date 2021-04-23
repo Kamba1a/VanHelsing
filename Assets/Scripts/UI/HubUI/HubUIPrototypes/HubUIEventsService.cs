@@ -9,22 +9,34 @@ namespace BeastHunterHubUI
         private const float RANDOM_EVENT_CHANCE = 0.05f; 
 
 
-        private GameTimeModel _gameTimeModel;
+        private HubUIContext _context;
         private Dictionary<GameTimeStruct, List<HubUIEventModel>> _scheduledEvents;
 
 
-        public HubUIEventsService(GameTimeModel gameTimeModel)
+        public HubUIEventsService(HubUIContext context)
         {
-            _gameTimeModel = gameTimeModel;
-            _gameTimeModel.OnChangeTimeHandler += OnChangedGameTime;
-
+            _context = context;
             _scheduledEvents = new Dictionary<GameTimeStruct, List<HubUIEventModel>>();
         }
 
 
-        public void AddEventToScheduler(HubUIEventModel eventModel)
+        public void RemoveOrderEvent(GameTimeStruct invokeTime, HubUIEventModel eventModel)
         {
-            GameTimeStruct invokeTime = eventModel.InvokeTime;
+            if (_scheduledEvents.ContainsKey(invokeTime))
+            {
+                _scheduledEvents[invokeTime].Remove(eventModel);
+            }
+        }
+
+        public HubUIEventModel CreateNewOrderEvent(OrderModel order)
+        {
+            HubUIEventModel newEvent = new HubUIEventModel(HubUIEventType.OrderCompleted);
+            AddEventToScheduler(order.CompletionTime.Value, newEvent);
+            return newEvent;
+        }
+
+        public void AddEventToScheduler(GameTimeStruct invokeTime, HubUIEventModel eventModel)
+        {
             if (!_scheduledEvents.ContainsKey(invokeTime))
             {
                 _scheduledEvents.Add(invokeTime, new List<HubUIEventModel>());
@@ -32,7 +44,7 @@ namespace BeastHunterHubUI
             _scheduledEvents[invokeTime].Add(eventModel);
         }
 
-        private void OnChangedGameTime(GameTimeStruct currentTime)
+        public void OnChangedGameTime(GameTimeStruct currentTime)
         {
             RandomEventCheck();
             ScheduleEventsCheck(currentTime);
@@ -42,12 +54,13 @@ namespace BeastHunterHubUI
         {
             if (_scheduledEvents.ContainsKey(invokeTime))
             {
-                //todo: stop time skip
+                _context.GameTime.StopTimeSkip();
                 for (int i = 0; i < _scheduledEvents[invokeTime].Count; i++)
                 {
                     _scheduledEvents[invokeTime][i].Invoke();
-                    HubUIServices.SharedInstance.GameMessages.Window($"Event {_scheduledEvents[invokeTime][i].Name} has happened!");
+                    HubUIServices.SharedInstance.GameMessages.Window($"Event {_scheduledEvents[invokeTime][i].EventType} has happened!");
                 }
+                _scheduledEvents.Remove(invokeTime);
             }
         }
 
@@ -55,7 +68,7 @@ namespace BeastHunterHubUI
         { 
             if (Random.Range(0, 101) <= RANDOM_EVENT_CHANCE * 100)
             {
-                //todo: !!a random event must stopped time skip!!
+                _context.GameTime.StopTimeSkip();
                 HubUIServices.SharedInstance.GameMessages.Window("A random event has happened!");
             }
         }

@@ -5,10 +5,14 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
+    //todo?:
+    //the ContextMenu method to quickly select a male or female character
+    //the ContextMenu method for randomization of one head only
     class CharacterSaver : MonoBehaviour
     {
         #region Fields
 
+        [Tooltip("Put the character SO, in which you want to save the form of the character on the scene")]
         [SerializeField] CharacterData _characterData;
         [SerializeField] private Material _fantasyHeroMaterial;
 

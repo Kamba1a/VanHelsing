@@ -7,20 +7,18 @@ namespace BeastHunterHubUI
     {
         #region Properties
 
-        public Action OnInvokeHandler { get; private set; }
+        public Action OnInvokeHandler { get; set; }
 
-        public string Name { get; private set; }
-        public GameTimeStruct InvokeTime { get; private set; }
+        public HubUIEventType EventType { get; private set; }
 
         #endregion
 
 
         #region ClassLifeCycle
 
-        public HubUIEventModel(string name, GameTimeStruct invokeTime)
+        public HubUIEventModel(HubUIEventType eventType)
         {
-            Name = name;
-            InvokeTime = invokeTime;
+            EventType = eventType;
         }
 
         #endregion

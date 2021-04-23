@@ -1,19 +1,22 @@
-﻿namespace BeastHunterHubUI
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+namespace BeastHunterHubUI
 {
     public class OrdersService
     {
-        private GameTimeModel _gameTime;
+        private HubUIContext _context;
 
 
-        public OrdersService(GameTimeModel gameTimeModel)
+        public OrdersService(HubUIContext context)
         {
-            _gameTime = gameTimeModel;
+            _context = context;
         }
 
 
-        public GameTimeStruct CalculateOrderCompletionTime(CharacterModel character, OrderStruct order)
+        public GameTimeStruct CalculateOrderCompletionTime(CharacterModel character, OrderModel order)
         {
-            GameTimeStruct orderCompletionTime = _gameTime.AddTime(order.BaseSpentHours);
+            GameTimeStruct orderCompletionTime = _context.GameTime.AddTime(order.BaseSpentHours);
             //
             //calculate logic
             //

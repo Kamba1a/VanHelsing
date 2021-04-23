@@ -34,8 +34,8 @@ namespace BeastHunterHubUI
         public EquippedClothesStorage ClothesEquipment { get; private set; }
         public PocketsStorage Pockets { get; private set; }
         public EquippedWeaponStorage WeaponEquipment { get; private set; }
+        public bool IsHaveOrder { get; set; }
         public MapCharacterBehaviour Behaviour { get; set; }
-        public OrderModel Order { get; private set; }
 
         #endregion
 
@@ -97,15 +97,6 @@ namespace BeastHunterHubUI
 
 
         #region Methods
-
-        public void GetOrder(OrderStruct order)
-        {
-            GameTimeStruct orderCompletionTime = HubUIServices.SharedInstance.OrdersService.CalculateOrderCompletionTime(this, order);
-            Order = new OrderModel(order.OrderType, orderCompletionTime);
-            HubUIServices.SharedInstance.GameMessages.Notice
-                ($"Character {Name} get the order {Order.OrderType}." +
-                $"Completion time: {Order.CompletionTime}");
-        }
 
         public void InitializeView3DModel(Transform parent)
         {

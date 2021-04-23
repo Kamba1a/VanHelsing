@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BeastHunterHubUI
 {
     public class GameTimeModel
     {
+        private const float SKIP_TIME_DELAY = 1.0f;
+
         #region Properties
 
-        public Action<GameTimeStruct> OnChangeTimeHandler;
+        public Action<GameTimeStruct> OnChangeTimeHandler { get; set; }
+        //public Action OnStartTimeSkipHandler { get; set; }
+        //public Action OnStopTimeSkipHandler { get; set; }
 
         public int HoursAmountPerDay { get; private set; }
         public GameTimeStruct CurrentTime { get; private set; }
+        public bool IsTimePassing { get; private set; }
 
         #endregion
 
@@ -21,12 +25,14 @@ namespace BeastHunterHubUI
 
         public GameTimeModel(int hoursAmountPerDay, int currentDay, int currentHour)
         {
+            IsTimePassing = false;
             HoursAmountPerDay = hoursAmountPerDay;
             CurrentTime = new GameTimeStruct(currentDay, currentHour);
         }
 
         public GameTimeModel(int hoursAmountPerDay, GameTimeStruct currentTime)
         {
+            IsTimePassing = false;
             HoursAmountPerDay = hoursAmountPerDay;
             CurrentTime = currentTime;
         }
@@ -35,6 +41,25 @@ namespace BeastHunterHubUI
 
 
         #region Methods
+
+        public IEnumerator StartTimeSkip()
+        {
+            IsTimePassing = true;
+            while (IsTimePassing)
+            {
+                yield return new WaitForSeconds(SKIP_TIME_DELAY);
+                if (!IsTimePassing)
+                {
+                    yield break;
+                }
+               OneHourPass();
+            }
+        }
+
+        public void StopTimeSkip()
+        {
+            IsTimePassing = false;
+        }
 
         public void OneHourPass()
         {
@@ -67,7 +92,7 @@ namespace BeastHunterHubUI
                 {
                     int h = hours;
                     int d = 0;
-                    while (h > HoursAmountPerDay - 1)
+                    while (h > HoursAmountPerDay - newTime.Hour)
                     {
                         h -= HoursAmountPerDay;
                         d++;
