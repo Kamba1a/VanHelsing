@@ -7,7 +7,7 @@ namespace BeastHunterHubUI
     {
         private HubUIEventModel _orderEvent;
 
-        public Action<string> OnCompleteHandler { get; set; }
+        public Action<OrderModel> OnCompleteHandler { get; set; }
 
         public OrderType OrderType { get; private set; }
         public int BaseSpentHours { get; private set; }
@@ -58,7 +58,7 @@ namespace BeastHunterHubUI
                 CompletionTime = null;
                 _orderEvent = null;
             }
-            OnCompleteHandler?.Invoke($"The order {OrderType} is completed!");
+            OnCompleteHandler?.Invoke(this);
         }
     }
 }
