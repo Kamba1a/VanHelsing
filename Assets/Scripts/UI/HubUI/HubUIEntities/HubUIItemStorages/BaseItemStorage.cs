@@ -29,6 +29,47 @@ namespace BeastHunterHubUI
         public abstract bool PutItem(int slotIndex, BaseItemModel item);
         public abstract bool PutItemToFirstEmptySlot(BaseItemModel item);
 
+        public virtual void SwapItemsWithOtherStorage(int currentStorageSlotIndex, BaseItemStorage otherStorage, int otherStorageSlotIndex)
+        {
+            BaseItemModel currentStorageItem = this.GetItemBySlot(currentStorageSlotIndex);
+            BaseItemModel otherStorageItem = otherStorage.GetItemBySlot(otherStorageSlotIndex);
+            bool isSuccefulTakeItems = false;
+            bool isSuccefullPutItems = false;
+
+            if (this.RemoveItem(currentStorageSlotIndex))
+            {
+                if (otherStorage.RemoveItem(otherStorageSlotIndex))
+                {
+                    isSuccefulTakeItems = true;
+                }
+                else
+                {
+                    this.PutItem(currentStorageSlotIndex, currentStorageItem);
+                }
+            }
+
+            if (isSuccefulTakeItems)
+            {
+                isSuccefullPutItems =
+                    this.PutItem(currentStorageSlotIndex, otherStorageItem) &&
+                    otherStorage.PutItem(otherStorageSlotIndex, currentStorageItem);
+
+                if (!isSuccefullPutItems)
+                {
+                    this.RemoveItem(currentStorageSlotIndex);
+                    this.PutItem(currentStorageSlotIndex, currentStorageItem);
+
+                    otherStorage.RemoveItem(otherStorageSlotIndex);
+                    otherStorage.PutItem(otherStorageSlotIndex, otherStorageItem);
+                }
+            }
+
+            if (!(isSuccefulTakeItems && isSuccefullPutItems))
+            {
+                Debug.LogWarning("Drag and drop swap items operation was not successful");
+            }
+        }
+
         public virtual bool RemoveItem(int slotIndex)
         {
             if (_items[slotIndex] != null)

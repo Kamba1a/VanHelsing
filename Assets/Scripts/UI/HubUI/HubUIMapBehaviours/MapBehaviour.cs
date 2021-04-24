@@ -752,8 +752,7 @@ namespace BeastHunterHubUI
         {
             if (_draggedItemInfo.slotIndex.HasValue)
             {
-                SwapItems
-                    (GetStorageByType(dropStorageType), dropSlotIndex,
+                GetStorageByType(dropStorageType).SwapItemsWithOtherStorage(dropSlotIndex,
                     GetStorageByType(_draggedItemInfo.storageType), _draggedItemInfo.slotIndex.Value);
 
                 switch (dropStorageType)
@@ -1447,7 +1446,7 @@ namespace BeastHunterHubUI
                 if (!clothesEquipmentStorage.PutItemToFirstEmptySlot(itemInClickedSlot))
                 {
                     int? firstSlot = clothesEquipmentStorage.GetFirstSlotIndexForItem(itemInClickedSlot as ClothesItemModel);
-                    SwapItems(clothesEquipmentStorage, firstSlot.Value, outStorage, outStorageSlotIndex);
+                    clothesEquipmentStorage.SwapItemsWithOtherStorage(firstSlot.Value, outStorage, outStorageSlotIndex);
                 }
                 else
                 {
@@ -1524,47 +1523,47 @@ namespace BeastHunterHubUI
             return objectUI;
         }
 
-        private void SwapItems(BaseItemStorage inStorage, int inStorageSlotIndex, BaseItemStorage outStorage, int outStorageSlotIndex)
-        {
-            BaseItemModel outStorageItem = outStorage.GetItemBySlot(outStorageSlotIndex);
-            BaseItemModel inStorageItem = inStorage.GetItemBySlot(inStorageSlotIndex);
-            bool isSuccefulTakeItems = false;
-            bool isSuccefullPutItems = false;
+        //private void SwapItems(BaseItemStorage inStorage, int inStorageSlotIndex, BaseItemStorage outStorage, int outStorageSlotIndex)
+        //{
+        //    BaseItemModel outStorageItem = outStorage.GetItemBySlot(outStorageSlotIndex);
+        //    BaseItemModel inStorageItem = inStorage.GetItemBySlot(inStorageSlotIndex);
+        //    bool isSuccefulTakeItems = false;
+        //    bool isSuccefullPutItems = false;
 
 
-            if (inStorage.RemoveItem(inStorageSlotIndex))
-            {
-                if (outStorage.RemoveItem(outStorageSlotIndex))
-                {
-                    isSuccefulTakeItems = true;
-                }
-                else
-                {
-                    inStorage.PutItem(inStorageSlotIndex, inStorageItem);
-                }
-            }
+        //    if (inStorage.RemoveItem(inStorageSlotIndex))
+        //    {
+        //        if (outStorage.RemoveItem(outStorageSlotIndex))
+        //        {
+        //            isSuccefulTakeItems = true;
+        //        }
+        //        else
+        //        {
+        //            inStorage.PutItem(inStorageSlotIndex, inStorageItem);
+        //        }
+        //    }
 
-            if (isSuccefulTakeItems)
-            {
-                isSuccefullPutItems =
-                    inStorage.PutItem(inStorageSlotIndex, outStorageItem) &&
-                    outStorage.PutItem(outStorageSlotIndex, inStorageItem);
+        //    if (isSuccefulTakeItems)
+        //    {
+        //        isSuccefullPutItems =
+        //            inStorage.PutItem(inStorageSlotIndex, outStorageItem) &&
+        //            outStorage.PutItem(outStorageSlotIndex, inStorageItem);
 
-                if (!isSuccefullPutItems)
-                {
-                    inStorage.RemoveItem(inStorageSlotIndex);
-                    inStorage.PutItem(inStorageSlotIndex, inStorageItem);
+        //        if (!isSuccefullPutItems)
+        //        {
+        //            inStorage.RemoveItem(inStorageSlotIndex);
+        //            inStorage.PutItem(inStorageSlotIndex, inStorageItem);
 
-                    outStorage.RemoveItem(outStorageSlotIndex);
-                    outStorage.PutItem(outStorageSlotIndex, outStorageItem);
-                }
-            }
+        //            outStorage.RemoveItem(outStorageSlotIndex);
+        //            outStorage.PutItem(outStorageSlotIndex, outStorageItem);
+        //        }
+        //    }
            
-            if (!(isSuccefulTakeItems && isSuccefullPutItems))
-            {
-                Debug.LogWarning("Drag and drop swap items operation was not successful");
-            }
-        }
+        //    if (!(isSuccefulTakeItems && isSuccefullPutItems))
+        //    {
+        //        Debug.LogWarning("Drag and drop swap items operation was not successful");
+        //    }
+        //}
 
         private IEnumerator ShowTooltip(int slotIndex, ItemStorageType storageType)
         {
