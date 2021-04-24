@@ -721,11 +721,11 @@ namespace BeastHunterHubUI
             {
                 if(item.ItemType == ItemType.Clothes)
                 {
-                    EquipSelectedCharacterWithClothes(storage, slotIndex);
+                    _selected.Character.EquipClothesItem(storage, slotIndex);
                 }
                 else if (item.ItemType == ItemType.Weapon)
                 {
-                    EquipSelectedCharacterWithWeapon(storage, slotIndex);
+                    _selected.Character.EquipWeaponItem(storage, slotIndex);
                 }
             }
         }
@@ -772,10 +772,9 @@ namespace BeastHunterHubUI
 
          private void OnDropItemOn3DViewModelRawImage()
         {
-
             if (_draggedItemInfo.slotIndex.HasValue)
             {
-                EquipSelectedCharacterWithClothes(GetStorageByType(_draggedItemInfo.storageType), _draggedItemInfo.slotIndex.Value);
+                _selected.Character.EquipClothesItem(GetStorageByType(_draggedItemInfo.storageType), _draggedItemInfo.slotIndex.Value);
             }
         }
 
@@ -1402,48 +1401,7 @@ namespace BeastHunterHubUI
             _displayedCurrentCitizensUIBehaviours.Clear();
         }
 
-        private void EquipSelectedCharacterWithWeapon(BaseItemStorage outStorage, int outStorageSlotIndex)
-        {
-            BaseItemModel itemInClickedSlot = outStorage.GetItemBySlot(outStorageSlotIndex);
-            if (itemInClickedSlot != null &&
-                itemInClickedSlot.ItemType == ItemType.Weapon &&
-                _selected.Character != null)
-            {
-                EquippedWeaponStorage weaponEquipmentStorage = _selected.Character.WeaponEquipment;
-                if (!weaponEquipmentStorage.PutItemToFirstEmptySlot(itemInClickedSlot))
-                {
-                    HubUIServices.SharedInstance.GameMessages.Notice("There is no free slots for this weapon");
-                }
-                else
-                {
-                    outStorage.RemoveItem(outStorageSlotIndex);
-                }
-
-            }
-        }
-
-        private void EquipSelectedCharacterWithClothes(BaseItemStorage outStorage, int outStorageSlotIndex)
-        {
-            BaseItemModel itemInClickedSlot = outStorage.GetItemBySlot(outStorageSlotIndex);
-            if (itemInClickedSlot != null &&
-                itemInClickedSlot.ItemType == ItemType.Clothes &&
-                _selected.Character != null)
-            {
-                EquippedClothesStorage clothesEquipmentStorage = _selected.Character.ClothesEquipment;
-                if (!clothesEquipmentStorage.PutItemToFirstEmptySlot(itemInClickedSlot))
-                {
-                    int? firstSlot = clothesEquipmentStorage.GetFirstSlotIndexForItem(itemInClickedSlot as ClothesItemModel);
-                    clothesEquipmentStorage.SwapItemsWithOtherStorage(firstSlot.Value, outStorage, outStorageSlotIndex);
-                }
-                else
-                {
-                    outStorage.RemoveItem(outStorageSlotIndex);
-                }
-
-            }
-        }
-
-        private void SetStorageSlotsInteractable<T>(bool flag, IEnumerable<T> slotBehaviours) where T : MapBaseSlotBehaviour
+         private void SetStorageSlotsInteractable<T>(bool flag, IEnumerable<T> slotBehaviours) where T : MapBaseSlotBehaviour
         {
             foreach (MapBaseSlotBehaviour slot in slotBehaviours)
             {
@@ -1509,48 +1467,6 @@ namespace BeastHunterHubUI
             objectUI.transform.localScale = new Vector3(1, 1, 1);
             return objectUI;
         }
-
-        //private void SwapItems(BaseItemStorage inStorage, int inStorageSlotIndex, BaseItemStorage outStorage, int outStorageSlotIndex)
-        //{
-        //    BaseItemModel outStorageItem = outStorage.GetItemBySlot(outStorageSlotIndex);
-        //    BaseItemModel inStorageItem = inStorage.GetItemBySlot(inStorageSlotIndex);
-        //    bool isSuccefulTakeItems = false;
-        //    bool isSuccefullPutItems = false;
-
-
-        //    if (inStorage.RemoveItem(inStorageSlotIndex))
-        //    {
-        //        if (outStorage.RemoveItem(outStorageSlotIndex))
-        //        {
-        //            isSuccefulTakeItems = true;
-        //        }
-        //        else
-        //        {
-        //            inStorage.PutItem(inStorageSlotIndex, inStorageItem);
-        //        }
-        //    }
-
-        //    if (isSuccefulTakeItems)
-        //    {
-        //        isSuccefullPutItems =
-        //            inStorage.PutItem(inStorageSlotIndex, outStorageItem) &&
-        //            outStorage.PutItem(outStorageSlotIndex, inStorageItem);
-
-        //        if (!isSuccefullPutItems)
-        //        {
-        //            inStorage.RemoveItem(inStorageSlotIndex);
-        //            inStorage.PutItem(inStorageSlotIndex, inStorageItem);
-
-        //            outStorage.RemoveItem(outStorageSlotIndex);
-        //            outStorage.PutItem(outStorageSlotIndex, outStorageItem);
-        //        }
-        //    }
-           
-        //    if (!(isSuccefulTakeItems && isSuccefullPutItems))
-        //    {
-        //        Debug.LogWarning("Drag and drop swap items operation was not successful");
-        //    }
-        //}
 
         private IEnumerator ShowTooltip(int slotIndex, ItemStorageType storageType)
         {

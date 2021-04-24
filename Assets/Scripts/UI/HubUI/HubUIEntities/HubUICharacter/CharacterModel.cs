@@ -98,6 +98,41 @@ namespace BeastHunterHubUI
 
         #region Methods
 
+        public void EquipClothesItem(BaseItemStorage outStorage, int outStorageSlotIndex)
+        {
+            BaseItemModel item = outStorage.GetItemBySlot(outStorageSlotIndex);
+            if (item != null && item.ItemType == ItemType.Clothes)
+            {
+                if (!ClothesEquipment.PutItemToFirstEmptySlot(item))
+                {
+                    int? firstSlot = ClothesEquipment.GetFirstSlotIndexForItem(item as ClothesItemModel);
+                    ClothesEquipment.SwapItemsWithOtherStorage(firstSlot.Value, outStorage, outStorageSlotIndex);
+                }
+                else
+                {
+                    outStorage.RemoveItem(outStorageSlotIndex);
+                }
+
+            }
+        }
+
+        public void EquipWeaponItem(BaseItemStorage outStorage, int outStorageSlotIndex)
+        {
+            BaseItemModel item = outStorage.GetItemBySlot(outStorageSlotIndex);
+            if (item != null && item.ItemType == ItemType.Weapon)
+            {
+                if (!WeaponEquipment.PutItemToFirstEmptySlot(item))
+                {
+                    HubUIServices.SharedInstance.GameMessages.Notice("There is no free slots for this weapon");
+                }
+                else
+                {
+                    outStorage.RemoveItem(outStorageSlotIndex);
+                }
+
+            }
+        }
+
         public void InitializeView3DModel(Transform parent)
         {
             View3DModelObjectOnScene = GameObject.Instantiate(_view3DModelPrefab, parent);
