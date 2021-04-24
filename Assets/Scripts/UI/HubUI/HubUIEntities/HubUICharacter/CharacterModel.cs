@@ -42,7 +42,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public CharacterModel(CharacterData data, CharacterSettingsStruct settings)
+        public CharacterModel(CharacterData data, CharactersSettingsStruct settings)
         {
             Name = data.Name;
             Portrait = data.Portrait;

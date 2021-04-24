@@ -383,9 +383,9 @@ namespace BeastHunterHubUI
             _character3DViewModelRendering =
                 Instantiate(_data.MapDataStruct.Characters3DViewRenderingPrefab,
                 _data.MapDataStruct.Characters3DViewRenderingObjectPosition, Quaternion.identity);
-            for (int i = 0; i < context.Characters.Count; i++)
+            for (int i = 0; i < context.Player.HiredCharacters.Count; i++)
             {
-                InitializeCharacterUI(context.Characters[i]);
+                InitializeCharacterUI(context.Player.HiredCharacters[i]);
             }
 
             FillItemStorageSlots(ItemStorageType.GeneralInventory);
@@ -446,10 +446,10 @@ namespace BeastHunterHubUI
 
         private void OnClick_OrderButton()  //WIP, just for testing order and event system
         {
-            if (!_context.Characters[0].IsHaveOrder)
+            if (!_player.HiredCharacters[0].IsHaveOrder)
             {
                 OrderModel testOrder = new OrderModel(OrderType.Alchemy, 4);
-                testOrder.AssignCharacter(_context.Characters[0]);
+                testOrder.AssignCharacter(_player.HiredCharacters[0]);
                 testOrder.OnCompleteHandler += (order) => Debug.Log($"Order {order.OrderType} is completed");
             }
         }

@@ -21,8 +21,8 @@ namespace BeastHunterHubUI
         [SerializeField] private int _shopsSlotsAmount;
 
         [Space(10, order = 1), Header("CHARACTERS", order = 2)]
-        [SerializeField] private CharacterData[] _charactersPool;
-        public CharacterSettingsStruct CharacterSettings;
+        [SerializeField] private CharacterData[] _charactersPool; //TODO: instead pool planned random generator for characters
+        public CharactersSettingsStruct CharacterSettings;
 
         [Space(10, order = 1), Header("GAME TIME", order = 2)]
         public HubUITimeSettingsStruct TimeSettings;

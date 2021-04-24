@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -12,21 +13,28 @@ namespace BeastHunterHubUI
 
         public int GoldAmount { get; private set; }
         public ItemStorage Inventory { get; private set; }
+        public List<CharacterModel> HiredCharacters { get; private set; }
 
         #endregion
 
 
         #region ClassLifeCycle
 
-        public PlayerModel(PlayerSettingsStruct settings)
+        public PlayerModel(PlayerSettingsStruct settings, CharactersSettingsStruct charactersSettings)
         {
             GoldAmount = settings.GoldAmount;
 
+            HiredCharacters = new List<CharacterModel>();
+            for (int i = 0; i < settings.StartHiredCharacters.Length; i++)
+            {
+                HiredCharacters.Add(new CharacterModel(settings.StartHiredCharacters[i], charactersSettings));
+            }
+
             Inventory = new ItemStorage(settings.InventorySlotsAmount, ItemStorageType.GeneralInventory);
-            for (int i = 0; i < settings.InventoryItems.Length; i++)
+            for (int i = 0; i < settings.StartInventoryItems.Length; i++)
             {
                 BaseItemModel itemModel = HubUIServices.SharedInstance.
-                    ItemInitializeService.InitializeItemModel(settings.InventoryItems[i]);
+                    ItemInitializeService.InitializeItemModel(settings.StartInventoryItems[i]);
                 Inventory.PutItem(i, itemModel);
             }
         }
@@ -35,6 +43,16 @@ namespace BeastHunterHubUI
 
 
         #region Methods
+
+        public void HireCharacter(CharacterModel character)
+        {
+            HiredCharacters.Add(character);
+        }
+
+        public void FireCharacter(CharacterModel character)
+        {
+            HiredCharacters.Remove(character);
+        }
 
         public bool AddGold(int goldAmount)
         {

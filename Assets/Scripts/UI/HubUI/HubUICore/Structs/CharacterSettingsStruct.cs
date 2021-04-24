@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BeastHunterHubUI
 {
     [Serializable]
-    public struct CharacterSettingsStruct
+    public struct CharactersSettingsStruct
     {
         [SerializeField] private ClothesType[] _clothesSlots;
         [SerializeField] private int _backpuckSlotAmount;

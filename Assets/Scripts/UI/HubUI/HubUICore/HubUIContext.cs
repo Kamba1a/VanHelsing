@@ -9,8 +9,8 @@ namespace BeastHunterHubUI
         #region Properties
 
         public PlayerModel Player { get; private set; }
-        public List<CharacterModel> Characters { get; private set; }
-        public CharacterSettingsStruct CharacterSettings { get; private set; }
+        public List<CharacterModel> CharactersForHire { get; private set; }
+        public CharactersSettingsStruct CharacterSettings { get; private set; }
         public List<CityModel> Cities { get; private set; }
         public int ShopsSlotsAmount { get; private set; }
         public List<LocationModel> Locations { get; private set; }
@@ -24,7 +24,7 @@ namespace BeastHunterHubUI
 
         public HubUIContext()
         {
-            Characters = new List<CharacterModel>();
+            CharactersForHire = new List<CharacterModel>();
             Cities = new List<CityModel>();
             Locations = new List<LocationModel>();
         }
@@ -39,12 +39,12 @@ namespace BeastHunterHubUI
             CharacterSettings = data.CharacterSettings;
             ShopsSlotsAmount = data.ShopsSlotsAmount;
 
-            Player = new PlayerModel(data.PlayerSettings);
+            Player = new PlayerModel(data.PlayerSettings, data.CharacterSettings);
             GameTime = new GameTimeModel(data.TimeSettings);
 
             for (int i = 0; i < data.CharactersPool.Length; i++)
             {
-                Characters.Add(new CharacterModel(data.CharactersPool[i], data.CharacterSettings));
+                CharactersForHire.Add(new CharacterModel(data.CharactersPool[i], data.CharacterSettings));
             }
 
             for (int i = 0; i < data.Cities.Length; i++)
