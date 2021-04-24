@@ -8,18 +8,11 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        [Header("HUB UI SETTINGS")]
-        [SerializeField] private HubUIContextData _contextData;
+        [Header("GAME CONTENT SETTINGS")]
+        public GameContentDataStruct ContextDataStruct;
 
-        [Header("MAP DATA SETTINGS")]
+        [Space(20, order = 1), Header("MAP DATA SETTINGS", order = 2)]
         public MapDataStruct MapDataStruct;
-
-        #endregion
-
-
-        #region Properties
-
-        public HubUIContextData ContextData => _contextData;
 
         #endregion
     }

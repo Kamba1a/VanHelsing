@@ -8,13 +8,11 @@ namespace BeastHunterHubUI
     {
         #region Properties
 
-        public int ShopsSlotsAmount { get; private set; }
-        public int CharactersEquipmentSlotAmount { get; private set; }
-        public int CharactersWeaponSetsAmount { get; private set; }
-        public ClothesType[] CharactersClothEquipment { get; private set; }
         public PlayerModel Player { get; private set; }
         public List<CharacterModel> Characters { get; private set; }
+        public CharacterSettingsStruct CharacterSettings { get; private set; }
         public List<CityModel> Cities { get; private set; }
+        public int ShopsSlotsAmount { get; private set; }
         public List<LocationModel> Locations { get; private set; }
         public QuestData[] QuestsData { get; private set; }
         public GameTimeModel GameTime { get; private set; }
@@ -36,20 +34,17 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public void Initialize(HubUIContextData data)
+        public void Initialize(GameContentDataStruct data)
         {
+            CharacterSettings = data.CharacterSettings;
             ShopsSlotsAmount = data.ShopsSlotsAmount;
-            CharactersEquipmentSlotAmount = data.CharactersEquipmentSlotAmount;
-            CharactersWeaponSetsAmount = data.CharactersWeaponSetsAmount;
-            CharactersClothEquipment = data.ClothSlots;
 
-            Player = new PlayerModel(data.Player);
-            GameTime = new GameTimeModel(data.HoursAmountPerDay, data.DayOnStartGame, data.HoursOnStartGame);
+            Player = new PlayerModel(data.PlayerSettings);
+            GameTime = new GameTimeModel(data.TimeSettings);
 
-            for (int i = 0; i < data.Characters.Length; i++)
+            for (int i = 0; i < data.CharactersPool.Length; i++)
             {
-                Characters.Add(new CharacterModel
-                    (data.Characters[i], data.CharactersEquipmentSlotAmount, data.ClothSlots, data.CharactersWeaponSetsAmount));
+                Characters.Add(new CharacterModel(data.CharactersPool[i], data.CharacterSettings));
             }
 
             for (int i = 0; i < data.Cities.Length; i++)
@@ -62,7 +57,7 @@ namespace BeastHunterHubUI
                 Locations.Add(new LocationModel(data.Locations[i]));
             }
 
-            QuestsData = data.Quests;
+            QuestsData = data.QuestsPool;
         }
 
         public MapObjectModel GetMapObjectModel(MapObjectData mapObjectData)

@@ -335,7 +335,7 @@ namespace BeastHunterHubUI
             _selected = new SelectedElements();
 
 
-            if (_characterClothesSlotsUIBehaviours.Length != context.CharactersClothEquipment.Length)
+            if (_characterClothesSlotsUIBehaviours.Length != context.CharacterSettings.ClothesSlots.Length)
             {
                 Debug.LogError("The number of cloth UI slots does not match the equipment of the characters!");
             }
@@ -345,7 +345,7 @@ namespace BeastHunterHubUI
                 FillCharacterClothesSlot(i);
             }
 
-            if (_characterWeaponSlotsUIBehaviours.Length != context.CharactersWeaponSetsAmount * 2)
+            if (_characterWeaponSlotsUIBehaviours.Length != context.CharacterSettings.WeaponSetsAmount * 2)
             {
                 Debug.LogError("The number of weapon UI slots does not match the equipment of the characters!");
             }
@@ -360,7 +360,7 @@ namespace BeastHunterHubUI
                 FillMapObject(_mapObjects[i], _data.MapDataStruct.MapObjects[i]);
             }
 
-            for (int i = 0; i < context.CharactersEquipmentSlotAmount; i++)
+            for (int i = 0; i < context.CharacterSettings.BackpuckSlotAmount; i++)
             {
                 InitializeCharacterBackpuckSlotUI(i);
             }
@@ -1145,7 +1145,7 @@ namespace BeastHunterHubUI
 
         private void FillCharacterClothesSlot(int slotIndex)
         {
-            Sprite slotSprite = _data.MapDataStruct.GetClothSlotSpriteByType(_context.CharactersClothEquipment[slotIndex]);
+            Sprite slotSprite = _data.MapDataStruct.GetClothSlotSpriteByType(_context.CharacterSettings.ClothesSlots[slotIndex]);
             _characterClothesSlotsUIBehaviours[slotIndex].FillSlotInfo(slotIndex, true, slotSprite);
             _characterClothesSlotsUIBehaviours[slotIndex].SetInteractable(false);
             _characterClothesSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_CharacterEquipmentSlot(slotIndex, ItemStorageType.ClothesEquipment);

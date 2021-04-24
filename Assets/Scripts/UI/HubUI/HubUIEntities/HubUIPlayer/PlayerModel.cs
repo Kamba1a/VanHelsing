@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+
 namespace BeastHunterHubUI
 {
     public class PlayerModel
@@ -17,20 +18,23 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public PlayerModel(PlayerData data)
+        public PlayerModel(PlayerSettingsStruct settings)
         {
-            GoldAmount = data.GoldAmount;
+            GoldAmount = settings.GoldAmount;
 
-            Inventory = new ItemStorage(data.InventorySlotsAmount, ItemStorageType.GeneralInventory);
-            for (int i = 0; i < data.InventoryItems.Length; i++)
+            Inventory = new ItemStorage(settings.InventorySlotsAmount, ItemStorageType.GeneralInventory);
+            for (int i = 0; i < settings.InventoryItems.Length; i++)
             {
                 BaseItemModel itemModel = HubUIServices.SharedInstance.
-                    ItemInitializeService.InitializeItemModel(data.InventoryItems[i]);
+                    ItemInitializeService.InitializeItemModel(settings.InventoryItems[i]);
                 Inventory.PutItem(i, itemModel);
             }
         }
 
         #endregion
+
+
+        #region Methods
 
         public bool AddGold(int goldAmount)
         {
@@ -55,5 +59,7 @@ namespace BeastHunterHubUI
             Debug.LogError("goldAmount parameter is less than or equal to zero");
             return false;
         }
+
+        #endregion
     }
 }

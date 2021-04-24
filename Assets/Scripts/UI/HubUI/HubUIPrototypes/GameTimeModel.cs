@@ -2,17 +2,21 @@
 using System.Collections;
 using UnityEngine;
 
+
 namespace BeastHunterHubUI
 {
     public class GameTimeModel
     {
+        #region Constants
+
         private const float SKIP_TIME_DELAY = 1.0f;
+
+        #endregion
+
 
         #region Properties
 
         public Action<GameTimeStruct> OnChangeTimeHandler { get; set; }
-        //public Action OnStartTimeSkipHandler { get; set; }
-        //public Action OnStopTimeSkipHandler { get; set; }
 
         public int HoursAmountPerDay { get; private set; }
         public GameTimeStruct CurrentTime { get; private set; }
@@ -22,6 +26,13 @@ namespace BeastHunterHubUI
 
 
         #region ClassLifeCycle
+
+        public GameTimeModel(HubUITimeSettingsStruct settings)
+        {
+            IsTimePassing = false;
+            HoursAmountPerDay = settings.HoursAmountPerDay;
+            CurrentTime = new GameTimeStruct(settings.DayOnStartGame, settings.HoursOnStartGame);
+        }
 
         public GameTimeModel(int hoursAmountPerDay, int currentDay, int currentHour)
         {
@@ -79,11 +90,6 @@ namespace BeastHunterHubUI
 
             if (hours > 0)
             {
-                //for (int i = 0; i < hours; i++)
-                //{
-                //    newTime = AddOneHour(newTime);
-                //}
-
                 if (hours < HoursAmountPerDay - CurrentTime.Hour)
                 {
                     newTime = new GameTimeStruct(newTime.Day, newTime.Hour + hours);

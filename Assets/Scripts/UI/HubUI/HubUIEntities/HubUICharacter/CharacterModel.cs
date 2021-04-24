@@ -42,7 +42,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public CharacterModel(CharacterData data, int backpackSize, ClothesType[] clothEquipment, int weaponSetsAmount)
+        public CharacterModel(CharacterData data, CharacterSettingsStruct settings)
         {
             Name = data.Name;
             Portrait = data.Portrait;
@@ -51,7 +51,7 @@ namespace BeastHunterHubUI
             _view3DModelAnimatorController = data.View3DModelAnimatorController;
             _defaultCharacterMaterial = data.DefaultMaterial;
 
-            Backpack = new ItemStorage(backpackSize, ItemStorageType.CharacterBackpuck);
+            Backpack = new ItemStorage(settings.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
             if (data.StartBackpuckItems != null)
             {
                 for (int i = 0; i < data.StartBackpuckItems.Length; i++)
@@ -63,7 +63,7 @@ namespace BeastHunterHubUI
 
             Pockets = new PocketsStorage();
 
-            ClothesEquipment = new EquippedClothesStorage(clothEquipment);
+            ClothesEquipment = new EquippedClothesStorage(settings.ClothesSlots);
             ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
 
             ClothesEquipment.OnTakeItemFromSlotHandler += OnTakeClothesEquipmentItem;
@@ -78,7 +78,7 @@ namespace BeastHunterHubUI
                 }
             }
 
-            WeaponEquipment = new EquippedWeaponStorage(weaponSetsAmount);
+            WeaponEquipment = new EquippedWeaponStorage(settings.WeaponSetsAmount);
 
             if (data.StartWeaponEquipmentItems != null)
             {

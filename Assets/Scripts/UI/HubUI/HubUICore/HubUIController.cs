@@ -35,7 +35,7 @@ namespace BeastHunterHubUI
         {
             _context = new HubUIContext();
             HubUIServices.SharedInstance.InitializeServices(_context);
-            _context.Initialize(BeastHunter.Data.HubUIData.ContextData);
+            _context.Initialize(BeastHunter.Data.HubUIData.ContextDataStruct);
             _context.GameTime.OnChangeTimeHandler += HubUIServices.SharedInstance.EventsService.OnChangedGameTime;
             new QuestController(_context);
             StartBehaviours(_context);
