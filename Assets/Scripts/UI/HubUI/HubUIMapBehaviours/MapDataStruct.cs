@@ -18,6 +18,7 @@ namespace BeastHunterHubUI
         [SerializeField] private GameObject _answerButtonUIPrefab;
         [SerializeField] private GameObject _characters3DViewRenderingPrefab;
         [SerializeField] private GameObject _characterBackpuckSlotUIPrefab;
+        [SerializeField] private GameObject _messageWindowPrefab;
 
         [Header("Settings")]
         [SerializeField] private bool _mapOnStartEnabled;
@@ -56,6 +57,7 @@ namespace BeastHunterHubUI
         public GameObject Characters3DViewRenderingPrefab => _characters3DViewRenderingPrefab;
         public Vector3 Characters3DViewRenderingObjectPosition => _characters3DViewRenderingObjectPosition;
         public GameObject CharacterBackpuckSlotUIPrefab => _characterBackpuckSlotUIPrefab;
+        public GameObject MessageWindowPrefab => _messageWindowPrefab;
         public bool MapOnStartEnabled => _mapOnStartEnabled;
         public MapObjectData[] MapObjects => _mapObjects;
         public Sprite WeaponSlotIcon => _weaponSlotIcon;

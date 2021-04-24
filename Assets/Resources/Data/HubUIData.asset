@@ -87,6 +87,8 @@ MonoBehaviour:
       type: 3}
     _characterBackpuckSlotUIPrefab: {fileID: 4649815293729276567, guid: 7899f865f88bda740864b45d02cbea24,
       type: 3}
+    _messageWindowPrefab: {fileID: 8800125775024752673, guid: 1f584825ef8ac7c409d78790dd09a67a,
+      type: 3}
     _mapOnStartEnabled: 0
     _characters3DViewRenderingObjectPosition: {x: 1000, y: 1000, z: 1000}
     _mapObjects:

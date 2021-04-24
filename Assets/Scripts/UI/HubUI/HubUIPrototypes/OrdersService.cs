@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-namespace BeastHunterHubUI
+﻿namespace BeastHunterHubUI
 {
     public class OrdersService
     {

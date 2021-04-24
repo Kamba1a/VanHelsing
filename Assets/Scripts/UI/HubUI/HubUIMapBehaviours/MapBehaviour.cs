@@ -148,6 +148,7 @@ namespace BeastHunterHubUI
         [SerializeField] private GameObject _tooltip;
         [SerializeField] private GameObject _loadingPanel;
         [SerializeField] private Button _clockButton;
+        [SerializeField] private GameObject _messagePanel;
 
         [Header("City info panel")]
         [SerializeField] private GameObject _cityInfoPanel;
@@ -421,6 +422,7 @@ namespace BeastHunterHubUI
             _loadingPanel.SetActive(false);
             _character3DViewModelRawImage.enabled = false;
             _timeSkipPanel.SetActive(false);
+            _messagePanel.SetActive(false);
         }
 
         #endregion
@@ -450,7 +452,8 @@ namespace BeastHunterHubUI
             {
                 OrderModel testOrder = new OrderModel(OrderType.Alchemy, 4);
                 testOrder.AssignCharacter(_player.HiredCharacters[0]);
-                testOrder.OnCompleteHandler += (order) => Debug.Log($"Order {order.OrderType} is completed");
+                testOrder.OnCompleteHandler += InitializeMessageWindow;
+                testOrder.OnCompleteHandler += Debug.Log;
             }
         }
 
@@ -1010,7 +1013,32 @@ namespace BeastHunterHubUI
 
         #endregion
 
+        #region OnClose/OnHide
+
+        private void OnClose_MessageWindow()
+        {
+            if (_messagePanel.transform.GetComponentsInChildren<MapMessageWindowBehaviour>(false).Length == 0)
+            {
+                _messagePanel.SetActive(false);
+            }
+        }
+
+        #endregion
+
         #region InitializeUIElements
+
+        private void InitializeMessageWindow(string message)
+        {
+            GameObject messageUI = InstantiateUIObject(_data.MapDataStruct.MessageWindowPrefab, _messagePanel);
+            MapMessageWindowBehaviour behaviour = messageUI.GetComponent<MapMessageWindowBehaviour>();
+            behaviour.OnCloseWindowHandler += OnClose_MessageWindow;
+            behaviour.FillInfo(message);
+
+            if (!_messagePanel.activeSelf)
+            {
+                _messagePanel.SetActive(true);
+            }
+        }
 
         private void InitializePocketsSlotsUI(int amount)
         {
