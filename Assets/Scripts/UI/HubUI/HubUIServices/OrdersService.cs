@@ -11,9 +11,9 @@
         }
 
 
-        public GameTimeStruct CalculateOrderCompletionTime(CharacterModel character, OrderModel order)
+        public HubUITimeStruct CalculateOrderCompletionTime(CharacterModel character, OrderModel order)
         {
-            GameTimeStruct orderCompletionTime = _context.GameTime.AddTime(order.BaseSpentHours);
+            HubUITimeStruct orderCompletionTime = _context.GameTime.AddTime(order.BaseSpentHours);
             //
             //calculate logic
             //

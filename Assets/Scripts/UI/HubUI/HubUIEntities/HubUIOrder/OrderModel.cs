@@ -1,19 +1,30 @@
 ﻿using System;
-using UnityEngine;
+
 
 namespace BeastHunterHubUI
 {
     public class OrderModel
     {
+        #region Fields
+
         private HubUIEventModel _orderEvent;
+
+        #endregion
+
+
+        #region Properties
 
         public Action<OrderModel> OnCompleteHandler { get; set; }
 
         public OrderType OrderType { get; private set; }
         public int BaseSpentHours { get; private set; }
         public CharacterModel CharacterAssigned { get; private set; }
-        public GameTimeStruct? CompletionTime { get; private set; }
+        public HubUITimeStruct? CompletionTime { get; private set; }
 
+        #endregion
+
+
+        #region ClassLifeCycle
 
         public OrderModel(OrderType orderType, int baseSpentHours)
         {
@@ -24,7 +35,11 @@ namespace BeastHunterHubUI
             CompletionTime = null;
         }
 
-        
+        #endregion
+
+
+        #region Methods
+
         public void AssignCharacter(CharacterModel character)
         {
             character.IsHaveOrder = true;
@@ -60,5 +75,7 @@ namespace BeastHunterHubUI
             }
             OnCompleteHandler?.Invoke(this);
         }
+
+        #endregion
     }
 }

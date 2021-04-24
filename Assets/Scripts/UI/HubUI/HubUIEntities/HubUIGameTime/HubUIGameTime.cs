@@ -5,21 +5,21 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    public class GameTimeModel
+    public class HubUIGameTime
     {
-        #region Constants
+        #region Fields
 
-        private const float SKIP_TIME_DELAY = 1.0f;
+        private float _timePassingDelay;
 
         #endregion
 
 
         #region Properties
 
-        public Action<GameTimeStruct> OnChangeTimeHandler { get; set; }
+        public Action<HubUITimeStruct> OnChangeTimeHandler { get; set; }
 
         public int HoursAmountPerDay { get; private set; }
-        public GameTimeStruct CurrentTime { get; private set; }
+        public HubUITimeStruct CurrentTime { get; private set; }
         public bool IsTimePassing { get; private set; }
 
         #endregion
@@ -27,25 +27,12 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public GameTimeModel(HubUITimeSettingsStruct settings)
+        public HubUIGameTime(HubUITimeSettingsStruct settings)
         {
             IsTimePassing = false;
+            _timePassingDelay = settings.TimePassingDelay;
             HoursAmountPerDay = settings.HoursAmountPerDay;
-            CurrentTime = new GameTimeStruct(settings.DayOnStartGame, settings.HoursOnStartGame);
-        }
-
-        public GameTimeModel(int hoursAmountPerDay, int currentDay, int currentHour)
-        {
-            IsTimePassing = false;
-            HoursAmountPerDay = hoursAmountPerDay;
-            CurrentTime = new GameTimeStruct(currentDay, currentHour);
-        }
-
-        public GameTimeModel(int hoursAmountPerDay, GameTimeStruct currentTime)
-        {
-            IsTimePassing = false;
-            HoursAmountPerDay = hoursAmountPerDay;
-            CurrentTime = currentTime;
+            CurrentTime = new HubUITimeStruct(settings.DayOnStartGame, settings.HoursOnStartGame);
         }
 
         #endregion
@@ -58,7 +45,7 @@ namespace BeastHunterHubUI
             IsTimePassing = true;
             while (IsTimePassing)
             {
-                yield return new WaitForSeconds(SKIP_TIME_DELAY);
+                yield return new WaitForSeconds(_timePassingDelay);
                 if (!IsTimePassing)
                 {
                     yield break;
@@ -78,21 +65,20 @@ namespace BeastHunterHubUI
             OnChangeTime();
         }
 
-        public GameTimeStruct AddTime(GameTimeStruct time)
+        public HubUITimeStruct AddTime(HubUITimeStruct time)
         {
             return AddTime(GameTimeStructToHours(time));
         }
 
-
-        public GameTimeStruct AddTime(int hours)
+        public HubUITimeStruct AddTime(int hours)
         {
-            GameTimeStruct newTime = CurrentTime;
+            HubUITimeStruct newTime = CurrentTime;
 
             if (hours > 0)
             {
                 if (hours < HoursAmountPerDay - CurrentTime.Hour)
                 {
-                    newTime = new GameTimeStruct(newTime.Day, newTime.Hour + hours);
+                    newTime = new HubUITimeStruct(newTime.Day, newTime.Hour + hours);
                 }
                 else
                 {
@@ -103,26 +89,26 @@ namespace BeastHunterHubUI
                         h -= HoursAmountPerDay;
                         d++;
                     }
-                    newTime = new GameTimeStruct(newTime.Day + d, newTime.Hour + h);
+                    newTime = new HubUITimeStruct(newTime.Day + d, newTime.Hour + h);
                 }
             }
 
             return newTime;
         }
 
-        private GameTimeStruct AddOneHour(GameTimeStruct currentTime)
+        private HubUITimeStruct AddOneHour(HubUITimeStruct currentTime)
         {
             if (currentTime.Hour + 1 >= HoursAmountPerDay)
             {
-                return new GameTimeStruct(currentTime.Day + 1, 0);
+                return new HubUITimeStruct(currentTime.Day + 1, 0);
             }
             else
             {
-                return new GameTimeStruct(currentTime.Day, currentTime.Hour + 1);
+                return new HubUITimeStruct(currentTime.Day, currentTime.Hour + 1);
             }
         }
 
-        private int GameTimeStructToHours(GameTimeStruct time)
+        private int GameTimeStructToHours(HubUITimeStruct time)
         {
             return time.Hour + time.Day * HoursAmountPerDay;
         }
