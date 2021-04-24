@@ -716,14 +716,15 @@ namespace BeastHunterHubUI
         private void OnDoubleClick_StorageSlot(int slotIndex, ItemStorageType storageType)
         {
             BaseItemStorage storage = GetStorageByType(storageType);
-            BaseItemModel item = storage.GetItemBySlot(slotIndex);
-            if (_hikePanel.activeSelf && item != null && _selected.Character != null)
+            BaseItemModel itemInClickedSlot = storage.GetItemBySlot(slotIndex);
+
+            if (_hikePanel.activeSelf && itemInClickedSlot != null && _selected.Character != null)
             {
-                if(item.ItemType == ItemType.Clothes)
+                if(itemInClickedSlot.ItemType == ItemType.Clothes)
                 {
                     _selected.Character.EquipClothesItem(storage, slotIndex);
                 }
-                else if (item.ItemType == ItemType.Weapon)
+                else if (itemInClickedSlot.ItemType == ItemType.Weapon)
                 {
                     _selected.Character.EquipWeaponItem(storage, slotIndex);
                 }
@@ -1377,6 +1378,7 @@ namespace BeastHunterHubUI
 
         #endregion
 
+        #region Other Methods
 
         private void HideRightInfoPanels()
         {
@@ -1500,6 +1502,8 @@ namespace BeastHunterHubUI
             Debug.Log("Load location. ID: " + (_selected.MapObject as LocationModel).LoadSceneId);
             SceneManager.LoadScene((_selected.MapObject as LocationModel).LoadSceneId);
          }
+
+        #endregion
 
         #endregion
     }
