@@ -125,14 +125,6 @@ namespace BeastHunterHubUI
         #endregion
 
 
-        #region Constants
-
-        private const float CHARACTERS_PANEL_SCROLLBAR_STEP = 1.0f;
-        private const float SHOW_TOOLTIP_DELAY = 2.0f;
-
-        #endregion
-
-
         #region Fields
 
         [Header("Map objects")]
@@ -225,7 +217,7 @@ namespace BeastHunterHubUI
         [SerializeField] private Text _currentHourText;
         [SerializeField] private Button _orderButton;
 
-
+        private SelectedElements _selected;
         private HubUIContext _context;
         private HubUIData _data;
         private PlayerModel _player;
@@ -243,13 +235,14 @@ namespace BeastHunterHubUI
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, ItemStorageType storageType) _draggedItemInfo;
 
-        private SelectedElements _selected;
-
         private GameObject _character3DViewModelRendering;
         private MapCharacterView3DModelBehaviour _character3DViewModelRawImageBehaviour;
 
-        //Yeah, this is coroutine. No one reviews my code anyway..
+        //Oh no, this is a little coroutine. No one reviews my code anyway..
         private Coroutine _showTooltipCoroutine;
+
+        private float _charactersPanelSwipeStep;
+        private float _tooltipShowingDelay;
 
         #endregion
 
@@ -264,8 +257,8 @@ namespace BeastHunterHubUI
             _hikeAcceptButton.onClick.AddListener(OnClick_HikeAcceptButton);
             _closeHikePanelButton.onClick.AddListener(OnClick_CloseHikePanelButton);
             _hikePanelButton.onClick.AddListener(OnClick_HikePanelButton);
-            _charactersPanelNextButton.onClick.AddListener(()=> OnClick_CharactersPanelNavigationButton(CHARACTERS_PANEL_SCROLLBAR_STEP));
-            _charactersPanelPreviousButton.onClick.AddListener(() => OnClick_CharactersPanelNavigationButton(-CHARACTERS_PANEL_SCROLLBAR_STEP));
+            _charactersPanelNextButton.onClick.AddListener(()=> OnClick_CharactersPanelNavigationButton(1));
+            _charactersPanelPreviousButton.onClick.AddListener(() => OnClick_CharactersPanelNavigationButton(-1));
             _perkTreeButton.onClick.AddListener(OnClick_PerkTreeButton);
             _shopButton.onClick.AddListener(OnClick_OpenTradePanelButton);
             _closeTradePanelButton.onClick.AddListener(OnClick_CloseTradePanelButton);
@@ -313,10 +306,13 @@ namespace BeastHunterHubUI
 
         public void Starting(HubUIContext context)
         {
+            _selected = new SelectedElements();
             _data = BeastHunter.Data.HubUIData;
             _context = context;
             _player = context.Player;
             _generalInventory = _player.Inventory;
+            _charactersPanelSwipeStep = _data.MapDataStruct.CharactersPanelSwipeStep;
+            _tooltipShowingDelay = _data.MapDataStruct.TooltipShowingDelay;
 
             _rightInfoPanelObjectsForDestroy = new List<GameObject>();
             _displayedCurrentCitizensUIBehaviours = new Dictionary<CitizenModel, MapCitizenBehaviour>();
@@ -331,8 +327,6 @@ namespace BeastHunterHubUI
             _characterWeaponSlotsUIBehaviours = _weaponSetsPanel.GetComponentsInChildren<MapEquipmentSlotBehaviour>();
 
             _character3DViewModelRawImageBehaviour = _character3DViewModelRawImage.GetComponent<MapCharacterView3DModelBehaviour>();
-
-            _selected = new SelectedElements();
 
 
             if (_characterClothesSlotsUIBehaviours.Length != context.CharacterSettings.ClothesSlots.Length)
@@ -590,9 +584,9 @@ namespace BeastHunterHubUI
             _dialogPanel.SetActive(true);
         }
 
-        private void OnClick_CharactersPanelNavigationButton(float step)
+        private void OnClick_CharactersPanelNavigationButton(int direction)
         {
-            _charactersPanelScrollbar.value += step;
+            _charactersPanelScrollbar.value += direction * _charactersPanelSwipeStep;
         }
 
         private void OnClick_PerkTreeButton()
@@ -682,19 +676,13 @@ namespace BeastHunterHubUI
 
         private void OnPointerEnter_Slot(int slotIndex, ItemStorageType storageType)
         {
-            if(_showTooltipCoroutine != null)
-            {
-                StopCoroutine(_showTooltipCoroutine);
-            }
+            StopShowTooltipCoroutine();
             _showTooltipCoroutine = StartCoroutine(ShowTooltip(slotIndex, storageType));
         }
 
         private void OnPointerExit_Slot(int slotIndex)
         {
-            if (_showTooltipCoroutine != null)
-            {
-                StopCoroutine(_showTooltipCoroutine);
-            }
+            StopShowTooltipCoroutine();
             _tooltip.SetActive(false);
         }
 
@@ -706,7 +694,12 @@ namespace BeastHunterHubUI
         {
             if (_selected.Character != null)
             {
-                if(!_generalInventory.PutItemToFirstEmptySlotFromOtherStorage(GetStorageByType(storageType), slotIndex))
+                if(_generalInventory.PutItemToFirstEmptySlotFromOtherStorage(GetStorageByType(storageType), slotIndex))
+                {
+                    StopShowTooltipCoroutine();
+                    _tooltip.SetActive(false);
+                }
+                else
                 {
                     HubUIServices.SharedInstance.GameMessages.Notice("Inventory is full");
                 }
@@ -722,11 +715,19 @@ namespace BeastHunterHubUI
             {
                 if(itemInClickedSlot.ItemType == ItemType.Clothes)
                 {
-                    _selected.Character.EquipClothesItem(storage, slotIndex);
+                    if(_selected.Character.EquipClothesItem(storage, slotIndex))
+                    {
+                        StopShowTooltipCoroutine();
+                        _tooltip.SetActive(false);
+                    }
                 }
                 else if (itemInClickedSlot.ItemType == ItemType.Weapon)
                 {
-                    _selected.Character.EquipWeaponItem(storage, slotIndex);
+                    if(_selected.Character.EquipWeaponItem(storage, slotIndex))
+                    {
+                        StopShowTooltipCoroutine();
+                        _tooltip.SetActive(false);
+                    }
                 }
             }
         }
@@ -738,10 +739,7 @@ namespace BeastHunterHubUI
         private void OnBeginDragItemFromSlot(int slotIndex, ItemStorageType storageType)
         {
             _tooltip.SetActive(false);
-            if(_showTooltipCoroutine != null)
-            {
-                StopCoroutine(_showTooltipCoroutine);
-            }
+            StopShowTooltipCoroutine();
             _draggedItemInfo.slotIndex = slotIndex;
             _draggedItemInfo.storageType = storageType;
         }
@@ -984,7 +982,7 @@ namespace BeastHunterHubUI
 
         #region OnChanged
 
-        private void OnChanged_GameTime(GameTimeStruct currentTime)
+        private void OnChanged_GameTime(HubUITimeStruct currentTime)
         {
             _currentDayText.text = currentTime.Day.ToString();
             _currentHourText.text = currentTime.Hour.ToString();
@@ -1470,9 +1468,17 @@ namespace BeastHunterHubUI
             return objectUI;
         }
 
+        private void StopShowTooltipCoroutine()
+        {
+            if (_showTooltipCoroutine != null)
+            {
+                StopCoroutine(_showTooltipCoroutine);
+            }
+        }
+
         private IEnumerator ShowTooltip(int slotIndex, ItemStorageType storageType)
         {
-            yield return new WaitForSeconds(SHOW_TOOLTIP_DELAY);
+            yield return new WaitForSeconds(_tooltipShowingDelay);
 
             FillTooltipByItemInfo(slotIndex, storageType);
 

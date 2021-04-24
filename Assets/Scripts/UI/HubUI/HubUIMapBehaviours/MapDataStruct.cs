@@ -21,6 +21,8 @@ namespace BeastHunterHubUI
 
         [Header("Settings")]
         [SerializeField] private bool _mapOnStartEnabled;
+        [SerializeField] private float _tooltipShowingDelay;
+        [SerializeField] private float _charactersPanelSwipeStep;
         [SerializeField] private Vector3 _characters3DViewRenderingObjectPosition;
 
         [Header("Objects on map")]
@@ -60,6 +62,8 @@ namespace BeastHunterHubUI
         public MapObjectData[] MapObjects => _mapObjects;
         public Sprite WeaponSlotIcon => _weaponSlotIcon;
         public Sprite PocketItemSlotIcon => _pocketItemSlotIcon;
+        public float TooltipShowingDelay => _tooltipShowingDelay;
+        public float CharactersPanelSwipeStep => _charactersPanelSwipeStep;
 
         #endregion
 

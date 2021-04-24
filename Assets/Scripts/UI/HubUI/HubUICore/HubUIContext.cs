@@ -15,7 +15,7 @@ namespace BeastHunterHubUI
         public int ShopsSlotsAmount { get; private set; }
         public List<LocationModel> Locations { get; private set; }
         public QuestData[] QuestsData { get; private set; }
-        public GameTimeModel GameTime { get; private set; }
+        public HubUIGameTime GameTime { get; private set; }
 
         #endregion
 
@@ -40,7 +40,7 @@ namespace BeastHunterHubUI
             ShopsSlotsAmount = data.ShopsSlotsAmount;
 
             Player = new PlayerModel(data.PlayerSettings, data.CharacterSettings);
-            GameTime = new GameTimeModel(data.TimeSettings);
+            GameTime = new HubUIGameTime(data.TimeSettings);
 
             for (int i = 0; i < data.CharactersPool.Length; i++)
             {

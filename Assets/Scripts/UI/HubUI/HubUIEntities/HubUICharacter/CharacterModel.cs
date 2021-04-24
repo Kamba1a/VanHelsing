@@ -98,7 +98,7 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public void EquipClothesItem(BaseItemStorage outStorage, int outStorageSlotIndex)
+        public bool EquipClothesItem(BaseItemStorage outStorage, int outStorageSlotIndex)
         {
             BaseItemModel item = outStorage.GetItemBySlot(outStorageSlotIndex);
             if (item != null && item.ItemType == ItemType.Clothes)
@@ -112,11 +112,15 @@ namespace BeastHunterHubUI
                 {
                     outStorage.RemoveItem(outStorageSlotIndex);
                 }
-
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
-        public void EquipWeaponItem(BaseItemStorage outStorage, int outStorageSlotIndex)
+        public bool EquipWeaponItem(BaseItemStorage outStorage, int outStorageSlotIndex)
         {
             BaseItemModel item = outStorage.GetItemBySlot(outStorageSlotIndex);
             if (item != null && item.ItemType == ItemType.Weapon)
@@ -124,12 +128,17 @@ namespace BeastHunterHubUI
                 if (!WeaponEquipment.PutItemToFirstEmptySlot(item))
                 {
                     HubUIServices.SharedInstance.GameMessages.Notice("There is no free slots for this weapon");
+                    return false;
                 }
                 else
                 {
                     outStorage.RemoveItem(outStorageSlotIndex);
+                    return true;
                 }
-
+            }
+            else
+            {
+                return false;
             }
         }
 

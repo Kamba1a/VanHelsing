@@ -70,6 +70,7 @@ MonoBehaviour:
       _hoursAmountPerDay: 24
       _hoursOnStartGame: 12
       _dayOnStartGame: 1
+      _timePassingDelay: 1
   MapDataStruct:
     _citizenUIPrefab: {fileID: 5311113231720852829, guid: a9a2ad70cde8fd5409f8b95ef49c4e33,
       type: 3}
@@ -90,6 +91,8 @@ MonoBehaviour:
     _characterBackpuckSlotUIPrefab: {fileID: 4649815293729276567, guid: 7899f865f88bda740864b45d02cbea24,
       type: 3}
     _mapOnStartEnabled: 0
+    _tooltipShowingDelay: 0.75
+    _charactersPanelSwipeStep: 1
     _characters3DViewRenderingObjectPosition: {x: 1000, y: 1000, z: 1000}
     _mapObjects:
     - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
