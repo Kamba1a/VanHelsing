@@ -706,7 +706,10 @@ namespace BeastHunterHubUI
         {
             if (_selected.Character != null)
             {
-                MoveItemToGeneralInventoryStorage(GetStorageByType(storageType), slotIndex);
+                if(!_generalInventory.PutItemToFirstEmptySlotFromOtherStorage(GetStorageByType(storageType), slotIndex))
+                {
+                    HubUIServices.SharedInstance.GameMessages.Notice("Inventory is full");
+                }
             }
         }
 
@@ -1397,22 +1400,6 @@ namespace BeastHunterHubUI
 
             _rightInfoPanelObjectsForDestroy.Clear();
             _displayedCurrentCitizensUIBehaviours.Clear();
-        }
-
-        private void MoveItemToGeneralInventoryStorage(BaseItemStorage outStorage, int outStorageSlotIndex)
-        {
-            BaseItemModel item = outStorage.GetItemBySlot(outStorageSlotIndex);
-            if (item != null)
-            {
-                if (_generalInventory.PutItemToFirstEmptySlot(item))
-                {
-                    outStorage.RemoveItem(outStorageSlotIndex);
-                }
-                else
-                {
-                    HubUIServices.SharedInstance.GameMessages.Notice("Inventory is full");
-                }
-            }
         }
 
         private void EquipSelectedCharacterWithWeapon(BaseItemStorage outStorage, int outStorageSlotIndex)

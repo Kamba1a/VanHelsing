@@ -29,6 +29,29 @@ namespace BeastHunterHubUI
         public abstract bool PutItem(int slotIndex, BaseItemModel item);
         public abstract bool PutItemToFirstEmptySlot(BaseItemModel item);
 
+
+        public virtual bool PutItemToFirstEmptySlotFromOtherStorage(BaseItemStorage otherStorage, int otherStorageSlotIndex)
+        {
+            BaseItemModel item = otherStorage.GetItemBySlot(otherStorageSlotIndex);
+            if (item != null)
+            {
+                if (this.PutItemToFirstEmptySlot(item))
+                {
+                    otherStorage.RemoveItem(otherStorageSlotIndex);
+                    return true;
+                }
+                else
+                {
+                    Debug.Log($"The storage {StorageType} is full");
+                    return false;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public virtual void SwapItemsWithOtherStorage(int currentStorageSlotIndex, BaseItemStorage otherStorage, int otherStorageSlotIndex)
         {
             BaseItemModel currentStorageItem = this.GetItemBySlot(currentStorageSlotIndex);
