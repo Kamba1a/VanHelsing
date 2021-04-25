@@ -12,13 +12,15 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        [Tooltip("Put the character SO, in which you want to save the form of the character on the scene")]
+        [Tooltip("Put the character SO, in which you want to save the module parts of the character on the scene")]
         [SerializeField] CharacterData _characterData;
+        [Tooltip("Put the new Fantasy Hero material, in which you want to save current material settings")]
         [SerializeField] private Material _fantasyHeroMaterial;
 
         private GameObject _modularCharacters;
         private List<CharacterHeadPart> _savedHeadParts;
         private List<CharacterClothesModuleParts> _savedModuleParts;
+
         private Dictionary<ClothesType, List<string>> _modulePartsGroups;
         private Dictionary<CharacterHeadPartType, List<string>> _headPartsGroups;
 
@@ -32,14 +34,20 @@ namespace BeastHunterHubUI
             _modularCharacters = GameObject.Find("ModularCharacters");
             _savedHeadParts = new List<CharacterHeadPart>();
             _savedModuleParts = new List<CharacterClothesModuleParts>();
-            InitializeHeadPartsTypesDictionary();
-            InitializeModulePartsTypesDictionary();
+            InitializeHeadPartsGroupsDictionary();
+            InitializeModulePartsGroupsDictionary();
         }
 
         #endregion
 
 
         #region Methods
+
+        [ContextMenu("SetFemaleModuleParts")]
+        public void SetFemaleModuleParts()
+        {
+
+        }
 
         [ContextMenu("SaveCharacterMaterial")]
         public void SaveCharacterMaterial()
@@ -156,7 +164,7 @@ namespace BeastHunterHubUI
             }
         }
 
-        private void InitializeHeadPartsTypesDictionary()
+        private void InitializeHeadPartsGroupsDictionary()
         {
             _headPartsGroups = new Dictionary<CharacterHeadPartType, List<string>>();
 
@@ -193,7 +201,7 @@ namespace BeastHunterHubUI
             _headPartsGroups.Add(CharacterHeadPartType.Ears, earsList);
         }
 
-        private void InitializeModulePartsTypesDictionary()
+        private void InitializeModulePartsGroupsDictionary()
         {
             _modulePartsGroups = new Dictionary<ClothesType, List<string>>();
 
