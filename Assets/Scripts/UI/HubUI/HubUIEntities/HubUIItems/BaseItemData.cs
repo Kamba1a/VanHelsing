@@ -12,6 +12,7 @@ namespace BeastHunterHubUI
         [SerializeField] private Sprite _icon;
         [SerializeField] private int _shopPrice;
         [SerializeField] private int _requiredReputationForBuyInShop;
+        [SerializeField] private int _rank;
 
         #endregion
 
@@ -24,6 +25,7 @@ namespace BeastHunterHubUI
         public Sprite Icon => _icon;
         public int ShopPrice => _shopPrice;
         public int RequiredReputationForSaleInShop => _requiredReputationForBuyInShop;
+        public int Rank => _rank;
 
         #endregion
     }
