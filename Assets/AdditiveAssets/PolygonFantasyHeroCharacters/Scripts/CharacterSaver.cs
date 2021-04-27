@@ -43,12 +43,6 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        [ContextMenu("SetFemaleModuleParts")]
-        public void SetFemaleModuleParts()
-        {
-
-        }
-
         [ContextMenu("SaveCharacterMaterial")]
         public void SaveCharacterMaterial()
         {
