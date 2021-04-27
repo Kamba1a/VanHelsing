@@ -20,14 +20,14 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public PlayerModel(PlayerSettingsStruct settings, CharactersSettingsStruct charactersSettings)
+        public PlayerModel(PlayerSettingsStruct settings, AllCharactersData allCharactersData)
         {
             GoldAmount = settings.GoldAmount;
 
             HiredCharacters = new List<CharacterModel>();
             for (int i = 0; i < settings.StartHiredCharacters.Length; i++)
             {
-                HiredCharacters.Add(new CharacterModel(settings.StartHiredCharacters[i], charactersSettings));
+                HiredCharacters.Add(new CharacterModel(settings.StartHiredCharacters[i], allCharactersData));
             }
 
             Inventory = new ItemStorage(settings.InventorySlotsAmount, ItemStorageType.GeneralInventory);

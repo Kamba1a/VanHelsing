@@ -11,6 +11,7 @@ namespace BeastHunterHubUI
         [SerializeField] GameObject _messagePanel;
 
         HubUIContext _context;
+        HubUIData _data;
 
         private List<IStart> _startBehaviours;
         private List<IUpdate> _updateBehaviours;
@@ -35,10 +36,12 @@ namespace BeastHunterHubUI
 
         private void Start()
         {
+            _data = BeastHunter.Data.HubUIData;
             _context = new HubUIContext();
+
             HubUIServices.SharedInstance.InitializeServices(_context);
-            _context.Initialize(BeastHunter.Data.HubUIData.ContextDataStruct);
-            new QuestController(_context);
+            _context.InitializeGameContent(_data);
+            new QuestController(_data.QuestsPool, _context);
             Subscriptions();
             StartBehaviours(_context);
 
@@ -109,7 +112,7 @@ namespace BeastHunterHubUI
 
         private void InitializeMessageWindow(string message)
         {
-            GameObject messageUI = InstantiateUIObject(BeastHunter.Data.HubUIData.MessageWindowPrefab, _messagePanel);
+            GameObject messageUI = InstantiateUIObject(_data.MessageWindowPrefab, _messagePanel);
             MapMessageWindowBehaviour behaviour = messageUI.GetComponent<MapMessageWindowBehaviour>();
             behaviour.OnCloseWindowHandler += OnClose_MessageWindow;
             behaviour.FillInfo(message);

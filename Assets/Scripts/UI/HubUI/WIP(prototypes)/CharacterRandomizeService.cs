@@ -11,10 +11,10 @@ namespace BeastHunterHubUI
     {
         private const float MALE_GENDER_CHANCE = 0.5f;
 
-        public CharacterModel GetRandomCharacter()
-        {
-            return new CharacterModel(new CharacterData(), new CharactersSettingsStruct()); //temporary
-        }
+        //public CharacterModel GetRandomCharacter()
+        //{
+        //    return new CharacterModel(new CharacterData(), new CharactersSettingsStruct()); //temporary
+        //}
 
         private bool IsMale()
         {

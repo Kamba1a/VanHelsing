@@ -29,7 +29,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public QuestController(HubUIContext context)
+        public QuestController(QuestData[] quests ,HubUIContext context)
         {
             _context = context;
 
@@ -37,9 +37,9 @@ namespace BeastHunterHubUI
             _activeQuests = new List<QuestModel>();
             _completedQuests = new List<QuestModel>();
 
-            for (int i = 0; i < _context.QuestsData.Length; i++)
+            for (int i = 0; i < quests.Length; i++)
             {
-                _notActiveQuests.Add(new QuestModel(_context.QuestsData[i], QuestStatus.NotActive));
+                _notActiveQuests.Add(new QuestModel(quests[i], QuestStatus.NotActive));
             }
 
             for (int i = 0; i < _notActiveQuests.Count; i++)

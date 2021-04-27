@@ -8,14 +8,11 @@ namespace BeastHunterHubUI
     {
         #region Properties
 
-        public PlayerModel Player { get; private set; }
-        public List<CharacterModel> CharactersForHire { get; private set; }
-        public CharactersSettingsStruct CharacterSettings { get; private set; }
-        public List<CityModel> Cities { get; private set; }
-        public int ShopsSlotsAmount { get; private set; }
-        public List<LocationModel> Locations { get; private set; }
-        public QuestData[] QuestsData { get; private set; }
-        public HubUIGameTime GameTime { get; private set; }
+        public PlayerModel Player { get; set; }
+        public List<CharacterModel> CharactersForHire { get; set; }
+        public List<LocationModel> Locations { get; set; }
+        public List<CityModel> Cities { get; set; }
+         public HubUIGameTime GameTime { get; set; }
 
         #endregion
 
@@ -34,18 +31,15 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public void Initialize(GameContentDataStruct data)
+        public void InitializeGameContent(HubUIData data)
         {
-            CharacterSettings = data.CharacterSettings;
-            ShopsSlotsAmount = data.ShopsSlotsAmount;
-
-            Player = new PlayerModel(data.PlayerSettings, data.CharacterSettings);
+            Player = new PlayerModel(data.PlayerSettings, data.AllCharactersData);
             GameTime = new HubUIGameTime(data.TimeSettings);
 
-            for (int i = 0; i < data.CharactersPool.Length; i++)
-            {
-                CharactersForHire.Add(new CharacterModel(data.CharactersPool[i], data.CharacterSettings));
-            }
+            //for (int i = 0; i < data.CharactersPool.Length; i++)
+            //{
+            //    CharactersForHire.Add(new CharacterModel(data.CharactersPool[i], data.CharacterSettings));
+            //}
 
             for (int i = 0; i < data.Cities.Length; i++)
             {
@@ -56,8 +50,6 @@ namespace BeastHunterHubUI
             {
                 Locations.Add(new LocationModel(data.Locations[i]));
             }
-
-            QuestsData = data.QuestsPool;
         }
 
         public MapObjectModel GetMapObjectModel(MapObjectData mapObjectData)

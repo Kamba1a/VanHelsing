@@ -29,8 +29,8 @@ namespace BeastHunterHubUI
         public string Name => _name;
         public Sprite Portrait => _portrait;
         public bool IsFemale => _isFemale;
-        public GameObject View3DModelPrefab => _view3DModelPrefab;
-        public RuntimeAnimatorController View3DModelAnimatorController => _view3DModelAnimatorController;
+        //public GameObject View3DModelPrefab => _view3DModelPrefab;
+        //public RuntimeAnimatorController View3DModelAnimatorController => _view3DModelAnimatorController;
         public BaseItemData[] StartBackpuckItems => (BaseItemData[])_startBackpuckItems?.Clone();
         public ClothesItemData[] StartClothesEquipmentItems => (ClothesItemData[])_startClothesEquipmentItems?.Clone();
         public WeaponItemData[] StartWeaponEquipmentItems => (WeaponItemData[])_startWeaponEquipmentItems?.Clone();

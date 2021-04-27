@@ -329,7 +329,7 @@ namespace BeastHunterHubUI
             _character3DViewModelRawImageBehaviour = _character3DViewModelRawImage.GetComponent<MapCharacterView3DModelBehaviour>();
 
 
-            if (_characterClothesSlotsUIBehaviours.Length != context.CharacterSettings.ClothesSlots.Length)
+            if (_characterClothesSlotsUIBehaviours.Length != _data.AllCharactersData.ClothesSlots.Length)
             {
                 Debug.LogError("The number of cloth UI slots does not match the equipment of the characters!");
             }
@@ -339,7 +339,7 @@ namespace BeastHunterHubUI
                 FillCharacterClothesSlot(i);
             }
 
-            if (_characterWeaponSlotsUIBehaviours.Length != context.CharacterSettings.WeaponSetsAmount * 2)
+            if (_characterWeaponSlotsUIBehaviours.Length != _data.AllCharactersData.WeaponSetsAmount * 2)
             {
                 Debug.LogError("The number of weapon UI slots does not match the equipment of the characters!");
             }
@@ -354,7 +354,7 @@ namespace BeastHunterHubUI
                 FillMapObject(_mapObjects[i], _data.MapDataStruct.MapObjects[i]);
             }
 
-            for (int i = 0; i < context.CharacterSettings.BackpuckSlotAmount; i++)
+            for (int i = 0; i < _data.AllCharactersData.BackpuckSlotAmount; i++)
             {
                 InitializeCharacterBackpuckSlotUI(i);
             }
@@ -364,12 +364,12 @@ namespace BeastHunterHubUI
                 InitializeGeneralInventorySlotUI(i);
             }
 
-            for (int i = 0; i < context.ShopsSlotsAmount; i++)
+            for (int i = 0; i < _data.CitiesShopsSlotsAmount; i++)
             {
                 InitializeBuyBackSlotUI(i);
             }
 
-            for (int i = 0; i < context.ShopsSlotsAmount; i++)
+            for (int i = 0; i < _data.CitiesShopsSlotsAmount; i++)
             {
                 InitializeShopSlotUI(i);
             }
@@ -1143,7 +1143,7 @@ namespace BeastHunterHubUI
 
         private void FillCharacterClothesSlot(int slotIndex)
         {
-            Sprite slotSprite = _data.MapDataStruct.GetClothSlotSpriteByType(_context.CharacterSettings.ClothesSlots[slotIndex]);
+            Sprite slotSprite = _data.MapDataStruct.GetClothSlotSpriteByType(_data.AllCharactersData.ClothesSlots[slotIndex]);
             _characterClothesSlotsUIBehaviours[slotIndex].FillSlotInfo(slotIndex, true, slotSprite);
             _characterClothesSlotsUIBehaviours[slotIndex].SetInteractable(false);
             _characterClothesSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_CharacterEquipmentSlot(slotIndex, ItemStorageType.ClothesEquipment);

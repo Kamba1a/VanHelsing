@@ -9,8 +9,9 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        private GameObject _view3DModelPrefab;
-        private RuntimeAnimatorController _view3DModelAnimatorController;
+        //private GameObject _view3DModelPrefab;
+        //private RuntimeAnimatorController _view3DModelAnimatorController;
+        private AllCharactersData _allData;
         private Material _defaultCharacterMaterial;
 
         private Dictionary<CharacterHeadPartType, (string name, bool isActiveByDefault)> _defaultHeadParts;
@@ -42,16 +43,17 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public CharacterModel(CharacterData data, CharactersSettingsStruct settings)
+        public CharacterModel(CharacterData data, AllCharactersData allData)
         {
+            _allData = allData;
             Name = data.Name;
             Portrait = data.Portrait;
             IsFemale = data.IsFemale;
-            _view3DModelPrefab = data.View3DModelPrefab;
-            _view3DModelAnimatorController = data.View3DModelAnimatorController;
+            //_view3DModelPrefab = allData.View3DModelPrefab;
+            //_view3DModelAnimatorController = allData.View3DModelAnimatorController;
             _defaultCharacterMaterial = data.DefaultMaterial;
 
-            Backpack = new ItemStorage(settings.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
+            Backpack = new ItemStorage(allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
             if (data.StartBackpuckItems != null)
             {
                 for (int i = 0; i < data.StartBackpuckItems.Length; i++)
@@ -63,7 +65,7 @@ namespace BeastHunterHubUI
 
             Pockets = new PocketsStorage();
 
-            ClothesEquipment = new EquippedClothesStorage(settings.ClothesSlots);
+            ClothesEquipment = new EquippedClothesStorage(allData.ClothesSlots);
             ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
 
             ClothesEquipment.OnTakeItemFromSlotHandler += OnTakeClothesEquipmentItem;
@@ -78,7 +80,7 @@ namespace BeastHunterHubUI
                 }
             }
 
-            WeaponEquipment = new EquippedWeaponStorage(settings.WeaponSetsAmount);
+            WeaponEquipment = new EquippedWeaponStorage(allData.WeaponSetsAmount);
 
             if (data.StartWeaponEquipmentItems != null)
             {
@@ -144,8 +146,8 @@ namespace BeastHunterHubUI
 
         public void InitializeView3DModel(Transform parent)
         {
-            View3DModelObjectOnScene = GameObject.Instantiate(_view3DModelPrefab, parent);
-            View3DModelObjectOnScene.GetComponent<Animator>().runtimeAnimatorController = _view3DModelAnimatorController;
+            View3DModelObjectOnScene = GameObject.Instantiate(_allData.View3DModelPrefab, parent);
+            View3DModelObjectOnScene.GetComponent<Animator>().runtimeAnimatorController = _allData.View3DModelAnimatorController;
 
             foreach (KeyValuePair<ClothesType, List<string>> kvp in _defaultModuleParts)
             {
