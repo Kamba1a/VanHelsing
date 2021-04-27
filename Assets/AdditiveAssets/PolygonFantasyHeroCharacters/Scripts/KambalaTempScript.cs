@@ -1,17 +1,11 @@
 using Extensions;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 public class KambalaTempScript : MonoBehaviour
 {
-    [SerializeField] GameObject _modularCharacter;
-    [SerializeField] public GameObject _originalArm;
-    [SerializeField] public GameObject _copyArm;
-    HumanBodyBones[] _bodyBones;
-    Transform[] _bonesMap;
-    string _moduleName = "Chr_ArmUpperRight_Male_03";
+    //[SerializeField] private GameObject _originalArm;
+    [SerializeField] private GameObject _copiedObject;
 
 
     //private void Start()
@@ -31,45 +25,42 @@ public class KambalaTempScript : MonoBehaviour
     //    }
     //}
 
-    [ContextMenu("GetBonesListInDebug")]
-    public void GetBonesListInDebug()
+    [ContextMenu("BonesToDebugLog")]
+    public void BonesToDebugLog()
     {
-        Transform[] bones = _originalArm.GetComponent<SkinnedMeshRenderer>().bones;
+        Transform[] bones = _copiedObject.GetComponent<SkinnedMeshRenderer>().bones;
         foreach (Transform bone in bones)
         {
-            Debug.Log(bone.gameObject.name);
+            Debug.Log($"{bone.gameObject.name} from {bone.transform.root.name}");
         }
     }
 
-    [ContextMenu("CreateNewArm")]
-    public void CreateNewArm()
+    [ContextMenu("UpdateSkinnedMesh")]
+    public void UpdateSkinnedMesh()
     {
-        GameObject arm = _modularCharacter.transform.FindDeep(_moduleName).gameObject;
-        GameObject newArm = GameObject.Instantiate(arm, this.gameObject.transform, false);
-        SkinnedMeshRenderer skinned = newArm.GetComponent<SkinnedMeshRenderer>();
-        skinned.rootBone = this.transform.FindDeep("Clavicle_R");
+        //GameObject _copyArm = GameObject.Instantiate(_originalArm, this.gameObject.transform, false);
 
-        Transform[] rootBones = skinned.rootBone.GetComponentsInChildren<Transform>();
-        Transform[] newBones = new Transform[rootBones.Length];
+        SkinnedMeshRenderer copiedSkinnedMesh = _copiedObject.GetComponent<SkinnedMeshRenderer>();
+        Transform[] bonesFromOriginal = copiedSkinnedMesh.bones;
+        Transform rootBoneFromOriginal = copiedSkinnedMesh.rootBone;
 
-        for (int i = 0; i< skinned.bones.Length; i++)
+        Transform newRootBone = this.transform.FindDeep(rootBoneFromOriginal.name);
+        Transform[] allBonesInNewRootBone = newRootBone.GetComponentsInChildren<Transform>();
+
+        Transform[] newBones = new Transform[bonesFromOriginal.Length];
+
+        for (int i = 0; i < bonesFromOriginal.Length; i++)
         {
-            for (int j = 0; j < rootBones.Length; j++)
+            for (int j = 0; j < allBonesInNewRootBone.Length; j++)
             {
-                if (skinned.bones[i].name == rootBones[j].name)
+                if (bonesFromOriginal[i].name == allBonesInNewRootBone[j].name)
                 {
-                    newBones[i] = rootBones[j];
+                    newBones[i] = allBonesInNewRootBone[j];
                 }
             }
         }
-        rootBones = newBones;
+
+        copiedSkinnedMesh.bones = newBones;
+        copiedSkinnedMesh.rootBone = newRootBone;
     }
-
-    //[ContextMenu("SetBonesTransformList")]
-    //public void SetBonesTransformList()
-    //{
-    //    _copyArm.GetComponent<SkinnedMeshRenderer>().bones = _bonesMap;
-
-    //    GetBonesListInDebug();
-    //}
 }

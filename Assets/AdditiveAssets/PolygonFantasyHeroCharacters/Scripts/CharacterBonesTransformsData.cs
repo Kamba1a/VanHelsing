@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+
 namespace BeastHunter
 {
     [CreateAssetMenu(fileName = "CharacterBonesTransformsData", menuName = "CreateData/HubUIData/CharacterBonesTransformsData", order = 0)]
@@ -12,6 +13,6 @@ namespace BeastHunter
     {
         [SerializeField] private GameObject _modularCharacter;
 
-        private Dictionary<string, Transform[]> _bonesTransforms;
+        private Dictionary<string, string[]> _bones;
     }
 }
