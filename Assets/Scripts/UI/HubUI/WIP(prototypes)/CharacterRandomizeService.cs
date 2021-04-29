@@ -22,15 +22,11 @@ namespace BeastHunterHubUI
         }
 
         /* Data:
-        [SerializeField] private string _name; //POOL
         [SerializeField] private Sprite _portrait; //RUNTIME
-        [SerializeField] private bool _isFemale; //RUNTIME
-        [SerializeField] private GameObject _view3DModelPrefab; //SETTINGS
-        [SerializeField] private RuntimeAnimatorController _view3DModelAnimatorController; //SETTINGS
         [SerializeField] private BaseItemData[] _startBackpuckItems; //RUNTIME from pool
         [SerializeField] private ClothesItemData[] _startClothesEquipmentItems; //RUNTIME from pool
         [SerializeField] private WeaponItemData[] _startWeaponEquipmentItems; //RUNTIME from pool
-        [SerializeField] private Material _defaultMaterial; //RUNTIME?
+        [SerializeField] private Material _defaultMaterial; //RUNTIME from pool
         [SerializeField] private CharacterClothesModuleParts[] _defaultModuleParts; //RUNTIME
         [SerializeField] private CharacterHeadPart[] _defaultHeadParts; //RUNTIME
         */

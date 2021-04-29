@@ -11,8 +11,6 @@ namespace BeastHunterHubUI
         [SerializeField] private string _name;
         [SerializeField] private Sprite _portrait;
         [SerializeField] private bool _isFemale;
-        [SerializeField] private GameObject _view3DModelPrefab;
-        [SerializeField] private RuntimeAnimatorController _view3DModelAnimatorController;
         [SerializeField] private BaseItemData[] _startBackpuckItems;
         [SerializeField] private ClothesItemData[] _startClothesEquipmentItems;
         [SerializeField] private WeaponItemData[] _startWeaponEquipmentItems;
@@ -29,8 +27,6 @@ namespace BeastHunterHubUI
         public string Name => _name;
         public Sprite Portrait => _portrait;
         public bool IsFemale => _isFemale;
-        //public GameObject View3DModelPrefab => _view3DModelPrefab;
-        //public RuntimeAnimatorController View3DModelAnimatorController => _view3DModelAnimatorController;
         public BaseItemData[] StartBackpuckItems => (BaseItemData[])_startBackpuckItems?.Clone();
         public ClothesItemData[] StartClothesEquipmentItems => (ClothesItemData[])_startClothesEquipmentItems?.Clone();
         public WeaponItemData[] StartWeaponEquipmentItems => (WeaponItemData[])_startWeaponEquipmentItems?.Clone();

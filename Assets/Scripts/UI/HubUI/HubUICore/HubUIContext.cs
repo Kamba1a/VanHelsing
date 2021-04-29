@@ -8,11 +8,11 @@ namespace BeastHunterHubUI
     {
         #region Properties
 
-        public PlayerModel Player { get; set; }
-        public List<CharacterModel> CharactersForHire { get; set; }
-        public List<LocationModel> Locations { get; set; }
-        public List<CityModel> Cities { get; set; }
-         public HubUIGameTime GameTime { get; set; }
+        public PlayerModel Player { get; private set; }
+        public List<CharacterModel> CharactersForHire { get; private set; }
+        public List<LocationModel> Locations { get; private set; }
+        public List<CityModel> Cities { get; private set; }
+        public HubUIGameTime GameTime { get; private set; }
 
         #endregion
 
@@ -36,6 +36,7 @@ namespace BeastHunterHubUI
             Player = new PlayerModel(data.PlayerSettings, data.AllCharactersData);
             GameTime = new HubUIGameTime(data.TimeSettings);
 
+            //todo: auto generated characters pool
             //for (int i = 0; i < data.CharactersPool.Length; i++)
             //{
             //    CharactersForHire.Add(new CharacterModel(data.CharactersPool[i], data.CharacterSettings));

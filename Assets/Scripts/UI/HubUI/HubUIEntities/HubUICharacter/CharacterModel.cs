@@ -91,6 +91,43 @@ namespace BeastHunterHubUI
             InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);
         }
 
+        //TODO: constructor for random character
+        public CharacterModel(AllCharactersData allData, int rank) //WIP
+        {
+            _allData = allData;
+            IsFemale = allData.IsFemale() ? true : false;
+            Name = allData.GetRandonNameFromPool(IsFemale);
+            //todo: Portrait = ?;
+            _defaultCharacterMaterial = allData.GetRandomMaterialFromPool();
+
+            Backpack = new ItemStorage(allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
+            Pockets = new PocketsStorage();
+
+            WeaponEquipment = new EquippedWeaponStorage(allData.WeaponSetsAmount);
+            ClothesEquipment = new EquippedClothesStorage(allData.ClothesSlots);
+            ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
+            ClothesEquipment.OnTakeItemFromSlotHandler += OnTakeClothesEquipmentItem;
+            ClothesEquipment.OnPutItemToSlotHandler += OnPutClothesEquipmentItem;
+
+            List<ClothesItemModel> startingClothesItems = allData.GetRandomStartingClothes(rank);
+            for (int i = 0; i < startingClothesItems.Count; i++)
+            {
+                ClothesEquipment.PutItemToFirstEmptySlot(startingClothesItems[i]);
+            }
+
+            //if (data.StartWeaponEquipmentItems != null)
+            //{
+            //    for (int i = 0; i < data.StartWeaponEquipmentItems.Length; i++)
+            //    {
+            //        BaseItemModel weapon = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartWeaponEquipmentItems[i]);
+            //        WeaponEquipment.PutItemToFirstEmptySlot(weapon);
+            //    }
+            //}
+
+            //InitializeDefaultHeadPartsDictionary(data.DefaultHeadParts);
+            //InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);
+        }
+
         #endregion
 
 
