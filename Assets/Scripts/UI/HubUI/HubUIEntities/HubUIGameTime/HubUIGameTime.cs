@@ -10,6 +10,7 @@ namespace BeastHunterHubUI
         #region Fields
 
         private float _timePassingDelay;
+        private HubUITimeStruct _currentTime;
 
         #endregion
 
@@ -18,8 +19,8 @@ namespace BeastHunterHubUI
 
         public Action<HubUITimeStruct> OnChangeTimeHandler { get; set; }
 
+        public HubUITimeStruct CurrentTime => _currentTime;
         public int HoursAmountPerDay { get; private set; }
-        public HubUITimeStruct CurrentTime { get; private set; }
         public bool IsTimePassing { get; private set; }
 
         #endregion
@@ -32,7 +33,7 @@ namespace BeastHunterHubUI
             IsTimePassing = false;
             _timePassingDelay = settings.TimePassingDelay;
             HoursAmountPerDay = settings.HoursAmountPerDay;
-            CurrentTime = new HubUITimeStruct(settings.DayOnStartGame, settings.HoursOnStartGame);
+            _currentTime = new HubUITimeStruct(settings.DayOnStartGame, settings.HoursOnStartGame);
         }
 
         #endregion
@@ -61,7 +62,16 @@ namespace BeastHunterHubUI
 
         public void OneHourPass()
         {
-            CurrentTime = AddOneHour(CurrentTime);
+            if (_currentTime.Hour + 1 >= HoursAmountPerDay)
+            {
+                _currentTime.Day += 1;
+                _currentTime.Hour = 0;
+            }
+            else
+            {
+                _currentTime.Hour += 1;
+            }
+
             OnChangeTime();
         }
 
@@ -78,7 +88,7 @@ namespace BeastHunterHubUI
             {
                 if (hours < HoursAmountPerDay - CurrentTime.Hour)
                 {
-                    newTime = new HubUITimeStruct(newTime.Day, newTime.Hour + hours);
+                    newTime.Hour += hours;
                 }
                 else
                 {
@@ -89,23 +99,12 @@ namespace BeastHunterHubUI
                         h -= HoursAmountPerDay;
                         d++;
                     }
-                    newTime = new HubUITimeStruct(newTime.Day + d, newTime.Hour + h);
+                    newTime.Day += d;
+                    newTime.Hour += h;
                 }
             }
 
             return newTime;
-        }
-
-        private HubUITimeStruct AddOneHour(HubUITimeStruct currentTime)
-        {
-            if (currentTime.Hour + 1 >= HoursAmountPerDay)
-            {
-                return new HubUITimeStruct(currentTime.Day + 1, 0);
-            }
-            else
-            {
-                return new HubUITimeStruct(currentTime.Day, currentTime.Hour + 1);
-            }
         }
 
         private int GameTimeStructToHours(HubUITimeStruct time)
