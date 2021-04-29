@@ -9,18 +9,16 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        //private GameObject _view3DModelPrefab;
-        //private RuntimeAnimatorController _view3DModelAnimatorController;
         private AllCharactersData _allData;
         private Material _defaultCharacterMaterial;
 
-        private Dictionary<CharacterHeadPartType, (string name, bool isActiveByDefault)> _defaultHeadParts;
-        private Dictionary<ClothesType, List<string>> _defaultModuleParts;
+        private Dictionary<CharacterHeadPartType, (string name, bool isActiveByDefault)> _defaultHeadPartsNames;
+        private Dictionary<ClothesType, List<string>> _defaultModulePartsNames;
+        private Dictionary<CharacterHeadPartType, (GameObject headPart, bool isActiveByDefault)> _defaultHeadParts;
+        private Dictionary<ClothesType, List<GameObject>> _defaultModuleParts;
+        private Dictionary<ClothesType, List<GameObject>> _clothesModuleParts;
 
-        //todo for optimization?
-        //private Dictionary<HubMapUICharacterHeadParts, GameObject> _defaultHeadParts;
-        //private Dictionary<HubMapUIClothesType, List<GameObject>> _defaultModuleParts;
-        //private Dictionary<HubMapUIClothesType, List<GameObject>> _clothesModuleParts;
+        private Transform _characterModulesTransform;
 
         #endregion
 
@@ -49,8 +47,6 @@ namespace BeastHunterHubUI
             Name = data.Name;
             Portrait = data.Portrait;
             IsFemale = data.IsFemale;
-            //_view3DModelPrefab = allData.View3DModelPrefab;
-            //_view3DModelAnimatorController = allData.View3DModelAnimatorController;
             _defaultCharacterMaterial = data.DefaultMaterial;
 
             Backpack = new ItemStorage(allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
@@ -144,65 +140,24 @@ namespace BeastHunterHubUI
             }
         }
 
-        public void InitializeView3DModel(Transform parent)
+         public void InitializeView3DModel(Transform parent)
         {
             View3DModelObjectOnScene = GameObject.Instantiate(_allData.View3DModelPrefab, parent);
             View3DModelObjectOnScene.GetComponent<Animator>().runtimeAnimatorController = _allData.View3DModelAnimatorController;
+            _characterModulesTransform = View3DModelObjectOnScene.transform.FindDeep(_allData.ModularCharactersChildGOForModulesName);
 
-            foreach (KeyValuePair<ClothesType, List<string>> kvp in _defaultModuleParts)
-            {
-                SetActiveToDefaultClothesByType(true, kvp.Key);
-            }
+            InitializeDefaultModules();
 
-            foreach (KeyValuePair<CharacterHeadPartType, (string name, bool isActiveByDefault)> kvp in _defaultHeadParts)
-            {
-                SetMaterialToModulePart(FindModulePartByName(kvp.Value.name), _defaultCharacterMaterial);
-            }
-            SetActiveToHeadPartsByDefault();
-
+            _clothesModuleParts = new Dictionary<ClothesType, List<GameObject>>();
             for (int i = 0; i < ClothesEquipment.GetSlotsCount(); i++)
             {
                 if (ClothesEquipment.GetItemBySlot(i) != null)
                 {
-                    PutOnClothes(ClothesEquipment.GetItemBySlot(i) as ClothesItemModel);
+                    PutOnClothesOnModel(ClothesEquipment.GetItemBySlot(i) as ClothesItemModel);
                 }
             }
 
             View3DModelObjectOnScene.SetActive(false);
-        }
-
-        private void InitializeDefaultHeadPartsDictionary(CharacterHeadPart[] characterHeadParts)
-        {
-            _defaultHeadParts = new Dictionary<CharacterHeadPartType, (string, bool)>();
-
-            for (int i = 0; i < characterHeadParts.Length; i++)
-            {
-                CharacterHeadPart headPart = characterHeadParts[i];
-                if (!_defaultHeadParts.ContainsKey(headPart.Type))
-                {
-                    _defaultHeadParts.Add(headPart.Type, (headPart.Name, headPart.IsActivateByDefault));
-                }
-            }
-        }
-
-        private void InitializeDefaultModulePartsDictionary(CharacterClothesModuleParts[] clothesModuleParts)
-        {
-            _defaultModuleParts = new Dictionary<ClothesType, List<string>>();
-
-            for (int i = 0; i < clothesModuleParts.Length; i++)
-            {
-                CharacterClothesModuleParts clothesParts = clothesModuleParts[i];
-
-                if (!_defaultModuleParts.ContainsKey(clothesParts.Type))
-                {
-                    List<string> clothesNames = new List<string>();
-                    for (int j = 0; j < clothesParts.Names.Count; j++)
-                    {
-                        clothesNames.Add(clothesParts.Names[j]);
-                    }
-                    _defaultModuleParts.Add(clothesParts.Type, clothesNames);
-                }
-            }
         }
 
         private void OnTakeClothesEquipmentItem(ItemStorageType storageType, int slotIndex, BaseItemModel item)
@@ -215,7 +170,7 @@ namespace BeastHunterHubUI
 
                 if (View3DModelObjectOnScene != null)
                 {
-                    TakeOffClothes(clothes);
+                    TakeOffClothesFromModel(clothes);
                 }
             }
         }
@@ -230,139 +185,183 @@ namespace BeastHunterHubUI
 
                 if (View3DModelObjectOnScene != null)
                 {
-                    PutOnClothes(clothes);
+                    PutOnClothesOnModel(clothes);
                 }
             }
         }
 
-        private void TakeOffClothes(ClothesItemModel clothes)
+        private void InitializeDefaultModules()
         {
-            ClothesType clothesType = clothes.ClothesType;
-
-            SetActiveToDefaultClothesByType(true, clothesType);
-
-            if (clothesType == ClothesType.Head)
+            _defaultModuleParts = new Dictionary<ClothesType, List<GameObject>>();
+            foreach (KeyValuePair<ClothesType, List<string>> kvp in _defaultModulePartsNames)
             {
-                SetActiveToHeadPartsByDefault();
+                List<GameObject> defaultModules = AddModulePartsTo3DModel(_allData.GetModulePartsByNames(kvp.Value), _defaultCharacterMaterial);
+                for (int i = 0; i < defaultModules.Count; i++)
+                {
+                    defaultModules[i].name += "(default)";
+                }
+                _defaultModuleParts.Add(kvp.Key, defaultModules);
             }
 
-            SetActiveClothesModuleParts(false, clothes);
+            _defaultHeadParts = new Dictionary<CharacterHeadPartType, (GameObject module, bool isActiveByDefault)>();
+            foreach (KeyValuePair<CharacterHeadPartType, (string name, bool isActiveByDefault)> kvp in _defaultHeadPartsNames)
+            {
+                GameObject defaultHeadPart = AddModulePartTo3DModel(_allData.GetModulePartByName(kvp.Value.name), _defaultCharacterMaterial);
+                defaultHeadPart.name += "(default)";
+                _defaultHeadParts.Add(kvp.Key, (defaultHeadPart, kvp.Value.isActiveByDefault));
+            }
+            SetDefaultActiveStatusToHeadParts();
         }
 
-        private void PutOnClothes(ClothesItemModel clothes)
+        private void TakeOffClothesFromModel(ClothesItemModel clothes)
         {
             ClothesType clothesType = clothes.ClothesType;
 
-            SetActiveClothesModuleParts(true, clothes);
+            SetActiveStatusToDefaultClothesByType(true, clothesType);
 
             if (clothesType == ClothesType.Head)
             {
-                foreach (KeyValuePair<CharacterHeadPartType, (string name, bool)> kvp in _defaultHeadParts)
+                SetDefaultActiveStatusToHeadParts();
+            }
+
+            RemoveClothesModulePartsFrom3DModel(clothes.ClothesType);
+        }
+
+        private void PutOnClothesOnModel(ClothesItemModel clothes)
+        {
+            ClothesType clothesType = clothes.ClothesType;
+
+            AddClothesModulePartsTo3DModel(clothes);
+
+            if (clothesType == ClothesType.Head)
+            {
+                foreach (KeyValuePair<CharacterHeadPartType, (GameObject headPart, bool)> kvp in _defaultHeadParts)
                 {
-                    FindModulePartByName(kvp.Value.name).SetActive(true);
+                    kvp.Value.headPart.SetActive(true);
                 }
 
                 for (int i = 0; i < clothes.DisabledHeadParts.Length; i++)
                 {
                     if (_defaultHeadParts.ContainsKey(clothes.DisabledHeadParts[i]))
                     {
-                        FindModulePartByName(_defaultHeadParts[clothes.DisabledHeadParts[i]].name).SetActive(false);
+                        _defaultHeadParts[clothes.DisabledHeadParts[i]].headPart.SetActive(false);
                     }
                 }
             }
 
-            SetActiveToDefaultClothesByType(false, clothesType);
+            SetActiveStatusToDefaultClothesByType(false, clothesType);
         }
 
-        private void SetActiveClothesModuleParts(bool flag, ClothesItemModel clothes)
+        private void RemoveClothesModulePartsFrom3DModel(ClothesType clothesType)
+        {
+            for (int i = 0; i < _clothesModuleParts[clothesType].Count; i++)
+            {
+                _clothesModuleParts[clothesType][i].SetActive(false);
+                GameObject.Destroy(_clothesModuleParts[clothesType][i]);
+            }
+            _clothesModuleParts[clothesType].Clear();
+        }
+
+        private void AddClothesModulePartsTo3DModel(ClothesItemModel clothes)
         {
             List<GameObject> moduleParts = new List<GameObject>();
 
-            moduleParts.AddRange(FindModulePartsByNames(clothes.PartsNamesAllGender));
+            moduleParts.AddRange(_allData.GetModulePartsByNames(clothes.PartsNamesAllGender));
 
             if (IsFemale)
             {
-                moduleParts.AddRange(FindModulePartsByNames(clothes.PartsNamesFemale));
+                moduleParts.AddRange(_allData.GetModulePartsByNames(clothes.PartsNamesFemale));
             }
             else
             {
-                moduleParts.AddRange(FindModulePartsByNames(clothes.PartsNamesMale));
+                moduleParts.AddRange(_allData.GetModulePartsByNames(clothes.PartsNamesMale));
             }
 
             if (moduleParts.Count > 0)
             {
-                if (flag)
-                {
-                    ActivatedModuleParts(moduleParts, clothes.FantasyHeroMaterial);
-                }
-                else
-                {
-                    DeactivatedModuleParts(moduleParts);
-                }
+                AddClothesModulesToDictionary(clothes.ClothesType, AddModulePartsTo3DModel(moduleParts, clothes.FantasyHeroMaterial));
             }
         }
 
-        private void SetActiveToHeadPartsByDefault()
+        private void AddClothesModulesToDictionary(ClothesType clothesType, List<GameObject> clothesModules)
         {
-            foreach (KeyValuePair<CharacterHeadPartType, (string name, bool isActiveByDefault)> kvp in _defaultHeadParts)
+            if (!_clothesModuleParts.ContainsKey(clothesType))
             {
-                FindModulePartByName(kvp.Value.name).SetActive(kvp.Value.isActiveByDefault);
+                _clothesModuleParts.Add(clothesType, new List<GameObject>());
+            }
+            _clothesModuleParts[clothesType].AddRange(clothesModules);
+        }
+
+        private List<GameObject> AddModulePartsTo3DModel(List<GameObject> moduleParts, Material fantasyHeroMaterial)
+        {
+            List<GameObject> addedModules = new List<GameObject>();
+            for (int i = 0; i < moduleParts.Count; i++)
+            {
+                addedModules.Add(AddModulePartTo3DModel(moduleParts[i], fantasyHeroMaterial));
+            }
+            return addedModules;
+        }
+
+        private GameObject AddModulePartTo3DModel(GameObject modulePart, Material fantasyHeroMaterial)
+        {
+            GameObject addedModule = GameObject.Instantiate(modulePart, _characterModulesTransform);
+            _allData.BindModuleToCharacter(addedModule, View3DModelObjectOnScene);
+            addedModule.GetComponent<SkinnedMeshRenderer>().material = fantasyHeroMaterial;
+            addedModule.SetActive(true);
+            return addedModule;
+        }
+
+        private void SetDefaultActiveStatusToHeadParts()
+        {
+            foreach (KeyValuePair<CharacterHeadPartType, (GameObject headPart, bool isActiveByDefault)> kvp in _defaultHeadParts)
+            {
+                kvp.Value.headPart.SetActive(kvp.Value.isActiveByDefault);
             }
         }
 
-        private void SetActiveToDefaultClothesByType(bool flag, ClothesType clothesType)
+        private void SetActiveStatusToDefaultClothesByType(bool flag, ClothesType clothesType)
         {
             if (_defaultModuleParts.ContainsKey(clothesType))
             {
-                if (flag)
+                for (int i = 0; i < _defaultModuleParts[clothesType].Count; i++)
                 {
-                    ActivatedModuleParts(FindModulePartsByNames(_defaultModuleParts[clothesType]), _defaultCharacterMaterial);
-                }
-                else
-                {
-                    DeactivatedModuleParts(FindModulePartsByNames(_defaultModuleParts[clothesType]));
+                    _defaultModuleParts[clothesType][i].SetActive(flag);
                 }
             }
         }
 
-        private void ActivatedModuleParts(List<GameObject> moduleParts, Material fantasyHeroMaterial)
+        private void InitializeDefaultHeadPartsDictionary(CharacterHeadPart[] characterHeadParts)
         {
-            for (int i = 0; i < moduleParts.Count; i++)
-            {
-                SetMaterialToModulePart(moduleParts[i], fantasyHeroMaterial);
-                moduleParts[i].SetActive(true);
-            }
-        }
+            _defaultHeadPartsNames = new Dictionary<CharacterHeadPartType, (string, bool)>();
 
-        private void DeactivatedModuleParts(List<GameObject> moduleParts)
-        {
-            for (int i = 0; i < moduleParts.Count; i++)
+            for (int i = 0; i < characterHeadParts.Length; i++)
             {
-                moduleParts[i].SetActive(false);
-            }
-        }
-
-        private List<GameObject> FindModulePartsByNames(IEnumerable<string> modulePartsNames)
-        {
-            List<GameObject> moduleParts = new List<GameObject>();
-            if (modulePartsNames != null)
-            {
-                foreach (string modulePartName in modulePartsNames)
+                CharacterHeadPart headPart = characterHeadParts[i];
+                if (!_defaultHeadPartsNames.ContainsKey(headPart.Type))
                 {
-                    moduleParts.Add(FindModulePartByName(modulePartName));
+                    _defaultHeadPartsNames.Add(headPart.Type, (headPart.Name, headPart.IsActivateByDefault));
                 }
             }
-            return moduleParts;
         }
 
-        private GameObject FindModulePartByName(string modulePartName)
+        private void InitializeDefaultModulePartsDictionary(CharacterClothesModuleParts[] clothesModuleParts)
         {
-            return View3DModelObjectOnScene.transform.FindDeep(modulePartName).gameObject;
-        }
+            _defaultModulePartsNames = new Dictionary<ClothesType, List<string>>();
 
-        private void SetMaterialToModulePart(GameObject modulePart, Material fantasyHeroMaterial)
-        {
-            modulePart.GetComponent<SkinnedMeshRenderer>().material = fantasyHeroMaterial;
+            for (int i = 0; i < clothesModuleParts.Length; i++)
+            {
+                CharacterClothesModuleParts clothesParts = clothesModuleParts[i];
+
+                if (!_defaultModulePartsNames.ContainsKey(clothesParts.Type))
+                {
+                    List<string> clothesNames = new List<string>();
+                    for (int j = 0; j < clothesParts.Names.Count; j++)
+                    {
+                        clothesNames.Add(clothesParts.Names[j]);
+                    }
+                    _defaultModulePartsNames.Add(clothesParts.Type, clothesNames);
+                }
+            }
         }
 
         #endregion

@@ -54,7 +54,7 @@ MonoBehaviour:
     - Chr_HandLeft_Female_00
   _defaultHeadParts:
   - _type: 3
-    _name: Chr_Eyebrow_Female_04
+    _name: Chr_Female_Eyebrow_04
     _isActivateByDefault: 1
   - _type: 2
     _name: Chr_Hair_21

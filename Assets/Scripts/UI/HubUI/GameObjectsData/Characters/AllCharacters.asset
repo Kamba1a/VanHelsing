@@ -17,7 +17,8 @@ MonoBehaviour:
   _weaponSetsAmount: 3
   _modularCharactersPrefab: {fileID: 1588895830433058, guid: ddc4cd0622acc4847817cc15268b4a19,
     type: 3}
-  _view3DModelPrefab: {fileID: 6667037347063198021, guid: dac53557101305c46bf45b75f46b571a,
+  _view3DModelPrefab: {fileID: 6667037347063198021, guid: 67ebd21778b32cb47bc276ed852041f2,
     type: 3}
   _view3DModelAnimatorController: {fileID: 9100000, guid: 4fde703d67cadff4a9a1c1dfb6de6662,
     type: 2}
+  _modularCharactersChildGOForModulesName: Modular_Characters
