@@ -235,7 +235,7 @@ namespace BeastHunterHubUI
         private List<GameObject> _displayedDialogAnswerButtons;
         private (int? slotIndex, ItemStorageType storageType) _draggedItemInfo;
 
-        private GameObject _character3DViewModelRendering;
+        //private GameObject _character3DViewModelRendering;
         private MapCharacterView3DModelBehaviour _character3DViewModelRawImageBehaviour;
 
         //Oh no, this is a little coroutine. No one reviews my code anyway..
@@ -374,9 +374,9 @@ namespace BeastHunterHubUI
                 InitializeShopSlotUI(i);
             }
 
-            _character3DViewModelRendering =
-                Instantiate(_data.MapDataStruct.Characters3DViewRenderingPrefab,
-                _data.MapDataStruct.Characters3DViewRenderingObjectPosition, Quaternion.identity);
+            //_character3DViewModelRendering =
+            //    Instantiate(_data.MapDataStruct.Characters3DViewRenderingPrefab,
+            //    _data.MapDataStruct.Characters3DViewRenderingObjectPosition, Quaternion.identity);
             for (int i = 0; i < context.Player.HiredCharacters.Count; i++)
             {
                 InitializeCharacterUI(context.Player.HiredCharacters[i]);
@@ -1043,7 +1043,7 @@ namespace BeastHunterHubUI
             behaviourUI.Initialize(character);
             behaviourUI.OnClick_ButtonHandler += OnClick_CharacterButton;
 
-            character.InitializeView3DModel(_character3DViewModelRendering.transform);
+            //character.InitializeView3DModel(_character3DViewModelRendering.transform);
         }
 
         private void InitializeCharacterBackpuckSlotUI(int slotIndex)

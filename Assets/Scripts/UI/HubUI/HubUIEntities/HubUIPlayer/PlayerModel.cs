@@ -31,7 +31,7 @@ namespace BeastHunterHubUI
             //todo: uncomment
             //for (int i = 0; i < settings.StartHiredCharacters.Length; i++)
             //{
-            //    HiredCharacters.Add(new CharacterModel(settings.StartHiredCharacters[i], allCharactersData));
+            //    HiredCharacters.Add(new CharacterModel(settings.StartHiredCharacters[i]));
             //}
 
             Inventory = new ItemStorage(settings.InventorySlotsAmount, ItemStorageType.GeneralInventory);

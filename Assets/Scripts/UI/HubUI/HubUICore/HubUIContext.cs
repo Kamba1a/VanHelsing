@@ -13,6 +13,7 @@ namespace BeastHunterHubUI
         public List<LocationModel> Locations { get; private set; }
         public List<CityModel> Cities { get; private set; }
         public HubUIGameTime GameTime { get; private set; }
+        public GameObject Character3DViewModelRendering { get; private set; }
 
         #endregion
 
@@ -33,12 +34,16 @@ namespace BeastHunterHubUI
 
         public void InitializeGameContent(HubUIData data)
         {
+            Character3DViewModelRendering =
+                GameObject.Instantiate(data.MapDataStruct.Characters3DViewRenderingPrefab,
+                data.MapDataStruct.Characters3DViewRenderingObjectPosition, Quaternion.identity);
+
             Player = new PlayerModel(data.PlayerSettings, data.AllCharactersData);
             GameTime = new HubUIGameTime(data.TimeSettings);
 
             for (int i = 0; i < data.RandomCharactersAmount; i++)
             {
-                CharacterModel newCharacter = new CharacterModel(data.AllCharactersData, Player.Rank);
+                CharacterModel newCharacter = new CharacterModel(Player.Rank);
                 CharactersForHire.Add(newCharacter);
 
                 Player.HireCharacter(newCharacter); //todo: remove (FOR DEBUG ONLY)

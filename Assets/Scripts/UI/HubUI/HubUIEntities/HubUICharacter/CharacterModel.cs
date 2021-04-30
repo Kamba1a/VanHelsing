@@ -41,15 +41,15 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public CharacterModel(CharacterData data, AllCharactersData allData)
+        public CharacterModel(CharacterData data)
         {
-            _allData = allData;
+            _allData = BeastHunter.Data.HubUIData.AllCharactersData;
             Name = data.Name;
             Portrait = data.Portrait;
             IsFemale = data.IsFemale;
             _defaultCharacterMaterial = data.DefaultMaterial;
 
-            Backpack = new ItemStorage(allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
+            Backpack = new ItemStorage(_allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
             if (data.StartBackpuckItems != null)
             {
                 for (int i = 0; i < data.StartBackpuckItems.Length; i++)
@@ -61,7 +61,7 @@ namespace BeastHunterHubUI
 
             Pockets = new PocketsStorage();
 
-            ClothesEquipment = new EquippedClothesStorage(allData.ClothesSlots);
+            ClothesEquipment = new EquippedClothesStorage(_allData.ClothesSlots);
             ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
 
             ClothesEquipment.OnTakeItemFromSlotHandler += OnTakeClothesEquipmentItem;
@@ -76,7 +76,7 @@ namespace BeastHunterHubUI
                 }
             }
 
-            WeaponEquipment = new EquippedWeaponStorage(allData.WeaponSetsAmount);
+            WeaponEquipment = new EquippedWeaponStorage(_allData.WeaponSetsAmount);
 
             if (data.StartWeaponEquipmentItems != null)
             {
@@ -89,40 +89,42 @@ namespace BeastHunterHubUI
 
             InitializeDefaultHeadPartsDictionary(data.DefaultHeadParts);
             InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);
+
+            //todo: InitializeView3DModel here
+            //InitializeView3DModel();
         }
 
-        //TODO: constructor for random character
-        public CharacterModel(AllCharactersData allData, int rank) //WIP
+        public CharacterModel(int rank) //WIP
         {
-            _allData = allData;
-            IsFemale = allData.IsFemale() ? true : false;
-            Name = allData.GetRandonNameFromPool(IsFemale);
+            _allData = BeastHunter.Data.HubUIData.AllCharactersData; ;
+            IsFemale = _allData.IsFemale() ? true : false;
+            Name = _allData.GetRandonNameFromPool(IsFemale);
             //todo: Portrait = ?;
-            _defaultCharacterMaterial = allData.GetRandomMaterialFromPool();
+            _defaultCharacterMaterial = _allData.GetRandomMaterialFromPool();
 
-            Backpack = new ItemStorage(allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
+            Backpack = new ItemStorage(_allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
             Pockets = new PocketsStorage();
 
-            WeaponEquipment = new EquippedWeaponStorage(allData.WeaponSetsAmount);
-            ClothesEquipment = new EquippedClothesStorage(allData.ClothesSlots);
+            WeaponEquipment = new EquippedWeaponStorage(_allData.WeaponSetsAmount);
+            ClothesEquipment = new EquippedClothesStorage(_allData.ClothesSlots);
             ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
             ClothesEquipment.OnTakeItemFromSlotHandler += OnTakeClothesEquipmentItem;
             ClothesEquipment.OnPutItemToSlotHandler += OnPutClothesEquipmentItem;
 
-            List<ClothesItemModel> startingClothesItems = allData.GetRandomStartingClothes(rank);
+            List<ClothesItemModel> startingClothesItems = _allData.GetRandomStartingClothes(rank);
             for (int i = 0; i < startingClothesItems.Count; i++)
             {
                 ClothesEquipment.PutItemToFirstEmptySlot(startingClothesItems[i]);
             }
 
-            List<WeaponItemModel> startingWeapon = allData.GetRandomStartingWeapon(rank);
+            List<WeaponItemModel> startingWeapon = _allData.GetRandomStartingWeapon(rank);
             for (int i = 0; i < startingWeapon.Count; i++)
             {
                 WeaponEquipment.PutItemToFirstEmptySlot(startingWeapon[i]);
             }
 
-            InitializeDefaultHeadPartsDictionary(allData.GetDefaultHeadModuleParts(IsFemale));
-            InitializeDefaultModulePartsDictionary(allData.GetDefaultBodyModules(IsFemale));
+            InitializeDefaultHeadPartsDictionary(_allData.GetDefaultHeadModuleParts(IsFemale));
+            InitializeDefaultModulePartsDictionary(_allData.GetDefaultBodyModules(IsFemale));
         }
 
         #endregion

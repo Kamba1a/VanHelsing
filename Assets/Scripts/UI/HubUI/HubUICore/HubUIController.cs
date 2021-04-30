@@ -10,8 +10,8 @@ namespace BeastHunterHubUI
 
         [SerializeField] GameObject _messagePanel;
 
-        HubUIContext _context;
-        HubUIData _data;
+        private HubUIContext _context;
+        private HubUIData _data;
 
         private List<IStart> _startBehaviours;
         private List<IUpdate> _updateBehaviours;
@@ -43,6 +43,7 @@ namespace BeastHunterHubUI
             _context.InitializeGameContent(_data);
             new QuestController(_data.QuestsPool, _context);
             Subscriptions();
+
             StartBehaviours(_context);
 
             _messagePanel.SetActive(false);
