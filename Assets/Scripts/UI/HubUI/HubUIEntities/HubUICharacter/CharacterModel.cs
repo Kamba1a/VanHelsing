@@ -121,8 +121,8 @@ namespace BeastHunterHubUI
                 WeaponEquipment.PutItemToFirstEmptySlot(startingWeapon[i]);
             }
 
-            //InitializeDefaultHeadPartsDictionary(data.DefaultHeadParts);
-            //InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);
+            InitializeDefaultHeadPartsDictionary(allData.GetDefaultHeadModuleParts(IsFemale));
+            InitializeDefaultModulePartsDictionary(allData.GetDefaultBodyModules(IsFemale));
         }
 
         #endregion
@@ -364,13 +364,12 @@ namespace BeastHunterHubUI
             }
         }
 
-        private void InitializeDefaultHeadPartsDictionary(CharacterHeadPart[] characterHeadParts)
+        private void InitializeDefaultHeadPartsDictionary(IEnumerable<CharacterHeadPart> characterHeadParts)
         {
             _defaultHeadPartsNames = new Dictionary<CharacterHeadPartType, (string, bool)>();
 
-            for (int i = 0; i < characterHeadParts.Length; i++)
+            foreach (CharacterHeadPart headPart in characterHeadParts)
             {
-                CharacterHeadPart headPart = characterHeadParts[i];
                 if (!_defaultHeadPartsNames.ContainsKey(headPart.Type))
                 {
                     _defaultHeadPartsNames.Add(headPart.Type, (headPart.Name, headPart.IsActivateByDefault));
@@ -378,14 +377,12 @@ namespace BeastHunterHubUI
             }
         }
 
-        private void InitializeDefaultModulePartsDictionary(CharacterClothesModuleParts[] clothesModuleParts)
+        private void InitializeDefaultModulePartsDictionary(IEnumerable<CharacterClothesModuleParts> clothesModuleParts)
         {
             _defaultModulePartsNames = new Dictionary<ClothesType, List<string>>();
 
-            for (int i = 0; i < clothesModuleParts.Length; i++)
+            foreach (CharacterClothesModuleParts clothesParts in clothesModuleParts)
             {
-                CharacterClothesModuleParts clothesParts = clothesModuleParts[i];
-
                 if (!_defaultModulePartsNames.ContainsKey(clothesParts.Type))
                 {
                     List<string> clothesNames = new List<string>();

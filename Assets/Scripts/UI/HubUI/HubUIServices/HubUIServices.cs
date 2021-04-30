@@ -12,6 +12,7 @@
         public GameMessages GameMessages { get;private set;}
         public OrdersService OrdersService { get; private set; }
         public HubUIEventsService EventsService { get; private set; }
+        public CharacterCheckNameService CharacterCheckNameService { get; private set; }
 
 
         public void InitializeServices(HubUIContext context)
@@ -22,6 +23,7 @@
             GameMessages = new GameMessages();
             OrdersService = new OrdersService(context);
             EventsService = new HubUIEventsService(context);
+            CharacterCheckNameService = new CharacterCheckNameService(context);
 
             MainInput = new MainInput();
             MainInput.Enable();

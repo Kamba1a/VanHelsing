@@ -20,30 +20,21 @@ namespace BeastHunterHubUI
         #endregion
 
 
-        #region Properties
+        #region UnityMethods
 
-        public Dictionary<int, List<WeaponItemData>> WeapomDataPool
+        private void OnEnable()
         {
-            get
-            {
-                if (_weaponDataPoolDic == null)
-                {
-                    InitializeWeaponDataPoolDictionary();
-                }
-                return _weaponDataPoolDic;
-            }
+            InitializeWeaponDataPoolDictionary();
+            InitializeClothesDataPoolDictionary();
         }
 
-        public Dictionary<int, Dictionary<ClothesType, List<ClothesItemData>>> ClothesDataPool
+        private void OnDisable()
         {
-            get
-            {
-                if (_clothesDataPoolDic == null)
-                {
-                    InitializeClothesDataPoolDictionary();
-                }
-                return _clothesDataPoolDic;
-            }
+            _weaponDataPoolDic.Clear();
+            _clothesDataPoolDic.Clear();
+
+            _weaponDataPoolDic = null;
+            _weaponDataPoolDic = null;
         }
 
         #endregion
@@ -124,34 +115,42 @@ namespace BeastHunterHubUI
         private void InitializeWeaponDataPoolDictionary()
         {
             _weaponDataPoolDic = new Dictionary<int, List<WeaponItemData>>();
-            for (int i = 0; i < _weaponItemsPool.Length; i++)
+
+            if(_weaponItemsPool != null)
             {
-                int itemRank = _weaponItemsPool[i].Rank;
-                if (!_weaponDataPoolDic.ContainsKey(itemRank))
+                for (int i = 0; i < _weaponItemsPool.Length; i++)
                 {
-                    _weaponDataPoolDic.Add(itemRank, new List<WeaponItemData>());
+                    int itemRank = _weaponItemsPool[i].Rank;
+                    if (!_weaponDataPoolDic.ContainsKey(itemRank))
+                    {
+                        _weaponDataPoolDic.Add(itemRank, new List<WeaponItemData>());
+                    }
+                    _weaponDataPoolDic[itemRank].Add(_weaponItemsPool[i]);
                 }
-                _weaponDataPoolDic[itemRank].Add(_weaponItemsPool[i]);
             }
         }
 
         private void InitializeClothesDataPoolDictionary()
         {
             _clothesDataPoolDic = new Dictionary<int, Dictionary<ClothesType, List<ClothesItemData>>>();
-            for (int i = 0; i < _clothesItemsPool.Length; i++)
-            {
-                int itemRank = _clothesItemsPool[i].Rank;
-                if (!_clothesDataPoolDic.ContainsKey(itemRank))
-                {
-                    Dictionary<ClothesType, List<ClothesItemData>> clothesTypesDic = new Dictionary<ClothesType, List<ClothesItemData>>();
-                    foreach (ClothesType clothesType in Enum.GetValues(typeof(ClothesType)))
-                    {
-                        clothesTypesDic.Add(clothesType, new List<ClothesItemData>());
-                    }
-                    _clothesDataPoolDic.Add(itemRank, clothesTypesDic);
 
+            if(_clothesItemsPool != null)
+            {
+                for (int i = 0; i < _clothesItemsPool.Length; i++)
+                {
+                    int itemRank = _clothesItemsPool[i].Rank;
+                    if (!_clothesDataPoolDic.ContainsKey(itemRank))
+                    {
+                        Dictionary<ClothesType, List<ClothesItemData>> clothesTypesDic = new Dictionary<ClothesType, List<ClothesItemData>>();
+                        foreach (ClothesType clothesType in Enum.GetValues(typeof(ClothesType)))
+                        {
+                            clothesTypesDic.Add(clothesType, new List<ClothesItemData>());
+                        }
+                        _clothesDataPoolDic.Add(itemRank, clothesTypesDic);
+
+                    }
+                    _clothesDataPoolDic[itemRank][_clothesItemsPool[i].ClothesType].Add(_clothesItemsPool[i]);
                 }
-                _clothesDataPoolDic[itemRank][_clothesItemsPool[i].ClothesType].Add(_clothesItemsPool[i]);
             }
         }
 

@@ -14,6 +14,7 @@ namespace BeastHunterHubUI
         [SerializeField] private LocationData[] _locationDatas;
         [SerializeField] private CityData[] _citiesDatas;
         [SerializeField] private int _citiesShopsSlotsAmount;
+        [SerializeField] private int _randomCharactersAmount;
         [SerializeField] private ItemDataPools _itemDataPools;
         public PlayerSettingsStruct PlayerSettings;
         public HubUITimeSettingsStruct TimeSettings;
@@ -35,6 +36,7 @@ namespace BeastHunterHubUI
         public LocationData[] Locations => (LocationData[])_locationDatas.Clone();
         public CityData[] Cities => (CityData[])_citiesDatas.Clone();
         public int CitiesShopsSlotsAmount => _citiesShopsSlotsAmount;
+        public int RandomCharactersAmount => _randomCharactersAmount;
         public ItemDataPools ItemDataPools => _itemDataPools;
 
         #endregion

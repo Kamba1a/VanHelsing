@@ -36,11 +36,13 @@ namespace BeastHunterHubUI
             Player = new PlayerModel(data.PlayerSettings, data.AllCharactersData);
             GameTime = new HubUIGameTime(data.TimeSettings);
 
-            //todo: auto generated characters pool
-            //for (int i = 0; i < data.CharactersPool.Length; i++)
-            //{
-            //    CharactersForHire.Add(new CharacterModel(data.CharactersPool[i], data.CharacterSettings));
-            //}
+            for (int i = 0; i < data.RandomCharactersAmount; i++)
+            {
+                CharacterModel newCharacter = new CharacterModel(data.AllCharactersData, Player.Rank);
+                CharactersForHire.Add(newCharacter);
+
+                Player.HireCharacter(newCharacter); //todo: remove (FOR DEBUG ONLY)
+            }
 
             for (int i = 0; i < data.Cities.Length; i++)
             {

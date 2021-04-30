@@ -12,6 +12,7 @@ namespace BeastHunterHubUI
         public Action<int> OnChangeGoldAmount { get; set; }
 
         public int GoldAmount { get; private set; }
+        public int Rank { get; private set; }
         public ItemStorage Inventory { get; private set; }
         public List<CharacterModel> HiredCharacters { get; private set; }
 
@@ -23,12 +24,15 @@ namespace BeastHunterHubUI
         public PlayerModel(PlayerSettingsStruct settings, AllCharactersData allCharactersData)
         {
             GoldAmount = settings.GoldAmount;
+            Rank = settings.StartingRank;
 
             HiredCharacters = new List<CharacterModel>();
-            for (int i = 0; i < settings.StartHiredCharacters.Length; i++)
-            {
-                HiredCharacters.Add(new CharacterModel(settings.StartHiredCharacters[i], allCharactersData));
-            }
+
+            //todo: uncomment
+            //for (int i = 0; i < settings.StartHiredCharacters.Length; i++)
+            //{
+            //    HiredCharacters.Add(new CharacterModel(settings.StartHiredCharacters[i], allCharactersData));
+            //}
 
             Inventory = new ItemStorage(settings.InventorySlotsAmount, ItemStorageType.GeneralInventory);
             for (int i = 0; i < settings.StartInventoryItems.Length; i++)

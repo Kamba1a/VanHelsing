@@ -10,6 +10,7 @@ namespace BeastHunterHubUI
         #region Fields
 
         [SerializeField] private int _goldAmount;
+        [SerializeField] private int _startingRank;
         [SerializeField] private int _inventorySlotsAmount;
         [SerializeField] private BaseItemData[] _startInventoryItems;
         [SerializeField] private CharacterData[] _startHiredCharacters;
@@ -20,6 +21,7 @@ namespace BeastHunterHubUI
         #region Properties
 
         public int GoldAmount => _goldAmount;
+        public int StartingRank => _startingRank;
         public int InventorySlotsAmount => _inventorySlotsAmount;
         public BaseItemData[] StartInventoryItems => (BaseItemData[])_startInventoryItems.Clone();
         public CharacterData[] StartHiredCharacters => _startHiredCharacters;
