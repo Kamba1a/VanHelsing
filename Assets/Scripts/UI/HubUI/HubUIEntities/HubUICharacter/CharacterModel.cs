@@ -115,14 +115,11 @@ namespace BeastHunterHubUI
                 ClothesEquipment.PutItemToFirstEmptySlot(startingClothesItems[i]);
             }
 
-            //if (data.StartWeaponEquipmentItems != null)
-            //{
-            //    for (int i = 0; i < data.StartWeaponEquipmentItems.Length; i++)
-            //    {
-            //        BaseItemModel weapon = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartWeaponEquipmentItems[i]);
-            //        WeaponEquipment.PutItemToFirstEmptySlot(weapon);
-            //    }
-            //}
+            List<WeaponItemModel> startingWeapon = allData.GetRandomStartingWeapon(rank);
+            for (int i = 0; i < startingWeapon.Count; i++)
+            {
+                WeaponEquipment.PutItemToFirstEmptySlot(startingWeapon[i]);
+            }
 
             //InitializeDefaultHeadPartsDictionary(data.DefaultHeadParts);
             //InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);

@@ -155,11 +155,21 @@ namespace BeastHunterHubUI
                 ClothesType randomClothesType = clothesTypePool[randomIndex];
                 clothesTypePool.RemoveAt(randomIndex);
 
-                ClothesItemData randomItemData = BeastHunter.Data.HubUIData.ItemDataPools.GetRandomClothesDataByRankAndType(rank, randomClothesType);
-                clothes.Add(new ClothesItemModel(randomItemData)) ;
+                ClothesItemData randomClothesData = BeastHunter.Data.HubUIData.ItemDataPools.GetRandomClothesDataByRankAndType(rank, randomClothesType);
+                clothes.Add(new ClothesItemModel(randomClothesData)) ;
             }
 
             return clothes;
+        }
+
+        public List<WeaponItemModel> GetRandomStartingWeapon(int rank)
+        {
+            List<WeaponItemModel> weapons = new List<WeaponItemModel>();
+
+            WeaponItemData randomWeaponData = BeastHunter.Data.HubUIData.ItemDataPools.GetRandomWeaponDataByRank(rank);
+            weapons.Add(new WeaponItemModel(randomWeaponData));
+
+            return weapons;
         }
 
         #endregion
