@@ -89,12 +89,10 @@ namespace BeastHunterHubUI
 
             InitializeDefaultHeadPartsDictionary(data.DefaultHeadParts);
             InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);
-
-            //todo: InitializeView3DModel here
-            //InitializeView3DModel();
+            InitializeView3DModel(_allData.Character3DViewModelRendering.transform);
         }
 
-        public CharacterModel(int rank) //WIP
+        public CharacterModel(int rank)
         {
             _allData = BeastHunter.Data.HubUIData.AllCharactersData; ;
             IsFemale = _allData.IsFemale() ? true : false;
@@ -125,6 +123,7 @@ namespace BeastHunterHubUI
 
             InitializeDefaultHeadPartsDictionary(_allData.GetDefaultHeadModuleParts(IsFemale));
             InitializeDefaultModulePartsDictionary(_allData.GetDefaultBodyModules(IsFemale));
+            InitializeView3DModel(_allData.Character3DViewModelRendering.transform);
         }
 
         #endregion

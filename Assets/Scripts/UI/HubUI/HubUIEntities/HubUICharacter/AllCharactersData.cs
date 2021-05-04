@@ -24,6 +24,8 @@ namespace BeastHunterHubUI
         [SerializeField] private GameObject _view3DModelPrefab;
         [SerializeField] private RuntimeAnimatorController _view3DModelAnimatorController;
         [SerializeField] string _modularCharactersChildGOForModulesName;
+        [SerializeField] private GameObject _characters3DViewRenderingPrefab;
+        [SerializeField] private Vector3 _characters3DViewRenderingObjectPosition;
 
         [Header("Character randomizer settings")]
         [SerializeField, Range(0, 1)] private float _femaleGenderChance;
@@ -107,6 +109,7 @@ namespace BeastHunterHubUI
         public GameObject View3DModelPrefab => _view3DModelPrefab;
         public RuntimeAnimatorController View3DModelAnimatorController => _view3DModelAnimatorController;
         public string ModularCharactersChildGOForModulesName => _modularCharactersChildGOForModulesName;
+        public GameObject Character3DViewModelRendering { get; private set; }
 
         #endregion
 
@@ -165,6 +168,12 @@ namespace BeastHunterHubUI
 
 
         #region Methods
+
+        public void InitializeCharacter3DViewModelRendering()
+        {
+            Character3DViewModelRendering =
+                Instantiate(_characters3DViewRenderingPrefab, _characters3DViewRenderingObjectPosition, Quaternion.identity);
+        }
 
         public List<GameObject> GetModulePartsByNames(IEnumerable<string> modulePartsNames)
         {
