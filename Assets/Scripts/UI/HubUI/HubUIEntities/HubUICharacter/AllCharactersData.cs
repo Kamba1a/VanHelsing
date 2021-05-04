@@ -110,6 +110,7 @@ namespace BeastHunterHubUI
         public RuntimeAnimatorController View3DModelAnimatorController => _view3DModelAnimatorController;
         public string ModularCharactersChildGOForModulesName => _modularCharactersChildGOForModulesName;
         public GameObject Character3DViewModelRendering { get; private set; }
+        public Camera CharacterPortraitCamera { get; private set; }
 
         #endregion
 
@@ -173,6 +174,8 @@ namespace BeastHunterHubUI
         {
             Character3DViewModelRendering =
                 Instantiate(_characters3DViewRenderingPrefab, _characters3DViewRenderingObjectPosition, Quaternion.identity);
+            CharacterPortraitCamera = Character3DViewModelRendering.transform.Find("CameraForPortrait").GetComponent<Camera>();
+            CharacterPortraitCamera.enabled = false;
         }
 
         public List<GameObject> GetModulePartsByNames(IEnumerable<string> modulePartsNames)

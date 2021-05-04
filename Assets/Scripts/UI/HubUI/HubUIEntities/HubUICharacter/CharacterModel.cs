@@ -1,4 +1,5 @@
 ﻿using Extensions;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -182,8 +183,9 @@ namespace BeastHunterHubUI
             _characterModulesTransform = View3DModelObjectOnScene.transform.FindDeep(_allData.ModularCharactersChildGOForModulesName);
 
             InitializeDefaultModules();
+            Portrait = GetCharacterPortrait();
 
-            _clothesModuleParts = new Dictionary<ClothesType, List<GameObject>>();
+            InitializeClothesModulePartsDic();
             for (int i = 0; i < ClothesEquipment.GetSlotsCount(); i++)
             {
                 if (ClothesEquipment.GetItemBySlot(i) != null)
@@ -193,6 +195,40 @@ namespace BeastHunterHubUI
             }
 
             View3DModelObjectOnScene.SetActive(false);
+        }
+
+        private Sprite GetCharacterPortrait()
+        {
+            Camera portraitCamera = _allData.CharacterPortraitCamera;
+            RenderTexture portraitRenderTexture = portraitCamera.targetTexture;
+            Rect portraitRect = new Rect(0, 0, portraitRenderTexture.width, portraitRenderTexture.height);
+
+            RenderTexture currentRenderTexture = RenderTexture.active;
+            RenderTexture.active = portraitRenderTexture;
+
+            portraitCamera.Render();
+
+            Texture2D portraitTexture = new Texture2D(portraitRenderTexture.width, portraitRenderTexture.height);
+            portraitTexture.ReadPixels(portraitRect, 0, 0);
+            portraitTexture.Apply();
+
+            RenderTexture.active = currentRenderTexture;
+            portraitCamera.enabled = false;
+
+            return Sprite.Create(portraitTexture, portraitRect, new Vector2());
+        }
+
+        private void InitializeClothesModulePartsDic()
+        {
+            _clothesModuleParts = new Dictionary<ClothesType, List<GameObject>>();
+
+            foreach (ClothesType clothesType in Enum.GetValues(typeof(ClothesType)))
+            {
+                _clothesModuleParts.Add(clothesType, new List<GameObject>());
+            }
+
+            _clothesModuleParts.Remove(ClothesType.Amulet);
+            _clothesModuleParts.Remove(ClothesType.Ring);
         }
 
         private void OnTakeClothesEquipmentItem(ItemStorageType storageType, int slotIndex, BaseItemModel item)
@@ -289,12 +325,15 @@ namespace BeastHunterHubUI
 
         private void RemoveClothesModulePartsFrom3DModel(ClothesType clothesType)
         {
-            for (int i = 0; i < _clothesModuleParts[clothesType].Count; i++)
+            if (_clothesModuleParts.ContainsKey(clothesType))
             {
-                _clothesModuleParts[clothesType][i].SetActive(false);
-                GameObject.Destroy(_clothesModuleParts[clothesType][i]);
+                for (int i = 0; i < _clothesModuleParts[clothesType].Count; i++)
+                {
+                    _clothesModuleParts[clothesType][i].SetActive(false);
+                    GameObject.Destroy(_clothesModuleParts[clothesType][i]);
+                }
+                _clothesModuleParts[clothesType].Clear();
             }
-            _clothesModuleParts[clothesType].Clear();
         }
 
         private void AddClothesModulePartsTo3DModel(ClothesItemModel clothes)
@@ -320,11 +359,10 @@ namespace BeastHunterHubUI
 
         private void AddClothesModulesToDictionary(ClothesType clothesType, List<GameObject> clothesModules)
         {
-            if (!_clothesModuleParts.ContainsKey(clothesType))
+            if (_clothesModuleParts.ContainsKey(clothesType))
             {
-                _clothesModuleParts.Add(clothesType, new List<GameObject>());
+                _clothesModuleParts[clothesType].AddRange(clothesModules);
             }
-            _clothesModuleParts[clothesType].AddRange(clothesModules);
         }
 
         private List<GameObject> AddModulePartsTo3DModel(List<GameObject> moduleParts, Material fantasyHeroMaterial)
