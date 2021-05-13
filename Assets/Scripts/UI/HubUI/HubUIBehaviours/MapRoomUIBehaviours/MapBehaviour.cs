@@ -220,8 +220,6 @@ namespace BeastHunterHubUI
         private SelectedElements _selected;
         private HubUIContext _context;
         private HubUIData _data;
-        private PlayerModel _player;
-        private ItemStorage _generalInventory;
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
         private List<MapStorageSlotBehaviour> _characterBackpuckSlotsUIBehaviours;
@@ -237,7 +235,6 @@ namespace BeastHunterHubUI
 
         private MapCharacterView3DModelBehaviour _character3DViewModelRawImageBehaviour;
 
-        //Oh no, this is a little coroutine. No one reviews my code anyway..
         private Coroutine _showTooltipCoroutine;
 
         private float _charactersPanelSwipeStep;
@@ -308,8 +305,6 @@ namespace BeastHunterHubUI
             _selected = new SelectedElements();
             _data = BeastHunter.Data.HubUIData;
             _context = context;
-            _player = context.Player;
-            _generalInventory = _player.Inventory;
             _charactersPanelSwipeStep = _data.MapDataStruct.CharactersPanelSwipeStep;
             _tooltipShowingDelay = _data.MapDataStruct.TooltipShowingDelay;
 
@@ -358,7 +353,7 @@ namespace BeastHunterHubUI
                 InitializeCharacterBackpuckSlotUI(i);
             }
 
-            for (int i = 0; i < _generalInventory.GetSlotsCount(); i++)
+            for (int i = 0; i < _context.Player.Inventory.GetSlotsCount(); i++)
             {
                 InitializeGeneralInventorySlotUI(i);
             }
@@ -379,8 +374,8 @@ namespace BeastHunterHubUI
             }
 
             FillItemStorageSlots(ItemStorageType.GeneralInventory);
-            _generalInventory.OnPutItemToSlotHandler += FillSlotUI;
-            _generalInventory.OnTakeItemFromSlotHandler += FillSlotUI;
+            _context.Player.Inventory.OnPutItemToSlotHandler += FillSlotUI;
+            _context.Player.Inventory.OnTakeItemFromSlotHandler += FillSlotUI;
 
             _selected.OnChanged_GeneralInventorySlotIndex = OnSelectedInventorySlot;
             _selected.OnChanged_BuyBackSlotIndex = OnSelectedBuyBackSlot;
@@ -388,7 +383,7 @@ namespace BeastHunterHubUI
             _selected.OnChanged_Character = OnSelectedCharacter;
             _selected.OnChanged_MapObject = OnSelectedMapObject;
 
-            _player.OnChangeGoldAmount += OnChangedPlayerGoldAmount;
+            _context.Player.OnChangeGoldAmount += OnChangedPlayerGoldAmount;
             _character3DViewModelRawImageBehaviour.OnDropHandler += OnDropItemOn3DViewModelRawImage;
             _context.GameTime.OnChangeTimeHandler += OnChanged_GameTime;
 
@@ -420,9 +415,9 @@ namespace BeastHunterHubUI
 
         public void Destroying()
         {
-            _player.OnChangeGoldAmount -= OnChangedPlayerGoldAmount;
-            _generalInventory.OnPutItemToSlotHandler -= FillSlotUI;
-            _generalInventory.OnTakeItemFromSlotHandler -= FillSlotUI;
+            _context.Player.OnChangeGoldAmount -= OnChangedPlayerGoldAmount;
+            _context.Player.Inventory.OnPutItemToSlotHandler -= FillSlotUI;
+            _context.Player.Inventory.OnTakeItemFromSlotHandler -= FillSlotUI;
             _character3DViewModelRawImageBehaviour.OnDropHandler -= OnDropItemOn3DViewModelRawImage;
             _context.GameTime.OnChangeTimeHandler -= OnChanged_GameTime;
         }
@@ -436,10 +431,10 @@ namespace BeastHunterHubUI
 
         private void OnClick_OrderButton()  //WIP, just for testing order and event system
         {
-            if (!_player.HiredCharacters[0].IsHaveOrder)
+            if (!_context.Player.HiredCharacters[0].IsHaveOrder)
             {
                 OrderModel testOrder = new OrderModel(OrderType.Alchemy, 4);
-                testOrder.AssignCharacter(_player.HiredCharacters[0]);
+                testOrder.AssignCharacter(_context.Player.HiredCharacters[0]);
                 testOrder.OnCompleteHandler += Debug.Log;
             }
         }
@@ -544,7 +539,7 @@ namespace BeastHunterHubUI
             CityModel city = _selected.MapObject as CityModel;
 
             SetScrollViewParentForPanel(_inventoryItemsPanel, _shopInventoryScrollView);
-            _playerGoldAmount.text = _player.GoldAmount.ToString();
+            _playerGoldAmount.text = _context.Player.GoldAmount.ToString();
             _shopCityReputation.text = city.PlayerReputation.ToString();
 
             FillItemStorageSlots(ItemStorageType.ShopStorage);
@@ -690,7 +685,7 @@ namespace BeastHunterHubUI
         {
             if (_selected.Character != null)
             {
-                if(_generalInventory.PutItemToFirstEmptySlotFromOtherStorage(GetStorageByType(storageType), slotIndex))
+                if(_context.Player.Inventory.PutItemToFirstEmptySlotFromOtherStorage(GetStorageByType(storageType), slotIndex))
                 {
                     StopShowTooltipCoroutine();
                     _tooltip.SetActive(false);
@@ -790,10 +785,10 @@ namespace BeastHunterHubUI
 
                 if (_tradePanel.activeSelf)
                 {
-                    if (_generalInventory.GetItemBySlot(_selected.GeneralInventorySlotIndex.Value) != null)
+                    if (_context.Player.Inventory.GetItemBySlot(_selected.GeneralInventorySlotIndex.Value) != null)
                     {
                         _sellingItemPrice.text = HubUIServices.SharedInstance.ShopService.
-                            CountSellPrice(_generalInventory.GetItemBySlot(_selected.GeneralInventorySlotIndex.Value)).ToString();
+                            CountSellPrice(_context.Player.Inventory.GetItemBySlot(_selected.GeneralInventorySlotIndex.Value)).ToString();
                         _sellButton.interactable = true;
                     }
                     else
@@ -832,7 +827,7 @@ namespace BeastHunterHubUI
                     if (item != null)
                     {
                         _buybackItemPrice.text = HubUIServices.SharedInstance.ShopService.CountSellPrice(item).ToString();
-                        _buyBackButton.interactable = _player.GoldAmount >= HubUIServices.SharedInstance.ShopService.CountSellPrice(item);
+                        _buyBackButton.interactable = _context.Player.GoldAmount >= HubUIServices.SharedInstance.ShopService.CountSellPrice(item);
                     }
                     else
                     {
@@ -1413,7 +1408,7 @@ namespace BeastHunterHubUI
                     break;
 
                 case ItemStorageType.GeneralInventory:
-                    storage = _generalInventory;
+                    storage = _context.Player.Inventory;
                     break;
 
                 case ItemStorageType.BuyBackStorage:
