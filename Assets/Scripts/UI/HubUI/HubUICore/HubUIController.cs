@@ -18,6 +18,7 @@ namespace BeastHunterHubUI
         private List<IDestroy> _destroyBehaviours;
 
         private MapBehaviour _mapBehaviour;
+        private QuestRoomUIBehaviour _questRoomUIBehaviour;
 
         #endregion
 
@@ -31,7 +32,10 @@ namespace BeastHunterHubUI
             _destroyBehaviours = new List<IDestroy>();
 
             _mapBehaviour = GetComponentInChildren<MapBehaviour>();
+            _questRoomUIBehaviour = GetComponentInChildren<QuestRoomUIBehaviour>();
+
             Add(_mapBehaviour);
+            Add(_questRoomUIBehaviour);
         }
 
         private void Start()
