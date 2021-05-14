@@ -3,8 +3,10 @@
 
 namespace BeastHunterHubUI
 {
-    public abstract class BaseBossData : ScriptableObject
+    [CreateAssetMenu(fileName = "BossData", menuName = "CreateData/HubUIData/BossData", order = 0)]
+    public abstract class BossData : ScriptableObject
     {
+        [Header("BaseBossData")]
         [SerializeField] private string _name;
         [SerializeField] private BossSizeType _bossSize;
         [SerializeField] private AttractionOrAvoidanceType _attraction;

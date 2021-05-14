@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿//namespace BeastHunterHubUI
+//{
+//    public class AnimaliaBossModel : BaseBossModel
+//    {
+//        public override BossType BossType { get ; protected set; }
+//        public AnimaliaBossType BossSubtype { get; private set; }
 
-namespace BeastHunterHubUI
-{
-    public class AnimaliaBossModel : BaseBossModel
-    {
-        public override BossType BossType { get ; protected set; }
 
-        public AnimaliaBossModel(BaseBossData data) : base(data)
-        {
-            BossType = BossType.Animalia;
-
-        }
-    }
-}
+//        public AnimaliaBossModel(AnimaliaBossData data) : base(data)
+//        {
+//            BossType = BossType.Animalia;
+//            BossSubtype = data.BossSubtype;
+//        }
+//    }
+//}
