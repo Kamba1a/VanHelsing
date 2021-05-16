@@ -20,28 +20,21 @@ namespace BeastHunterHubUI
         }
 
 
-        public void RemoveOrderEvent(HubUITimeStruct invokeTime, HubUIEventModel eventModel)
+        public void RemoveEventFromScheduler(HubUIEventModel eventModel)
         {
-            if (_scheduledEvents.ContainsKey(invokeTime))
+            if (_scheduledEvents.ContainsKey(eventModel.InvokeTime))
             {
-                _scheduledEvents[invokeTime].Remove(eventModel);
+                _scheduledEvents[eventModel.InvokeTime].Remove(eventModel);
             }
         }
 
-        public HubUIEventModel CreateNewOrderEvent(OrderModel order)
+        public void AddEventToScheduler(HubUIEventModel eventModel)
         {
-            HubUIEventModel newEvent = new HubUIEventModel(HubUIEventType.OrderCompleted);
-            AddEventToScheduler(order.CompletionTime.Value, newEvent);
-            return newEvent;
-        }
-
-        public void AddEventToScheduler(HubUITimeStruct invokeTime, HubUIEventModel eventModel)
-        {
-            if (!_scheduledEvents.ContainsKey(invokeTime))
+            if (!_scheduledEvents.ContainsKey(eventModel.InvokeTime))
             {
-                _scheduledEvents.Add(invokeTime, new List<HubUIEventModel>());
+                _scheduledEvents.Add(eventModel.InvokeTime, new List<HubUIEventModel>());
             }
-            _scheduledEvents[invokeTime].Add(eventModel);
+            _scheduledEvents[eventModel.InvokeTime].Add(eventModel);
         }
 
         public void OnChangedGameTime(HubUITimeStruct currentTime)
@@ -57,8 +50,8 @@ namespace BeastHunterHubUI
                 _context.GameTime.StopTimeSkip();
                 for (int i = 0; i < _scheduledEvents[invokeTime].Count; i++)
                 {
+                    HubUIServices.SharedInstance.GameMessages.Window(_scheduledEvents[invokeTime][i].Message);
                     _scheduledEvents[invokeTime][i].Invoke();
-                    HubUIServices.SharedInstance.GameMessages.Window($"Event {_scheduledEvents[invokeTime][i].EventType} has happened!");
                 }
                 _scheduledEvents.Remove(invokeTime);
             }

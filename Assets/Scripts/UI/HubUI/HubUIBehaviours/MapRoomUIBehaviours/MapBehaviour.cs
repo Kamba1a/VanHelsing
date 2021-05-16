@@ -390,7 +390,7 @@ namespace BeastHunterHubUI
             _currentDayText.text = context.GameTime.CurrentTime.Day.ToString();
             _currentHourText.text = context.GameTime.CurrentTime.Hour.ToString();
 
-            _mainPanel.SetActive(_data.MapDataStruct.MapOnStartEnabled);
+            _mainPanel.SetActive(false);
             _infoPanel.SetActive(false);
             _cityInfoPanel.SetActive(false);
             _dialogPanel.SetActive(false);

@@ -19,7 +19,6 @@ namespace BeastHunterHubUI
         public OrderType OrderType { get; private set; }
         public int BaseSpentHours { get; private set; }
         public CharacterModel CharacterAssigned { get; private set; }
-        public HubUITimeStruct? CompletionTime { get; private set; }
 
         #endregion
 
@@ -32,7 +31,6 @@ namespace BeastHunterHubUI
             OrderType = orderType;
             BaseSpentHours = baseSpentHours;
             CharacterAssigned = null;
-            CompletionTime = null;
         }
 
         #endregion
@@ -44,12 +42,14 @@ namespace BeastHunterHubUI
         {
             character.IsHaveOrder = true;
             CharacterAssigned = character;
-            CompletionTime = HubUIServices.SharedInstance.OrdersService.CalculateOrderCompletionTime(character, this);
-            _orderEvent = HubUIServices.SharedInstance.EventsService.CreateNewOrderEvent(this);
+
+            string eventMsg = $"The order {OrderType} is completed";
+            _orderEvent = new HubUIEventModel(BaseSpentHours, eventMsg);
             _orderEvent.OnInvokeHandler = Complete;
 
+            HubUIServices.SharedInstance.EventsService.AddEventToScheduler(_orderEvent);
             HubUIServices.SharedInstance.GameMessages.Notice
-                ($"Character {character.Name} get the order {OrderType}. Completion time: {CompletionTime}");
+                ($"Character {character.Name} get the order {OrderType}. Completion time: {_orderEvent.InvokeTime}");
         }
 
         public void RemoveAssignedCharacter()
@@ -57,9 +57,8 @@ namespace BeastHunterHubUI
             if (CharacterAssigned != null)
             {
                 CharacterAssigned.IsHaveOrder = false;
-                HubUIServices.SharedInstance.EventsService.RemoveOrderEvent(CompletionTime.Value, _orderEvent);
+                HubUIServices.SharedInstance.EventsService.RemoveEventFromScheduler(_orderEvent);
                 CharacterAssigned = null;
-                CompletionTime = null;
                 _orderEvent = null;
             }
         }
@@ -70,7 +69,6 @@ namespace BeastHunterHubUI
             {
                 CharacterAssigned.IsHaveOrder = false;
                 CharacterAssigned = null;
-                CompletionTime = null;
                 _orderEvent = null;
             }
             OnCompleteHandler?.Invoke(this);

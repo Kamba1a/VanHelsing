@@ -10,9 +10,10 @@
         public ItemInitializeService ItemInitializeService { get; private set; }
         public MainInput MainInput { get; private set; }
         public GameMessages GameMessages { get;private set;}
-        public OrdersService OrdersService { get; private set; }
+        public TimeService TimeService { get; private set; }
         public HubUIEventsService EventsService { get; private set; }
         public CharacterCheckNameService CharacterCheckNameService { get; private set; }
+        public HuntingQuestService HuntingQuestService { get; private set; }
 
 
         public void InitializeServices(HubUIContext context)
@@ -21,9 +22,10 @@
             TravelTimeService = new TravelTimeService();
             ItemInitializeService = new ItemInitializeService();
             GameMessages = new GameMessages();
-            OrdersService = new OrdersService(context);
+            TimeService = new TimeService(context);
             EventsService = new HubUIEventsService(context);
             CharacterCheckNameService = new CharacterCheckNameService(context);
+            HuntingQuestService = new HuntingQuestService();
 
             MainInput = new MainInput();
             MainInput.Enable();

@@ -18,13 +18,13 @@ namespace BeastHunterHubUI
 
         public void Notice(string msg)
         {
-            Debug.Log(msg);
+            Debug.Log("Notice game message: " + msg);
             OnNoticeMessageHandler?.Invoke(msg);
         }
 
         public void Window(string msg)
         {
-            Debug.Log(msg);
+            Debug.Log("Window game message: " + msg);
             OnWindowMessageHandler?.Invoke(msg);
         }
 

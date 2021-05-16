@@ -31,8 +31,8 @@ namespace BeastHunterHubUI
             _updateBehaviours = new List<IUpdate>();
             _destroyBehaviours = new List<IDestroy>();
 
-            _mapBehaviour = GetComponentInChildren<MapBehaviour>();
-            _questRoomUIBehaviour = GetComponentInChildren<QuestRoomUIBehaviour>();
+            _mapBehaviour = GetComponentInChildren<MapBehaviour>(true);
+            _questRoomUIBehaviour = GetComponentInChildren<QuestRoomUIBehaviour>(true);
 
             Add(_mapBehaviour);
             Add(_questRoomUIBehaviour);

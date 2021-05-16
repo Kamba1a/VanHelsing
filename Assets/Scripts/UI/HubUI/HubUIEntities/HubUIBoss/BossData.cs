@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 
 namespace BeastHunterHubUI
 {
-    [CreateAssetMenu(fileName = "BossData", menuName = "CreateData/HubUIData/BossData", order = 0)]
     public abstract class BossData : ScriptableObject
     {
         [Header("BaseBossData")]
@@ -14,6 +14,8 @@ namespace BeastHunterHubUI
         [SerializeField] private VulnerabilityType _vulnerability;
 
 
+        public abstract BossType BossType { get; }
+        public abstract Enum BossSubtype { get; }
         public string Name => _name;
         public BossSizeType BossSize => _bossSize;
         public AttractionOrAvoidanceType Attraction => _attraction;

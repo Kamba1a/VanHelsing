@@ -15,6 +15,7 @@ namespace BeastHunterHubUI
         public int Rank { get; private set; }
         public ItemStorage Inventory { get; private set; }
         public List<CharacterModel> HiredCharacters { get; private set; }
+        public HuntingQuestModel HuntingQuest { get; private set; } 
 
         #endregion
 
@@ -48,6 +49,26 @@ namespace BeastHunterHubUI
 
         #region Methods
 
+        public void TakeHuntingQuest(HuntingQuestModel quest)
+        {
+            if (HuntingQuest == null)
+            {
+                HuntingQuest = quest;
+                HuntingQuest.OnCompletedHandler += DropHuntingQuest;
+                quest.Activate();
+            }
+            else
+            {
+                Debug.LogError("The new hunting quest cannot be taken because the player already has a hunting quest");
+            }
+        }
+
+        public void DropHuntingQuest()
+        {
+            HuntingQuest.OnCompletedHandler -= DropHuntingQuest;
+            HuntingQuest = null;
+        }
+
         public void HireCharacter(CharacterModel character)
         {
             HiredCharacters.Add(character);
@@ -60,7 +81,7 @@ namespace BeastHunterHubUI
 
         public bool AddGold(int goldAmount)
         {
-            if(goldAmount > 0)
+            if (goldAmount > 0)
             {
                 GoldAmount += goldAmount;
                 OnChangeGoldAmount?.Invoke(GoldAmount);

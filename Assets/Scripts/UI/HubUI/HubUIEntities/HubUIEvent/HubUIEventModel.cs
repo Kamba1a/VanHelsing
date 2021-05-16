@@ -9,16 +9,18 @@ namespace BeastHunterHubUI
 
         public Action OnInvokeHandler { get; set; }
 
-        public HubUIEventType EventType { get; private set; }
+        public HubUITimeStruct InvokeTime { get; private set; }
+        public string Message { get; private set; }
 
         #endregion
 
 
         #region ClassLifeCycle
 
-        public HubUIEventModel(HubUIEventType eventType)
+        public HubUIEventModel(int invokeHoursAmount, string invokeMessage)
         {
-            EventType = eventType;
+            InvokeTime = HubUIServices.SharedInstance.TimeService.CalculateTime(invokeHoursAmount);
+            Message = invokeMessage;
         }
 
         #endregion

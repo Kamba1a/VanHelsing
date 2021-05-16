@@ -26,6 +26,12 @@ MonoBehaviour:
   _citiesShopsSlotsAmount: 20
   _randomCharactersAmount: 5
   _itemDataPools: {fileID: 11400000, guid: 5efb51aa2c6b6b0449cb922c915b405e, type: 2}
+  _huntingQuestsDataPool:
+  - {fileID: 11400000, guid: 6569354df43ee3c42b7aad209f3a8887, type: 2}
+  - {fileID: 11400000, guid: 666a5504f1c1909428191750e9c916a6, type: 2}
+  _bossesDataPool:
+  - {fileID: 11400000, guid: 2c3011b637f41c8478a9ff84ef154776, type: 2}
+  - {fileID: 11400000, guid: 10da2d25f5f199641bb3b02d2ef18da7, type: 2}
   PlayerSettings:
     _goldAmount: 200
     _startingRank: 0
@@ -80,14 +86,10 @@ MonoBehaviour:
       type: 3}
     _answerButtonUIPrefab: {fileID: 4532874562538034351, guid: d3bcb53cab92ad245a8f95bd2cb657e2,
       type: 3}
-    _characters3DViewRenderingPrefab: {fileID: 5064816351402119910, guid: 284a4960537acb849a2b3d9f00a331e9,
-      type: 3}
     _characterBackpuckSlotUIPrefab: {fileID: 4649815293729276567, guid: 7899f865f88bda740864b45d02cbea24,
       type: 3}
-    _mapOnStartEnabled: 0
     _tooltipShowingDelay: 0.75
     _charactersPanelSwipeStep: 1
-    _characters3DViewRenderingObjectPosition: {x: 1000, y: 1000, z: 1000}
     _mapObjects:
     - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
     - {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
@@ -110,3 +112,7 @@ MonoBehaviour:
     _beltSlotIcon: {fileID: 21300000, guid: da09804303305f542a686824630e7269, type: 3}
     _pocketItemSlotIcon: {fileID: 21300000, guid: fe025e83f69d0b54f8a4fe3c7c128fd7,
       type: 3}
+  QuestRoomDataStruct:
+    _questListItemPrefab: {fileID: 4561106657247383774, guid: 1f6cb4251a86aab46912695617d8e932,
+      type: 3}
+    _huntingQuestAmount: 2
