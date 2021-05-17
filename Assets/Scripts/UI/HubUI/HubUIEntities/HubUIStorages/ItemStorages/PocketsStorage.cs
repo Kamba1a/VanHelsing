@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 
 namespace BeastHunterHubUI
@@ -29,7 +28,7 @@ namespace BeastHunterHubUI
             {
                 for (int i = 0; i < amount; i++)
                 {
-                    _items.Add(null);
+                    _elementSlots.Add(null);
                 }
 
                 OnChangeSlotsAmountHandler?.Invoke();
@@ -41,9 +40,9 @@ namespace BeastHunterHubUI
             if (amount > 0)
             {
                 int freeSlots = 0;
-                for (int i = 0; i < _items.Count; i++)
+                for (int i = 0; i < _elementSlots.Count; i++)
                 {
-                    if (_items[i] == null)
+                    if (_elementSlots[i] == null)
                     {
                         freeSlots++;
                         if (freeSlots >= amount)
@@ -62,9 +61,9 @@ namespace BeastHunterHubUI
             if (amount > 0)
             {
                 List<int> slotsToDelete = new List<int>();
-                for (int i = 0; i < _items.Count; i++)
+                for (int i = 0; i < _elementSlots.Count; i++)
                 {
-                    if (_items[i] == null)
+                    if (_elementSlots[i] == null)
                     {
                         slotsToDelete.Add(i);
                         if (slotsToDelete.Count >= amount)
@@ -82,7 +81,7 @@ namespace BeastHunterHubUI
                 {
                     for (int i = slotsToDelete.Count - 1; i >= 0; i--)
                     {
-                        _items.RemoveAt(slotsToDelete[i]);
+                        _elementSlots.RemoveAt(slotsToDelete[i]);
                     }
                     OnChangeSlotsAmountHandler?.Invoke();
                     return true;
@@ -91,13 +90,13 @@ namespace BeastHunterHubUI
             return true;
         }
 
-        public override bool PutItem(int slotIndex, BaseItemModel item)
+        public override bool PutElement(int slotIndex, BaseItemModel item)
         {
             if (item != null)
             {
                 if (item.ItemType == ItemType.PocketItem)
                 {
-                    return base.PutItem(slotIndex, item);
+                    return base.PutElement(slotIndex, item);
                 }
                 else
                 {

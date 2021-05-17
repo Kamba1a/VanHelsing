@@ -29,11 +29,11 @@ namespace BeastHunterHubUI
         {
             StorageType = ItemStorageType.WeaponEquipment;
 
-            _items = new List<BaseItemModel>();
+            _elementSlots = new List<BaseItemModel>();
             int slotsAmount = weaponSetsAmount * SLOTS_AMOUNT_IN_WEAPON_SET;
             for (int i = 0; i < slotsAmount; i++)
             {
-                _items.Add(null);
+                _elementSlots.Add(null);
             }
         }
 
@@ -42,7 +42,7 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public override bool PutItem(int slotIndex, BaseItemModel item)
+        public override bool PutElement(int slotIndex, BaseItemModel item)
         {
             bool isSucceful = false;
             int putSlotIndex = slotIndex;
@@ -54,7 +54,7 @@ namespace BeastHunterHubUI
                 {
                     WeaponItemModel weapon = item as WeaponItemModel;
 
-                    if (_items[slotIndex] == null && AdjacentWeapon(slotIndex) == null)
+                    if (_elementSlots[slotIndex] == null && AdjacentWeapon(slotIndex) == null)
                     {
                         if (IsEvenSlotIndex(slotIndex) || !weapon.IsTwoHanded)
                         {
@@ -62,20 +62,20 @@ namespace BeastHunterHubUI
                             {
                                 adjacendSlotIndex = AdjacentSlotIndex(slotIndex);
                             }
-                            _items[slotIndex] = item;
+                            _elementSlots[slotIndex] = item;
                             isSucceful = true;
                         }
                         else
                         {
-                            _items[AdjacentSlotIndex(slotIndex)] = item;
+                            _elementSlots[AdjacentSlotIndex(slotIndex)] = item;
                             putSlotIndex = AdjacentSlotIndex(slotIndex);
                             adjacendSlotIndex = slotIndex;
                             isSucceful = true;
                         }
                     }
-                    else if (_items[slotIndex] == null && !AdjacentWeapon(slotIndex).IsTwoHanded && !weapon.IsTwoHanded)
+                    else if (_elementSlots[slotIndex] == null && !AdjacentWeapon(slotIndex).IsTwoHanded && !weapon.IsTwoHanded)
                     {
-                        _items[slotIndex] = item;
+                        _elementSlots[slotIndex] = item;
                         isSucceful = true;
                     }
                     else
@@ -92,20 +92,20 @@ namespace BeastHunterHubUI
             }
             else
             {
-                if (_items[slotIndex] == null)
+                if (_elementSlots[slotIndex] == null)
                 {
                     return true;
                 }
                 else
                 {
-                    _items[slotIndex] = null;
+                    _elementSlots[slotIndex] = null;
                     isSucceful = true;
                 }
             }
 
             if (isSucceful)
             {
-                OnPutItemToSlot(putSlotIndex, _items[putSlotIndex]);
+                OnPutElementToSlot(putSlotIndex, _elementSlots[putSlotIndex]);
             }
 
             if (adjacendSlotIndex.HasValue)
@@ -116,7 +116,7 @@ namespace BeastHunterHubUI
             return isSucceful;
         }
 
-        public override bool PutItemToFirstEmptySlot(BaseItemModel item)
+        public override bool PutElementToFirstEmptySlot(BaseItemModel item)
         {
             if (item != null)
             {
@@ -126,7 +126,7 @@ namespace BeastHunterHubUI
 
                     if (FindFirstEmptySlotByWeaponGripType(weapon.IsTwoHanded, out int? emptySlot))
                     {
-                        return PutItem(emptySlot.Value, item);
+                        return PutElement(emptySlot.Value, item);
                     }
                 }
                 else
@@ -141,13 +141,13 @@ namespace BeastHunterHubUI
             return false;
         }
 
-        public override bool RemoveItem(int slotIndex)
+        public override bool RemoveElement(int slotIndex)
         {
-            if (_items[slotIndex] != null && (_items[slotIndex] as WeaponItemModel).IsTwoHanded)
+            if (_elementSlots[slotIndex] != null && (_elementSlots[slotIndex] as WeaponItemModel).IsTwoHanded)
             {
                 OnTwoHandedWeapon(AdjacentSlotIndex(slotIndex), null);
             }
-            return base.RemoveItem(slotIndex);
+            return base.RemoveElement(slotIndex);
         }
 
         private bool FindFirstEmptySlotByWeaponGripType(bool isTwoHandedWeapon, out int? slotIndex)
@@ -156,9 +156,9 @@ namespace BeastHunterHubUI
 
             if (isTwoHandedWeapon)
             {
-                for (int i = 0; i < _items.Count; i++)
+                for (int i = 0; i < _elementSlots.Count; i++)
                 {
-                    if (_items[i] == null && AdjacentWeapon(i) == null)
+                    if (_elementSlots[i] == null && AdjacentWeapon(i) == null)
                     {
                         slotIndex = i;
                         return true;
@@ -167,9 +167,9 @@ namespace BeastHunterHubUI
             }
             else
             {
-                for (int i = 0; i < _items.Count; i++)
+                for (int i = 0; i < _elementSlots.Count; i++)
                 {
-                    if (_items[i] == null && (AdjacentWeapon(i) == null || !AdjacentWeapon(i).IsTwoHanded))
+                    if (_elementSlots[i] == null && (AdjacentWeapon(i) == null || !AdjacentWeapon(i).IsTwoHanded))
                     {
                         slotIndex = i;
                         return true;
@@ -183,7 +183,7 @@ namespace BeastHunterHubUI
 
         public WeaponItemModel AdjacentWeapon(int slotIndex)
         {
-            return GetItemBySlot(AdjacentSlotIndex(slotIndex)) as WeaponItemModel;
+            return GetElementBySlot(AdjacentSlotIndex(slotIndex)) as WeaponItemModel;
         }
 
         private bool IsEvenSlotIndex(int slotIndex)

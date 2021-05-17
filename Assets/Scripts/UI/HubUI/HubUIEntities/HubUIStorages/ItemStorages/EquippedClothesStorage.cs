@@ -9,7 +9,7 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        public override ItemStorageType StorageType { get; protected set; }
+        public override ItemStorageType StorageType { get;  protected set; }
         private ClothesType[] _slotTypes;
 
         #endregion
@@ -21,10 +21,10 @@ namespace BeastHunterHubUI
         {
             StorageType = ItemStorageType.ClothesEquipment;
 
-            _items = new List<BaseItemModel>();
+            _elementSlots = new List<BaseItemModel>();
             for (int i = 0; i < clothTypes.Length; i++)
             {
-                _items.Add(null);
+                _elementSlots.Add(null);
             }
 
             _slotTypes = clothTypes;
@@ -37,15 +37,15 @@ namespace BeastHunterHubUI
 
         public Func<int, bool> IsEnoughEmptyPocketsFunc { get; set; }
 
-        public override bool RemoveItem(int slotIndex)
+        public override bool RemoveElement(int slotIndex)
         {
-            ClothesItemModel itemInSlot = _items[slotIndex] as ClothesItemModel;
+            ClothesItemModel itemInSlot = _elementSlots[slotIndex] as ClothesItemModel;
 
             if (itemInSlot != null)
             {
                 if (IsEnoughEmptyPocketsFunc.Invoke(itemInSlot.PocketsAmount))
                 {
-                    return base.RemoveItem(slotIndex);
+                    return base.RemoveElement(slotIndex);
                 }
                 HubUIServices.SharedInstance.GameMessages.Notice($"For taking off that clothes {itemInSlot.PocketsAmount} pockets slots need to be emptied");
                 return false;
@@ -56,7 +56,7 @@ namespace BeastHunterHubUI
             }
         }
 
-        public override bool PutItem(int slotIndex, BaseItemModel item)
+        public override bool PutElement(int slotIndex, BaseItemModel item)
         {
             bool isSucceful = false;
 
@@ -66,14 +66,14 @@ namespace BeastHunterHubUI
                 {
                     if ((item as ClothesItemModel).ClothesType == _slotTypes[slotIndex])
                     {
-                        if (_items[slotIndex] == null)
+                        if (_elementSlots[slotIndex] == null)
                         {
-                            _items[slotIndex] = item;
+                            _elementSlots[slotIndex] = item;
                             isSucceful = true;
                         }
                         else
                         {
-                            isSucceful = PutItemToFirstEmptySlot(item);
+                            isSucceful = PutElementToFirstEmptySlot(item);
                         }
                     }
                     else
@@ -93,26 +93,26 @@ namespace BeastHunterHubUI
 
             if (isSucceful)
             {
-                OnPutItemToSlot(slotIndex, item);
+                OnPutElementToSlot(slotIndex, item);
             }
 
             return isSucceful;
         }
 
-        public override bool PutItemToFirstEmptySlot(BaseItemModel item)
+        public override bool PutElementToFirstEmptySlot(BaseItemModel item)
         {
             if (item != null)
             {
                 if (item.ItemType == ItemType.Clothes)
                 {
                     ClothesItemModel clothItem = item as ClothesItemModel;
-                    for (int i = 0; i < _items.Count; i++)
+                    for (int i = 0; i < _elementSlots.Count; i++)
                     {
                         if (_slotTypes[i] == clothItem.ClothesType)
                         {
-                            if (_items[i] == null)
+                            if (_elementSlots[i] == null)
                             {
-                                return PutItem(i, item);
+                                return PutElement(i, item);
                             }
                         }
                     }
@@ -134,7 +134,7 @@ namespace BeastHunterHubUI
 
         public int? GetFirstSlotIndexForItem(ClothesItemModel item)
         {
-            for (int i = 0; i < _items.Count; i++)
+            for (int i = 0; i < _elementSlots.Count; i++)
             {
                 if (_slotTypes[i] == item.ClothesType)
                 {

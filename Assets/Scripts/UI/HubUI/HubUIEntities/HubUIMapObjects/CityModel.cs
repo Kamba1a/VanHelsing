@@ -89,7 +89,7 @@ namespace BeastHunterHubUI
                 int randomItemIndex = UnityEngine.Random.Range(0, ShopItemsPool.Count-1);
                 BaseItemModel itemModel = HubUIServices.SharedInstance.
                     ItemInitializeService.InitializeItemModel(ShopItemsPool[randomItemIndex]);
-                ShopStorage.PutItem(i, itemModel);
+                ShopStorage.PutElement(i, itemModel);
             }
         }
 

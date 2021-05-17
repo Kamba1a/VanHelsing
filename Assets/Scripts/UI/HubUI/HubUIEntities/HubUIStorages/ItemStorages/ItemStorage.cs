@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 
 namespace BeastHunterHubUI
@@ -17,10 +18,11 @@ namespace BeastHunterHubUI
         public ItemStorage(int slotsAmount, ItemStorageType storageType)
         {
             StorageType = storageType;
-            _items = new List<BaseItemModel>();
+
+            _elementSlots = new List<BaseItemModel>();
             for (int i = 0; i < slotsAmount; i++)
             {
-                _items.Add(null);
+                _elementSlots.Add(null);
             }
         }
 
@@ -29,23 +31,23 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public override bool PutItem(int slotIndex, BaseItemModel item)
+        public override bool PutElement(int slotIndex, BaseItemModel item)
         {
             bool isSucceful = false;
 
-            if (_items[slotIndex] == null)
+            if (_elementSlots[slotIndex] == null)
             {
-                _items[slotIndex] = item;
+                _elementSlots[slotIndex] = item;
                 isSucceful = true;
             }
             else
             {
-                isSucceful = PutItemToFirstEmptySlot(item);
+                isSucceful = PutElementToFirstEmptySlot(item);
             }
 
             if (isSucceful)
             {
-                OnPutItemToSlot(slotIndex, item);
+                OnPutElementToSlot(slotIndex, item);
             }
             else
             {
@@ -55,13 +57,13 @@ namespace BeastHunterHubUI
             return isSucceful;
         }
 
-        public override bool PutItemToFirstEmptySlot(BaseItemModel item)
+        public override bool PutElementToFirstEmptySlot(BaseItemModel item)
         {
-            for (int i = 0; i < _items.Count; i++)
+            for (int i = 0; i < _elementSlots.Count; i++)
             {
-                if (_items[i] == null)
+                if (_elementSlots[i] == null)
                 {
-                    return PutItem(i, item);
+                    return PutElement(i, item);
                 }
             }
             return false;
@@ -69,9 +71,9 @@ namespace BeastHunterHubUI
 
         public bool IsFull()
         {
-            for (int i = 0; i < _items.Count; i++)
+            for (int i = 0; i < _elementSlots.Count; i++)
             {
-                if (_items[i] == null)
+                if (_elementSlots[i] == null)
                 {
                     return false;
                 }
@@ -81,9 +83,9 @@ namespace BeastHunterHubUI
 
         public bool IsContainItem(BaseItemData item)
         {
-            for (int i = 0; i < _items.Count; i++)
+            for (int i = 0; i < _elementSlots.Count; i++)
             {
-                if (_items[i].DataInstanceID == item.GetInstanceID())
+                if (_elementSlots[i].DataInstanceID == item.GetInstanceID())
                 {
                     return true;
                 }
@@ -93,11 +95,11 @@ namespace BeastHunterHubUI
 
         public bool RemoveFirstItem(BaseItemData item)
         {
-            for (int i = 0; i < _items.Count; i++)
+            for (int i = 0; i < _elementSlots.Count; i++)
             {
-                if (_items[i].DataInstanceID == item.GetInstanceID())
+                if (_elementSlots[i].DataInstanceID == item.GetInstanceID())
                 {
-                    RemoveItem(i);
+                    RemoveElement(i);
                     return true;
                 }
             }

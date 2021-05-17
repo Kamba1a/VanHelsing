@@ -175,7 +175,7 @@ namespace BeastHunterHubUI
             {
                 BaseItemModel itemModel = HubUIServices.SharedInstance.
                     ItemInitializeService.InitializeItemModel(quest.CurrentTask.GivenItemData);
-                if (_context.Player.Inventory.PutItemToFirstEmptySlot(itemModel))
+                if (_context.Player.Inventory.PutElementToFirstEmptySlot(itemModel))
                 {
                     Debug.Log("The player received the item " + quest.CurrentTask.GivenItemData.Name);
                     return true;

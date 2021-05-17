@@ -87,13 +87,13 @@ namespace BeastHunterHubUI
         public void SellItem(CityModel city, int inventorySlotIndex)
         {
             ItemStorage playerInventory = _context.Player.Inventory;
-            BaseItemModel sellingItem = playerInventory.GetItemBySlot(inventorySlotIndex);
+            BaseItemModel sellingItem = playerInventory.GetElementBySlot(inventorySlotIndex);
 
             if (sellingItem != null)
             {
-                if (city.BuyBackStorage.PutItemToFirstEmptySlot(sellingItem))
+                if (city.BuyBackStorage.PutElementToFirstEmptySlot(sellingItem))
                 {
-                    playerInventory.RemoveItem(inventorySlotIndex);
+                    playerInventory.RemoveElement(inventorySlotIndex);
                     _context.Player.AddGold(CountSellPrice(sellingItem));
                 }
                 else
@@ -106,14 +106,14 @@ namespace BeastHunterHubUI
         public void BuyBackItem(CityModel city, int buyBackStorageSlotIndex)
         {
             ItemStorage buyBackStorage = city.BuyBackStorage;
-            BaseItemModel buyingItem = buyBackStorage.GetItemBySlot(buyBackStorageSlotIndex);
+            BaseItemModel buyingItem = buyBackStorage.GetElementBySlot(buyBackStorageSlotIndex);
             if (buyingItem != null)
             {
                 if (_context.Player.GoldAmount >= CountSellPrice(buyingItem))
                 {
-                    if (_context.Player.Inventory.PutItemToFirstEmptySlot(buyingItem))
+                    if (_context.Player.Inventory.PutElementToFirstEmptySlot(buyingItem))
                     {
-                        buyBackStorage.RemoveItem(buyBackStorageSlotIndex);
+                        buyBackStorage.RemoveElement(buyBackStorageSlotIndex);
                         _context.Player.TakeGold(CountSellPrice(buyingItem));
                     }
                     else
@@ -131,15 +131,15 @@ namespace BeastHunterHubUI
         public void BuyItem(CityModel city, int shopStorageSlotIndex)
         {
             ItemStorage shopStorage = city.ShopStorage;
-            BaseItemModel buyingItem = shopStorage.GetItemBySlot(shopStorageSlotIndex);
+            BaseItemModel buyingItem = shopStorage.GetElementBySlot(shopStorageSlotIndex);
 
             if (buyingItem != null)
             {
                 if (IsPossibleToBuyShopItem(buyingItem, city))
                 {
-                    if (_context.Player.Inventory.PutItemToFirstEmptySlot(buyingItem))
+                    if (_context.Player.Inventory.PutElementToFirstEmptySlot(buyingItem))
                     {
-                        shopStorage.RemoveItem(shopStorageSlotIndex);
+                        shopStorage.RemoveElement(shopStorageSlotIndex);
                         _context.Player.TakeGold(GetItemPrice(buyingItem));
                     }
                     else

@@ -56,7 +56,7 @@ namespace BeastHunterHubUI
                 for (int i = 0; i < data.StartBackpuckItems.Length; i++)
                 {
                     BaseItemModel itemModel = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartBackpuckItems[i]);
-                    Backpack.PutItem(i, itemModel);
+                    Backpack.PutElement(i, itemModel);
                 }
             }
 
@@ -65,15 +65,15 @@ namespace BeastHunterHubUI
             ClothesEquipment = new EquippedClothesStorage(_allData.ClothesSlots);
             ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
 
-            ClothesEquipment.OnTakeItemFromSlotHandler += OnTakeClothesEquipmentItem;
-            ClothesEquipment.OnPutItemToSlotHandler += OnPutClothesEquipmentItem;
+            ClothesEquipment.OnTakeElementFromSlotHandler += OnTakeClothesEquipmentItem;
+            ClothesEquipment.OnPutElementToSlotHandler += OnPutClothesEquipmentItem;
 
             if (data.StartClothesEquipmentItems != null)
             {
                 for (int i = 0; i < data.StartClothesEquipmentItems.Length; i++)
                 {
                     BaseItemModel clothes = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartClothesEquipmentItems[i]);
-                    ClothesEquipment.PutItemToFirstEmptySlot(clothes);
+                    ClothesEquipment.PutElementToFirstEmptySlot(clothes);
                 }
             }
 
@@ -84,7 +84,7 @@ namespace BeastHunterHubUI
                 for (int i = 0; i < data.StartWeaponEquipmentItems.Length; i++)
                 {
                     BaseItemModel weapon = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(data.StartWeaponEquipmentItems[i]);
-                    WeaponEquipment.PutItemToFirstEmptySlot(weapon);
+                    WeaponEquipment.PutElementToFirstEmptySlot(weapon);
                 }
             }
 
@@ -107,19 +107,19 @@ namespace BeastHunterHubUI
             WeaponEquipment = new EquippedWeaponStorage(_allData.WeaponSetsAmount);
             ClothesEquipment = new EquippedClothesStorage(_allData.ClothesSlots);
             ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
-            ClothesEquipment.OnTakeItemFromSlotHandler += OnTakeClothesEquipmentItem;
-            ClothesEquipment.OnPutItemToSlotHandler += OnPutClothesEquipmentItem;
+            ClothesEquipment.OnTakeElementFromSlotHandler += OnTakeClothesEquipmentItem;
+            ClothesEquipment.OnPutElementToSlotHandler += OnPutClothesEquipmentItem;
 
             List<ClothesItemModel> startingClothesItems = _allData.GetRandomStartingClothes(rank);
             for (int i = 0; i < startingClothesItems.Count; i++)
             {
-                ClothesEquipment.PutItemToFirstEmptySlot(startingClothesItems[i]);
+                ClothesEquipment.PutElementToFirstEmptySlot(startingClothesItems[i]);
             }
 
             List<WeaponItemModel> startingWeapon = _allData.GetRandomStartingWeapon(rank);
             for (int i = 0; i < startingWeapon.Count; i++)
             {
-                WeaponEquipment.PutItemToFirstEmptySlot(startingWeapon[i]);
+                WeaponEquipment.PutElementToFirstEmptySlot(startingWeapon[i]);
             }
 
             InitializeDefaultHeadPartsDictionary(_allData.GetDefaultHeadModuleParts(IsFemale));
@@ -134,17 +134,17 @@ namespace BeastHunterHubUI
 
         public bool EquipClothesItem(BaseItemStorage outStorage, int outStorageSlotIndex)
         {
-            BaseItemModel item = outStorage.GetItemBySlot(outStorageSlotIndex);
+            BaseItemModel item = outStorage.GetElementBySlot(outStorageSlotIndex);
             if (item != null && item.ItemType == ItemType.Clothes)
             {
-                if (!ClothesEquipment.PutItemToFirstEmptySlot(item))
+                if (!ClothesEquipment.PutElementToFirstEmptySlot(item))
                 {
                     int? firstSlot = ClothesEquipment.GetFirstSlotIndexForItem(item as ClothesItemModel);
-                    ClothesEquipment.SwapItemsWithOtherStorage(firstSlot.Value, outStorage, outStorageSlotIndex);
+                    ClothesEquipment.SwapElementsWithOtherStorage(firstSlot.Value, outStorage, outStorageSlotIndex);
                 }
                 else
                 {
-                    outStorage.RemoveItem(outStorageSlotIndex);
+                    outStorage.RemoveElement(outStorageSlotIndex);
                 }
                 return true;
             }
@@ -156,17 +156,17 @@ namespace BeastHunterHubUI
 
         public bool EquipWeaponItem(BaseItemStorage outStorage, int outStorageSlotIndex)
         {
-            BaseItemModel item = outStorage.GetItemBySlot(outStorageSlotIndex);
+            BaseItemModel item = outStorage.GetElementBySlot(outStorageSlotIndex);
             if (item != null && item.ItemType == ItemType.Weapon)
             {
-                if (!WeaponEquipment.PutItemToFirstEmptySlot(item))
+                if (!WeaponEquipment.PutElementToFirstEmptySlot(item))
                 {
                     HubUIServices.SharedInstance.GameMessages.Notice("There is no free slots for this weapon");
                     return false;
                 }
                 else
                 {
-                    outStorage.RemoveItem(outStorageSlotIndex);
+                    outStorage.RemoveElement(outStorageSlotIndex);
                     return true;
                 }
             }
@@ -188,9 +188,9 @@ namespace BeastHunterHubUI
             InitializeClothesModulePartsDic();
             for (int i = 0; i < ClothesEquipment.GetSlotsCount(); i++)
             {
-                if (ClothesEquipment.GetItemBySlot(i) != null)
+                if (ClothesEquipment.GetElementBySlot(i) != null)
                 {
-                    PutOnClothesOnModel(ClothesEquipment.GetItemBySlot(i) as ClothesItemModel);
+                    PutOnClothesOnModel(ClothesEquipment.GetElementBySlot(i) as ClothesItemModel);
                 }
             }
 

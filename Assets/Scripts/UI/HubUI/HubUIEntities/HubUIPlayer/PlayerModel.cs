@@ -40,7 +40,7 @@ namespace BeastHunterHubUI
             {
                 BaseItemModel itemModel = HubUIServices.SharedInstance.
                     ItemInitializeService.InitializeItemModel(settings.StartInventoryItems[i]);
-                Inventory.PutItem(i, itemModel);
+                Inventory.PutElement(i, itemModel);
             }
         }
 
