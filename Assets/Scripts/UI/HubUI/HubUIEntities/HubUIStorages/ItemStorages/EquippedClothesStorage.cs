@@ -5,7 +5,7 @@ using System;
 
 namespace BeastHunterHubUI
 {
-    public class EquippedClothesStorage : BaseItemStorage
+    public class EquippedClothesStorage : BaseItemLimitedStorage
     {
         #region Fields
 

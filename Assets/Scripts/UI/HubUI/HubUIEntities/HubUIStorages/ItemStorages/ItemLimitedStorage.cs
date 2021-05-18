@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
 namespace BeastHunterHubUI
 {
-    public class ItemStorage : BaseItemStorage
+    public class ItemLimitedStorage : BaseItemLimitedStorage
     {
         #region Properties
 
@@ -15,7 +14,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public ItemStorage(int slotsAmount, ItemStorageType storageType)
+        public ItemLimitedStorage(int slotsAmount, ItemStorageType storageType)
         {
             StorageType = storageType;
 

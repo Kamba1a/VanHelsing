@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace BeastHunterHubUI
 {
     public abstract class BaseStorage<ElementType, EnumStorageType> where EnumStorageType : Enum
@@ -16,9 +15,6 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public virtual Action<EnumStorageType, int, ElementType> OnPutElementToSlotHandler { get; set; }
-        public virtual Action<EnumStorageType, int, ElementType> OnTakeElementFromSlotHandler { get; set; }
-
         public abstract EnumStorageType StorageType { get; protected set; }
 
         #endregion
@@ -28,28 +24,25 @@ namespace BeastHunterHubUI
 
         public abstract bool PutElement(int slotIndex, ElementType element);
         public abstract bool PutElementToFirstEmptySlot(ElementType element);
+        public abstract bool RemoveElement(int slotIndex);
+        public abstract void ClearSlots();
 
-
-        public virtual bool PutElementToFirstEmptySlotFromOtherStorage(BaseStorage<ElementType, EnumStorageType> otherStorage, int otherStorageSlotIndex)
+        public virtual ElementType GetElementBySlot(int slotIndex)
         {
-            ElementType element = otherStorage.GetElementBySlot(otherStorageSlotIndex);
-            if (element != null)
+            if (slotIndex < _elementSlots.Count)
             {
-                if (this.PutElementToFirstEmptySlot(element))
-                {
-                    otherStorage.RemoveElement(otherStorageSlotIndex);
-                    return true;
-                }
-                else
-                {
-                    Debug.Log($"The storage {StorageType} is full");
-                    return false;
-                }
+                return _elementSlots[slotIndex];
             }
             else
             {
-                return true;
+                Debug.LogError(this + "Incorrect input parameter: slot index exceeds the number of slots in list");
+                return default;
             }
+        }
+
+        public virtual int GetSlotsCount()
+        {
+            return _elementSlots.Count;
         }
 
         public virtual void SwapElementsWithOtherStorage(int currentStorageSlotIndex, BaseStorage<ElementType, EnumStorageType> otherStorage, int otherStorageSlotIndex)
@@ -93,46 +86,26 @@ namespace BeastHunterHubUI
             }
         }
 
-        public virtual bool RemoveElement(int slotIndex)
+        public virtual bool PutElementToFirstEmptySlotFromOtherStorage(BaseStorage<ElementType, EnumStorageType> otherStorage, int otherStorageSlotIndex)
         {
-            if (_elementSlots[slotIndex] != null)
+            ElementType element = otherStorage.GetElementBySlot(otherStorageSlotIndex);
+            if (element != null)
             {
-                ElementType takenElement = _elementSlots[slotIndex];
-                _elementSlots[slotIndex] = default;
-                OnTakeElementFromSlot(slotIndex, takenElement);
-            }
-            return true;
-        }
-
-        public virtual ElementType GetElementBySlot(int slotIndex)
-        {
-            return _elementSlots[slotIndex];
-        }
-
-        public virtual int GetSlotsCount()
-        {
-            return _elementSlots.Count;
-        }
-
-        public virtual void Clear()
-        {
-            for (int i = 0; i < _elementSlots.Count; i++)
-            {
-                if (_elementSlots[i] != null)
+                if (this.PutElementToFirstEmptySlot(element))
                 {
-                    RemoveElement(i);
+                    otherStorage.RemoveElement(otherStorageSlotIndex);
+                    return true;
+                }
+                else
+                {
+                    Debug.Log($"The storage {StorageType} is full");
+                    return false;
                 }
             }
-        }
-
-        protected virtual void OnPutElementToSlot(int slotIndex, ElementType newElement)
-        {
-            OnPutElementToSlotHandler?.Invoke(StorageType, slotIndex, newElement);
-        }
-
-        protected virtual void OnTakeElementFromSlot(int slotIndex, ElementType takedElement)
-        {
-            OnTakeElementFromSlotHandler?.Invoke(StorageType, slotIndex, takedElement);
+            else
+            {
+                return true;
+            }
         }
 
         #endregion

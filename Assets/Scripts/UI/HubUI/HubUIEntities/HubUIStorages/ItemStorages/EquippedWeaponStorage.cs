@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BeastHunterHubUI
 {
-    public class EquippedWeaponStorage : BaseItemStorage
+    public class EquippedWeaponStorage : BaseItemLimitedStorage
     {
         #region Constants
 

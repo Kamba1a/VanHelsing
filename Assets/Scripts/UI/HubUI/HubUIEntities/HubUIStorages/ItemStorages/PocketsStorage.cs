@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BeastHunterHubUI
 {
-    public class PocketsStorage : ItemStorage
+    public class PocketsStorage : ItemLimitedStorage
     {
         #region Properties
 

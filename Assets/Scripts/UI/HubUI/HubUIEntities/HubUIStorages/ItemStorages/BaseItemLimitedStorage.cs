@@ -3,7 +3,7 @@
 
 namespace BeastHunterHubUI
 {
-    public abstract class BaseItemStorage : BaseStorage<BaseItemModel, ItemStorageType>
+    public abstract class BaseItemLimitedStorage : BaseLimitedStorage<BaseItemModel, ItemStorageType>
     {
         public virtual Sprite GetItemIconBySlot(int slotIndex)
         {

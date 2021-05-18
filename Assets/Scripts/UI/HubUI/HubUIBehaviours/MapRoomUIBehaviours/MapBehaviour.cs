@@ -562,7 +562,7 @@ namespace BeastHunterHubUI
             _tradePanel.SetActive(false);
 
             CityModel selectedCity = _selected.MapObject as CityModel;
-            selectedCity.BuyBackStorage.Clear();
+            selectedCity.BuyBackStorage.ClearSlots();
             selectedCity.BuyBackStorage.OnPutElementToSlotHandler -= FillSlotUI;
             selectedCity.BuyBackStorage.OnTakeElementFromSlotHandler -= FillSlotUI;
             selectedCity.ShopStorage.OnPutElementToSlotHandler -= FillSlotUI;
@@ -699,7 +699,7 @@ namespace BeastHunterHubUI
 
         private void OnDoubleClick_StorageSlot(int slotIndex, ItemStorageType storageType)
         {
-            BaseItemStorage storage = GetStorageByType(storageType);
+            BaseItemLimitedStorage storage = GetStorageByType(storageType);
             BaseItemModel itemInClickedSlot = storage.GetElementBySlot(slotIndex);
 
             if (_hikePanel.activeSelf && itemInClickedSlot != null && _selected.Character != null)
@@ -1218,7 +1218,7 @@ namespace BeastHunterHubUI
 
         private void FillSlotUI(ItemStorageType storageType, int slotIndex, BaseItemModel item)
         {
-            BaseItemStorage storage = GetStorageByType(storageType);
+            BaseItemLimitedStorage storage = GetStorageByType(storageType);
             Sprite sprite = storage.GetItemIconBySlot(slotIndex);
 
             switch (storageType)
@@ -1277,7 +1277,7 @@ namespace BeastHunterHubUI
 
         private void FillItemStorageSlots(ItemStorageType storageType)
         {
-            BaseItemStorage storage = GetStorageByType(storageType);
+            BaseItemLimitedStorage storage = GetStorageByType(storageType);
 
             for (int i = 0; i < storage.GetSlotsCount(); i++)
             {
@@ -1398,9 +1398,9 @@ namespace BeastHunterHubUI
             }
         }
 
-        private BaseItemStorage GetStorageByType(Enum storageType)
+        private BaseItemLimitedStorage GetStorageByType(Enum storageType)
         {
-            BaseItemStorage storage = null;
+            BaseItemLimitedStorage storage = null;
             switch (storageType)
             {
                 case ItemStorageType.CharacterBackpuck:

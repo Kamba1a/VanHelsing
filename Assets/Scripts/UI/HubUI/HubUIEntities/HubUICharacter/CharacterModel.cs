@@ -30,7 +30,7 @@ namespace BeastHunterHubUI
         public Sprite Portrait { get; private set; }
         public bool IsFemale { get; private set; }
         public GameObject View3DModelObjectOnScene { get; private set; }
-        public ItemStorage Backpack { get; private set; }
+        public ItemLimitedStorage Backpack { get; private set; }
         public EquippedClothesStorage ClothesEquipment { get; private set; }
         public PocketsStorage Pockets { get; private set; }
         public EquippedWeaponStorage WeaponEquipment { get; private set; }
@@ -50,7 +50,7 @@ namespace BeastHunterHubUI
             IsFemale = data.IsFemale;
             _defaultCharacterMaterial = data.DefaultMaterial;
 
-            Backpack = new ItemStorage(_allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
+            Backpack = new ItemLimitedStorage(_allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
             if (data.StartBackpuckItems != null)
             {
                 for (int i = 0; i < data.StartBackpuckItems.Length; i++)
@@ -101,7 +101,7 @@ namespace BeastHunterHubUI
             //todo: Portrait = ?;
             _defaultCharacterMaterial = _allData.GetRandomMaterialFromPool();
 
-            Backpack = new ItemStorage(_allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
+            Backpack = new ItemLimitedStorage(_allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
             Pockets = new PocketsStorage();
 
             WeaponEquipment = new EquippedWeaponStorage(_allData.WeaponSetsAmount);
@@ -132,7 +132,7 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public bool EquipClothesItem(BaseItemStorage outStorage, int outStorageSlotIndex)
+        public bool EquipClothesItem(BaseItemLimitedStorage outStorage, int outStorageSlotIndex)
         {
             BaseItemModel item = outStorage.GetElementBySlot(outStorageSlotIndex);
             if (item != null && item.ItemType == ItemType.Clothes)
@@ -154,7 +154,7 @@ namespace BeastHunterHubUI
             }
         }
 
-        public bool EquipWeaponItem(BaseItemStorage outStorage, int outStorageSlotIndex)
+        public bool EquipWeaponItem(BaseItemLimitedStorage outStorage, int outStorageSlotIndex)
         {
             BaseItemModel item = outStorage.GetElementBySlot(outStorageSlotIndex);
             if (item != null && item.ItemType == ItemType.Weapon)

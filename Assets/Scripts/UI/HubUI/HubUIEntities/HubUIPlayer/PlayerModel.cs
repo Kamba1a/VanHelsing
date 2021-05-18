@@ -13,7 +13,7 @@ namespace BeastHunterHubUI
 
         public int GoldAmount { get; private set; }
         public int Rank { get; private set; }
-        public ItemStorage Inventory { get; private set; }
+        public ItemLimitedStorage Inventory { get; private set; }
         public List<CharacterModel> HiredCharacters { get; private set; }
         public HuntingQuestModel HuntingQuest { get; private set; } 
 
@@ -35,7 +35,7 @@ namespace BeastHunterHubUI
             //    HiredCharacters.Add(new CharacterModel(settings.StartHiredCharacters[i]));
             //}
 
-            Inventory = new ItemStorage(settings.InventorySlotsAmount, ItemStorageType.GeneralInventory);
+            Inventory = new ItemLimitedStorage(settings.InventorySlotsAmount, ItemStorageType.GeneralInventory);
             for (int i = 0; i < settings.StartInventoryItems.Length; i++)
             {
                 BaseItemModel itemModel = HubUIServices.SharedInstance.
