@@ -14,7 +14,7 @@ namespace BeastHunterHubUI
         public int GoldAmount { get; private set; }
         public int Rank { get; private set; }
         public ItemLimitedStorage Inventory { get; private set; }
-        public List<CharacterModel> HiredCharacters { get; private set; }
+        public CharacterUnlimitedStorage AvailableHunters { get; private set; }
         public HuntingQuestModel HuntingQuest { get; private set; } 
 
         #endregion
@@ -27,7 +27,7 @@ namespace BeastHunterHubUI
             GoldAmount = settings.GoldAmount;
             Rank = settings.StartingRank;
 
-            HiredCharacters = new List<CharacterModel>();
+            AvailableHunters = new CharacterUnlimitedStorage(CharacterStorageType.AvailableHunters);
 
             //todo: uncomment
             //for (int i = 0; i < settings.StartHiredCharacters.Length; i++)
@@ -71,12 +71,12 @@ namespace BeastHunterHubUI
 
         public void HireCharacter(CharacterModel character)
         {
-            HiredCharacters.Add(character);
+            AvailableHunters.PutElementToFirstEmptySlot(character);
         }
 
         public void FireCharacter(CharacterModel character)
         {
-            HiredCharacters.Remove(character);
+            AvailableHunters.RemoveElement(character);
         }
 
         public bool AddGold(int goldAmount)

@@ -3,7 +3,7 @@
 
 namespace BeastHunterHubUI
 {
-    public class CharacterLimitedStorage : BaseCharacterLimitedStorage
+    public class CharacterLimitedStorage : BaseLimitedStorage<CharacterModel, CharacterStorageType>
     {
         public override CharacterStorageType StorageType { get; protected set; }
 

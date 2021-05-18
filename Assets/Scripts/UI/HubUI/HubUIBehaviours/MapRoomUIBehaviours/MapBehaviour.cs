@@ -368,9 +368,9 @@ namespace BeastHunterHubUI
                 InitializeShopSlotUI(i);
             }
 
-            for (int i = 0; i < context.Player.HiredCharacters.Count; i++)
+            for (int i = 0; i < context.Player.AvailableHunters.GetSlotsCount(); i++)
             {
-                InitializeCharacterUI(context.Player.HiredCharacters[i]);
+                InitializeCharacterUI(context.Player.AvailableHunters.GetElementBySlot(i));
             }
 
             FillItemStorageSlots(ItemStorageType.GeneralInventory);
@@ -431,10 +431,10 @@ namespace BeastHunterHubUI
 
         private void OnClick_OrderButton()  //WIP, just for testing order and event system
         {
-            if (!_context.Player.HiredCharacters[0].IsHaveOrder)
+            if (!_context.Player.AvailableHunters.GetElementBySlot(0).IsHaveOrder)
             {
                 OrderModel testOrder = new OrderModel(OrderType.Alchemy, 4);
-                testOrder.AssignCharacter(_context.Player.HiredCharacters[0]);
+                testOrder.AssignCharacter(_context.Player.AvailableHunters.GetElementBySlot(0));
                 testOrder.OnCompleteHandler += Debug.Log;
             }
         }

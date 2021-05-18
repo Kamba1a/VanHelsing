@@ -51,5 +51,18 @@ namespace BeastHunterHubUI
             }
             return true;
         }
+
+        public bool RemoveElement(CharacterModel character)
+        {
+            if (_elementSlots.Contains(character))
+            {
+                _elementSlots.Remove(character);
+            }
+            else
+            {
+                Debug.LogError(this + "Incorrect input parameter: character is not found");
+            }
+            return true;
+        }
     }
 }

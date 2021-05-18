@@ -38,6 +38,11 @@ namespace BeastHunterHubUI
             }
         }
 
+        #endregion
+
+
+        #region ClassLifeCicle
+
         public MapObjectModel(MapObjectData mapObjectData)
         {
             MapObjectType = mapObjectData.GetMapObjectType();

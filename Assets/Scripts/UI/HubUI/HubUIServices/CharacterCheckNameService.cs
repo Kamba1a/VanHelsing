@@ -23,9 +23,9 @@
 
         public bool IsNameFree(string name)
         {
-            for (int i = 0; i < _context.Player.HiredCharacters.Count; i++)
+            for (int i = 0; i < _context.Player.AvailableHunters.GetSlotsCount(); i++)
             {
-                if (_context.Player.HiredCharacters[i].Name == name)
+                if (_context.Player.AvailableHunters.GetElementBySlot(i).Name == name)
                 {
                     return false;
                 }

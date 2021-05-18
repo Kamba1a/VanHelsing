@@ -58,6 +58,7 @@ namespace BeastHunterHubUI
                     _currentQuestListItems.Add(questBehaviour);
                 }
 
+                _questApplyButton.enabled = false;
                 gameObject.SetActive(true);
             }
             else
@@ -75,13 +76,17 @@ namespace BeastHunterHubUI
         {
             _questDescriptionText.text = quest.Description;
             _selectedQuest = quest;
+            _questApplyButton.enabled = true;
         }
 
         private void OnClick_QuestApplyButton()
         {
-            _context.Player.TakeHuntingQuest(_selectedQuest);
-            HubUIServices.SharedInstance.GameMessages.Notice($"The quest {_selectedQuest.Title} started. Time expires at: {_selectedQuest.RunningOutTime}");
-            CloseAndClear();
+            if (_selectedQuest != null)
+            {
+                _context.Player.TakeHuntingQuest(_selectedQuest);
+                HubUIServices.SharedInstance.GameMessages.Notice($"The quest {_selectedQuest.Title} started. Time expires at: {_selectedQuest.RunningOutTime}");
+                CloseAndClear();
+            }
         }
 
         private void CloseAndClear()
