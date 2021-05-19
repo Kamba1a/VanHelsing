@@ -12,26 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdc4f56eb8b4c2742b1415abd0385973, type: 3}
   m_Name: HubUIData
   m_EditorClassIdentifier: 
-  _charactersData: {fileID: 11400000, guid: 9824cdaccbb2c104e91379e78ce53133, type: 2}
-  _questsPool:
-  - {fileID: 11400000, guid: 81ad56c84f8679347b6301f8a566d862, type: 2}
-  _locationDatas:
-  - {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
-  - {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
-  - {fileID: 11400000, guid: 860d3696ec691de4e9302d6819bd9cda, type: 2}
-  - {fileID: 11400000, guid: 9b605ac1c7e3a6b458708df1317a7eaf, type: 2}
-  - {fileID: 11400000, guid: a4953306eee0c584a8c7fc514f731fbb, type: 2}
-  _citiesDatas:
-  - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
-  _citiesShopsSlotsAmount: 20
-  _randomCharactersAmount: 5
-  _itemDataPools: {fileID: 11400000, guid: 5efb51aa2c6b6b0449cb922c915b405e, type: 2}
-  _huntingQuestsDataPool:
-  - {fileID: 11400000, guid: 6569354df43ee3c42b7aad209f3a8887, type: 2}
-  - {fileID: 11400000, guid: 666a5504f1c1909428191750e9c916a6, type: 2}
-  _bossesDataPool:
-  - {fileID: 11400000, guid: 2c3011b637f41c8478a9ff84ef154776, type: 2}
-  - {fileID: 11400000, guid: 10da2d25f5f199641bb3b02d2ef18da7, type: 2}
   PlayerSettings:
     _goldAmount: 200
     _startingRank: 0
@@ -69,6 +49,29 @@ MonoBehaviour:
     _hoursOnStartGame: 12
     _dayOnStartGame: 1
     _timePassingDelay: 1
+  _charactersData: {fileID: 11400000, guid: 9824cdaccbb2c104e91379e78ce53133, type: 2}
+  _citiesShopsSlotsAmount: 20
+  _randomCharactersAmount: 5
+  _locationDatas:
+  - {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
+  - {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
+  - {fileID: 11400000, guid: 860d3696ec691de4e9302d6819bd9cda, type: 2}
+  - {fileID: 11400000, guid: 9b605ac1c7e3a6b458708df1317a7eaf, type: 2}
+  - {fileID: 11400000, guid: a4953306eee0c584a8c7fc514f731fbb, type: 2}
+  _citiesDatas:
+  - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
+  _workRoomsData:
+  - {fileID: 11400000, guid: 538f84166fed25a459e3eb52a5ac7aac, type: 2}
+  - {fileID: 11400000, guid: 90082b5b7c854a7479b78cae329f1dee, type: 2}
+  _questsPool:
+  - {fileID: 11400000, guid: 81ad56c84f8679347b6301f8a566d862, type: 2}
+  _huntingQuestsDataPool:
+  - {fileID: 11400000, guid: 6569354df43ee3c42b7aad209f3a8887, type: 2}
+  - {fileID: 11400000, guid: 666a5504f1c1909428191750e9c916a6, type: 2}
+  _bossesDataPool:
+  - {fileID: 11400000, guid: 2c3011b637f41c8478a9ff84ef154776, type: 2}
+  - {fileID: 11400000, guid: 10da2d25f5f199641bb3b02d2ef18da7, type: 2}
+  _itemDataPools: {fileID: 11400000, guid: 5efb51aa2c6b6b0449cb922c915b405e, type: 2}
   _messageWindowPrefab: {fileID: 8800125775024752673, guid: 1f584825ef8ac7c409d78790dd09a67a,
     type: 3}
   MapDataStruct:

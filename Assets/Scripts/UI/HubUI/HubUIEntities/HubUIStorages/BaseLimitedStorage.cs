@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using UnityEngine;
 
 namespace BeastHunterHubUI
 {
@@ -10,6 +10,7 @@ namespace BeastHunterHubUI
 
         public virtual Action<EnumStorageType, int, ElementType> OnPutElementToSlotHandler { get; set; }
         public virtual Action<EnumStorageType, int, ElementType> OnTakeElementFromSlotHandler { get; set; }
+        public virtual Action<EnumStorageType> OnStorageResizeHandler { get; set; }
 
 
         #endregion
@@ -54,6 +55,22 @@ namespace BeastHunterHubUI
             }
         }
 
+        public virtual void AddSlots(int slotAmount)
+        {
+            if (slotAmount > 0)
+            {
+                for (int i = 0; i < slotAmount; i++)
+                {
+                    _elementSlots.Add(default);
+                }
+                OnStorageResize();
+            }
+            else
+            {
+                Debug.LogError($"Incorrect input parameter: parameter less or equal zero (input value: {slotAmount})");
+            }
+        }
+
         protected virtual void OnPutElementToSlot(int slotIndex, ElementType newElement)
         {
             OnPutElementToSlotHandler?.Invoke(StorageType, slotIndex, newElement);
@@ -62,6 +79,11 @@ namespace BeastHunterHubUI
         protected virtual void OnTakeElementFromSlot(int slotIndex, ElementType takedElement)
         {
             OnTakeElementFromSlotHandler?.Invoke(StorageType, slotIndex, takedElement);
+        }
+
+        protected virtual void OnStorageResize()
+        {
+            OnStorageResizeHandler?.Invoke(StorageType);
         }
 
         #endregion
