@@ -10,5 +10,6 @@
         ClothesEquipment = 5,
         PocketsStorage = 6,
         WeaponEquipment = 7,
+        WorkRoomFinishedItems = 8,
     }
 }

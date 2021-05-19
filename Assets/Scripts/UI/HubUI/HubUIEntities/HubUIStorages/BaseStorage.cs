@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace BeastHunterHubUI
 {
     public abstract class BaseStorage<ElementType, EnumStorageType> where EnumStorageType : Enum
@@ -15,7 +16,18 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public abstract EnumStorageType StorageType { get; protected set; }
+        public EnumStorageType StorageType { get; private set; }
+
+        #endregion
+
+
+
+        #region ClassLifeCycle
+
+        public BaseStorage(EnumStorageType storageType)
+        {
+            StorageType = storageType;
+        }
 
         #endregion
 

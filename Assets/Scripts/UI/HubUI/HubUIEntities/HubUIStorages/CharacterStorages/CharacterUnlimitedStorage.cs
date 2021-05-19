@@ -6,12 +6,8 @@ namespace BeastHunterHubUI
 {
     public class CharacterUnlimitedStorage : BaseStorage<CharacterModel, CharacterStorageType>
     {
-        public override CharacterStorageType StorageType { get; protected set; }
-
-
-        public CharacterUnlimitedStorage(CharacterStorageType storageType)
+        public CharacterUnlimitedStorage(CharacterStorageType storageType) : base(storageType)
         {
-            StorageType = storageType;
             _elementSlots = new List<CharacterModel>();
         }
 

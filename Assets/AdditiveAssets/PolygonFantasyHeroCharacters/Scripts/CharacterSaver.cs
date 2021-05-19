@@ -5,9 +5,6 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    //todo?:
-    //the ContextMenu method to quickly select a male or female character
-    //the ContextMenu method for randomization of one head only
     class CharacterSaver : MonoBehaviour
     {
         #region Fields

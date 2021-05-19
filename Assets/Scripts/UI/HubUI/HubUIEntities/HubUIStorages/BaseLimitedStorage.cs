@@ -1,5 +1,5 @@
 ﻿using System;
-using UnityEngine;
+using System.Collections.Generic;
 
 
 namespace BeastHunterHubUI
@@ -11,6 +11,21 @@ namespace BeastHunterHubUI
         public virtual Action<EnumStorageType, int, ElementType> OnPutElementToSlotHandler { get; set; }
         public virtual Action<EnumStorageType, int, ElementType> OnTakeElementFromSlotHandler { get; set; }
 
+
+        #endregion
+
+
+        #region ClassLifeCycle
+
+        public BaseLimitedStorage(int slotsAmount, EnumStorageType storageType) : base(storageType)
+        {
+            _elementSlots = new List<ElementType>();
+
+            for (int i = 0; i < slotsAmount; i++)
+            {
+                _elementSlots.Add(default);
+            }
+        }
 
         #endregion
 

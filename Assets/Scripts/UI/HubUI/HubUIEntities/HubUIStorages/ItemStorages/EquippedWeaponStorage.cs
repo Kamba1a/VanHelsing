@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections.Generic;
 
 
 namespace BeastHunterHubUI
@@ -18,24 +17,12 @@ namespace BeastHunterHubUI
 
         public Action<int, Sprite> OnTwoHandedWeaponHandler;
 
-        public override ItemStorageType StorageType { get; protected set; }
-
         #endregion
 
 
         #region ClassLifeCycle
 
-        public EquippedWeaponStorage(int weaponSetsAmount)
-        {
-            StorageType = ItemStorageType.WeaponEquipment;
-
-            _elementSlots = new List<BaseItemModel>();
-            int slotsAmount = weaponSetsAmount * SLOTS_AMOUNT_IN_WEAPON_SET;
-            for (int i = 0; i < slotsAmount; i++)
-            {
-                _elementSlots.Add(null);
-            }
-        }
+        public EquippedWeaponStorage(int weaponSetsAmount) : base(weaponSetsAmount * SLOTS_AMOUNT_IN_WEAPON_SET, ItemStorageType.WeaponEquipment) { }
 
         #endregion
 

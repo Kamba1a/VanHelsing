@@ -1,29 +1,10 @@
-﻿using System.Collections.Generic;
-
-
-namespace BeastHunterHubUI
+﻿namespace BeastHunterHubUI
 {
     public class ItemLimitedStorage : BaseItemLimitedStorage
     {
-        #region Properties
-
-        public override ItemStorageType StorageType { get; protected set; }
-
-        #endregion
-
-
         #region ClassLifeCycle
 
-        public ItemLimitedStorage(int slotsAmount, ItemStorageType storageType)
-        {
-            StorageType = storageType;
-
-            _elementSlots = new List<BaseItemModel>();
-            for (int i = 0; i < slotsAmount; i++)
-            {
-                _elementSlots.Add(null);
-            }
-        }
+        public ItemLimitedStorage(int slotsAmount, ItemStorageType storageType) : base(slotsAmount, storageType) { }
 
         #endregion
 

@@ -9,7 +9,6 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        public override ItemStorageType StorageType { get;  protected set; }
         private ClothesType[] _slotTypes;
 
         #endregion
@@ -17,16 +16,8 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public EquippedClothesStorage(ClothesType[] clothTypes)
+        public EquippedClothesStorage(ClothesType[] clothTypes) : base(clothTypes.Length, ItemStorageType.ClothesEquipment)
         {
-            StorageType = ItemStorageType.ClothesEquipment;
-
-            _elementSlots = new List<BaseItemModel>();
-            for (int i = 0; i < clothTypes.Length; i++)
-            {
-                _elementSlots.Add(null);
-            }
-
             _slotTypes = clothTypes;
         }
 

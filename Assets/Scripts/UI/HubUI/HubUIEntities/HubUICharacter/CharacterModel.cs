@@ -98,7 +98,6 @@ namespace BeastHunterHubUI
             _allData = BeastHunter.Data.HubUIData.AllCharactersData; ;
             IsFemale = _allData.IsFemale() ? true : false;
             Name = _allData.GetRandonNameFromPool(IsFemale);
-            //todo: Portrait = ?;
             _defaultCharacterMaterial = _allData.GetRandomMaterialFromPool();
 
             Backpack = new ItemLimitedStorage(_allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);

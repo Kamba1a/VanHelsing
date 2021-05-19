@@ -5,19 +5,7 @@ namespace BeastHunterHubUI
 {
     public class CharacterLimitedStorage : BaseLimitedStorage<CharacterModel, CharacterStorageType>
     {
-        public override CharacterStorageType StorageType { get; protected set; }
-
-
-        public CharacterLimitedStorage(int slotsAmount, CharacterStorageType storageType)
-        {
-            StorageType = storageType;
-            _elementSlots = new List<CharacterModel>();
-
-            for (int i = 0; i < slotsAmount; i++)
-            {
-                _elementSlots.Add(null);
-            }
-        }
+        public CharacterLimitedStorage(int slotsAmount, CharacterStorageType storageType) : base(slotsAmount, storageType) { }
 
 
         public override bool PutElement(int slotIndex, CharacterModel character)
