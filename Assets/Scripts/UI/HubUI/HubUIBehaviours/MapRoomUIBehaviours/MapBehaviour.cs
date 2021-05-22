@@ -222,7 +222,7 @@ namespace BeastHunterHubUI
         private HubUIData _data;
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
-        private List<MapStorageSlotBehaviour> _characterBackpuckSlotsUIBehaviours;
+        private List<MapStorageSlotBehaviour> _characterBackpackSlotsUIBehaviours;
         private List<MapStorageSlotBehaviour> _generalInventorySlotsUIBehaviours;
         private List<MapShopSlotBehaviour> _shopSlotsUIBehaviours;
         private List<MapStorageSlotBehaviour> _buyBackSlotsUIBehaviours;
@@ -312,7 +312,7 @@ namespace BeastHunterHubUI
             _displayedCurrentCitizensUIBehaviours = new Dictionary<CitizenModel, MapCitizenBehaviour>();
             _displayedDialogAnswerButtons = new List<GameObject>();
 
-            _characterBackpuckSlotsUIBehaviours = new List<MapStorageSlotBehaviour>();
+            _characterBackpackSlotsUIBehaviours = new List<MapStorageSlotBehaviour>();
             _generalInventorySlotsUIBehaviours = new List<MapStorageSlotBehaviour>();
             _buyBackSlotsUIBehaviours = new List<MapStorageSlotBehaviour>();
             _shopSlotsUIBehaviours = new List<MapShopSlotBehaviour>();
@@ -348,9 +348,9 @@ namespace BeastHunterHubUI
                 FillMapObject(_mapObjects[i], _data.MapDataStruct.MapObjects[i]);
             }
 
-            for (int i = 0; i < _data.AllCharactersData.BackpuckSlotAmount; i++)
+            for (int i = 0; i < _data.AllCharactersData.BackpackSlotAmount; i++)
             {
-                InitializeCharacterBackpuckSlotUI(i);
+                InitializeCharacterBackpackSlotUI(i);
             }
 
             for (int i = 0; i < _context.Player.Inventory.GetSlotsCount(); i++)
@@ -431,7 +431,7 @@ namespace BeastHunterHubUI
 
         private void OnClick_OrderButton()  //WIP, just for testing order and event system
         {
-            if (!_context.Player.AvailableHunters.GetElementBySlot(0).IsHaveOrder)
+            if (!_context.Player.AvailableHunters.GetElementBySlot(0).IsAssignedToWork)
             {
                 OrderModel testOrder = new OrderModel(OrderType.Alchemy, 4);
                 testOrder.AssignCharacter(_context.Player.AvailableHunters.GetElementBySlot(0));
@@ -913,7 +913,7 @@ namespace BeastHunterHubUI
             {
                 if (_selected.Character != null)
                 {
-                    SetStorageSlotsInteractable(true, _characterBackpuckSlotsUIBehaviours);
+                    SetStorageSlotsInteractable(true, _characterBackpackSlotsUIBehaviours);
                     SetStorageSlotsInteractable(true, _characterClothesSlotsUIBehaviours);
                     SetStorageSlotsInteractable(true, _characterWeaponSlotsUIBehaviours);
                 }
@@ -924,7 +924,7 @@ namespace BeastHunterHubUI
                 _selected.Character.Behaviour.SelectFrameSwitch(true);
                 _hikeAcceptButton.interactable = true;
 
-                FillItemStorageSlots(ItemStorageType.CharacterBackpuck);
+                FillItemStorageSlots(ItemStorageType.CharacterBackpack);
                 _selected.Character.Backpack.OnPutElementToSlotHandler += FillSlotUI;
                 _selected.Character.Backpack.OnTakeElementFromSlotHandler += FillSlotUI;
 
@@ -950,7 +950,7 @@ namespace BeastHunterHubUI
             {
                 _character3DViewModelRawImage.enabled = false;
                 _hikeAcceptButton.interactable = false;
-                SetStorageSlotsInteractable(false, _characterBackpuckSlotsUIBehaviours);
+                SetStorageSlotsInteractable(false, _characterBackpackSlotsUIBehaviours);
                 SetStorageSlotsInteractable(false, _characterClothesSlotsUIBehaviours);
                 SetStorageSlotsInteractable(false, _characterWeaponSlotsUIBehaviours);
             }
@@ -1035,21 +1035,21 @@ namespace BeastHunterHubUI
             behaviourUI.OnClick_ButtonHandler += OnClick_CharacterButton;
         }
 
-        private void InitializeCharacterBackpuckSlotUI(int slotIndex)
+        private void InitializeCharacterBackpackSlotUI(int slotIndex)
         {
-            GameObject backpuckSlotUI = InstantiateUIObject(_data.MapDataStruct.CharacterBackpuckSlotUIPrefab, _characterInventoryPanel);
+            GameObject backpackSlotUI = InstantiateUIObject(_data.MapDataStruct.CharacterBackpackSlotUIPrefab, _characterInventoryPanel);
 
-            MapStorageSlotBehaviour slotBehaviour = backpuckSlotUI.GetComponent<MapStorageSlotBehaviour>();
+            MapStorageSlotBehaviour slotBehaviour = backpackSlotUI.GetComponent<MapStorageSlotBehaviour>();
             slotBehaviour.FillSlotInfo(slotIndex, true);
             slotBehaviour.SetInteractable(false);
-            slotBehaviour.OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_StorageSlot(slotIndex, ItemStorageType.CharacterBackpuck);
-            slotBehaviour.OnBeginDragItemHandler = (slotIndex) => OnBeginDragItemFromSlot(slotIndex, ItemStorageType.CharacterBackpuck);
-            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, ItemStorageType.CharacterBackpuck);
-            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, ItemStorageType.CharacterBackpuck);
-            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, ItemStorageType.CharacterBackpuck);
+            slotBehaviour.OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_StorageSlot(slotIndex, ItemStorageType.CharacterBackpack);
+            slotBehaviour.OnBeginDragItemHandler = (slotIndex) => OnBeginDragItemFromSlot(slotIndex, ItemStorageType.CharacterBackpack);
+            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, ItemStorageType.CharacterBackpack);
+            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, ItemStorageType.CharacterBackpack);
+            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, ItemStorageType.CharacterBackpack);
             slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
-            _characterBackpuckSlotsUIBehaviours.Add(slotBehaviour);
+            _characterBackpackSlotsUIBehaviours.Add(slotBehaviour);
         }
 
         private void InitializeGeneralInventorySlotUI(int slotIndex)
@@ -1223,9 +1223,9 @@ namespace BeastHunterHubUI
 
             switch (storageType)
             {
-                case ItemStorageType.CharacterBackpuck:
+                case ItemStorageType.CharacterBackpack:
 
-                    _characterBackpuckSlotsUIBehaviours[slotIndex].FillSlot(sprite);
+                    _characterBackpackSlotsUIBehaviours[slotIndex].FillSlot(sprite);
 
                     break;
                 case ItemStorageType.GeneralInventory:
@@ -1403,7 +1403,7 @@ namespace BeastHunterHubUI
             BaseItemLimitedStorage storage = null;
             switch (storageType)
             {
-                case ItemStorageType.CharacterBackpuck:
+                case ItemStorageType.CharacterBackpack:
                     storage = _selected.Character.Backpack;
                     break;
 

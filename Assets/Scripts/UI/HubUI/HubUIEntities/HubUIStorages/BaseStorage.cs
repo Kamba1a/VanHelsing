@@ -21,7 +21,6 @@ namespace BeastHunterHubUI
         #endregion
 
 
-
         #region ClassLifeCycle
 
         public BaseStorage(EnumStorageType storageType)

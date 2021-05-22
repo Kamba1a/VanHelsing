@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -6,9 +7,10 @@ namespace BeastHunterHubUI
 {
     public class HubUIEventsService
     {
-        private const float RANDOM_EVENT_CHANCE = 0.05f; 
+        private const float RANDOM_EVENT_CHANCE = 0.05f;
 
 
+        private Action _onTimeTick;
         private HubUIContext _context;
         private Dictionary<HubUITimeStruct, List<HubUIEventModel>> _scheduledEvents;
 
@@ -25,6 +27,10 @@ namespace BeastHunterHubUI
             if (_scheduledEvents.ContainsKey(eventModel.InvokeTime))
             {
                 _scheduledEvents[eventModel.InvokeTime].Remove(eventModel);
+                if (eventModel.IsEachTimeTickInvokeOn)
+                {
+                    _onTimeTick -= eventModel.TimeTick;
+                }
             }
         }
 
@@ -35,10 +41,15 @@ namespace BeastHunterHubUI
                 _scheduledEvents.Add(eventModel.InvokeTime, new List<HubUIEventModel>());
             }
             _scheduledEvents[eventModel.InvokeTime].Add(eventModel);
+            if (eventModel.IsEachTimeTickInvokeOn)
+            {
+                _onTimeTick += eventModel.TimeTick;
+            }
         }
 
         public void OnChangedGameTime(HubUITimeStruct currentTime)
         {
+            _onTimeTick?.Invoke();
             RandomEventCheck();
             ScheduleEventsCheck(currentTime);
         }
@@ -50,7 +61,10 @@ namespace BeastHunterHubUI
                 _context.GameTime.StopTimeSkip();
                 for (int i = 0; i < _scheduledEvents[invokeTime].Count; i++)
                 {
-                    HubUIServices.SharedInstance.GameMessages.Window(_scheduledEvents[invokeTime][i].Message);
+                    if (_scheduledEvents[invokeTime][i].IsEachTimeTickInvokeOn)
+                    {
+                        _onTimeTick -= _scheduledEvents[invokeTime][i].TimeTick;
+                    }
                     _scheduledEvents[invokeTime][i].Invoke();
                 }
                 _scheduledEvents.Remove(invokeTime);
@@ -59,7 +73,7 @@ namespace BeastHunterHubUI
 
         private void RandomEventCheck() 
         { 
-            if (Random.Range(0, 101) <= RANDOM_EVENT_CHANCE * 100)
+            if (UnityEngine.Random.Range(0, 101) <= RANDOM_EVENT_CHANCE * 100)
             {
                 _context.GameTime.StopTimeSkip();
                 HubUIServices.SharedInstance.GameMessages.Window("A random event has happened!");

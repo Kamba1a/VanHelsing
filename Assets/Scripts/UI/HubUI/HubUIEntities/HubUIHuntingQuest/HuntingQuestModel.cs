@@ -52,8 +52,7 @@ namespace BeastHunterHubUI
         public void Activate()
         {
             QuestStatus = HuntingQuestStatus.Actived;
-            string eventMsg = "It's time to go hunting!";
-            _questEvent = new HubUIEventModel(_hoursAmountBeforeHunt, eventMsg);
+            _questEvent = new HubUIEventModel(_hoursAmountBeforeHunt, false);
             _questEvent.OnInvokeHandler = OnTimeOvered;
             HubUIServices.SharedInstance.EventsService.AddEventToScheduler(_questEvent);
         }
@@ -62,7 +61,7 @@ namespace BeastHunterHubUI
         {
             QuestStatus = HuntingQuestStatus.Completed;
 
-            if(_questEvent != null)
+            if (_questEvent != null)
             {
                 HubUIServices.SharedInstance.EventsService.RemoveEventFromScheduler(_questEvent);
                 RemoveEvent();
@@ -74,6 +73,7 @@ namespace BeastHunterHubUI
         private void OnTimeOvered()
         {
             QuestStatus = HuntingQuestStatus.TimeOvered;
+            HubUIServices.SharedInstance.GameMessages.Window("It's time to go hunting!");
             RemoveEvent();
             OnTimeOveredHandler?.Invoke(this);
         }

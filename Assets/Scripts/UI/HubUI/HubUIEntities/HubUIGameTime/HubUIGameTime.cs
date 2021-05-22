@@ -60,21 +60,6 @@ namespace BeastHunterHubUI
             IsTimePassing = false;
         }
 
-        public void OneHourPass()
-        {
-            if (_currentTime.Hour + 1 >= HoursAmountPerDay)
-            {
-                _currentTime.Day += 1;
-                _currentTime.Hour = 0;
-            }
-            else
-            {
-                _currentTime.Hour += 1;
-            }
-
-            OnChangeTime();
-        }
-
         public HubUITimeStruct AddTime(HubUITimeStruct time)
         {
             return AddTime(GameTimeStructToHours(time));
@@ -105,6 +90,21 @@ namespace BeastHunterHubUI
             }
 
             return newTime;
+        }
+
+        private void OneHourPass()
+        {
+            if (_currentTime.Hour + 1 >= HoursAmountPerDay)
+            {
+                _currentTime.Day += 1;
+                _currentTime.Hour = 0;
+            }
+            else
+            {
+                _currentTime.Hour += 1;
+            }
+
+            OnChangeTime();
         }
 
         private int GameTimeStructToHours(HubUITimeStruct time)

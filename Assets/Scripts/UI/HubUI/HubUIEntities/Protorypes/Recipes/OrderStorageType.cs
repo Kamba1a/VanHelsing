@@ -1,6 +1,6 @@
 ﻿namespace BeastHunterHubUI
 {
-    public enum RecipesStorageType
+    public enum OrderStorageType
     {
         None = 0,
     }

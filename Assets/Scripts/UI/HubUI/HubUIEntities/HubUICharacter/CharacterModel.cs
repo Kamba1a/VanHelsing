@@ -34,8 +34,9 @@ namespace BeastHunterHubUI
         public EquippedClothesStorage ClothesEquipment { get; private set; }
         public PocketsStorage Pockets { get; private set; }
         public EquippedWeaponStorage WeaponEquipment { get; private set; }
-        public bool IsHaveOrder { get; set; }
+        public bool IsAssignedToWork { get; set; }
         public MapCharacterBehaviour Behaviour { get; set; }
+        public int TemporarySkillLevelForDebug { get; set; } //TEMPORARY! todo: replace to realized skills
 
         #endregion
 
@@ -50,7 +51,7 @@ namespace BeastHunterHubUI
             IsFemale = data.IsFemale;
             _defaultCharacterMaterial = data.DefaultMaterial;
 
-            Backpack = new ItemLimitedStorage(_allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
+            Backpack = new ItemLimitedStorage(_allData.BackpackSlotAmount, ItemStorageType.CharacterBackpack);
             if (data.StartBackpuckItems != null)
             {
                 for (int i = 0; i < data.StartBackpuckItems.Length; i++)
@@ -95,12 +96,13 @@ namespace BeastHunterHubUI
 
         public CharacterModel(int rank)
         {
+            TemporarySkillLevelForDebug = 30;
             _allData = BeastHunter.Data.HubUIData.AllCharactersData; ;
             IsFemale = _allData.IsFemale() ? true : false;
             Name = _allData.GetRandonNameFromPool(IsFemale);
             _defaultCharacterMaterial = _allData.GetRandomMaterialFromPool();
 
-            Backpack = new ItemLimitedStorage(_allData.BackpuckSlotAmount, ItemStorageType.CharacterBackpuck);
+            Backpack = new ItemLimitedStorage(_allData.BackpackSlotAmount, ItemStorageType.CharacterBackpack);
             Pockets = new PocketsStorage();
 
             WeaponEquipment = new EquippedWeaponStorage(_allData.WeaponSetsAmount);

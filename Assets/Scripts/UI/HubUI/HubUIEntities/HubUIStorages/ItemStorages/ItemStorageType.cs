@@ -3,7 +3,7 @@
     public enum ItemStorageType
     {
         None = 0,
-        CharacterBackpuck = 1,
+        CharacterBackpack = 1,
         GeneralInventory = 2,
         ShopStorage = 3,
         BuyBackStorage = 4,

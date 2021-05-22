@@ -3,6 +3,7 @@
 
 namespace BeastHunterHubUI
 {
+    [Obsolete] //todo: remove class after realized workrooms
     public class OrderModel
     {
         #region Fields
@@ -40,11 +41,10 @@ namespace BeastHunterHubUI
 
         public void AssignCharacter(CharacterModel character)
         {
-            character.IsHaveOrder = true;
+            character.IsAssignedToWork = true;
             CharacterAssigned = character;
 
-            string eventMsg = $"The order {OrderType} is completed";
-            _orderEvent = new HubUIEventModel(BaseSpentHours, eventMsg);
+            _orderEvent = new HubUIEventModel(BaseSpentHours, false);
             _orderEvent.OnInvokeHandler = Complete;
 
             HubUIServices.SharedInstance.EventsService.AddEventToScheduler(_orderEvent);
@@ -56,7 +56,7 @@ namespace BeastHunterHubUI
         {
             if (CharacterAssigned != null)
             {
-                CharacterAssigned.IsHaveOrder = false;
+                CharacterAssigned.IsAssignedToWork = false;
                 HubUIServices.SharedInstance.EventsService.RemoveEventFromScheduler(_orderEvent);
                 CharacterAssigned = null;
                 _orderEvent = null;
@@ -67,10 +67,11 @@ namespace BeastHunterHubUI
         {
             if (CharacterAssigned != null)
             {
-                CharacterAssigned.IsHaveOrder = false;
+                CharacterAssigned.IsAssignedToWork = false;
                 CharacterAssigned = null;
                 _orderEvent = null;
             }
+            HubUIServices.SharedInstance.GameMessages.Window($"The order {OrderType} is completed");
             OnCompleteHandler?.Invoke(this);
         }
 

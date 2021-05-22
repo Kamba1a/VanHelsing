@@ -6,8 +6,8 @@ namespace BeastHunterHubUI
     [System.Serializable]
     public class WorkRoomProgress : BaseWorkRoomProgress
     {
-        [SerializeField] int _recipesSlots;
+        [SerializeField] int _ordersSlots;
 
-        public int RecipesSlots => _recipesSlots;
+        public int OrderSlots => _ordersSlots;
     }
 }

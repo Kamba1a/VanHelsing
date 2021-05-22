@@ -53,7 +53,7 @@ namespace BeastHunterHubUI
         public GameObject EquipmentSlotUIPrefab => _equipmentSlotUIPrefab;
         public GameObject InventorySlotUIPrefab => _inventorySlotUIPrefab;
         public GameObject AnswerButtonUIPrefab => _answerButtonUIPrefab;
-        public GameObject CharacterBackpuckSlotUIPrefab => _characterBackpuckSlotUIPrefab;
+        public GameObject CharacterBackpackSlotUIPrefab => _characterBackpuckSlotUIPrefab;
         public MapObjectData[] MapObjects => _mapObjects;
         public Sprite WeaponSlotIcon => _weaponSlotIcon;
         public Sprite PocketItemSlotIcon => _pocketItemSlotIcon;

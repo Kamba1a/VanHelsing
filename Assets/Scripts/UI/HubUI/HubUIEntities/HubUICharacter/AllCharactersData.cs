@@ -103,7 +103,7 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public int BackpuckSlotAmount => _backpuckSlotAmount;
+        public int BackpackSlotAmount => _backpuckSlotAmount;
         public int WeaponSetsAmount => _weaponSetsAmount;
         public ClothesType[] ClothesSlots => (ClothesType[])_clothesSlots.Clone();
         public GameObject View3DModelPrefab => _view3DModelPrefab;
