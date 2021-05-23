@@ -13,6 +13,7 @@ namespace BeastHunterHubUI
         public List<LocationModel> Locations { get; private set; }
         public List<CityModel> Cities { get; private set; }
         public HubUIGameTime GameTime { get; private set; }
+        public List<WorkRoomModel> WorkRooms { get; private set; }
 
         #endregion
 
@@ -24,6 +25,7 @@ namespace BeastHunterHubUI
             CharactersForHire = new List<CharacterModel>();
             Cities = new List<CityModel>();
             Locations = new List<LocationModel>();
+            WorkRooms = new List<WorkRoomModel>();
         }
 
         #endregion
@@ -52,6 +54,11 @@ namespace BeastHunterHubUI
             for (int i = 0; i < data.Locations.Length; i++)
             {
                 Locations.Add(new LocationModel(data.Locations[i]));
+            }
+
+            for (int i = 0; i < data.WorkRoomsData.Length; i++)
+            {
+                WorkRooms.Add(new WorkRoomModel(data.WorkRoomsData[i].WorkRoomStruct));
             }
         }
 

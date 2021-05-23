@@ -474,7 +474,7 @@ namespace BeastHunterHubUI
         {
             SetScrollViewParentForPanel(_inventoryItemsPanel, _hikeInventoryScrollView);
 
-            _travelTimeText.text = HubUIServices.SharedInstance.TravelTimeService.
+            _travelTimeText.text = HubUIServices.SharedInstance.TimeService.
                 GetFullPhraseAboutTravelTime(_selected.MapObject as LocationModel);
             _hikePanel.SetActive(true);
         }

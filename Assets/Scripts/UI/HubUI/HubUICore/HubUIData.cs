@@ -36,6 +36,9 @@ namespace BeastHunterHubUI
         [Space(20, order = 1), Header("QUEST ROOM SETTINGS", order = 2)]
         public QuestRoomDataStruct QuestRoomDataStruct;
 
+        [Space(20, order = 1), Header("WORK ROOM SETTINGS", order = 2)]
+        public WorkRoomUIDataStruct WorkRoomDataStruct;
+
         #endregion
 
 

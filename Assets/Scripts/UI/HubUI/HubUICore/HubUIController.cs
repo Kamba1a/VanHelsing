@@ -19,6 +19,7 @@ namespace BeastHunterHubUI
 
         private MapBehaviour _mapBehaviour;
         private QuestRoomUIBehaviour _questRoomUIBehaviour;
+        private WorkRoomUIBehaviour _workRoomUIBehaviour;
 
         #endregion
 
@@ -33,9 +34,11 @@ namespace BeastHunterHubUI
 
             _mapBehaviour = GetComponentInChildren<MapBehaviour>(true);
             _questRoomUIBehaviour = GetComponentInChildren<QuestRoomUIBehaviour>(true);
+            _workRoomUIBehaviour = GetComponentInChildren<WorkRoomUIBehaviour>(true);
 
             Add(_mapBehaviour);
             Add(_questRoomUIBehaviour);
+            Add(_workRoomUIBehaviour);
         }
 
         private void Start()

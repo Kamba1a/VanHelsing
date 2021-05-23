@@ -32,6 +32,34 @@ namespace BeastHunterHubUI
 
         #region Methods
 
+        public int GetMinOrderCompleteTime()
+        {
+            int? minNumber = null;
+            for (int i = 0; i < OrdersSlots.GetSlotsCount(); i++)
+            {
+                ItemOrderModel order = OrdersSlots.GetElementBySlot(i);
+                if (order != null)
+                {
+                    if (!minNumber.HasValue)
+                    {
+                        minNumber = order.HoursNumberToComplete;
+                    }
+                    else
+                    {
+                        if (minNumber.Value > order.HoursNumberToComplete)
+                        {
+                            minNumber = order.HoursNumberToComplete;
+                        }
+                    }
+                }
+            }
+            if (!minNumber.HasValue)
+            {
+                minNumber = 0;
+            }
+            return minNumber.Value;
+        }
+
         protected override void RoomImprove()
         {
             OrdersSlots.AddSlots(ProgressScheme[Level].OrderSlots - OrdersSlots.GetSlotsCount());

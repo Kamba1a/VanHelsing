@@ -120,3 +120,6 @@ MonoBehaviour:
     _questListItemPrefab: {fileID: 4561106657247383774, guid: 1f6cb4251a86aab46912695617d8e932,
       type: 3}
     _huntingQuestAmount: 2
+  WorkRoomDataStruct:
+    _workRoomButtonPrefab: {fileID: 6542063352831393134, guid: 422c2fe1f43e8e2489906de36f97dc94,
+      type: 3}

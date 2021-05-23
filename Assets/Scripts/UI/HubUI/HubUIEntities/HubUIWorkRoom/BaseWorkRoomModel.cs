@@ -58,12 +58,15 @@ namespace BeastHunterHubUI
             AssistantWorkplaces.OnPutElementToSlotHandler += OnAssistantAddBase;
             AssistantWorkplaces.OnTakeElementFromSlotHandler += OnAssistantRemoveBase;
 
-            for (int i = 0; i < roomStruct.Assistants.Count; i++)
+            if (roomStruct.Assistants != null)
             {
-                if (!AssistantWorkplaces.PutElementToFirstEmptySlot(roomStruct.Assistants[i]))
+                for (int i = 0; i < roomStruct.Assistants.Count; i++)
                 {
-                    Debug.LogError("Incorrect input parameter: assistans amount more than the number of slots");
-                    break;
+                    if (!AssistantWorkplaces.PutElementToFirstEmptySlot(roomStruct.Assistants[i]))
+                    {
+                        Debug.LogError("Incorrect input parameter: assistans amount more than the number of slots");
+                        break;
+                    }
                 }
             }
         }
@@ -82,10 +85,13 @@ namespace BeastHunterHubUI
 
         public void LevelUp()
         {
-            Level += 1;
-            AssistantWorkplaces.AddSlots(ProgressScheme[Level].AssistansAmount - AssistantWorkplaces.GetSlotsCount());
-            RoomImprove();
-            OnLevelUp();
+            if (ProgressScheme.ContainsKey(Level + 1))
+            {
+                Level += 1;
+                AssistantWorkplaces.AddSlots(ProgressScheme[Level].AssistansAmount - AssistantWorkplaces.GetSlotsCount());
+                RoomImprove();
+                OnLevelUp();
+            }
         }
 
         private void OnChiefAddBase(CharacterStorageType storageType, int slotIndex, CharacterModel character)
