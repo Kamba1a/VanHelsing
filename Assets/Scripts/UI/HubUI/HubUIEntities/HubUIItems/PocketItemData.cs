@@ -8,17 +8,7 @@ namespace BeastHunterHubUI
     {
         #region Properties
 
-        public override ItemType ItemType { get; protected set; }
-
-        #endregion
-
-
-        #region UnityMethods
-
-        private void OnEnable()
-        {
-            ItemType = ItemType.PocketItem;
-        }
+        public override ItemType ItemType => ItemType.PocketItem;
 
         #endregion
     }

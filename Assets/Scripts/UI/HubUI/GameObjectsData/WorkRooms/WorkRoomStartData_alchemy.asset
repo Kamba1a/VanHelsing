@@ -20,12 +20,12 @@ MonoBehaviour:
     - _level: 1
       _progress:
         _assistansAmount: 3
-        _recipesSlots: 3
+        _ordersSlots: 1
     - _level: 2
       _progress:
         _assistansAmount: 4
-        _recipesSlots: 4
+        _ordersSlots: 1
     - _level: 3
       _progress:
         _assistansAmount: 5
-        _recipesSlots: 5
+        _ordersSlots: 1

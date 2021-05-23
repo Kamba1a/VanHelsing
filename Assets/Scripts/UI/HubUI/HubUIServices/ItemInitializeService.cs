@@ -23,6 +23,9 @@ namespace BeastHunterHubUI
                 case ItemType.Weapon:
                     return new WeaponItemModel(data as WeaponItemData);
 
+                case ItemType.Ingredient:
+                    return new IngredientItemModel(data as IngredientItemData);
+
                 default:
                     Debug.LogError(this + ": incorrect HubMapUIItemType");
                     return null;

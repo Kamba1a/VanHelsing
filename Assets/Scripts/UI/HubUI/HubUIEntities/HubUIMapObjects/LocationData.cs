@@ -13,7 +13,7 @@ namespace BeastHunterHubUI
         [SerializeField] private Sprite _screenshot;
         [SerializeField] private int _travelTime;
         [SerializeField] private DwellerData[] _dwellers;
-        [SerializeField] private IngredientData[] _ingredients;
+        [SerializeField] private IngredientItemData[] _ingredients;
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace BeastHunterHubUI
         public Sprite Screenshot => _screenshot;
         public int TravelTime => _travelTime;
         public DwellerData[] Dwellers => _dwellers;
-        public IngredientData[] Ingredients => _ingredients;
+        public IngredientItemData[] Ingredients => _ingredients;
 
         #endregion
 

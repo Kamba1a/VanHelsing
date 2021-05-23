@@ -29,17 +29,7 @@ namespace BeastHunterHubUI
         public string[] ClothesPartsNamesMale => (string[])_clothesPartsNamesMale?.Clone();
         public string[] ClothesPartsNamesFemale => (string[])_clothesPartsNamesFemale?.Clone();
         public CharacterHeadPartType[] DisabledHeadParts => (CharacterHeadPartType[])_disabledHeadParts?.Clone();
-        public override ItemType ItemType { get; protected set; }
-
-        #endregion
-
-
-        #region UnityMethods
-
-        private void OnEnable()
-        {
-            ItemType = ItemType.Clothes;
-        }
+        public override ItemType ItemType => ItemType.Clothes;
 
         #endregion
     }

@@ -16,17 +16,7 @@ namespace BeastHunterHubUI
         #region Properties
 
         public bool IsTwoHanded => _isTwoHanded;
-        public override ItemType ItemType { get; protected set; }
-
-        #endregion
-
-
-        #region UnityMethods
-
-        private void OnEnable()
-        {
-            ItemType = ItemType.Weapon;
-        }
+        public override ItemType ItemType => ItemType.Weapon;
 
         #endregion
     }

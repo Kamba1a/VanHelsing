@@ -11,7 +11,7 @@ namespace BeastHunterHubUI
         public Sprite Screenshot { get; private set;}
         public int TravelTime { get; private set; }
         public DwellerData[] Dwellers { get; private set; }
-        public IngredientData[] Ingredients { get; private set; }
+        public IngredientItemData[] Ingredients { get; private set; }
 
         #endregion
 

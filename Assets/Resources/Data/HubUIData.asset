@@ -39,6 +39,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: f6e185ac30a19194cbf45439c92e3b36, type: 2}
     - {fileID: 11400000, guid: 8460c4d8fab1f4d4399d4e7e715de911, type: 2}
     - {fileID: 11400000, guid: 899f376411d00d646aeb701d5ddb4f7e, type: 2}
+    - {fileID: 11400000, guid: 0095dc81f4df59045abcc52e5a8d23d1, type: 2}
     _startHiredCharacters:
     - {fileID: 11400000, guid: 9fb474a159a104d49a106419732f29d4, type: 2}
     - {fileID: 11400000, guid: 5bedb4bb121491a418e9a717db215ba4, type: 2}

@@ -19,7 +19,7 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public abstract ItemType ItemType { get; protected set; }
+        public abstract ItemType ItemType { get; }
         public string Name => _name;
         public string Description => _description;
         public Sprite Icon => _icon;
