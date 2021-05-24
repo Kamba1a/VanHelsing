@@ -97,7 +97,7 @@ namespace BeastHunterHubUI
 
             if (adjacendSlotIndex.HasValue)
             {
-                OnTwoHandedWeapon(adjacendSlotIndex.Value, GetItemIconBySlot(putSlotIndex));
+                OnTwoHandedWeapon(adjacendSlotIndex.Value, GetElementSpriteBySlot(putSlotIndex));
             }
 
             return isSucceful;

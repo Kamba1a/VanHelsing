@@ -25,11 +25,6 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public override void FillSlotInfo(int slotIndex, bool isDragAndDropOn)
-        {
-            base.FillSlotInfo(slotIndex, isDragAndDropOn);
-        }
-
         public override void RemoveAllListeners()
         {
             base.RemoveAllListeners();

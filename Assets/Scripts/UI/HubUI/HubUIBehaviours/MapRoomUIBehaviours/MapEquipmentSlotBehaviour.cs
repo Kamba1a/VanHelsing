@@ -15,9 +15,9 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public void FillSlotInfo(int slotIndex, bool isDragAndDropOn, Sprite slotSprite)
+        public void Initialize(int slotIndex, bool isDragAndDropOn, Sprite slotSprite)
         {
-            base.FillSlotInfo(slotIndex, isDragAndDropOn);
+            base.Initialize(slotIndex, isDragAndDropOn);
             _slotImage.sprite = slotSprite;
             _slotImage.enabled = true;
         }

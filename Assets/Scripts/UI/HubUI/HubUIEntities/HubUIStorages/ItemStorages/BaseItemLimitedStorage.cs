@@ -8,7 +8,7 @@ namespace BeastHunterHubUI
         public BaseItemLimitedStorage(int slotsAmount, ItemStorageType storageType) : base(slotsAmount, storageType) { }
 
 
-        public virtual Sprite GetItemIconBySlot(int slotIndex)
+        public override Sprite GetElementSpriteBySlot(int slotIndex)
         {
             if (_elementSlots[slotIndex] != null)
             {

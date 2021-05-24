@@ -36,6 +36,8 @@ namespace BeastHunterHubUI
         public abstract bool PutElement(int slotIndex, ElementType element);
         public abstract bool PutElementToFirstEmptySlot(ElementType element);
         public abstract bool RemoveElement(int slotIndex);
+        public abstract Sprite GetElementSpriteBySlot(int slotIndex);
+
         public abstract void ClearSlots();
 
         public virtual ElementType GetElementBySlot(int slotIndex)

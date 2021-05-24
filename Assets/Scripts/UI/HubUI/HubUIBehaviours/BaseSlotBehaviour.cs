@@ -43,7 +43,7 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public virtual void FillSlotInfo(int slotIndex, bool isDragAndDropOn)
+        public virtual void Initialize(int slotIndex, bool isDragAndDropOn)
         {
             _isInteractable = true;
             _itemImage.enabled = false;

@@ -1,5 +1,5 @@
 ﻿using System;
-
+using UnityEngine;
 
 namespace BeastHunterHubUI
 {
@@ -44,6 +44,18 @@ namespace BeastHunterHubUI
                 }
             }
             return false;
+        }
+
+        public override Sprite GetElementSpriteBySlot(int slotIndex)
+        {
+            if (_elementSlots[slotIndex] != null)
+            {
+                return _elementSlots[slotIndex].Recipe.Item.Icon;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

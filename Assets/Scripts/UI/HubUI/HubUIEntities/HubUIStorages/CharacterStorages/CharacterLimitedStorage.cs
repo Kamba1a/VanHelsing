@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using UnityEngine;
 
 
 namespace BeastHunterHubUI
@@ -6,7 +6,6 @@ namespace BeastHunterHubUI
     public class CharacterLimitedStorage : BaseLimitedStorage<CharacterModel, CharacterStorageType>
     {
         public CharacterLimitedStorage(int slotsAmount, CharacterStorageType storageType) : base(slotsAmount, storageType) { }
-
 
         public override bool PutElement(int slotIndex, CharacterModel character)
         {
@@ -44,6 +43,18 @@ namespace BeastHunterHubUI
                 }
             }
             return false;
+        }
+
+        public override Sprite GetElementSpriteBySlot(int slotIndex)
+        {
+            if (_elementSlots[slotIndex] != null)
+            {
+                return _elementSlots[slotIndex].Portrait;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
