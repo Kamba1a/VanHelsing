@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    public class CharacterUnlimitedStorage : BaseStorage<CharacterModel, CharacterStorageType>
+    public class CharacterUnlimitedStorage : BaseCharacterStorage
     {
         public CharacterUnlimitedStorage(CharacterStorageType storageType) : base(storageType)
         {

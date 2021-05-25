@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace BeastHunterHubUI
 {
-    public abstract class BaseSlotBehaviour : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    public abstract class BaseSlotBehaviour<StorageType> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler where StorageType : Enum
     {
         #region Constants
 
@@ -25,26 +25,28 @@ namespace BeastHunterHubUI
         protected int _slotIndex;
         protected bool _isInteractable;
         protected bool _isDragAndDropOn;
+        protected StorageType _storageType;
 
         #endregion
 
 
         #region Properties
 
-        public Action<int> OnBeginDragItemHandler { get; set; }
-        public Action<int> OnEndDragItemHandler { get; set; }
-        public Action<int> OnDroppedItemHandler { get; set; }
-        public Action<int> OnPointerEnterHandler { get; set; }
-        public Action<int> OnPointerExitHandler { get; set; }
-        public Action<int> OnDoubleClickButtonHandler { get; set; }
+        public Action<int, StorageType> OnBeginDragItemHandler { get; set; }
+        public Action<int, StorageType> OnEndDragItemHandler { get; set; }
+        public Action<int, StorageType> OnDroppedItemHandler { get; set; }
+        public Action<int, StorageType> OnPointerEnterHandler { get; set; }
+        public Action<int, StorageType> OnPointerExitHandler { get; set; }
+        public Action<int, StorageType> OnDoubleClickButtonHandler { get; set; }
 
         #endregion
 
 
         #region Methods
 
-        public virtual void Initialize(int slotIndex, bool isDragAndDropOn)
+        public virtual void Initialize(int slotIndex, StorageType storageType, bool isDragAndDropOn)
         {
+            _storageType = storageType;
             _isInteractable = true;
             _itemImage.enabled = false;
             _slotIndex = slotIndex;
@@ -90,7 +92,7 @@ namespace BeastHunterHubUI
             {
                 if (Time.time < _lastClickTime + DOUBLECLICK_TIME)
                 {
-                        OnDoubleClickButtonHandler?.Invoke(_slotIndex);
+                        OnDoubleClickButtonHandler?.Invoke(_slotIndex, _storageType);
                 }
                 _lastClickTime = Time.time;
              }
@@ -119,7 +121,7 @@ namespace BeastHunterHubUI
 
                     FillSlot(null);
 
-                    OnBeginDragItemHandler?.Invoke(_slotIndex);
+                    OnBeginDragItemHandler?.Invoke(_slotIndex, _storageType);
                 }
             }
         }
@@ -147,7 +149,7 @@ namespace BeastHunterHubUI
             if (_draggedObject != null)
             {
                 Destroy(_draggedObject);
-                OnEndDragItemHandler?.Invoke(_slotIndex);
+                OnEndDragItemHandler?.Invoke(_slotIndex, _storageType);
             }
         }
 
@@ -160,7 +162,7 @@ namespace BeastHunterHubUI
         {
             if (_isInteractable && _isDragAndDropOn)
             {
-                OnDroppedItemHandler?.Invoke(_slotIndex);
+                OnDroppedItemHandler?.Invoke(_slotIndex, _storageType);
             }
         }
 
@@ -173,7 +175,7 @@ namespace BeastHunterHubUI
         {
             if (_itemImage.sprite != null && _isInteractable)
             {
-                OnPointerEnterHandler?.Invoke(_slotIndex);
+                OnPointerEnterHandler?.Invoke(_slotIndex, _storageType);
             }
         }
 
@@ -186,7 +188,7 @@ namespace BeastHunterHubUI
         {
             if (_itemImage.sprite != null)
             {
-                OnPointerExitHandler?.Invoke(_slotIndex);
+                OnPointerExitHandler?.Invoke(_slotIndex, _storageType);
             }
         }
 

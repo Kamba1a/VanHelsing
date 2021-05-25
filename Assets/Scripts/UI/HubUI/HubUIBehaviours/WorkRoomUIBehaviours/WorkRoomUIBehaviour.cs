@@ -26,6 +26,7 @@ namespace BeastHunterHubUI
         private HubUIContext _context;
         private HubUIData _data;
         private (int? slotIndex, CharacterStorageType storageType) _draggedCharacterInfo;
+        WorkRoomModel _selectedRoom;
 
 
         private void OnEnable()
@@ -52,7 +53,11 @@ namespace BeastHunterHubUI
                 InitializeWorkRoomButton(_context.WorkRooms[i]);
             }
 
-            //todo: _chiefSlotBehaviour initialize
+            _chiefSlotBehaviour.Initialize(0, CharacterStorageType.ChiefWorkplace, true);
+            _chiefSlotBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
+            _chiefSlotBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
+            _chiefSlotBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
+
             //todo: _charactersFillablePanel initialize
 
             _roomButtonsFillablePanel.SetActive(true);
@@ -70,12 +75,18 @@ namespace BeastHunterHubUI
 
         private void OnClick_RoomButton(WorkRoomModel model)
         {
+            _selectedRoom = model;
             FillRoomPanel(model);
             _roomPanel.SetActive(true);
         }
 
         private void OnClick_CloseRoomButton()
         {
+            _selectedRoom = null;
+            _roomPanel.SetActive(false);
+
+            _selectedRoom.ChiefWorkplace.OnPutElementToSlotHandler -= FillCharacterSlotUI;
+            _selectedRoom.ChiefWorkplace.OnTakeElementFromSlotHandler -= FillCharacterSlotUI;
             //todo: close and clear
         }
 
@@ -87,9 +98,16 @@ namespace BeastHunterHubUI
         private void FillRoomPanel(WorkRoomModel room)
         {
             _roomNameText.text = room.Name;
-            //todo: _chiefSlotBehaviour fill slot logic
-            _chiefSkillLevelImage.fillAmount = room.ChiefWorkplace.GetElementBySlot(0).TemporarySkillLevelForDebug/100;
-            _chiefSkillLevelText.text = room.ChiefWorkplace.GetElementBySlot(0).TemporarySkillLevelForDebug.ToString() + "%";
+
+            CharacterModel chief = room.ChiefWorkplace.GetElementBySlot(0);
+            if (chief != null)
+            {
+                _chiefSlotBehaviour.FillSlot(chief.Portrait);
+                _chiefSkillLevelImage.fillAmount = chief.TemporarySkillLevelForDebug / 100;
+                _chiefSkillLevelText.text = chief.TemporarySkillLevelForDebug.ToString() + "%";
+            }
+            room.ChiefWorkplace.OnPutElementToSlotHandler += FillCharacterSlotUI;
+            room.ChiefWorkplace.OnTakeElementFromSlotHandler += FillCharacterSlotUI;
 
             for (int i = 0; i < room.AssistantWorkplaces.GetSlotsCount(); i++)
             {
@@ -144,14 +162,14 @@ namespace BeastHunterHubUI
 
         private void FillCharacterSlotUI(CharacterStorageType storageType, int slotIndex, CharacterModel character)
         {
-            BaseStorage<CharacterModel,Enum> storage = GetCharacterStorageByType(storageType);
+            BaseCharacterStorage storage = GetCharacterStorageByType(storageType);
             Sprite sprite = storage.GetElementSpriteBySlot(slotIndex);
 
             switch (storageType)
             {
                 case CharacterStorageType.ChiefWorkplace:
 
-                    //_characterBackpackSlotsUIBehaviours[slotIndex].FillSlot(sprite);
+                    _chiefSlotBehaviour.FillSlot(sprite);
 
                     break;
 
@@ -163,13 +181,21 @@ namespace BeastHunterHubUI
             }
         }
 
-        private BaseStorage<CharacterModel, Enum> GetCharacterStorageByType(CharacterStorageType storageType)
+        private BaseCharacterStorage GetCharacterStorageByType(CharacterStorageType storageType)
         {
-            BaseStorage<CharacterModel, Enum> storage = null;
+            BaseCharacterStorage storage = null;
             switch (storageType)
             {
                 case CharacterStorageType.ChiefWorkplace:
-                    //storage = _selected.Character.Backpack;
+                    storage = _selectedRoom.ChiefWorkplace;
+                    break;
+
+                case CharacterStorageType.AssistantWorkplaces:
+                    storage = _selectedRoom.AssistantWorkplaces;
+                    break;
+
+                case CharacterStorageType.AvailableHunters:
+                    storage = _context.Player.AvailableHunters;
                     break;
 
                 default:

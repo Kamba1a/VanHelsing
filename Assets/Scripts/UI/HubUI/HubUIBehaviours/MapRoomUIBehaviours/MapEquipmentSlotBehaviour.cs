@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace BeastHunterHubUI
 {
-    public class MapEquipmentSlotBehaviour : BaseSlotBehaviour
+    public class MapEquipmentSlotBehaviour : BaseSlotBehaviour<ItemStorageType>
     {
         #region Fields
 
@@ -15,9 +15,9 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public void Initialize(int slotIndex, bool isDragAndDropOn, Sprite slotSprite)
+        public void Initialize(int slotIndex, ItemStorageType stotageType, bool isDragAndDropOn, Sprite slotSprite)
         {
-            base.Initialize(slotIndex, isDragAndDropOn);
+            base.Initialize(slotIndex, stotageType, isDragAndDropOn);
             _slotImage.sprite = slotSprite;
             _slotImage.enabled = true;
         }

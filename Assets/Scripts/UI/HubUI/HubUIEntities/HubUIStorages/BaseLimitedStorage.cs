@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace BeastHunterHubUI
 {
     public abstract class BaseLimitedStorage<ElementType, EnumStorageType> : BaseStorage<ElementType, EnumStorageType> where EnumStorageType : Enum 
     {
         #region Properties
 
-        public virtual Action<EnumStorageType, int, ElementType> OnPutElementToSlotHandler { get; set; }
-        public virtual Action<EnumStorageType, int, ElementType> OnTakeElementFromSlotHandler { get; set; }
-        public virtual Action<EnumStorageType> OnStorageResizeHandler { get; set; }
+        public Action<EnumStorageType, int, ElementType> OnPutElementToSlotHandler { get; set; }
+        public Action<EnumStorageType, int, ElementType> OnTakeElementFromSlotHandler { get; set; }
+        public Action<EnumStorageType> OnStorageResizeHandler { get; set; }
 
 
         #endregion
@@ -71,17 +72,17 @@ namespace BeastHunterHubUI
             }
         }
 
-        protected virtual void OnPutElementToSlot(int slotIndex, ElementType newElement)
+        protected void OnPutElementToSlot(int slotIndex, ElementType newElement)
         {
             OnPutElementToSlotHandler?.Invoke(StorageType, slotIndex, newElement);
         }
 
-        protected virtual void OnTakeElementFromSlot(int slotIndex, ElementType takedElement)
+        protected void OnTakeElementFromSlot(int slotIndex, ElementType takedElement)
         {
             OnTakeElementFromSlotHandler?.Invoke(StorageType, slotIndex, takedElement);
         }
 
-        protected virtual void OnStorageResize()
+        protected void OnStorageResize()
         {
             OnStorageResizeHandler?.Invoke(StorageType);
         }

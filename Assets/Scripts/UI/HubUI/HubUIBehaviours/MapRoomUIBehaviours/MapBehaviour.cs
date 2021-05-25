@@ -650,19 +650,26 @@ namespace BeastHunterHubUI
 
         #region OnPointer
 
-        private void OnPointerDown_InventorySlot(int slotIndex)
+        private void OnPointerDown_Slot(int slotIndex, ItemStorageType storageType)
         {
-            _selected.GeneralInventorySlotIndex = slotIndex;
-        }
+            switch (storageType)
+            {
+                case ItemStorageType.GeneralInventory:
+                    _selected.GeneralInventorySlotIndex = slotIndex;
+                    break;
 
-        private void OnPointerDown_BuyBackSlot(int slotIndex)
-        {
-            _selected.BuyBackSlotIndex = slotIndex;
-        }
+                case ItemStorageType.BuyBackStorage:
+                    _selected.BuyBackSlotIndex = slotIndex;
+                    break;
 
-        private void OnPointerDown_ShopSlot(int slotIndex)
-        {
-            _selected.ShopSlotIndex = slotIndex;
+                case ItemStorageType.ShopStorage:
+                    _selected.ShopSlotIndex = slotIndex;
+                    break;
+
+                default:
+                    Debug.LogError("Incorrect ItemStorageType");
+                    break;
+            }
         }
 
         private void OnPointerEnter_Slot(int slotIndex, ItemStorageType storageType)
@@ -671,7 +678,7 @@ namespace BeastHunterHubUI
             _showTooltipCoroutine = StartCoroutine(ShowTooltip(slotIndex, storageType));
         }
 
-        private void OnPointerExit_Slot(int slotIndex)
+        private void OnPointerExit_Slot(int slotIndex, ItemStorageType storageType)
         {
             StopShowTooltipCoroutine();
             _tooltip.SetActive(false);
@@ -1007,12 +1014,12 @@ namespace BeastHunterHubUI
             {
                 GameObject slotUI = InstantiateUIObject(_data.MapDataStruct.EquipmentSlotUIPrefab, _pocketSlotsPanel);
                 MapEquipmentSlotBehaviour slotBehaviour = slotUI.GetComponent<MapEquipmentSlotBehaviour>();
-                slotBehaviour.Initialize(i, true, _data.MapDataStruct.PocketItemSlotIcon);
+                slotBehaviour.Initialize(i, ItemStorageType.PocketsStorage, true, _data.MapDataStruct.PocketItemSlotIcon);
                 slotBehaviour.FillSlot(_selected.Character.Pockets.GetElementSpriteBySlot(i));
-                slotBehaviour.OnBeginDragItemHandler = (slotIndex) => OnBeginDragItemFromSlot(slotIndex, ItemStorageType.PocketsStorage);
-                slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, ItemStorageType.PocketsStorage);
-                slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, ItemStorageType.PocketsStorage);
-                slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, ItemStorageType.PocketsStorage);
+                slotBehaviour.OnBeginDragItemHandler = OnBeginDragItemFromSlot;
+                slotBehaviour.OnDroppedItemHandler = OnDropItemToSlot;
+                slotBehaviour.OnEndDragItemHandler = OnEndDragItem;
+                slotBehaviour.OnPointerEnterHandler = OnPointerEnter_Slot;
                 slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
                 _characterPocketsSlotsBehaviours.Add(slotBehaviour);
             }
@@ -1040,13 +1047,13 @@ namespace BeastHunterHubUI
             GameObject backpackSlotUI = InstantiateUIObject(_data.MapDataStruct.CharacterBackpackSlotUIPrefab, _characterInventoryPanel);
 
             MapStorageSlotBehaviour slotBehaviour = backpackSlotUI.GetComponent<MapStorageSlotBehaviour>();
-            slotBehaviour.Initialize(slotIndex, true);
+            slotBehaviour.Initialize(slotIndex, ItemStorageType.CharacterBackpack, true);
             slotBehaviour.SetInteractable(false);
-            slotBehaviour.OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_StorageSlot(slotIndex, ItemStorageType.CharacterBackpack);
-            slotBehaviour.OnBeginDragItemHandler = (slotIndex) => OnBeginDragItemFromSlot(slotIndex, ItemStorageType.CharacterBackpack);
-            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, ItemStorageType.CharacterBackpack);
-            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, ItemStorageType.CharacterBackpack);
-            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, ItemStorageType.CharacterBackpack);
+            slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_StorageSlot;
+            slotBehaviour.OnBeginDragItemHandler = OnBeginDragItemFromSlot;
+            slotBehaviour.OnDroppedItemHandler = OnDropItemToSlot;
+            slotBehaviour.OnEndDragItemHandler = OnEndDragItem;
+            slotBehaviour.OnPointerEnterHandler = OnPointerEnter_Slot;
             slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _characterBackpackSlotsUIBehaviours.Add(slotBehaviour);
@@ -1057,13 +1064,13 @@ namespace BeastHunterHubUI
             GameObject inventorySlotUI = InstantiateUIObject(_data.MapDataStruct.InventorySlotUIPrefab, _inventoryItemsPanel);
 
             MapStorageSlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<MapStorageSlotBehaviour>();
-            slotBehaviour.Initialize(slotIndex, true);
-            slotBehaviour.OnPointerDownHandler = OnPointerDown_InventorySlot;
-            slotBehaviour.OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_StorageSlot(slotIndex, ItemStorageType.GeneralInventory);
-            slotBehaviour.OnBeginDragItemHandler = (slotIndex) => OnBeginDragItemFromSlot(slotIndex, ItemStorageType.GeneralInventory);
-            slotBehaviour.OnDroppedItemHandler = (slotIndex) => OnDropItemToSlot(slotIndex, ItemStorageType.GeneralInventory);
-            slotBehaviour.OnEndDragItemHandler = (slotIndex) => OnEndDragItem(slotIndex, ItemStorageType.GeneralInventory);
-            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, ItemStorageType.GeneralInventory);
+            slotBehaviour.Initialize(slotIndex, ItemStorageType.GeneralInventory, true);
+            slotBehaviour.OnPointerDownHandler = OnPointerDown_Slot;
+            slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_StorageSlot;
+            slotBehaviour.OnBeginDragItemHandler = OnBeginDragItemFromSlot;
+            slotBehaviour.OnDroppedItemHandler = OnDropItemToSlot;
+            slotBehaviour.OnEndDragItemHandler = OnEndDragItem;
+            slotBehaviour.OnPointerEnterHandler = OnPointerEnter_Slot;
             slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _generalInventorySlotsUIBehaviours.Add(slotBehaviour);
@@ -1074,10 +1081,10 @@ namespace BeastHunterHubUI
             GameObject buyBackSlotUI = InstantiateUIObject(_data.MapDataStruct.ShopSlotUIPrefab, _buyBackItemsPanel);
 
             MapStorageSlotBehaviour slotBehaviour = buyBackSlotUI.GetComponent<MapStorageSlotBehaviour>();
-            slotBehaviour.Initialize(slotIndex, false);
+            slotBehaviour.Initialize(slotIndex, ItemStorageType.BuyBackStorage, false);
             slotBehaviour.SetInteractable(false);
-            slotBehaviour.OnPointerDownHandler = OnPointerDown_BuyBackSlot;
-            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, ItemStorageType.BuyBackStorage);
+            slotBehaviour.OnPointerDownHandler = OnPointerDown_Slot;
+            slotBehaviour.OnPointerEnterHandler = OnPointerEnter_Slot;
             slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _buyBackSlotsUIBehaviours.Add(slotBehaviour);
@@ -1088,10 +1095,10 @@ namespace BeastHunterHubUI
             GameObject shopSlotUI = InstantiateUIObject(_data.MapDataStruct.ShopSlotUIPrefab, _buyingItemsPanel);
 
             MapShopSlotBehaviour slotBehaviour = shopSlotUI.GetComponent<MapShopSlotBehaviour>();
-            slotBehaviour.Initialize(slotIndex, false);
+            slotBehaviour.Initialize(slotIndex, ItemStorageType.ShopStorage, false);
             slotBehaviour.SetInteractable(false);
-            slotBehaviour.OnPointerDownHandler = OnPointerDown_ShopSlot;
-            slotBehaviour.OnPointerEnterHandler = (slotIndex) => OnPointerEnter_Slot(slotIndex, ItemStorageType.ShopStorage);
+            slotBehaviour.OnPointerDownHandler = OnPointerDown_Slot;
+            slotBehaviour.OnPointerEnterHandler = OnPointerEnter_Slot;
             slotBehaviour.OnPointerExitHandler = OnPointerExit_Slot;
 
             _shopSlotsUIBehaviours.Add(slotBehaviour);
@@ -1133,26 +1140,26 @@ namespace BeastHunterHubUI
         private void FillCharacterClothesSlot(int slotIndex)
         {
             Sprite slotSprite = _data.MapDataStruct.GetClothSlotSpriteByType(_data.AllCharactersData.ClothesSlots[slotIndex]);
-            _characterClothesSlotsUIBehaviours[slotIndex].Initialize(slotIndex, true, slotSprite);
+            _characterClothesSlotsUIBehaviours[slotIndex].Initialize(slotIndex, ItemStorageType.ClothesEquipment, true, slotSprite);
             _characterClothesSlotsUIBehaviours[slotIndex].SetInteractable(false);
-            _characterClothesSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_CharacterEquipmentSlot(slotIndex, ItemStorageType.ClothesEquipment);
-            _characterClothesSlotsUIBehaviours[slotIndex].OnBeginDragItemHandler += (slotIndex) => OnBeginDragItemFromSlot(slotIndex, ItemStorageType.ClothesEquipment);
-            _characterClothesSlotsUIBehaviours[slotIndex].OnEndDragItemHandler += (slotIndex) => OnEndDragItem(slotIndex, ItemStorageType.ClothesEquipment);
-            _characterClothesSlotsUIBehaviours[slotIndex].OnDroppedItemHandler += (slotIndex) => OnDropItemToSlot(slotIndex, ItemStorageType.ClothesEquipment);
-            _characterClothesSlotsUIBehaviours[slotIndex].OnPointerEnterHandler += (slotIndex) => OnPointerEnter_Slot(slotIndex, ItemStorageType.ClothesEquipment);
+            _characterClothesSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = OnDoubleClick_CharacterEquipmentSlot;
+            _characterClothesSlotsUIBehaviours[slotIndex].OnBeginDragItemHandler += OnBeginDragItemFromSlot;
+            _characterClothesSlotsUIBehaviours[slotIndex].OnEndDragItemHandler += OnEndDragItem;
+            _characterClothesSlotsUIBehaviours[slotIndex].OnDroppedItemHandler += OnDropItemToSlot;
+            _characterClothesSlotsUIBehaviours[slotIndex].OnPointerEnterHandler += OnPointerEnter_Slot;
             _characterClothesSlotsUIBehaviours[slotIndex].OnPointerExitHandler += OnPointerExit_Slot;
         }
 
         private void FillWeaponSlot(int slotIndex)
         {
             Sprite slotSprite = _data.MapDataStruct.WeaponSlotIcon;
-            _characterWeaponSlotsUIBehaviours[slotIndex].Initialize(slotIndex, true, slotSprite);
+            _characterWeaponSlotsUIBehaviours[slotIndex].Initialize(slotIndex, ItemStorageType.WeaponEquipment, true, slotSprite);
             _characterWeaponSlotsUIBehaviours[slotIndex].SetInteractable(false);
-            _characterWeaponSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = (slotIndex) => OnDoubleClick_CharacterEquipmentSlot(slotIndex, ItemStorageType.WeaponEquipment);
-            _characterWeaponSlotsUIBehaviours[slotIndex].OnBeginDragItemHandler += (slotIndex) => OnBeginDragItemFromSlot(slotIndex, ItemStorageType.WeaponEquipment);
-            _characterWeaponSlotsUIBehaviours[slotIndex].OnEndDragItemHandler += (slotIndex) => OnEndDragItem(slotIndex, ItemStorageType.WeaponEquipment);
-            _characterWeaponSlotsUIBehaviours[slotIndex].OnDroppedItemHandler += (slotIndex) => OnDropItemToSlot(slotIndex, ItemStorageType.WeaponEquipment);
-            _characterWeaponSlotsUIBehaviours[slotIndex].OnPointerEnterHandler += (slotIndex) => OnPointerEnter_Slot(slotIndex, ItemStorageType.WeaponEquipment);
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = OnDoubleClick_CharacterEquipmentSlot;
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnBeginDragItemHandler += OnBeginDragItemFromSlot;
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnEndDragItemHandler += OnEndDragItem;
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnDroppedItemHandler += OnDropItemToSlot;
+            _characterWeaponSlotsUIBehaviours[slotIndex].OnPointerEnterHandler += OnPointerEnter_Slot;
             _characterWeaponSlotsUIBehaviours[slotIndex].OnPointerExitHandler += OnPointerExit_Slot;
         }
 
@@ -1390,9 +1397,9 @@ namespace BeastHunterHubUI
             _displayedCurrentCitizensUIBehaviours.Clear();
         }
 
-         private void SetStorageSlotsInteractable<T>(bool flag, IEnumerable<T> slotBehaviours) where T : BaseSlotBehaviour
+         private void SetStorageSlotsInteractable<T>(bool flag, IEnumerable<T> slotBehaviours) where T : BaseSlotBehaviour<ItemStorageType>
         {
-            foreach (BaseSlotBehaviour slot in slotBehaviours)
+            foreach (BaseSlotBehaviour<ItemStorageType> slot in slotBehaviours)
             {
                 slot.SetInteractable(flag);
             }

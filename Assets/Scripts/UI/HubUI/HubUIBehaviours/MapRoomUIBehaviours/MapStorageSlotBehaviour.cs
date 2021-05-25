@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace BeastHunterHubUI
 {
-    public class MapStorageSlotBehaviour : BaseSlotBehaviour, IPointerDownHandler
+    public class MapStorageSlotBehaviour : BaseSlotBehaviour<ItemStorageType>, IPointerDownHandler
     {
         #region Fields
 
@@ -18,7 +18,7 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public Action<int> OnPointerDownHandler { get; set; }
+        public Action<int, ItemStorageType> OnPointerDownHandler { get; set; }
 
         #endregion
 
@@ -56,7 +56,7 @@ namespace BeastHunterHubUI
         {
             if (_isInteractable)
             {
-                OnPointerDownHandler?.Invoke(_slotIndex);
+                OnPointerDownHandler?.Invoke(_slotIndex, _storageType);
             }
         }
 
