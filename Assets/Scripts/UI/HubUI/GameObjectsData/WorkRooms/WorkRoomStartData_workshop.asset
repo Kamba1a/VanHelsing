@@ -15,6 +15,7 @@ MonoBehaviour:
   _workRoomStruct:
     _baseWorkRoomStruct:
       _roomType: 1
+      _usedSkill: 2
       _name: "\u041C\u0430\u0441\u0442\u0435\u0440\u0441\u043A\u0430\u044F"
       _level: 1
       _progressScheme:

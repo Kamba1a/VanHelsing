@@ -25,6 +25,9 @@ namespace BeastHunterHubUI
         [SerializeField] private Button _createOrderButton;
         [SerializeField] private Button _takeMakedItemsButton;
 
+        //TEMPORARY! Remove after debug!
+        [SerializeField] private ItemRecipeData _recipeForDebug;
+
 
         private HubUIContext _context;
         private HubUIData _data;
@@ -80,10 +83,12 @@ namespace BeastHunterHubUI
 
         private void OnClick_CreateOrderButton()
         {
-            //todo
-            if (_selectedRoom.OrdersSlots.IsHasFreeSlots())
+            if (_selectedRoom.OrdersSlots.HasFreeSlots())
             {
-
+                //todo: open craft window
+                //temporary for debug:
+                ItemOrderModel order = new ItemOrderModel(_recipeForDebug, _selectedRoom.OrderTimeReducePercent);
+                _selectedRoom.OrdersSlots.PutElementToFirstEmptySlot(order);
             }
         }
 

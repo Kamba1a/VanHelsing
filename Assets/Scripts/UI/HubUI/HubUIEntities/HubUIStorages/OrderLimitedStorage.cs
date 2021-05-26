@@ -12,7 +12,7 @@ namespace BeastHunterHubUI
         public OrderLimitedStorage(int slotsAmount) : base(slotsAmount, OrderStorageType.None) { }
 
 
-        public bool IsHasFreeSlots()
+        public bool HasFreeSlots()
         {
             for (int i = 0; i < _elementSlots.Count; i++)
             {
@@ -26,36 +26,28 @@ namespace BeastHunterHubUI
 
         public override bool PutElement(int slotIndex, ItemOrderModel order)
         {
-            if (CheckPossibilityFunc.Invoke(slotIndex))
+            bool isSucceful = false;
+
+            if (_elementSlots[slotIndex] == null)
             {
-                bool isSucceful = false;
-
-                if (_elementSlots[slotIndex] == null)
-                {
-                    _elementSlots[slotIndex] = order;
-                    isSucceful = true;
-                }
-                //else
-                //{
-                //    isSucceful = PutElementToFirstEmptySlot(order);
-                //}
-
-                if (isSucceful)
-                {
-                    OnPutElementToSlot(slotIndex, order);
-                }
-                //else
-                //{
-                //    HubUIServices.SharedInstance.GameMessages.Notice(StorageType + " is full");
-                //}
-
-                return isSucceful;
+                _elementSlots[slotIndex] = order;
+                isSucceful = true;
             }
-            else
+            //else
+            //{
+            //    isSucceful = PutElementToFirstEmptySlot(order);
+            //}
+
+            if (isSucceful)
             {
-                Debug.Log($"Impossible to put an element in slot {slotIndex}");
-                return false;
+                OnPutElementToSlot(slotIndex, order);
             }
+            //else
+            //{
+            //    HubUIServices.SharedInstance.GameMessages.Notice(StorageType + " is full");
+            //}
+
+            return isSucceful;
         }
 
         public override bool PutElementToFirstEmptySlot(ItemOrderModel order)
@@ -64,7 +56,14 @@ namespace BeastHunterHubUI
             {
                 if (_elementSlots[i] == null)
                 {
-                    return PutElement(i, order);
+                    if (CheckPossibilityFunc.Invoke(i))
+                    {
+                        return PutElement(i, order);
+                    }
+                    else
+                    {
+                        Debug.Log($"Impossible to put an element in slot {i}");
+                    }
                 }
             }
             return false;

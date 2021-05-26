@@ -123,15 +123,7 @@ namespace BeastHunterHubUI
 
         private bool CheckMakedItemsSlots(int slotIndex)
         {
-            if (MakedItemsSlots.GetElementBySlot(slotIndex) != null)
-            {
-                HubUIServices.SharedInstance.GameMessages.Notice("First take the maked item from slot below");
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return MakedItemsSlots.GetElementBySlot(slotIndex) != null;
         }
 
         private void OnOrderAdd(OrderStorageType storageType, int slotIndex, ItemOrderModel order)

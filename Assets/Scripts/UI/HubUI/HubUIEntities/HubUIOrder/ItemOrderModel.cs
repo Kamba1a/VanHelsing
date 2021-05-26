@@ -76,8 +76,11 @@ namespace BeastHunterHubUI
 
         public void UpdateHoursNumberToComplete(float timeReducePercent)
         {
+            Debug.Log("timeReducePercent " + timeReducePercent);
             float baseHoursToComplete = Recipe.BaseHoursNumberToComplete * timeReducePercent;
+            Debug.Log("baseHoursToComplete " + baseHoursToComplete);
             HoursNumberToComplete = (int)Mathf.Round(baseHoursToComplete * ProgressToComplete);
+            Debug.Log("HoursNumberToComplete " + HoursNumberToComplete);
             _progressPerTick = (100 / HoursNumberToComplete) / 100;
         }
 
