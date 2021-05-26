@@ -222,10 +222,10 @@ namespace BeastHunterHubUI
         private HubUIData _data;
 
         private List<GameObject> _rightInfoPanelObjectsForDestroy;
-        private List<MapStorageSlotBehaviour> _characterBackpackSlotsUIBehaviours;
-        private List<MapStorageSlotBehaviour> _generalInventorySlotsUIBehaviours;
+        private List<MapItemStorageSlotBehaviour> _characterBackpackSlotsUIBehaviours;
+        private List<MapItemStorageSlotBehaviour> _generalInventorySlotsUIBehaviours;
         private List<MapShopSlotBehaviour> _shopSlotsUIBehaviours;
-        private List<MapStorageSlotBehaviour> _buyBackSlotsUIBehaviours;
+        private List<MapItemStorageSlotBehaviour> _buyBackSlotsUIBehaviours;
         private MapEquipmentSlotBehaviour[] _characterClothesSlotsUIBehaviours;
         private MapEquipmentSlotBehaviour[] _characterWeaponSlotsUIBehaviours;
         private List<MapEquipmentSlotBehaviour> _characterPocketsSlotsBehaviours;
@@ -312,9 +312,9 @@ namespace BeastHunterHubUI
             _displayedCurrentCitizensUIBehaviours = new Dictionary<CitizenModel, MapCitizenBehaviour>();
             _displayedDialogAnswerButtons = new List<GameObject>();
 
-            _characterBackpackSlotsUIBehaviours = new List<MapStorageSlotBehaviour>();
-            _generalInventorySlotsUIBehaviours = new List<MapStorageSlotBehaviour>();
-            _buyBackSlotsUIBehaviours = new List<MapStorageSlotBehaviour>();
+            _characterBackpackSlotsUIBehaviours = new List<MapItemStorageSlotBehaviour>();
+            _generalInventorySlotsUIBehaviours = new List<MapItemStorageSlotBehaviour>();
+            _buyBackSlotsUIBehaviours = new List<MapItemStorageSlotBehaviour>();
             _shopSlotsUIBehaviours = new List<MapShopSlotBehaviour>();
             _characterClothesSlotsUIBehaviours = _characterClothPanel.GetComponentsInChildren<MapEquipmentSlotBehaviour>();
             _characterPocketsSlotsBehaviours = new List<MapEquipmentSlotBehaviour>();
@@ -368,9 +368,9 @@ namespace BeastHunterHubUI
                 InitializeShopSlotUI(i);
             }
 
-            for (int i = 0; i < context.Player.AvailableHunters.GetSlotsCount(); i++)
+            for (int i = 0; i < context.Player.AvailableCharacters.GetSlotsCount(); i++)
             {
-                InitializeCharacterUI(context.Player.AvailableHunters.GetElementBySlot(i));
+                InitializeCharacterUI(context.Player.AvailableCharacters.GetElementBySlot(i));
             }
 
             FillItemStorageSlots(ItemStorageType.GeneralInventory);
@@ -431,10 +431,10 @@ namespace BeastHunterHubUI
 
         private void OnClick_OrderButton()  //WIP, just for testing order and event system
         {
-            if (!_context.Player.AvailableHunters.GetElementBySlot(0).IsAssignedToWork)
+            if (!_context.Player.AvailableCharacters.GetElementBySlot(0).IsAssignedToWork)
             {
                 OrderModel testOrder = new OrderModel(OrderType.Alchemy, 4);
-                testOrder.AssignCharacter(_context.Player.AvailableHunters.GetElementBySlot(0));
+                testOrder.AssignCharacter(_context.Player.AvailableCharacters.GetElementBySlot(0));
                 testOrder.OnCompleteHandler += Debug.Log;
             }
         }
@@ -1046,7 +1046,7 @@ namespace BeastHunterHubUI
         {
             GameObject backpackSlotUI = InstantiateUIObject(_data.MapDataStruct.CharacterBackpackSlotUIPrefab, _characterInventoryPanel);
 
-            MapStorageSlotBehaviour slotBehaviour = backpackSlotUI.GetComponent<MapStorageSlotBehaviour>();
+            MapItemStorageSlotBehaviour slotBehaviour = backpackSlotUI.GetComponent<MapItemStorageSlotBehaviour>();
             slotBehaviour.Initialize(slotIndex, ItemStorageType.CharacterBackpack, true);
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_StorageSlot;
@@ -1063,7 +1063,7 @@ namespace BeastHunterHubUI
         {
             GameObject inventorySlotUI = InstantiateUIObject(_data.MapDataStruct.InventorySlotUIPrefab, _inventoryItemsPanel);
 
-            MapStorageSlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<MapStorageSlotBehaviour>();
+            MapItemStorageSlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<MapItemStorageSlotBehaviour>();
             slotBehaviour.Initialize(slotIndex, ItemStorageType.GeneralInventory, true);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_Slot;
             slotBehaviour.OnDoubleClickButtonHandler = OnDoubleClick_StorageSlot;
@@ -1080,7 +1080,7 @@ namespace BeastHunterHubUI
         {
             GameObject buyBackSlotUI = InstantiateUIObject(_data.MapDataStruct.ShopSlotUIPrefab, _buyBackItemsPanel);
 
-            MapStorageSlotBehaviour slotBehaviour = buyBackSlotUI.GetComponent<MapStorageSlotBehaviour>();
+            MapItemStorageSlotBehaviour slotBehaviour = buyBackSlotUI.GetComponent<MapItemStorageSlotBehaviour>();
             slotBehaviour.Initialize(slotIndex, ItemStorageType.BuyBackStorage, false);
             slotBehaviour.SetInteractable(false);
             slotBehaviour.OnPointerDownHandler = OnPointerDown_Slot;

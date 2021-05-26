@@ -36,7 +36,7 @@ namespace BeastHunterHubUI
         public EquippedWeaponStorage WeaponEquipment { get; private set; }
         public bool IsAssignedToWork { get; set; }
         public MapCharacterBehaviour Behaviour { get; set; }
-        public int TemporarySkillLevelForDebug { get; set; } //TEMPORARY! todo: replace to realized skills
+        public Dictionary<SkillType, int> Skills { get; private set; }
 
         #endregion
 
@@ -92,11 +92,12 @@ namespace BeastHunterHubUI
             InitializeDefaultHeadPartsDictionary(data.DefaultHeadParts);
             InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);
             InitializeView3DModel(_allData.Character3DViewModelRendering.transform);
+
+            SkillsInitialize(data.Skills);
         }
 
         public CharacterModel(int rank)
         {
-            TemporarySkillLevelForDebug = 30;
             _allData = BeastHunter.Data.HubUIData.AllCharactersData; ;
             IsFemale = _allData.IsFemale() ? true : false;
             Name = _allData.GetRandonNameFromPool(IsFemale);
@@ -126,6 +127,9 @@ namespace BeastHunterHubUI
             InitializeDefaultHeadPartsDictionary(_allData.GetDefaultHeadModuleParts(IsFemale));
             InitializeDefaultModulePartsDictionary(_allData.GetDefaultBodyModules(IsFemale));
             InitializeView3DModel(_allData.Character3DViewModelRendering.transform);
+
+            //todo: realize skills randomizer by design document
+            SkillsTestInitializeForRandomCharacter(); //TEMPORARY for debug (remove after realization)
         }
 
         #endregion
@@ -433,6 +437,34 @@ namespace BeastHunterHubUI
                     _defaultModulePartsNames.Add(clothesParts.Type, clothesNames);
                 }
             }
+        }
+
+        private void SkillsInitialize(IEnumerable<CharacterSkillLevel> skills)
+        {
+            Skills = new Dictionary<SkillType, int>();
+            foreach (SkillType skillType in Enum.GetValues(typeof(SkillType)))
+            {
+                Skills.Add(skillType, 0);
+            }
+
+            foreach (CharacterSkillLevel skill in skills)
+            {
+                Skills[skill.SkillType] = skill.SkillLevel;
+            }
+
+            Skills.Remove(SkillType.None);
+        }
+
+        /// <summary>TEMPORARY for debug only! (remove after realization)</summary>
+        private void SkillsTestInitializeForRandomCharacter()
+        {
+            Skills = new Dictionary<SkillType, int>();
+            foreach (SkillType skillType in Enum.GetValues(typeof(SkillType)))
+            {
+                Skills.Add(skillType, 30);
+            }
+
+            Skills.Remove(SkillType.None);
         }
 
         #endregion

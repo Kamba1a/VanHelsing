@@ -1,6 +1,6 @@
 ﻿namespace BeastHunterHubUI
 {
-    class WorkRoomMakedItemSlotBehaviour : BaseSlotBehaviour<CharacterStorageType>
+    class WorkRoomMakedItemSlotBehaviour : BaseSlotBehaviour<ItemStorageType>
     {
     }
 }

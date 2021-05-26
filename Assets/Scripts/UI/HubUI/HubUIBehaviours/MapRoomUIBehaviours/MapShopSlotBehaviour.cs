@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace BeastHunterHubUI
 {
-    class MapShopSlotBehaviour : MapStorageSlotBehaviour
+    class MapShopSlotBehaviour : MapItemStorageSlotBehaviour
     {
         #region Fields
 

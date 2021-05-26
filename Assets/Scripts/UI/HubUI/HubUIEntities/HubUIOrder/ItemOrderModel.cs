@@ -10,6 +10,7 @@ namespace BeastHunterHubUI
 
         protected HubUIEventModel _orderEvent;
         private float _progressPerTick;
+        private int _hoursNumberToComplete;
 
         #endregion
 
@@ -17,11 +18,24 @@ namespace BeastHunterHubUI
         #region Properties
 
         public Action<ItemOrderModel> OnCompleteHandler { get; set; }
+        public Action<int> OnChangeHoursNumberToCompleteHandler { get; set; }
 
-        public int HoursNumberToComplete { get; private set; }
+        public bool IsCompleted { get; private set; }
         public float ProgressToComplete { get; private set; }
         public ItemRecipeData Recipe { get; private set; }
         public BaseItemModel MakedItem { get; private set; }
+        public int HoursNumberToComplete
+        {
+            get => _hoursNumberToComplete;
+            private set
+            {
+                if (value != _hoursNumberToComplete)
+                {
+                    _hoursNumberToComplete = value;
+                    OnChangeHoursNumberToCompleteHandler?.Invoke(_hoursNumberToComplete);
+                }
+            }
+        }
 
         #endregion
 
@@ -30,6 +44,7 @@ namespace BeastHunterHubUI
 
         public ItemOrderModel(ItemRecipeData recipe, float timeReducePercent)
         {
+            IsCompleted = false;
             Recipe = recipe;
             ProgressToComplete = 0.0f;
             UpdateHoursNumberToComplete(timeReducePercent);
@@ -76,6 +91,7 @@ namespace BeastHunterHubUI
         private void Complete()
         {
             //todo: add fail chance
+            IsCompleted = true;
             MakedItem = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(Recipe.Item);
             OnCompleteHandler?.Invoke(this);
         }

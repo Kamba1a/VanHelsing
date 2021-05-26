@@ -10,6 +10,7 @@ namespace BeastHunterHubUI
         #region Fields
 
         [SerializeField] private WorkRoomType _roomType;
+        [SerializeField] private SkillType _usedSkill;
         [SerializeField] private string _name;
         [SerializeField] private int _level;
         [SerializeField] private CharacterModel _chiefWorker;
@@ -22,6 +23,7 @@ namespace BeastHunterHubUI
         #region Properties
 
         public WorkRoomType RoomType => _roomType;
+        public SkillType UsedSkill => _usedSkill;
         public string Name => _name;
         public int Level => _level;
         public CharacterModel ChiefWorker => _chiefWorker;

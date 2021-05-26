@@ -14,14 +14,17 @@ namespace BeastHunterHubUI
         public Action<WorkRoomModel> OnClickButtonHandler { get; set; }
 
 
-        public void FillUIInfo(WorkRoomModel room)
+        public void Initialize(WorkRoomModel room)
         {
             _roomNameText.text = room.Name;
-            int time = room.GetMinOrderCompleteTime();
-            _roomTimeText.text = $"({time} {HubUIServices.SharedInstance.TimeService.GetHoursWord(time)})";
+            UpdateOrderTime(room.MinOrderCompleteTime);
             GetComponent<Button>().onClick.AddListener(() => OnClickButton(room));
         }
 
+        public void UpdateOrderTime(int time)
+        {
+            _roomTimeText.text = $"({time} {HubUIServices.SharedInstance.TimeService.GetHoursWord(time)})";
+        }
 
         private void OnClickButton(WorkRoomModel room)
         {

@@ -7,12 +7,29 @@ namespace BeastHunterHubUI
 {
     public class WorkRoomModel : BaseWorkRoomModel<WorkRoomProgress>
     {
+        private int _minOrderCompleteTime;
+
         #region Properties
 
         public Action<ItemOrderModel> OnOrderCompleteHandler { get; set; }
+        public Action<int> OnChangeMinOrderCompleteTimeHandler { get; set; }
 
         public OrderLimitedStorage OrdersSlots { get; private set; }
+        public ItemLimitedStorage MakedItemsSlots { get; private set; }
         public override Dictionary<int, WorkRoomProgress> ProgressScheme { get; protected set; }
+
+        public int MinOrderCompleteTime
+        {
+            get => _minOrderCompleteTime;
+            private set
+            {
+                if (value != _minOrderCompleteTime)
+                {
+                    _minOrderCompleteTime = value;
+                    OnChangeMinOrderCompleteTimeHandler?.Invoke(_minOrderCompleteTime);
+                }
+            }
+        }
 
         #endregion
 
@@ -25,40 +42,15 @@ namespace BeastHunterHubUI
 
             OrdersSlots.OnPutElementToSlotHandler += OnOrderAdd;
             OrdersSlots.OnTakeElementFromSlotHandler += OnOrderRemove;
+            OrdersSlots.CheckPossibilityFunc = CheckMakedItemsSlots;
+
+            MakedItemsSlots = new ItemLimitedStorage(ProgressScheme[Level].OrderSlots, ItemStorageType.WorkRoomMakedItems);
         }
 
         #endregion
 
 
         #region Methods
-
-        public int GetMinOrderCompleteTime()
-        {
-            int? minNumber = null;
-            for (int i = 0; i < OrdersSlots.GetSlotsCount(); i++)
-            {
-                ItemOrderModel order = OrdersSlots.GetElementBySlot(i);
-                if (order != null)
-                {
-                    if (!minNumber.HasValue)
-                    {
-                        minNumber = order.HoursNumberToComplete;
-                    }
-                    else
-                    {
-                        if (minNumber.Value > order.HoursNumberToComplete)
-                        {
-                            minNumber = order.HoursNumberToComplete;
-                        }
-                    }
-                }
-            }
-            if (!minNumber.HasValue)
-            {
-                minNumber = 0;
-            }
-            return minNumber.Value;
-        }
 
         protected override void RoomImprove()
         {
@@ -74,7 +66,7 @@ namespace BeastHunterHubUI
             float totalLevelSkill = AssistansGeneralSkillLevel;
             if (ChiefWorkplace.GetElementBySlot(0) != null)
             {
-                totalLevelSkill += ChiefWorkplace.GetElementBySlot(0).TemporarySkillLevelForDebug;
+                totalLevelSkill += ChiefWorkplace.GetElementBySlot(0).Skills[UsedSkill];
             }
             return 1 - (totalLevelSkill * maxReducePercent / maxLevelSkill);
         }
@@ -129,6 +121,19 @@ namespace BeastHunterHubUI
             }
         }
 
+        private bool CheckMakedItemsSlots(int slotIndex)
+        {
+            if (MakedItemsSlots.GetElementBySlot(slotIndex) != null)
+            {
+                HubUIServices.SharedInstance.GameMessages.Notice("First take the maked item from slot below");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         private void OnOrderAdd(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
         {
             if (ChiefWorkplace.GetElementBySlot(0) != null)
@@ -136,17 +141,60 @@ namespace BeastHunterHubUI
                 order.OnCompleteHandler += OnOrderComplete;
                 order.AddOrderEvent();
             }
+            order.OnChangeHoursNumberToCompleteHandler += OnChangeOrderTime;
         }
 
         private void OnOrderRemove(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
         {
             order.OnCompleteHandler = null;
+            order.OnChangeHoursNumberToCompleteHandler = null;
             order.RemoveOrderEvent();
+            UpdateMinOrderCompleteTime();
         }
 
         private void OnOrderComplete(ItemOrderModel order)
         {
+            if (!MakedItemsSlots.PutElementToFirstEmptySlot(order.MakedItem))
+            {
+                Debug.LogError("No storage space for maked items!");
+            }
             OnOrderCompleteHandler?.Invoke(order);
+        }
+
+        private void OnChangeOrderTime(int orderTime)
+        {
+            if (orderTime < MinOrderCompleteTime)
+            {
+                MinOrderCompleteTime = orderTime;
+            }
+        }
+
+        private void UpdateMinOrderCompleteTime()
+        {
+            int? minNumber = null;
+            for (int i = 0; i < OrdersSlots.GetSlotsCount(); i++)
+            {
+                ItemOrderModel order = OrdersSlots.GetElementBySlot(i);
+                if (order != null)
+                {
+                    if (!minNumber.HasValue)
+                    {
+                        minNumber = order.HoursNumberToComplete;
+                    }
+                    else
+                    {
+                        if (minNumber.Value > order.HoursNumberToComplete)
+                        {
+                            minNumber = order.HoursNumberToComplete;
+                        }
+                    }
+                }
+            }
+            if (!minNumber.HasValue)
+            {
+                minNumber = 0;
+            }
+            MinOrderCompleteTime = minNumber.Value;
         }
 
         #endregion

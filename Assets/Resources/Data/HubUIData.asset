@@ -123,3 +123,9 @@ MonoBehaviour:
   WorkRoomDataStruct:
     _workRoomButtonPrefab: {fileID: 6542063352831393134, guid: 422c2fe1f43e8e2489906de36f97dc94,
       type: 3}
+    _workerSlotPrefab: {fileID: 1306646833271779637, guid: 59466932bc7fdc048a3cb794d04cb730,
+      type: 3}
+    _orderSlotPrefab: {fileID: 2691191466766241560, guid: 114647e0e418d7e4ab742b56e7d0131f,
+      type: 3}
+    _makedItemSlotPrefab: {fileID: 6189855442535406670, guid: e04f5c587f2972048b9f8b6e999d50ba,
+      type: 3}

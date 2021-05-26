@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,24 +22,33 @@ namespace BeastHunterHubUI
         [SerializeField] private GameObject _ordersSlotsFillablePanel;
         [SerializeField] private GameObject _makedItemsSlotsFillablePanel;
         [SerializeField] private GameObject _charactersFillablePanel;
+        [SerializeField] private Button _createOrderButton;
+        [SerializeField] private Button _takeMakedItemsButton;
 
 
         private HubUIContext _context;
         private HubUIData _data;
         private (int? slotIndex, CharacterStorageType storageType) _draggedCharacterInfo;
         WorkRoomModel _selectedRoom;
+        List<WorkRoomWorkerSlotBehaviour> _assistantsSlotsBehaviours;
+        List<WorkRoomOrderSlotBehaviour> _orderSlotsBehaviours;
+        List<WorkRoomMakedItemSlotBehaviour> _makedItemSlotsBehaviours;
 
 
         private void OnEnable()
         {
             _roomCloseButton.onClick.AddListener(OnClick_CloseRoomButton);
             _roomUpgradeButton.onClick.AddListener(OnClick_UpgradeRoomButton);
+            _createOrderButton.onClick.AddListener(OnClick_CreateOrderButton);
+            _takeMakedItemsButton.onClick.AddListener(OnClick_TakeMakedItemsButton);
         }
 
         private void OnDisable()
         {
             _roomCloseButton.onClick.RemoveAllListeners();
             _roomUpgradeButton.onClick.RemoveAllListeners();
+            _createOrderButton.onClick.RemoveAllListeners();
+            _takeMakedItemsButton.onClick.RemoveAllListeners();
         }
 
 
@@ -47,6 +57,9 @@ namespace BeastHunterHubUI
             _context = context;
             _data = BeastHunter.Data.HubUIData;
 
+            _assistantsSlotsBehaviours = new List<WorkRoomWorkerSlotBehaviour>();
+            _orderSlotsBehaviours = new List<WorkRoomOrderSlotBehaviour>();
+            _makedItemSlotsBehaviours = new List<WorkRoomMakedItemSlotBehaviour>();
 
             for (int i = 0; i < _context.WorkRooms.Count; i++)
             {
@@ -65,12 +78,32 @@ namespace BeastHunterHubUI
         }
 
 
+        private void OnClick_CreateOrderButton()
+        {
+            //todo
+            if (_selectedRoom.OrdersSlots.IsHasFreeSlots())
+            {
+
+            }
+        }
+
+        private void OnClick_TakeMakedItemsButton()
+        {
+            //todo
+        }
+
+        private void OnClick_UpgradeRoomButton()
+        {
+            //todo: open add window
+        }
+
         private void InitializeWorkRoomButton(WorkRoomModel model)
         {
             GameObject buttonUI = InstantiateUIObject(_data.WorkRoomDataStruct.WorkRoomButtonPrefab, _roomButtonsFillablePanel);
             WorkRoomButtonBehaviour behaviour = buttonUI.GetComponentInChildren<WorkRoomButtonBehaviour>();
-            behaviour.FillUIInfo(model);
+            behaviour.Initialize(model);
             behaviour.OnClickButtonHandler += OnClick_RoomButton;
+            model.OnChangeMinOrderCompleteTimeHandler += behaviour.UpdateOrderTime;
         }
 
         private void OnClick_RoomButton(WorkRoomModel model)
@@ -82,61 +115,98 @@ namespace BeastHunterHubUI
 
         private void OnClick_CloseRoomButton()
         {
-            _selectedRoom = null;
             _roomPanel.SetActive(false);
 
             _selectedRoom.ChiefWorkplace.OnPutElementToSlotHandler -= FillCharacterSlotUI;
             _selectedRoom.ChiefWorkplace.OnTakeElementFromSlotHandler -= FillCharacterSlotUI;
-            //todo: close and clear
-        }
+            _selectedRoom.AssistantWorkplaces.OnPutElementToSlotHandler -= FillCharacterSlotUI;
+            _selectedRoom.AssistantWorkplaces.OnTakeElementFromSlotHandler -= FillCharacterSlotUI;
+            _selectedRoom.OrdersSlots.OnTakeElementFromSlotHandler -= FillOrderSlotUI;
+            _selectedRoom.OrdersSlots.OnPutElementToSlotHandler -= FillOrderSlotUI;
+            _selectedRoom.MakedItemsSlots.OnPutElementToSlotHandler -= FillMakedItemSlotUI;
+            _selectedRoom.MakedItemsSlots.OnTakeElementFromSlotHandler -= FillMakedItemSlotUI;
+            _selectedRoom = null;
 
-        private void OnClick_UpgradeRoomButton()
-        {
-            //todo: open add window
+            for (int i = _assistantsSlotsBehaviours.Count-1; i >= 0; i--)
+            {
+                Destroy(_assistantsSlotsBehaviours[i].gameObject);
+            }
+
+            for (int i = _orderSlotsBehaviours.Count-1; i >= 0; i--)
+            {
+                Destroy(_orderSlotsBehaviours[i].gameObject);
+            }
+
+            for (int i = _makedItemSlotsBehaviours.Count-1; i >= 0; i--)
+            {
+                Destroy(_makedItemSlotsBehaviours[i].gameObject);
+            }
+
+            _assistantsSlotsBehaviours.Clear();
+            _orderSlotsBehaviours.Clear();
+            _makedItemSlotsBehaviours.Clear();
         }
 
         private void FillRoomPanel(WorkRoomModel room)
         {
             _roomNameText.text = room.Name;
 
-            CharacterModel chief = room.ChiefWorkplace.GetElementBySlot(0);
-            if (chief != null)
-            {
-                _chiefSlotBehaviour.FillSlot(chief.Portrait);
-                _chiefSkillLevelImage.fillAmount = chief.TemporarySkillLevelForDebug / 100;
-                _chiefSkillLevelText.text = chief.TemporarySkillLevelForDebug.ToString() + "%";
-            }
+            FillCharacterSlotUI(CharacterStorageType.ChiefWorkplace, 0, room.ChiefWorkplace.GetElementBySlot(0));
             room.ChiefWorkplace.OnPutElementToSlotHandler += FillCharacterSlotUI;
             room.ChiefWorkplace.OnTakeElementFromSlotHandler += FillCharacterSlotUI;
 
             for (int i = 0; i < room.AssistantWorkplaces.GetSlotsCount(); i++)
             {
                 InitializeAssistantSlotUI(i);
+                FillCharacterSlotUI(CharacterStorageType.AssistantWorkplaces, i, room.AssistantWorkplaces.GetElementBySlot(i));
             }
-
-            _assistantsSkillLevelImage.fillAmount = room.AssistansGeneralSkillLevel / 100;
-            _assistantsSkillLevelText.text = room.AssistansGeneralSkillLevel.ToString();
 
             for (int i = 0; i < room.OrdersSlots.GetSlotsCount(); i++)
             {
                 InitializeOrderSlotUI(i);
+                FillOrderSlotUI(OrderStorageType.None, i, room.OrdersSlots.GetElementBySlot(i));
                 InitializeMakedItemSlotUI(i);
+                FillMakedItemSlotUI(ItemStorageType.WorkRoomFinishedItems, i, room.MakedItemsSlots.GetElementBySlot(i));
             }
-        }
-
-        private void InitializeMakedItemSlotUI(int slotIndex)
-        {
-            //todo
         }
 
         private void InitializeOrderSlotUI(int slotIndex)
         {
-            //todo
+            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.OrderSlotPrefab, _ordersSlotsFillablePanel);
+            WorkRoomOrderSlotBehaviour slotBehaviour = slotUI.GetComponentInChildren<WorkRoomOrderSlotBehaviour>();
+            _orderSlotsBehaviours.Add(slotBehaviour);
+            slotBehaviour.Initialize(slotIndex, OrderStorageType.None, false);
+            slotBehaviour.OnClickRemoveOrderButtonHandler += OnClick_RemoveOrderFromSlotButton;
+            _selectedRoom.OrdersSlots.OnPutElementToSlotHandler += FillOrderSlotUI;
+            _selectedRoom.OrdersSlots.OnTakeElementFromSlotHandler += FillOrderSlotUI;
+        }
+
+        private void OnClick_RemoveOrderFromSlotButton(int slotIndex)
+        {
+            _selectedRoom.OrdersSlots.RemoveElement(slotIndex);
+        }
+
+        private void InitializeMakedItemSlotUI(int slotIndex)
+        {
+            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.MakedItemSlotPrefab, _makedItemsSlotsFillablePanel);
+            WorkRoomMakedItemSlotBehaviour slotBehaviour = slotUI.GetComponentInChildren<WorkRoomMakedItemSlotBehaviour>();
+            _makedItemSlotsBehaviours.Add(slotBehaviour);
+            slotBehaviour.Initialize(slotIndex, ItemStorageType.WorkRoomMakedItems, false);
+            _selectedRoom.MakedItemsSlots.OnPutElementToSlotHandler += FillMakedItemSlotUI;
+            _selectedRoom.MakedItemsSlots.OnTakeElementFromSlotHandler += FillMakedItemSlotUI;
         }
 
         private void InitializeAssistantSlotUI(int slotIndex)
         {
-            //todo
+            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.WorkerSlotPrefab, _assistantsSlotsFillablePanel);
+            WorkRoomWorkerSlotBehaviour slotBehaviour = slotUI.GetComponent<WorkRoomWorkerSlotBehaviour>();
+            _assistantsSlotsBehaviours.Add(slotBehaviour);
+            slotBehaviour.Initialize(slotIndex, CharacterStorageType.AssistantWorkplaces, true);
+            slotBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
+            slotBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
+            slotBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
+            _selectedRoom.AssistantWorkplaces.OnPutElementToSlotHandler += FillCharacterSlotUI;
+            _selectedRoom.AssistantWorkplaces.OnTakeElementFromSlotHandler += FillCharacterSlotUI;
         }
 
         private void OnBeginDragCharacterFromSlot(int slotIndex, CharacterStorageType storageType)
@@ -170,6 +240,24 @@ namespace BeastHunterHubUI
                 case CharacterStorageType.ChiefWorkplace:
 
                     _chiefSlotBehaviour.FillSlot(sprite);
+                    if (character != null)
+                    {
+                        _chiefSkillLevelImage.fillAmount = character.Skills[_selectedRoom.UsedSkill] / 100;
+                        _chiefSkillLevelText.text = character.Skills[_selectedRoom.UsedSkill].ToString() + "%";
+                    }
+                    else
+                    {
+                        _chiefSkillLevelImage.fillAmount = 0;
+                        _chiefSkillLevelText.text = "0%";
+                    }
+
+                    break;
+
+                case CharacterStorageType.AssistantWorkplaces:
+
+                    _assistantsSlotsBehaviours[slotIndex].FillSlot(sprite);
+                    _assistantsSkillLevelImage.fillAmount = _selectedRoom.AssistansGeneralSkillLevel / 100;
+                    _assistantsSkillLevelText.text = _selectedRoom.AssistansGeneralSkillLevel.ToString() + "%";
 
                     break;
 
@@ -179,6 +267,18 @@ namespace BeastHunterHubUI
 
                     break;
             }
+        }
+
+        private void FillOrderSlotUI(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
+        {
+            Sprite sprite = _selectedRoom.OrdersSlots.GetElementSpriteBySlot(slotIndex);
+            _orderSlotsBehaviours[slotIndex].FillSlot(sprite);
+        }
+
+        private void FillMakedItemSlotUI(ItemStorageType storageType, int slotIndex, BaseItemModel item)
+        {
+            Sprite sprite = _selectedRoom.MakedItemsSlots.GetElementSpriteBySlot(slotIndex);
+            _makedItemSlotsBehaviours[slotIndex].FillSlot(sprite);
         }
 
         private BaseCharacterStorage GetCharacterStorageByType(CharacterStorageType storageType)
@@ -194,8 +294,8 @@ namespace BeastHunterHubUI
                     storage = _selectedRoom.AssistantWorkplaces;
                     break;
 
-                case CharacterStorageType.AvailableHunters:
-                    storage = _context.Player.AvailableHunters;
+                case CharacterStorageType.AvailableCharacters:
+                    storage = _context.Player.AvailableCharacters;
                     break;
 
                 default:

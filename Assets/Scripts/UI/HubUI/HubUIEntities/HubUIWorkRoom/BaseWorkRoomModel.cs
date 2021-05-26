@@ -13,6 +13,7 @@ namespace BeastHunterHubUI
         public Action OnInfoUpdateHandler { get; set; }
 
         public WorkRoomType RoomType { get; private set; }
+        public SkillType UsedSkill { get; private set; }
         public string Name { get; private set; }
         public int Level { get; private set; }
         public CharacterLimitedStorage ChiefWorkplace { get; private set; }
@@ -28,8 +29,8 @@ namespace BeastHunterHubUI
 
         public BaseWorkRoomModel(BaseWorkRoomStruct<T> roomStruct)
         {
-            AssistansGeneralSkillLevel = 0;
             RoomType = roomStruct.RoomType;
+            UsedSkill = roomStruct.UsedSkill;
             Name = roomStruct.Name;
             Level = roomStruct.Level;
 
@@ -130,13 +131,13 @@ namespace BeastHunterHubUI
 
         private void RecountAssistansGeneralSkillLevel()
         {
+            AssistansGeneralSkillLevel = 0;
             for (int i = 0; i < AssistantWorkplaces.GetSlotsCount(); i++)
             {
-                AssistansGeneralSkillLevel = 0;
                 CharacterModel assistant = AssistantWorkplaces.GetElementBySlot(i);
                 if (assistant != null)
                 {
-                    Mathf.Clamp(AssistansGeneralSkillLevel += assistant.TemporarySkillLevelForDebug, 0, 100);
+                    Mathf.Clamp(AssistansGeneralSkillLevel += assistant.Skills[UsedSkill], 0, 100);
                 }
             }
         }

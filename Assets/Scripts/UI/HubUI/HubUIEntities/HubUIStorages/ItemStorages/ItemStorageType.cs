@@ -2,7 +2,7 @@
 {
     public enum ItemStorageType
     {
-        None = 0,
+        WorkRoomMakedItems = 0,
         CharacterBackpack = 1,
         GeneralInventory = 2,
         ShopStorage = 3,
