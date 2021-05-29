@@ -51,7 +51,10 @@ namespace BeastHunterHubUI
 
             if (isSucceful)
             {
-                OnPutElementToSlot(slotIndex, character);
+                if(character != null)
+                {
+                    OnPutElementToSlot(slotIndex, character);
+                }
             }
             else
             {

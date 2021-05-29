@@ -37,6 +37,7 @@ namespace BeastHunterHubUI
         public bool IsAssignedToWork { get; set; }
         public MapCharacterBehaviour Behaviour { get; set; }
         public Dictionary<SkillType, int> Skills { get; private set; }
+        public int Rank { get; private set; }
 
         #endregion
 
@@ -45,6 +46,7 @@ namespace BeastHunterHubUI
 
         public CharacterModel(CharacterData data)
         {
+            Rank = data.Rank;
             _allData = BeastHunter.Data.HubUIData.AllCharactersData;
             Name = data.Name;
             Portrait = data.Portrait;
@@ -98,6 +100,7 @@ namespace BeastHunterHubUI
 
         public CharacterModel(int rank)
         {
+            Rank = rank;
             _allData = BeastHunter.Data.HubUIData.AllCharactersData; ;
             IsFemale = _allData.IsFemale() ? true : false;
             Name = _allData.GetRandonNameFromPool(IsFemale);

@@ -129,3 +129,5 @@ MonoBehaviour:
       type: 3}
     _makedItemSlotPrefab: {fileID: 6189855442535406670, guid: e04f5c587f2972048b9f8b6e999d50ba,
       type: 3}
+    _characterListItemPrefab: {fileID: 5008816691853892247, guid: b299710c61697a84483131e556e9a550,
+      type: 3}

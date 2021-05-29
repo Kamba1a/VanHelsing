@@ -146,6 +146,10 @@ namespace BeastHunterHubUI
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
+            //System.Collections.Generic.List<RaycastResult> results = new System.Collections.Generic.List<RaycastResult>();
+            //EventSystem.current.RaycastAll(eventData, results);
+            //Debug.Log("Drop on " + results[0].gameObject.name);
+
             if (_draggedObject != null)
             {
                 Destroy(_draggedObject);

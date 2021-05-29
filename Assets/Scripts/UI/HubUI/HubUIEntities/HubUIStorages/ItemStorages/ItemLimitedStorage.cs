@@ -27,7 +27,10 @@
 
             if (isSucceful)
             {
-                OnPutElementToSlot(slotIndex, item);
+                if (item != null)
+                {
+                    OnPutElementToSlot(slotIndex, item);
+                }
             }
             else
             {

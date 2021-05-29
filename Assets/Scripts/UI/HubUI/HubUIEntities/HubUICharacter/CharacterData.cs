@@ -19,6 +19,7 @@ namespace BeastHunterHubUI
         [SerializeField] private CharacterClothesModuleParts[] _defaultModuleParts;
         [SerializeField] private CharacterHeadPart[] _defaultHeadParts;
         [SerializeField] private CharacterSkillLevel[] _skills;
+        [SerializeField] private int _rank;
 
         #endregion
 
@@ -35,6 +36,7 @@ namespace BeastHunterHubUI
         public CharacterClothesModuleParts[] DefaultModuleParts => (CharacterClothesModuleParts[])_defaultModuleParts?.Clone();
         public CharacterHeadPart[] DefaultHeadParts => (CharacterHeadPart[])_defaultHeadParts?.Clone();
         public CharacterSkillLevel[] Skills => (CharacterSkillLevel[])_skills?.Clone();
+        public int Rank => _rank;
 
         #endregion
 

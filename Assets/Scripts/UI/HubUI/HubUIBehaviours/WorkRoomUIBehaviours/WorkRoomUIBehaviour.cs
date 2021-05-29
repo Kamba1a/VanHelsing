@@ -76,6 +76,10 @@ namespace BeastHunterHubUI
             _chiefSlotBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
 
             //todo: _charactersFillablePanel initialize
+            for (int i = 0; i < _context.Player.AvailableCharacters.GetSlotsCount(); i++)
+            {
+                InitializeCharacterListItemUI(i);
+            }
 
             _roomButtonsFillablePanel.SetActive(true);
             _roomPanel.SetActive(false);
@@ -115,6 +119,19 @@ namespace BeastHunterHubUI
         private void OnClick_UpgradeRoomButton()
         {
             //todo: open add window
+        }
+
+        //WIP
+        private void InitializeCharacterListItemUI(int slotIndex) //TODO
+        {
+            GameObject characterUI = InstantiateUIObject(_data.WorkRoomDataStruct.CharacterListItemPrefab, _charactersFillablePanel);
+            WorkRoomCharacterListItemBehaviour uiBehaviour = characterUI.GetComponent<WorkRoomCharacterListItemBehaviour>();
+            uiBehaviour.Initialize(slotIndex, CharacterStorageType.AvailableCharacters, true);
+            uiBehaviour.FillSlot(_context.Player.AvailableCharacters.GetElementSpriteBySlot(slotIndex));
+            uiBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
+            uiBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
+            uiBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
+            //_context.Player.AvailableCharacters.
         }
 
         private void InitializeWorkRoomButton(WorkRoomModel model)
