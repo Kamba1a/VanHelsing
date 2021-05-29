@@ -69,6 +69,30 @@ namespace BeastHunterHubUI
             return false;
         }
 
+        public bool PutElementToFirstEmptySlot(ItemOrderModel order, out int? slotIndex)
+        {
+            slotIndex = null;
+            for (int i = 0; i < _elementSlots.Count; i++)
+            {
+                if (_elementSlots[i] == null)
+                {
+                    if (CheckPossibilityFunc.Invoke(i))
+                    {
+                        if (PutElement(i, order))
+                        {
+                            slotIndex = i;
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log($"Impossible to put an element in slot {i}");
+                    }
+                }
+            }
+            return false;
+        }
+
         public override Sprite GetElementSpriteBySlot(int slotIndex)
         {
             if (_elementSlots[slotIndex] != null)

@@ -243,6 +243,14 @@ namespace BeastHunterHubUI
         #endregion
 
 
+        #region Properties
+
+        public Action OnShowMapUIHandler { get; set; }
+        public Action OnHideMapUIHandler { get; set; }
+
+        #endregion
+
+
         #region UnityMethods
 
         private void OnEnable()
@@ -467,6 +475,7 @@ namespace BeastHunterHubUI
 
         private void OnClick_MapButton()
         {
+            OnShowMapUIHandler?.Invoke();
             _mainPanel.SetActive(true);
         }
 
@@ -481,6 +490,7 @@ namespace BeastHunterHubUI
 
         private void OnClick_HubButton()
         {
+            OnHideMapUIHandler?.Invoke();
             _mainPanel.SetActive(false);
         }
 

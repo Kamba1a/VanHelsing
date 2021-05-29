@@ -76,19 +76,33 @@ namespace BeastHunterHubUI
 
         public void UpdateHoursNumberToComplete(float timeReducePercent)
         {
-            Debug.Log("timeReducePercent " + timeReducePercent);
+            Debug.Log("UpdateHoursNumberToComplete()");
+            Debug.Log("timeReducePercent=" + timeReducePercent);
             float baseHoursToComplete = Recipe.BaseHoursNumberToComplete * timeReducePercent;
-            Debug.Log("baseHoursToComplete " + baseHoursToComplete);
-            HoursNumberToComplete = (int)Mathf.Round(baseHoursToComplete * ProgressToComplete);
-            Debug.Log("HoursNumberToComplete " + HoursNumberToComplete);
-            _progressPerTick = (100 / HoursNumberToComplete) / 100;
+            Debug.Log("baseHoursToComplete=" + baseHoursToComplete);
+            HoursNumberToComplete = (int)Mathf.Round(baseHoursToComplete - (baseHoursToComplete * ProgressToComplete));
+            Debug.Log("HoursNumberToComplete=" + HoursNumberToComplete);
+
+            if (HoursNumberToComplete != 0)
+            {
+                _progressPerTick = (float)(100 / HoursNumberToComplete) / 100;
+            }
+            else
+            {
+                _progressPerTick = 0;
+            }
+
+            Debug.Log("_progressPerTick=" + _progressPerTick);
         }
 
-        public void TimeTick()
+        private void TimeTick()
         {
+            Debug.Log("TimeTick()");
             int spentHour = 1;
-            HoursNumberToComplete = -spentHour;
+            HoursNumberToComplete -= spentHour;
             Mathf.Clamp(ProgressToComplete += _progressPerTick * spentHour, 0, 1);
+            Debug.Log("HoursNumberToComplete="+ HoursNumberToComplete);
+            Debug.Log("ProgressToComplete=" + ProgressToComplete);
         }
 
         private void Complete()

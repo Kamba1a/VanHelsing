@@ -123,7 +123,7 @@ namespace BeastHunterHubUI
 
         private bool CheckMakedItemsSlots(int slotIndex)
         {
-            return MakedItemsSlots.GetElementBySlot(slotIndex) != null;
+            return MakedItemsSlots.GetElementBySlot(slotIndex) == null;
         }
 
         private void OnOrderAdd(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
@@ -150,6 +150,7 @@ namespace BeastHunterHubUI
             {
                 Debug.LogError("No storage space for maked items!");
             }
+            HubUIServices.SharedInstance.GameMessages.OnWindowMessageHandler($"Recipe {order.Recipe.Item.Name} is completed!");
             OnOrderCompleteHandler?.Invoke(order);
         }
 

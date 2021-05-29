@@ -8,6 +8,7 @@ namespace BeastHunterHubUI
     class WorkRoomOrderSlotBehaviour : BaseSlotBehaviour<OrderStorageType>
     {
         [SerializeField] private Button _removeOrderButton;
+        [SerializeField] private Text _timeText;
 
 
         public Action<int> OnClickRemoveOrderButtonHandler { get; set; }
@@ -17,13 +18,18 @@ namespace BeastHunterHubUI
         {
             base.Initialize(slotIndex, storageType, isDragAndDropOn);
             _removeOrderButton.onClick.AddListener(OnClickRemoveOrderButton);
-            SetActiveRemoveOrderButton(false);
+            _itemImage.gameObject.SetActive(false);
         }
 
         public override void FillSlot(Sprite sprite)
         {
             base.FillSlot(sprite);
-            SetActiveRemoveOrderButton(sprite!=null);
+            _itemImage.gameObject.SetActive(sprite != null);
+        }
+
+        public void UpdateTimeText(int hours)
+        {
+            _timeText.text = $"{hours} {HubUIServices.SharedInstance.TimeService.GetHoursWord(hours)}";
         }
 
         private void SetActiveRemoveOrderButton(bool flag)

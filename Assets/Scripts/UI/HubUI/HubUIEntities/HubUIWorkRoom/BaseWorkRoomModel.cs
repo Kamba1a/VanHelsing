@@ -32,15 +32,7 @@ namespace BeastHunterHubUI
             RoomType = roomStruct.RoomType;
             UsedSkill = roomStruct.UsedSkill;
             Name = roomStruct.Name;
-            Level = roomStruct.Level;
-
-            ChiefWorkplace = new CharacterLimitedStorage(1, CharacterStorageType.ChiefWorkplace);
-            ChiefWorkplace.OnPutElementToSlotHandler += OnChiefAddBase;
-            ChiefWorkplace.OnTakeElementFromSlotHandler += OnChiefRemoveBase;
-            if (roomStruct.ChiefWorker != null)
-            {
-                ChiefWorkplace.PutElementToFirstEmptySlot(roomStruct.ChiefWorker);
-            }
+            OrderTimeReducePercent = 1;
 
             ProgressScheme = new Dictionary<int, T>();
             for (int i = 0; i < roomStruct.ProgressScheme.Count; i++)
@@ -55,10 +47,24 @@ namespace BeastHunterHubUI
                 }
             }
 
+            if (!ProgressScheme.ContainsKey(roomStruct.Level))
+            {
+                Debug.LogError($"Incorrect input data: the room level {roomStruct.Level} is not contained in the progress schema");
+            }
+            Level = roomStruct.Level;
+
+            ChiefWorkplace = new CharacterLimitedStorage(1, CharacterStorageType.ChiefWorkplace);
             AssistantWorkplaces = new CharacterLimitedStorage(ProgressScheme[Level].AssistansAmount, CharacterStorageType.AssistantWorkplaces);
+
+            ChiefWorkplace.OnPutElementToSlotHandler += OnChiefAddBase;
+            ChiefWorkplace.OnTakeElementFromSlotHandler += OnChiefRemoveBase;
+            if (roomStruct.ChiefWorker != null)
+            {
+                ChiefWorkplace.PutElementToFirstEmptySlot(roomStruct.ChiefWorker);
+            }
+
             AssistantWorkplaces.OnPutElementToSlotHandler += OnAssistantAddBase;
             AssistantWorkplaces.OnTakeElementFromSlotHandler += OnAssistantRemoveBase;
-
             if (roomStruct.Assistants != null)
             {
                 for (int i = 0; i < roomStruct.Assistants.Count; i++)

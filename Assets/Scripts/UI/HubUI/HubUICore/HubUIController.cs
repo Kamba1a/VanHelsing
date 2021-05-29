@@ -85,12 +85,16 @@ namespace BeastHunterHubUI
         {
             _context.GameTime.OnChangeTimeHandler += HubUIServices.SharedInstance.EventsService.OnChangedGameTime;
             HubUIServices.SharedInstance.GameMessages.OnWindowMessageHandler += InitializeMessageWindow;
+            _mapBehaviour.OnShowMapUIHandler += _workRoomUIBehaviour.HideRoomButtonsPanel;
+            _mapBehaviour.OnHideMapUIHandler += _workRoomUIBehaviour.ShowRoomButtonsPanel;
         }
 
         private void Unsubscribes()
         {
             _context.GameTime.OnChangeTimeHandler -= HubUIServices.SharedInstance.EventsService.OnChangedGameTime;
             HubUIServices.SharedInstance.GameMessages.OnWindowMessageHandler -= InitializeMessageWindow;
+            _mapBehaviour.OnShowMapUIHandler -= _workRoomUIBehaviour.HideRoomButtonsPanel;
+            _mapBehaviour.OnHideMapUIHandler -= _workRoomUIBehaviour.ShowRoomButtonsPanel;
         }
 
         private void StartBehaviours(HubUIContext context)
