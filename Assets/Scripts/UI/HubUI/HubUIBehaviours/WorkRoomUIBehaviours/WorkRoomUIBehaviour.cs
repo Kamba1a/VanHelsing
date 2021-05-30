@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace BeastHunterHubUI
 {
-    class WorkRoomUIBehaviour : MonoBehaviour, IStart
+    class WorkRoomUIBehaviour : MonoBehaviour, IStart, IDestroy
     {
         [SerializeField] private GameObject _roomButtonsPanel;
         [SerializeField] private GameObject _roomButtonsFillablePanel;
@@ -75,14 +75,23 @@ namespace BeastHunterHubUI
             _chiefSlotBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
             _chiefSlotBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
 
-            //todo: _charactersFillablePanel initialize
             for (int i = 0; i < _context.Player.AvailableCharacters.GetSlotsCount(); i++)
             {
-                InitializeCharacterListItemUI(i);
+                InitializeCharacterListItemUI(i, _context.Player.AvailableCharacters.GetElementBySlot(i));
             }
+            _context.Player.AvailableCharacters.OnAddCharacterHandler += InitializeCharacterListItemUI;
+            _context.Player.AvailableCharacters.OnRemoveCharacterHandler += RemoveCharacterListItemUI;
+            _context.Player.AvailableCharacters.OnReplaceCharacterHandler += ReplaceCharacterListItemUI;
 
             _roomButtonsFillablePanel.SetActive(true);
             _roomPanel.SetActive(false);
+        }
+
+        public void Destroying()
+        {
+            _context.Player.AvailableCharacters.OnAddCharacterHandler -= InitializeCharacterListItemUI;
+            _context.Player.AvailableCharacters.OnRemoveCharacterHandler -= RemoveCharacterListItemUI;
+            _context.Player.AvailableCharacters.OnReplaceCharacterHandler -= ReplaceCharacterListItemUI;
         }
 
 
@@ -122,16 +131,36 @@ namespace BeastHunterHubUI
         }
 
         //WIP
-        private void InitializeCharacterListItemUI(int slotIndex) //TODO
+        private void InitializeCharacterListItemUI(int slotIndex, CharacterModel character)
         {
             GameObject characterUI = InstantiateUIObject(_data.WorkRoomDataStruct.CharacterListItemPrefab, _charactersFillablePanel);
             WorkRoomCharacterListItemBehaviour uiBehaviour = characterUI.GetComponent<WorkRoomCharacterListItemBehaviour>();
-            uiBehaviour.Initialize(slotIndex, CharacterStorageType.AvailableCharacters, true);
-            uiBehaviour.FillSlot(_context.Player.AvailableCharacters.GetElementSpriteBySlot(slotIndex));
+            uiBehaviour.Initialize(slotIndex, character);
             uiBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
             uiBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
             uiBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
-            //_context.Player.AvailableCharacters.
+            uiBehaviour.IsPointerEnterOn = IsDraggedCharacter;
+            //TODO: on enter, on exit insert list element
+        }
+
+        private bool IsDraggedCharacter()
+        {
+            return _draggedCharacterInfo.slotIndex.HasValue;
+        }
+
+        private void RemoveCharacterListItemUI(int slotIndex)
+        {
+            Destroy(GetCharacterListItemBehaviour(slotIndex).gameObject);
+        }
+
+        private void ReplaceCharacterListItemUI(int slotIndex, CharacterModel character)
+        {
+            GetCharacterListItemBehaviour(slotIndex).UpdateInfo(character);
+        }
+
+        private WorkRoomCharacterListItemBehaviour GetCharacterListItemBehaviour(int index)
+        {
+            return _charactersFillablePanel.transform.GetChild(index).GetComponent<WorkRoomCharacterListItemBehaviour>();
         }
 
         private void InitializeWorkRoomButton(WorkRoomModel model)
@@ -266,11 +295,22 @@ namespace BeastHunterHubUI
         {
             _draggedCharacterInfo.slotIndex = slotIndex;
             _draggedCharacterInfo.storageType = storageType;
+            if(storageType == CharacterStorageType.AvailableCharacters)
+            {
+               //GetCharacterListItemBehaviour(slotIndex).gameObject.transform.SetParent(_tempHidePanel.transform);
+            }
         }
 
         private void OnEndDragCharacter(int slotIndex, CharacterStorageType storageType)
         {
-            FillCharacterSlotUI(storageType, slotIndex, GetCharacterStorageByType(storageType).GetElementBySlot(slotIndex));
+            if (storageType != CharacterStorageType.AvailableCharacters)
+            {
+                FillCharacterSlotUI(storageType, slotIndex, GetCharacterStorageByType(storageType).GetElementBySlot(slotIndex));
+            }
+            else
+            {
+
+            }
             _draggedCharacterInfo.slotIndex = null;
         }
 
@@ -278,8 +318,16 @@ namespace BeastHunterHubUI
         {
             if (_draggedCharacterInfo.slotIndex.HasValue)
             {
-                GetCharacterStorageByType(dropStorageType).SwapElementsWithOtherStorage(dropSlotIndex,
+                if (dropStorageType == CharacterStorageType.AvailableCharacters)
+                {
+                    GetCharacterStorageByType(dropStorageType).PutElementToFirstEmptySlotFromOtherStorage
+                        (GetCharacterStorageByType(_draggedCharacterInfo.storageType), _draggedCharacterInfo.slotIndex.Value);
+                }
+                else
+                {
+                    GetCharacterStorageByType(dropStorageType).SwapElementsWithOtherStorage(dropSlotIndex,
                     GetCharacterStorageByType(_draggedCharacterInfo.storageType), _draggedCharacterInfo.slotIndex.Value);
+                }
             }
         }
 
@@ -365,6 +413,5 @@ namespace BeastHunterHubUI
             objectUI.transform.localScale = new Vector3(1, 1, 1);
             return objectUI;
         }
-
     }
 }
