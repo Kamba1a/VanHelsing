@@ -110,6 +110,7 @@ namespace BeastHunterHubUI
             //todo: add fail chance
             IsCompleted = true;
             MakedItem = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(Recipe.Item);
+            RemoveOrderEvent();
             OnCompleteHandler?.Invoke(this);
         }
 
