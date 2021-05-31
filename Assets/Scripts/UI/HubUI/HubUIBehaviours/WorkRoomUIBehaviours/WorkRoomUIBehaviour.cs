@@ -139,13 +139,12 @@ namespace BeastHunterHubUI
             uiBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
             uiBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
             uiBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
-            uiBehaviour.IsPointerEnterOn = IsDraggedCharacter;
-            //TODO: on enter, on exit insert list element
+            uiBehaviour.IsPointerEnterOn += IsDraggedCharacter;
         }
 
-        private bool IsDraggedCharacter()
+        private bool IsDraggedCharacter(int slotIndex)
         {
-            return _draggedCharacterInfo.slotIndex.HasValue;
+            return _draggedCharacterInfo.slotIndex.HasValue && _draggedCharacterInfo.slotIndex.Value != slotIndex;
         }
 
         private void RemoveCharacterListItemUI(int slotIndex)
@@ -295,10 +294,6 @@ namespace BeastHunterHubUI
         {
             _draggedCharacterInfo.slotIndex = slotIndex;
             _draggedCharacterInfo.storageType = storageType;
-            if(storageType == CharacterStorageType.AvailableCharacters)
-            {
-               //GetCharacterListItemBehaviour(slotIndex).gameObject.transform.SetParent(_tempHidePanel.transform);
-            }
         }
 
         private void OnEndDragCharacter(int slotIndex, CharacterStorageType storageType)
@@ -306,10 +301,6 @@ namespace BeastHunterHubUI
             if (storageType != CharacterStorageType.AvailableCharacters)
             {
                 FillCharacterSlotUI(storageType, slotIndex, GetCharacterStorageByType(storageType).GetElementBySlot(slotIndex));
-            }
-            else
-            {
-
             }
             _draggedCharacterInfo.slotIndex = null;
         }
@@ -320,14 +311,26 @@ namespace BeastHunterHubUI
             {
                 if (dropStorageType == CharacterStorageType.AvailableCharacters)
                 {
-                    GetCharacterStorageByType(dropStorageType).PutElementToFirstEmptySlotFromOtherStorage
-                        (GetCharacterStorageByType(_draggedCharacterInfo.storageType), _draggedCharacterInfo.slotIndex.Value);
+                    //GetCharacterStorageByType(dropStorageType).PutElementToFirstEmptySlotFromOtherStorage
+                    //    (GetCharacterStorageByType(_draggedCharacterInfo.storageType), _draggedCharacterInfo.slotIndex.Value);
+                    BaseCharacterStorage storageOut = GetCharacterStorageByType(_draggedCharacterInfo.storageType);
+                    CharacterModel character = storageOut.GetElementBySlot(_draggedCharacterInfo.slotIndex.Value);
+
+                    if (storageOut.RemoveElement(_draggedCharacterInfo.slotIndex.Value))
+                    {
+                        GetCharacterStorageByType(dropStorageType).PutElement(dropSlotIndex + 1, character);
+                    }
+                    else
+                    {
+                        Debug.LogError($"The remove element from {_draggedCharacterInfo.storageType} is not succeful");
+                    }
                 }
                 else
                 {
                     GetCharacterStorageByType(dropStorageType).SwapElementsWithOtherStorage(dropSlotIndex,
                     GetCharacterStorageByType(_draggedCharacterInfo.storageType), _draggedCharacterInfo.slotIndex.Value);
                 }
+                _draggedCharacterInfo.slotIndex = null;
             }
         }
 
@@ -343,7 +346,7 @@ namespace BeastHunterHubUI
                     _chiefSlotBehaviour.FillSlot(sprite);
                     if (character != null)
                     {
-                        _chiefSkillLevelImage.fillAmount = character.Skills[_selectedRoom.UsedSkill] / 100;
+                        _chiefSkillLevelImage.fillAmount = (float)character.Skills[_selectedRoom.UsedSkill] / 100;
                         _chiefSkillLevelText.text = character.Skills[_selectedRoom.UsedSkill].ToString() + "%";
                     }
                     else
@@ -357,7 +360,7 @@ namespace BeastHunterHubUI
                 case CharacterStorageType.AssistantWorkplaces:
 
                     _assistantsSlotsBehaviours[slotIndex].FillSlot(sprite);
-                    _assistantsSkillLevelImage.fillAmount = _selectedRoom.AssistansGeneralSkillLevel / 100;
+                    _assistantsSkillLevelImage.fillAmount = (float)_selectedRoom.AssistansGeneralSkillLevel / 100;
                     _assistantsSkillLevelText.text = _selectedRoom.AssistansGeneralSkillLevel.ToString() + "%";
 
                     break;

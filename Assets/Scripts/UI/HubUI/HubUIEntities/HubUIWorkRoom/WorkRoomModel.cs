@@ -133,6 +133,7 @@ namespace BeastHunterHubUI
                 order.OnCompleteHandler += OnOrderComplete;
                 order.AddOrderEvent();
             }
+            UpdateMinOrderCompleteTime();
             order.OnChangeHoursNumberToCompleteHandler += OnChangeOrderTime;
         }
 

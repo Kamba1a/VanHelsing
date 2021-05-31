@@ -9,6 +9,8 @@ namespace BeastHunterHubUI
 {
     class WorkRoomCharacterListItemBehaviour : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler
     {
+        #region Fields
+
         [SerializeField] private GameObject _objectForDrag;
         [SerializeField] private Image _characterPortraitImage;
         [SerializeField] private Text _nameText;
@@ -19,6 +21,8 @@ namespace BeastHunterHubUI
         private RectTransform _rectTransform;
         private Vector2 _size;
 
+        #endregion
+
 
         #region Properties
 
@@ -27,7 +31,7 @@ namespace BeastHunterHubUI
         public Action<int, CharacterStorageType> OnDroppedItemHandler { get; set; }
         public Action<int, CharacterStorageType> OnPointerEnterHandler { get; set; }
         public Action<int, CharacterStorageType> OnPointerExitHandler { get; set; }
-        public Func<bool> IsPointerEnterOn { get; set; }
+        public Func<int, bool> IsPointerEnterOn { get; set; }
 
         public int SlotIndex
         {
@@ -44,6 +48,9 @@ namespace BeastHunterHubUI
         #endregion
 
 
+        #region UnityMethods
+
+
         private void OnDestroy()
         {
             if(_currentDraggedObject != null)
@@ -51,6 +58,8 @@ namespace BeastHunterHubUI
                 Destroy(_currentDraggedObject);
             }
         }
+
+        #endregion
 
 
         #region Methods
@@ -156,6 +165,7 @@ namespace BeastHunterHubUI
 
         public void OnDrop(PointerEventData eventData)
         {
+            _rectTransform.sizeDelta = _size;
             OnDroppedItemHandler?.Invoke(SlotIndex, _storageType);
         }
 
@@ -166,8 +176,11 @@ namespace BeastHunterHubUI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (IsPointerEnterOn.Invoke())
+            if (IsPointerEnterOn.Invoke(SlotIndex))
             {
+                Vector2 newSize = _size;
+                newSize.y = newSize.y * 1.5f;
+                _rectTransform.sizeDelta = newSize;
                 OnPointerEnterHandler?.Invoke(SlotIndex, _storageType);
             }
         }
@@ -179,8 +192,9 @@ namespace BeastHunterHubUI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (IsPointerEnterOn.Invoke())
+            if (IsPointerEnterOn.Invoke(SlotIndex))
             {
+                _rectTransform.sizeDelta = _size;
                 OnPointerExitHandler?.Invoke(SlotIndex, _storageType);
             }
         }
