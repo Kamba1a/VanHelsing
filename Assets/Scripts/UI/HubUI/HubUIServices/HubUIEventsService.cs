@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace BeastHunterHubUI
 {
     public class HubUIEventsService
@@ -31,6 +30,10 @@ namespace BeastHunterHubUI
                 {
                     _onTimeTick -= eventModel.TimeTick;
                 }
+                if(_scheduledEvents[eventModel.InvokeTime].Count == 0)
+                {
+                    _scheduledEvents.Remove(eventModel.InvokeTime);
+                }
             }
         }
 
@@ -58,14 +61,17 @@ namespace BeastHunterHubUI
         {
             if (_scheduledEvents.ContainsKey(invokeTime))
             {
-                _context.GameTime.StopTimeSkip();
-                for (int i = 0; i < _scheduledEvents[invokeTime].Count; i++)
+                if (_scheduledEvents[invokeTime].Count > 0)
                 {
-                    if (_scheduledEvents[invokeTime][i].IsEachTimeTickInvokeOn)
+                    _context.GameTime.StopTimeSkip();
+                    for (int i = 0; i < _scheduledEvents[invokeTime].Count; i++)
                     {
-                        _onTimeTick -= _scheduledEvents[invokeTime][i].TimeTick;
+                        if (_scheduledEvents[invokeTime][i].IsEachTimeTickInvokeOn)
+                        {
+                            _onTimeTick -= _scheduledEvents[invokeTime][i].TimeTick;
+                        }
+                        _scheduledEvents[invokeTime][i].Invoke();
                     }
-                    _scheduledEvents[invokeTime][i].Invoke();
                 }
                 _scheduledEvents.Remove(invokeTime);
             }

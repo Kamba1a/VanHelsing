@@ -9,8 +9,8 @@ namespace BeastHunterHubUI
         #region Fields
 
         protected HubUIEventModel _orderEvent;
-        private float _progressPerTick;
         private int _hoursNumberToComplete;
+        private int _baseHoursToComplete;
 
         #endregion
 
@@ -47,7 +47,7 @@ namespace BeastHunterHubUI
             IsCompleted = false;
             Recipe = recipe;
             ProgressToComplete = 0.0f;
-            UpdateHoursNumberToComplete(timeReducePercent);
+            RecountHoursToComplete(timeReducePercent);
         }
 
         #endregion
@@ -59,7 +59,7 @@ namespace BeastHunterHubUI
         {
             _orderEvent = new HubUIEventModel(HoursNumberToComplete, true);
             _orderEvent.OnInvokeHandler = Complete;
-            _orderEvent.OnTickTimeHandler += TimeTick;
+            _orderEvent.OnTickTimeHandler += TimeTickUpdate;
             HubUIServices.SharedInstance.EventsService.AddEventToScheduler(_orderEvent);
         }
 
@@ -67,40 +67,39 @@ namespace BeastHunterHubUI
         {
             if (_orderEvent != null)
             {
+                HubUIServices.SharedInstance.EventsService.RemoveEventFromScheduler(_orderEvent);
                 _orderEvent.OnInvokeHandler = null;
                 _orderEvent.OnTickTimeHandler = null;
-                HubUIServices.SharedInstance.EventsService.RemoveEventFromScheduler(_orderEvent);
                 _orderEvent = null;
             }
         }
 
-        public void UpdateHoursNumberToComplete(float timeReducePercent)
+        public void RecountHoursToComplete(float timeReducePercent)
         {
             Debug.Log("UpdateHoursNumberToComplete()");
             Debug.Log("timeReducePercent=" + timeReducePercent);
-            float baseHoursToComplete = Recipe.BaseHoursNumberToComplete * timeReducePercent;
-            Debug.Log("baseHoursToComplete=" + baseHoursToComplete);
-            HoursNumberToComplete = (int)Mathf.Round(baseHoursToComplete - (baseHoursToComplete * ProgressToComplete));
+
+            _baseHoursToComplete = (int)Mathf.Round(Recipe.BaseHoursNumberToComplete * timeReducePercent);
+            HoursNumberToComplete = (int)Mathf.Round(_baseHoursToComplete - (_baseHoursToComplete * ProgressToComplete));
+
+            if(_orderEvent != null)
+            {
+                RemoveOrderEvent();
+                AddOrderEvent();
+            }
+
+            Debug.Log("_baseHoursToComplete=" + _baseHoursToComplete);
             Debug.Log("HoursNumberToComplete=" + HoursNumberToComplete);
-
-            if (HoursNumberToComplete != 0)
-            {
-                _progressPerTick = (float)(100 / HoursNumberToComplete) / 100;
-            }
-            else
-            {
-                _progressPerTick = 0;
-            }
-
-            Debug.Log("_progressPerTick=" + _progressPerTick);
         }
 
-        private void TimeTick()
+        private void TimeTickUpdate()
         {
-            Debug.Log("TimeTick()");
+            Debug.Log("TimeTickUpdate()");
+
             int spentHour = 1;
-            HoursNumberToComplete -= spentHour;
-            Mathf.Clamp(ProgressToComplete += _progressPerTick * spentHour, 0, 1);
+            HoursNumberToComplete = HoursNumberToComplete - spentHour < 0 ? 0 : HoursNumberToComplete - spentHour;
+            ProgressToComplete = (float)(_baseHoursToComplete - HoursNumberToComplete) / _baseHoursToComplete;
+
             Debug.Log("HoursNumberToComplete="+ HoursNumberToComplete);
             Debug.Log("ProgressToComplete=" + ProgressToComplete);
         }
@@ -109,8 +108,12 @@ namespace BeastHunterHubUI
         {
             //todo: add fail chance
             IsCompleted = true;
+
+            _orderEvent.OnInvokeHandler = null;
+            _orderEvent.OnTickTimeHandler = null;
+            _orderEvent = null;
+
             MakedItem = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(Recipe.Item);
-            RemoveOrderEvent();
             OnCompleteHandler?.Invoke(this);
         }
 
