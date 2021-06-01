@@ -8,6 +8,8 @@ namespace BeastHunterHubUI
 {
     class WorkRoomUIBehaviour : MonoBehaviour, IStart, IDestroy
     {
+        #region Fields
+
         [SerializeField] private GameObject _roomButtonsPanel;
         [SerializeField] private GameObject _roomButtonsFillablePanel;
         [SerializeField] private GameObject _roomPanel;
@@ -38,6 +40,10 @@ namespace BeastHunterHubUI
         List<WorkRoomOrderSlotBehaviour> _orderSlotsBehaviours;
         List<WorkRoomMakedItemSlotBehaviour> _makedItemSlotsBehaviours;
 
+        #endregion
+
+
+        #region UnityMethods
 
         private void OnEnable()
         {
@@ -55,6 +61,10 @@ namespace BeastHunterHubUI
             _takeMakedItemsButton.onClick.RemoveAllListeners();
         }
 
+        #endregion
+
+
+        #region IStart
 
         public void Starting(HubUIContext context)
         {
@@ -81,19 +91,30 @@ namespace BeastHunterHubUI
             }
             _context.Player.AvailableCharacters.OnAddCharacterHandler += InitializeCharacterListItemUI;
             _context.Player.AvailableCharacters.OnRemoveCharacterHandler += RemoveCharacterListItemUI;
-            _context.Player.AvailableCharacters.OnReplaceCharacterHandler += ReplaceCharacterListItemUI;
+            _context.Player.AvailableCharacters.OnReplaceCharacterHandler += UpdateCharacterListItemUI;
 
             _roomButtonsFillablePanel.SetActive(true);
             _roomPanel.SetActive(false);
         }
 
+        #endregion
+
+
+        #region IDestroy
+
         public void Destroying()
         {
             _context.Player.AvailableCharacters.OnAddCharacterHandler -= InitializeCharacterListItemUI;
             _context.Player.AvailableCharacters.OnRemoveCharacterHandler -= RemoveCharacterListItemUI;
-            _context.Player.AvailableCharacters.OnReplaceCharacterHandler -= ReplaceCharacterListItemUI;
+            _context.Player.AvailableCharacters.OnReplaceCharacterHandler -= UpdateCharacterListItemUI;
         }
 
+        #endregion
+
+
+        #region Methods
+
+        #region PublicMethods
 
         public void ShowRoomButtonsPanel()
         {
@@ -105,63 +126,9 @@ namespace BeastHunterHubUI
             _roomButtonsPanel.SetActive(false);
         }
 
-        private void OnClick_CreateOrderButton()
-        {
-            if (_selectedRoom.OrdersSlots.HasFreeSlots())
-            {
-                //todo: open craft window
-                //temporary for debug:
-                ItemOrderModel order = new ItemOrderModel(_recipeForDebug, _selectedRoom.OrderTimeReducePercent);
-                if(_selectedRoom.OrdersSlots.PutElementToFirstEmptySlot(order, out int? slotIndex))
-                {
-                    _makedItemSlotsBehaviours[slotIndex.Value].FillSlot(order.Recipe.Item.Icon);
-                    _makedItemSlotsBehaviours[slotIndex.Value].UpdateTimeText(order.HoursNumberToComplete);
-                    order.OnChangeHoursNumberToCompleteHandler += _makedItemSlotsBehaviours[slotIndex.Value].UpdateTimeText;
-                }
-            }
-        }
+        #endregion
 
-        private void OnClick_TakeMakedItemsButton()
-        {
-            //todo
-        }
-
-        private void OnClick_UpgradeRoomButton()
-        {
-            //todo: open add window
-        }
-
-        //WIP
-        private void InitializeCharacterListItemUI(int slotIndex, CharacterModel character)
-        {
-            GameObject characterUI = InstantiateUIObject(_data.WorkRoomDataStruct.CharacterListItemPrefab, _charactersFillablePanel);
-            WorkRoomCharacterListItemBehaviour uiBehaviour = characterUI.GetComponent<WorkRoomCharacterListItemBehaviour>();
-            uiBehaviour.Initialize(slotIndex, character);
-            uiBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
-            uiBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
-            uiBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
-            uiBehaviour.IsPointerEnterOn += IsDraggedCharacter;
-        }
-
-        private bool IsDraggedCharacter(int slotIndex)
-        {
-            return _draggedCharacterInfo.slotIndex.HasValue && _draggedCharacterInfo.slotIndex.Value != slotIndex;
-        }
-
-        private void RemoveCharacterListItemUI(int slotIndex)
-        {
-            Destroy(GetCharacterListItemBehaviour(slotIndex).gameObject);
-        }
-
-        private void ReplaceCharacterListItemUI(int slotIndex, CharacterModel character)
-        {
-            GetCharacterListItemBehaviour(slotIndex).UpdateInfo(character);
-        }
-
-        private WorkRoomCharacterListItemBehaviour GetCharacterListItemBehaviour(int index)
-        {
-            return _charactersFillablePanel.transform.GetChild(index).GetComponent<WorkRoomCharacterListItemBehaviour>();
-        }
+        #region InstantiateAndDestroyMethods
 
         private void InitializeWorkRoomButton(WorkRoomModel model)
         {
@@ -172,6 +139,68 @@ namespace BeastHunterHubUI
             model.OnChangeMinOrderCompleteTimeHandler += behaviour.UpdateOrderTime;
         }
 
+        private void InitializeAssistantSlotUI(int slotIndex)
+        {
+            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.WorkerSlotPrefab, _assistantsSlotsFillablePanel);
+            WorkRoomWorkerSlotBehaviour slotBehaviour = slotUI.GetComponent<WorkRoomWorkerSlotBehaviour>();
+            _assistantsSlotsBehaviours.Add(slotBehaviour);
+            slotBehaviour.Initialize(slotIndex, CharacterStorageType.AssistantWorkplaces, true);
+            slotBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
+            slotBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
+            slotBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
+            _selectedRoom.AssistantWorkplaces.OnPutElementToSlotHandler += FillCharacterSlotUI;
+            _selectedRoom.AssistantWorkplaces.OnTakeElementFromSlotHandler += FillCharacterSlotUI;
+        }
+
+        private void InitializeOrderSlotUI(int slotIndex)
+        {
+            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.OrderSlotPrefab, _ordersSlotsFillablePanel);
+            WorkRoomOrderSlotBehaviour slotBehaviour = slotUI.GetComponentInChildren<WorkRoomOrderSlotBehaviour>();
+            _orderSlotsBehaviours.Add(slotBehaviour);
+            slotBehaviour.Initialize(slotIndex, OrderStorageType.None, false);
+            slotBehaviour.OnClickRemoveOrderButtonHandler += OnClick_RemoveOrderFromSlotButton;
+            _selectedRoom.OrdersSlots.OnPutElementToSlotHandler += FillOrderSlotUI;
+            _selectedRoom.OrdersSlots.OnTakeElementFromSlotHandler += FillOrderSlotUI;
+        }
+
+        private void InitializeMakedItemSlotUI(int slotIndex)
+        {
+            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.MakedItemSlotPrefab, _makedItemsSlotsFillablePanel);
+            WorkRoomMakedItemSlotBehaviour slotBehaviour = slotUI.GetComponentInChildren<WorkRoomMakedItemSlotBehaviour>();
+            _makedItemSlotsBehaviours.Add(slotBehaviour);
+            slotBehaviour.Initialize(slotIndex, ItemStorageType.WorkRoomMakedItems, false);
+            _selectedRoom.MakedItemsSlots.OnPutElementToSlotHandler += FillMakedItemSlotUI;
+            _selectedRoom.MakedItemsSlots.OnTakeElementFromSlotHandler += FillMakedItemSlotUI;
+        }
+
+        private void InitializeCharacterListItemUI(int slotIndex, CharacterModel character)
+        {
+            GameObject characterUI = InstantiateUIObject(_data.WorkRoomDataStruct.CharacterListItemPrefab, _charactersFillablePanel);
+            WorkRoomCharacterListItemBehaviour uiBehaviour = characterUI.GetComponent<WorkRoomCharacterListItemBehaviour>();
+            uiBehaviour.Initialize(slotIndex, character);
+            uiBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
+            uiBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
+            uiBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
+            uiBehaviour.IsPointerEnterOn += IsPointerEnterCharacterListItemOn;
+        }
+
+        private void RemoveCharacterListItemUI(int slotIndex)
+        {
+            Destroy(GetCharacterListItemBehaviour(slotIndex).gameObject);
+        }
+
+        private GameObject InstantiateUIObject(GameObject prefab, GameObject parent)
+        {
+            GameObject objectUI = GameObject.Instantiate(prefab);
+            objectUI.transform.SetParent(parent.transform, false);
+            objectUI.transform.localScale = new Vector3(1, 1, 1);
+            return objectUI;
+        }
+
+        #endregion
+
+        #region OnClickMethods
+
         private void OnClick_RoomButton(WorkRoomModel model)
         {
             _selectedRoom = model;
@@ -179,7 +208,7 @@ namespace BeastHunterHubUI
             _roomPanel.SetActive(true);
         }
 
-        private void OnClick_CloseRoomButton()
+         private void OnClick_CloseRoomButton()
         {
             _roomPanel.SetActive(false);
 
@@ -201,17 +230,17 @@ namespace BeastHunterHubUI
                 }
             }
 
-            for (int i = _assistantsSlotsBehaviours.Count-1; i >= 0; i--)
+            for (int i = _assistantsSlotsBehaviours.Count - 1; i >= 0; i--)
             {
                 Destroy(_assistantsSlotsBehaviours[i].gameObject);
             }
 
-            for (int i = _orderSlotsBehaviours.Count-1; i >= 0; i--)
+            for (int i = _orderSlotsBehaviours.Count - 1; i >= 0; i--)
             {
                 Destroy(_orderSlotsBehaviours[i].gameObject);
             }
 
-            for (int i = _makedItemSlotsBehaviours.Count-1; i >= 0; i--)
+            for (int i = _makedItemSlotsBehaviours.Count - 1; i >= 0; i--)
             {
                 Destroy(_makedItemSlotsBehaviours[i].gameObject);
             }
@@ -221,6 +250,94 @@ namespace BeastHunterHubUI
             _makedItemSlotsBehaviours.Clear();
             _selectedRoom = null;
         }
+
+        private void OnClick_RemoveOrderFromSlotButton(int slotIndex)
+        {
+            _makedItemSlotsBehaviours[slotIndex].FillSlot(null);
+            _selectedRoom.OrdersSlots.GetElementBySlot(slotIndex).OnChangeHoursNumberToCompleteHandler -= _makedItemSlotsBehaviours[slotIndex].UpdateTimeText;
+            _selectedRoom.OrdersSlots.RemoveElement(slotIndex);
+        }
+
+        private void OnClick_CreateOrderButton()
+        {
+            if (_selectedRoom.OrdersSlots.HasFreeSlots())
+            {
+                //todo: open craft window
+                //temporary for debug:
+                ItemOrderModel order = new ItemOrderModel(_recipeForDebug, _selectedRoom.OrderTimeReducePercent);
+                if (_selectedRoom.OrdersSlots.PutElementToFirstEmptySlot(order, out int? slotIndex))
+                {
+                    _makedItemSlotsBehaviours[slotIndex.Value].FillSlot(order.Recipe.Item.Icon);
+                    _makedItemSlotsBehaviours[slotIndex.Value].UpdateTimeText(order.HoursNumberToComplete);
+                    order.OnChangeHoursNumberToCompleteHandler += _makedItemSlotsBehaviours[slotIndex.Value].UpdateTimeText;
+                }
+            }
+        }
+
+        private void OnClick_TakeMakedItemsButton()
+        {
+            //todo
+        }
+
+        private void OnClick_UpgradeRoomButton()
+        {
+            //todo: open add window
+        }
+
+        #endregion
+
+        #region DragAndDropMethods
+
+        private void OnBeginDragCharacterFromSlot(int slotIndex, CharacterStorageType storageType)
+        {
+            _draggedCharacterInfo.slotIndex = slotIndex;
+            _draggedCharacterInfo.storageType = storageType;
+        }
+
+        private void OnEndDragCharacter(int slotIndex, CharacterStorageType storageType)
+        {
+            if (storageType != CharacterStorageType.AvailableCharacters)
+            {
+                FillCharacterSlotUI(storageType, slotIndex, GetCharacterStorageByType(storageType).GetElementBySlot(slotIndex));
+            }
+            _draggedCharacterInfo.slotIndex = null;
+        }
+
+        private void OnDropCharacterToSlot(int dropSlotIndex, CharacterStorageType dropStorageType)
+        {
+            if (_draggedCharacterInfo.slotIndex.HasValue)
+            {
+                if (dropStorageType == CharacterStorageType.AvailableCharacters)
+                {
+                    BaseCharacterStorage storageOut = GetCharacterStorageByType(_draggedCharacterInfo.storageType);
+                    CharacterModel character = storageOut.GetElementBySlot(_draggedCharacterInfo.slotIndex.Value);
+
+                    if (storageOut.RemoveElement(_draggedCharacterInfo.slotIndex.Value))
+                    {
+                        GetCharacterStorageByType(dropStorageType).PutElement(dropSlotIndex + 1, character);
+                    }
+                    else
+                    {
+                        Debug.LogError($"The remove element from {_draggedCharacterInfo.storageType} is not succeful");
+                    }
+                }
+                else
+                {
+                    GetCharacterStorageByType(dropStorageType).SwapElementsWithOtherStorage(dropSlotIndex,
+                    GetCharacterStorageByType(_draggedCharacterInfo.storageType), _draggedCharacterInfo.slotIndex.Value);
+                }
+                _draggedCharacterInfo.slotIndex = null;
+            }
+        }
+
+        private bool IsPointerEnterCharacterListItemOn(int slotIndex)
+        {
+            return _draggedCharacterInfo.slotIndex.HasValue && _draggedCharacterInfo.slotIndex.Value != slotIndex;
+        }
+
+        #endregion
+
+        #region FillingMethods
 
         private void FillRoomPanel(WorkRoomModel room)
         {
@@ -249,91 +366,6 @@ namespace BeastHunterHubUI
                     _makedItemSlotsBehaviours[i].UpdateTimeText(order.HoursNumberToComplete);
                     order.OnChangeHoursNumberToCompleteHandler += _makedItemSlotsBehaviours[i].UpdateTimeText;
                 }
-            }
-        }
-
-        private void InitializeOrderSlotUI(int slotIndex)
-        {
-            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.OrderSlotPrefab, _ordersSlotsFillablePanel);
-            WorkRoomOrderSlotBehaviour slotBehaviour = slotUI.GetComponentInChildren<WorkRoomOrderSlotBehaviour>();
-            _orderSlotsBehaviours.Add(slotBehaviour);
-            slotBehaviour.Initialize(slotIndex, OrderStorageType.None, false);
-            slotBehaviour.OnClickRemoveOrderButtonHandler += OnClick_RemoveOrderFromSlotButton;
-            _selectedRoom.OrdersSlots.OnPutElementToSlotHandler += FillOrderSlotUI;
-            _selectedRoom.OrdersSlots.OnTakeElementFromSlotHandler += FillOrderSlotUI;
-        }
-
-        private void OnClick_RemoveOrderFromSlotButton(int slotIndex)
-        {
-            _makedItemSlotsBehaviours[slotIndex].FillSlot(null);
-            _selectedRoom.OrdersSlots.GetElementBySlot(slotIndex).OnChangeHoursNumberToCompleteHandler -= _makedItemSlotsBehaviours[slotIndex].UpdateTimeText;
-            _selectedRoom.OrdersSlots.RemoveElement(slotIndex);
-        }
-
-        private void InitializeMakedItemSlotUI(int slotIndex)
-        {
-            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.MakedItemSlotPrefab, _makedItemsSlotsFillablePanel);
-            WorkRoomMakedItemSlotBehaviour slotBehaviour = slotUI.GetComponentInChildren<WorkRoomMakedItemSlotBehaviour>();
-            _makedItemSlotsBehaviours.Add(slotBehaviour);
-            slotBehaviour.Initialize(slotIndex, ItemStorageType.WorkRoomMakedItems, false);
-            _selectedRoom.MakedItemsSlots.OnPutElementToSlotHandler += FillMakedItemSlotUI;
-            _selectedRoom.MakedItemsSlots.OnTakeElementFromSlotHandler += FillMakedItemSlotUI;
-        }
-
-        private void InitializeAssistantSlotUI(int slotIndex)
-        {
-            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.WorkerSlotPrefab, _assistantsSlotsFillablePanel);
-            WorkRoomWorkerSlotBehaviour slotBehaviour = slotUI.GetComponent<WorkRoomWorkerSlotBehaviour>();
-            _assistantsSlotsBehaviours.Add(slotBehaviour);
-            slotBehaviour.Initialize(slotIndex, CharacterStorageType.AssistantWorkplaces, true);
-            slotBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
-            slotBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
-            slotBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
-            _selectedRoom.AssistantWorkplaces.OnPutElementToSlotHandler += FillCharacterSlotUI;
-            _selectedRoom.AssistantWorkplaces.OnTakeElementFromSlotHandler += FillCharacterSlotUI;
-        }
-
-        private void OnBeginDragCharacterFromSlot(int slotIndex, CharacterStorageType storageType)
-        {
-            _draggedCharacterInfo.slotIndex = slotIndex;
-            _draggedCharacterInfo.storageType = storageType;
-        }
-
-        private void OnEndDragCharacter(int slotIndex, CharacterStorageType storageType)
-        {
-            if (storageType != CharacterStorageType.AvailableCharacters)
-            {
-                FillCharacterSlotUI(storageType, slotIndex, GetCharacterStorageByType(storageType).GetElementBySlot(slotIndex));
-            }
-            _draggedCharacterInfo.slotIndex = null;
-        }
-
-        private void OnDropCharacterToSlot(int dropSlotIndex, CharacterStorageType dropStorageType)
-        {
-            if (_draggedCharacterInfo.slotIndex.HasValue)
-            {
-                if (dropStorageType == CharacterStorageType.AvailableCharacters)
-                {
-                    //GetCharacterStorageByType(dropStorageType).PutElementToFirstEmptySlotFromOtherStorage
-                    //    (GetCharacterStorageByType(_draggedCharacterInfo.storageType), _draggedCharacterInfo.slotIndex.Value);
-                    BaseCharacterStorage storageOut = GetCharacterStorageByType(_draggedCharacterInfo.storageType);
-                    CharacterModel character = storageOut.GetElementBySlot(_draggedCharacterInfo.slotIndex.Value);
-
-                    if (storageOut.RemoveElement(_draggedCharacterInfo.slotIndex.Value))
-                    {
-                        GetCharacterStorageByType(dropStorageType).PutElement(dropSlotIndex + 1, character);
-                    }
-                    else
-                    {
-                        Debug.LogError($"The remove element from {_draggedCharacterInfo.storageType} is not succeful");
-                    }
-                }
-                else
-                {
-                    GetCharacterStorageByType(dropStorageType).SwapElementsWithOtherStorage(dropSlotIndex,
-                    GetCharacterStorageByType(_draggedCharacterInfo.storageType), _draggedCharacterInfo.slotIndex.Value);
-                }
-                _draggedCharacterInfo.slotIndex = null;
             }
         }
 
@@ -388,6 +420,20 @@ namespace BeastHunterHubUI
             _makedItemSlotsBehaviours[slotIndex].FillSlot(sprite);
         }
 
+        private void UpdateCharacterListItemUI(int slotIndex, CharacterModel character)
+        {
+            GetCharacterListItemBehaviour(slotIndex).UpdateInfo(character);
+        }
+
+        #endregion
+
+        #region OtherMethods
+
+        private WorkRoomCharacterListItemBehaviour GetCharacterListItemBehaviour(int index)
+        {
+            return _charactersFillablePanel.transform.GetChild(index).GetComponent<WorkRoomCharacterListItemBehaviour>();
+        }
+
         private BaseCharacterStorage GetCharacterStorageByType(CharacterStorageType storageType)
         {
             BaseCharacterStorage storage = null;
@@ -412,12 +458,8 @@ namespace BeastHunterHubUI
             return storage;
         }
 
-        private GameObject InstantiateUIObject(GameObject prefab, GameObject parent)
-        {
-            GameObject objectUI = GameObject.Instantiate(prefab);
-            objectUI.transform.SetParent(parent.transform, false);
-            objectUI.transform.localScale = new Vector3(1, 1, 1);
-            return objectUI;
-        }
+        #endregion
+
+        #endregion
     }
 }
