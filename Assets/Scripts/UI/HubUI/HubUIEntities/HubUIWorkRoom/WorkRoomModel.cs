@@ -42,7 +42,6 @@ namespace BeastHunterHubUI
 
             OrdersSlots.OnPutElementToSlotHandler += OnOrderAdd;
             OrdersSlots.OnTakeElementFromSlotHandler += OnOrderRemove;
-            OrdersSlots.CheckPossibilityFunc = CheckMakedItemsSlots;
 
             MakedItemsSlots = new ItemLimitedStorage(ProgressScheme[Level].OrderSlots, ItemStorageType.WorkRoomMakedItems);
         }
@@ -119,11 +118,6 @@ namespace BeastHunterHubUI
                     order.RecountHoursToComplete(OrderTimeReducePercent);
                 }
             }
-        }
-
-        private bool CheckMakedItemsSlots(int slotIndex)
-        {
-            return MakedItemsSlots.GetElementBySlot(slotIndex) == null;
         }
 
         private void OnOrderAdd(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
