@@ -208,14 +208,11 @@ namespace BeastHunterHubUI
         [SerializeField] private Button _closePerksPanelButton;
         [SerializeField] private GameObject _perksCharactersPanel;
 
-        [Header("Time skip panel (PROTOTYPE)")]
-        [SerializeField] private GameObject _timeSkipPanel;
-        [SerializeField] private Button _closeTimeSkipPanel;
-        [SerializeField] private Button _startTimeSkipButton;
-        [SerializeField] private Button _stopTimeSkipButton;
+        [Header("Time skip panel")]
+        [SerializeField] private GameObject _startTimeSkipButton;
+        [SerializeField] private GameObject _stopTimeSkipButton;
         [SerializeField] private Text _currentDayText;
         [SerializeField] private Text _currentHourText;
-        [SerializeField] private Button _orderButton;
 
         private SelectedElements _selected;
         private HubUIContext _context;
@@ -270,12 +267,9 @@ namespace BeastHunterHubUI
             _buyBackButton.onClick.AddListener(OnClick_BuyBackItemButton);
             _buyButton.onClick.AddListener(OnClick_BuyItemButton);
             _closePerksPanelButton.onClick.AddListener(OnClick_ClosePerksButton);
-            _clockButton.onClick.AddListener(OnClick_ClockButton);
 
-            _closeTimeSkipPanel.onClick.AddListener(OnClick_CloseTimeSkipPanelButton);
-            _startTimeSkipButton.onClick.AddListener(OnClick_StartTimeSkipButton);
-            _stopTimeSkipButton.onClick.AddListener(OnClick_StopTimeSkipButton);
-            _orderButton.onClick.AddListener(OnClick_OrderButton);
+            _startTimeSkipButton.GetComponentInChildren<Button>().onClick.AddListener(OnClick_StartTimeSkipButton);
+            _stopTimeSkipButton.GetComponentInChildren<Button>().onClick.AddListener(OnClick_StopTimeSkipButton);
         }
 
         private void OnDisable()
@@ -297,10 +291,8 @@ namespace BeastHunterHubUI
             _closePerksPanelButton.onClick.RemoveAllListeners();
             _clockButton.onClick.RemoveAllListeners();
 
-            _closeTimeSkipPanel.onClick.RemoveAllListeners();
-            _startTimeSkipButton.onClick.RemoveAllListeners();
-            _stopTimeSkipButton.onClick.RemoveAllListeners();
-            _orderButton.onClick.RemoveAllListeners();
+            _startTimeSkipButton.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
+            _stopTimeSkipButton.GetComponentInChildren<Button>().onClick.RemoveAllListeners();
         }
 
         #endregion
@@ -395,8 +387,8 @@ namespace BeastHunterHubUI
             _character3DViewModelRawImageBehaviour.OnDropHandler += OnDropItemOn3DViewModelRawImage;
             _context.GameTime.OnChangeTimeHandler += OnChanged_GameTime;
 
-            _currentDayText.text = context.GameTime.CurrentTime.Day.ToString();
-            _currentHourText.text = context.GameTime.CurrentTime.Hour.ToString();
+            OnChanged_GameTime(context.GameTime.CurrentTime);
+            context.GameTime.OnSwitchTimeSkipHandler += OnSwitchTimeSkip;
 
             _mainPanel.SetActive(false);
             _infoPanel.SetActive(false);
@@ -413,7 +405,7 @@ namespace BeastHunterHubUI
             _hikeAcceptButton.interactable = false;
             _loadingPanel.SetActive(false);
             _character3DViewModelRawImage.enabled = false;
-            _timeSkipPanel.SetActive(false);
+            _stopTimeSkipButton.SetActive(false);
         }
 
         #endregion
@@ -437,16 +429,6 @@ namespace BeastHunterHubUI
 
         #region OnClick
 
-        private void OnClick_OrderButton()  //WIP, just for testing order and event system
-        {
-            if (!_context.Player.AvailableCharacters.GetElementBySlot(0).IsAssignedToWork)
-            {
-                OrderModel testOrder = new OrderModel(OrderType.Alchemy, 4);
-                testOrder.AssignCharacter(_context.Player.AvailableCharacters.GetElementBySlot(0));
-                testOrder.OnCompleteHandler += Debug.Log;
-            }
-        }
-
         private void OnClick_StartTimeSkipButton()
         {
             if (!_context.GameTime.IsTimePassing)
@@ -461,16 +443,6 @@ namespace BeastHunterHubUI
             {
                 _context.GameTime.StopTimeSkip();
             }
-        }
-
-        private void OnClick_ClockButton()
-        {
-            _timeSkipPanel.SetActive(true);
-        }
-
-        private void OnClick_CloseTimeSkipPanelButton()
-        {
-            _timeSkipPanel.SetActive(false);
         }
 
         private void OnClick_MapButton()
@@ -990,10 +962,16 @@ namespace BeastHunterHubUI
 
         #region OnChanged
 
+        private void OnSwitchTimeSkip(bool isTimePassing)
+        {
+            _startTimeSkipButton.SetActive(!isTimePassing);
+            _stopTimeSkipButton.SetActive(isTimePassing);
+        }
+
         private void OnChanged_GameTime(HubUITimeStruct currentTime)
         {
-            _currentDayText.text = currentTime.Day.ToString();
-            _currentHourText.text = currentTime.Hour.ToString();
+            _currentDayText.text = "Day: " + currentTime.Day.ToString();
+            _currentHourText.text = "Hour: " + currentTime.Hour.ToString();
         }
 
         private void OnChangedPocketsSlotsAmount()

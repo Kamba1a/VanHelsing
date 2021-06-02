@@ -114,6 +114,7 @@ namespace BeastHunterHubUI
             _orderEvent = null;
 
             MakedItem = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(Recipe.Item);
+            HubUIServices.SharedInstance.GameMessages.OnWindowMessageHandler($"Recipe {Recipe.Item.Name} is completed!");
             OnCompleteHandler?.Invoke(this);
         }
 

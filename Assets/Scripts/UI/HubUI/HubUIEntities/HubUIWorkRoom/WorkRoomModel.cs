@@ -11,11 +11,9 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public Action<ItemOrderModel> OnOrderCompleteHandler { get; set; }
         public Action<int> OnChangeMinOrderCompleteTimeHandler { get; set; }
 
         public OrderLimitedStorage OrdersSlots { get; private set; }
-        public ItemLimitedStorage MakedItemsSlots { get; private set; }
         public override Dictionary<int, WorkRoomProgress> ProgressScheme { get; protected set; }
 
         public int MinOrderCompleteTime
@@ -42,8 +40,6 @@ namespace BeastHunterHubUI
 
             OrdersSlots.OnPutElementToSlotHandler += OnOrderAdd;
             OrdersSlots.OnTakeElementFromSlotHandler += OnOrderRemove;
-
-            MakedItemsSlots = new ItemLimitedStorage(ProgressScheme[Level].OrderSlots, ItemStorageType.WorkRoomMakedItems);
         }
 
         #endregion
@@ -127,7 +123,6 @@ namespace BeastHunterHubUI
                 order.AddOrderEvent();
             }
             UpdateMinOrderCompleteTime();
-            order.OnCompleteHandler += OnOrderComplete;
             order.OnChangeHoursNumberToCompleteHandler += OnChangeOrderBaseCompleteTime;
         }
 
@@ -137,16 +132,6 @@ namespace BeastHunterHubUI
             order.OnChangeHoursNumberToCompleteHandler = null;
             order.RemoveOrderEvent();
             UpdateMinOrderCompleteTime();
-        }
-
-        private void OnOrderComplete(ItemOrderModel order)
-        {
-            if (!MakedItemsSlots.PutElementToFirstEmptySlot(order.MakedItem))
-            {
-                Debug.LogError("No storage space for maked items!");
-            }
-            HubUIServices.SharedInstance.GameMessages.OnWindowMessageHandler($"Recipe {order.Recipe.Item.Name} is completed!");
-            OnOrderCompleteHandler?.Invoke(order);
         }
 
         private void OnChangeOrderBaseCompleteTime(int orderTime)

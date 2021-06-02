@@ -18,6 +18,7 @@ namespace BeastHunterHubUI
         #region Properties
 
         public Action<HubUITimeStruct> OnChangeTimeHandler { get; set; }
+        public Action<bool> OnSwitchTimeSkipHandler { get; set; }
 
         public HubUITimeStruct CurrentTime => _currentTime;
         public int HoursAmountPerDay { get; private set; }
@@ -44,15 +45,20 @@ namespace BeastHunterHubUI
         public IEnumerator StartTimeSkip()
         {
             IsTimePassing = true;
+            OnSwitchTimeSkipHandler?.Invoke(true);
+
             while (IsTimePassing)
             {
                 yield return new WaitForSeconds(_timePassingDelay);
                 if (!IsTimePassing)
                 {
-                    yield break;
+                    break;
                 }
-               OneHourPass();
+                OneHourPass();
+                OnChangeTimeHandler?.Invoke(CurrentTime);
             }
+
+            OnSwitchTimeSkipHandler?.Invoke(false);
         }
 
         public void StopTimeSkip()
@@ -103,18 +109,11 @@ namespace BeastHunterHubUI
             {
                 _currentTime.Hour += 1;
             }
-
-            OnChangeTime();
         }
 
         private int GameTimeStructToHours(HubUITimeStruct time)
         {
             return time.Hour + time.Day * HoursAmountPerDay;
-        }
-
-        private void OnChangeTime()
-        {
-            OnChangeTimeHandler?.Invoke(CurrentTime);
         }
 
         #endregion
