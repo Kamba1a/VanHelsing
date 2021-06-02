@@ -90,6 +90,7 @@ namespace BeastHunterHubUI
             _context.Player.AvailableCharacters.OnRemoveCharacterHandler += RemoveCharacterListItemUI;
             _context.Player.AvailableCharacters.OnReplaceCharacterHandler += UpdateCharacterListItemUI;
 
+            gameObject.SetActive(true);
             _roomButtonsFillablePanel.SetActive(true);
             _roomPanel.SetActive(false);
         }
