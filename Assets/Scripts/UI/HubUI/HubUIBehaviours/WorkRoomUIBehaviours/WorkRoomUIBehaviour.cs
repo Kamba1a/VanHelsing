@@ -26,6 +26,7 @@ namespace BeastHunterHubUI
         [SerializeField] private GameObject _charactersFillablePanel;
         [SerializeField] private Button _createOrderButton;
         [SerializeField] private Button _takeMakedItemsButton;
+        [SerializeField] private WorkRoomCharacterPanelBehaviour _characterPanelBehaviour;
 
         //TEMPORARY! Remove after debug!
         [SerializeField] private ItemRecipeData _recipeForDebug;
@@ -89,6 +90,8 @@ namespace BeastHunterHubUI
             _context.Player.AvailableCharacters.OnAddCharacterHandler += InitializeCharacterListItemUI;
             _context.Player.AvailableCharacters.OnRemoveCharacterHandler += RemoveCharacterListItemUI;
             _context.Player.AvailableCharacters.OnReplaceCharacterHandler += UpdateCharacterListItemUI;
+
+            _characterPanelBehaviour.OnDropHandler += OnDropToCharacterPanel;
 
             gameObject.SetActive(true);
             _roomButtonsFillablePanel.SetActive(true);
@@ -294,9 +297,30 @@ namespace BeastHunterHubUI
             }
         }
 
+        private void OnDropToCharacterPanel()
+        {
+            if (_draggedCharacterInfo.slotIndex.HasValue)
+            {
+                GetCharacterStorageByType(CharacterStorageType.AvailableCharacters).
+                    PutElementToFirstEmptySlotFromOtherStorage(GetCharacterStorageByType(_draggedCharacterInfo.storageType), _draggedCharacterInfo.slotIndex.Value);
+                _draggedCharacterInfo.slotIndex = null;
+            }
+        }
+
         private bool IsPointerEnterCharacterListItemOn(int slotIndex)
         {
-            return _draggedCharacterInfo.slotIndex.HasValue && _draggedCharacterInfo.slotIndex.Value != slotIndex;
+            if (_draggedCharacterInfo.slotIndex.HasValue)
+            {
+                if(_draggedCharacterInfo.storageType != CharacterStorageType.AvailableCharacters)
+                {
+                    return true;
+                }
+                else
+                {
+                    return _draggedCharacterInfo.slotIndex.Value != slotIndex;
+                }
+            }
+            return false;
         }
 
         #endregion
