@@ -385,10 +385,11 @@ namespace BeastHunterHubUI
 
             _context.Player.OnChangeGoldAmount += OnChangedPlayerGoldAmount;
             _character3DViewModelRawImageBehaviour.OnDropHandler += OnDropItemOn3DViewModelRawImage;
-            _context.GameTime.OnChangeTimeHandler += OnChanged_GameTime;
 
-            OnChanged_GameTime(context.GameTime.CurrentTime);
+            _context.GameTime.OnChangeTimeHandler += OnChanged_GameTime;
             context.GameTime.OnSwitchTimeSkipHandler += OnSwitchTimeSkip;
+            OnChanged_GameTime(context.GameTime.CurrentTime);
+            OnSwitchTimeSkip(context.GameTime.IsTimePassing);
 
             _mainPanel.SetActive(false);
             _infoPanel.SetActive(false);
@@ -405,7 +406,6 @@ namespace BeastHunterHubUI
             _hikeAcceptButton.interactable = false;
             _loadingPanel.SetActive(false);
             _character3DViewModelRawImage.enabled = false;
-            _stopTimeSkipButton.SetActive(false);
         }
 
         #endregion

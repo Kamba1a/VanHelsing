@@ -227,7 +227,19 @@ namespace BeastHunterHubUI
 
         private void OnClick_TakeMakedItemsButton()
         {
-            //todo
+            //todo by design doc (open add window and craft fail chance)
+            //temporary:
+            for (int i = 0; i < _selectedRoom.OrdersSlots.GetSlotsCount(); i++)
+            {
+                ItemOrderModel order = _selectedRoom.OrdersSlots.GetElementBySlot(i);
+                if (order != null && order.IsCompleted)
+                {
+                    _context.Player.Inventory.PutElementToFirstEmptySlot(order.MakedItem);
+                    HubUIServices.SharedInstance.GameMessages.Notice($"{order.MakedItem.Name} moved to player inventory");
+                    _selectedRoom.OrdersSlots.RemoveElement(i);
+                }
+            }
+            
         }
 
         private void OnClick_UpgradeRoomButton()
