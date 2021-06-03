@@ -12,58 +12,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdc4f56eb8b4c2742b1415abd0385973, type: 3}
   m_Name: HubUIData
   m_EditorClassIdentifier: 
-  PlayerSettings:
-    _goldAmount: 200
-    _startingRank: 0
-    _inventorySlotsAmount: 60
-    _startInventoryItems:
-    - {fileID: 11400000, guid: b82379ba5dbb65c4a9c24795aacbca77, type: 2}
-    - {fileID: 11400000, guid: 4ef6411f36ddde84e85833d692065971, type: 2}
-    - {fileID: 11400000, guid: e88f2f60d12eaf7499c76e491be54eba, type: 2}
-    - {fileID: 11400000, guid: d251bc27e1e3b004db86ee0f06a83739, type: 2}
-    - {fileID: 11400000, guid: b5414bdaa16c2a24795504aaab30a25a, type: 2}
-    - {fileID: 11400000, guid: a4a3ebf3a1fac67498eae459e1b55ef7, type: 2}
-    - {fileID: 11400000, guid: 61e1c8d68c279de4ab6e825ce3ea7967, type: 2}
-    - {fileID: 11400000, guid: 043b19e6b22373e4fa1fd2f190b2b871, type: 2}
-    - {fileID: 11400000, guid: 94090163ee36659408d33ec787c120ce, type: 2}
-    - {fileID: 11400000, guid: bf4007d09f37b5c45a3fe947240beda0, type: 2}
-    - {fileID: 11400000, guid: 2f80044f5c527464e90eead336176198, type: 2}
-    - {fileID: 11400000, guid: b70d1f904cbdf3e4f891776021a10569, type: 2}
-    - {fileID: 11400000, guid: 95a772b527171d1429d829162c1411bb, type: 2}
-    - {fileID: 11400000, guid: 23967b094b19e7340acee48cc5005df4, type: 2}
-    - {fileID: 11400000, guid: 5c85a6f9efa72f442aa3990239013733, type: 2}
-    - {fileID: 11400000, guid: b2764ecbd1fcbd94fb45cfeee1f80140, type: 2}
-    - {fileID: 11400000, guid: 7188440d0dd19614882227cf7c80e002, type: 2}
-    - {fileID: 11400000, guid: 3624a46c93231c840a317cef98d92a07, type: 2}
-    - {fileID: 11400000, guid: 2aadd9546a993ac4c962f5bfb2c48ebc, type: 2}
-    - {fileID: 11400000, guid: f6e185ac30a19194cbf45439c92e3b36, type: 2}
-    - {fileID: 11400000, guid: 8460c4d8fab1f4d4399d4e7e715de911, type: 2}
-    - {fileID: 11400000, guid: 899f376411d00d646aeb701d5ddb4f7e, type: 2}
-    - {fileID: 11400000, guid: 0095dc81f4df59045abcc52e5a8d23d1, type: 2}
-    _startHiredCharacters:
-    - {fileID: 11400000, guid: 9fb474a159a104d49a106419732f29d4, type: 2}
-    - {fileID: 11400000, guid: 5bedb4bb121491a418e9a717db215ba4, type: 2}
-    - {fileID: 11400000, guid: 5e2a56911803eb640a1facc3389c8627, type: 2}
-    - {fileID: 11400000, guid: 4e3ca3341ad44d047b3985d33cb9bf09, type: 2}
-  TimeSettings:
+  _startGameDataStruct:
+    _gameTimeStruct:
+      _day: 1
+      _hour: 12
+    _playerStruct:
+      _rank: 0
+      _goldAmount: 200
+      _inventorySlotsAmount: 50
+      _inventoryItems:
+      - {fileID: 11400000, guid: b82379ba5dbb65c4a9c24795aacbca77, type: 2}
+      - {fileID: 11400000, guid: 4ef6411f36ddde84e85833d692065971, type: 2}
+      - {fileID: 11400000, guid: e88f2f60d12eaf7499c76e491be54eba, type: 2}
+      - {fileID: 11400000, guid: d251bc27e1e3b004db86ee0f06a83739, type: 2}
+      - {fileID: 11400000, guid: b5414bdaa16c2a24795504aaab30a25a, type: 2}
+      - {fileID: 11400000, guid: a4a3ebf3a1fac67498eae459e1b55ef7, type: 2}
+      - {fileID: 11400000, guid: 61e1c8d68c279de4ab6e825ce3ea7967, type: 2}
+      - {fileID: 11400000, guid: 043b19e6b22373e4fa1fd2f190b2b871, type: 2}
+      - {fileID: 11400000, guid: 94090163ee36659408d33ec787c120ce, type: 2}
+      - {fileID: 11400000, guid: bf4007d09f37b5c45a3fe947240beda0, type: 2}
+      - {fileID: 11400000, guid: 2f80044f5c527464e90eead336176198, type: 2}
+      - {fileID: 11400000, guid: b70d1f904cbdf3e4f891776021a10569, type: 2}
+      - {fileID: 11400000, guid: 95a772b527171d1429d829162c1411bb, type: 2}
+      - {fileID: 11400000, guid: 23967b094b19e7340acee48cc5005df4, type: 2}
+      - {fileID: 11400000, guid: 5c85a6f9efa72f442aa3990239013733, type: 2}
+      - {fileID: 11400000, guid: b2764ecbd1fcbd94fb45cfeee1f80140, type: 2}
+      - {fileID: 11400000, guid: 7188440d0dd19614882227cf7c80e002, type: 2}
+      - {fileID: 11400000, guid: 3624a46c93231c840a317cef98d92a07, type: 2}
+      - {fileID: 11400000, guid: 2aadd9546a993ac4c962f5bfb2c48ebc, type: 2}
+      - {fileID: 11400000, guid: f6e185ac30a19194cbf45439c92e3b36, type: 2}
+      - {fileID: 11400000, guid: 8460c4d8fab1f4d4399d4e7e715de911, type: 2}
+      - {fileID: 11400000, guid: 899f376411d00d646aeb701d5ddb4f7e, type: 2}
+      - {fileID: 11400000, guid: 0095dc81f4df59045abcc52e5a8d23d1, type: 2}
+      _availableCharacters: []
+    _locationsData:
+    - {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
+    - {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
+    - {fileID: 11400000, guid: 860d3696ec691de4e9302d6819bd9cda, type: 2}
+    - {fileID: 11400000, guid: 9b605ac1c7e3a6b458708df1317a7eaf, type: 2}
+    - {fileID: 11400000, guid: a4953306eee0c584a8c7fc514f731fbb, type: 2}
+    _citiesData:
+    - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
+    _workRoomsData:
+    - {fileID: 11400000, guid: 538f84166fed25a459e3eb52a5ac7aac, type: 2}
+    - {fileID: 11400000, guid: 90082b5b7c854a7479b78cae329f1dee, type: 2}
+  _gameTimeSettings:
     _hoursAmountPerDay: 24
-    _hoursOnStartGame: 12
-    _dayOnStartGame: 1
     _timePassingDelay: 1
+  _charactersAmountForHire: 5
   _charactersData: {fileID: 11400000, guid: 9824cdaccbb2c104e91379e78ce53133, type: 2}
   _citiesShopsSlotsAmount: 20
-  _randomCharactersAmount: 5
-  _locationDatas:
-  - {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
-  - {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
-  - {fileID: 11400000, guid: 860d3696ec691de4e9302d6819bd9cda, type: 2}
-  - {fileID: 11400000, guid: 9b605ac1c7e3a6b458708df1317a7eaf, type: 2}
-  - {fileID: 11400000, guid: a4953306eee0c584a8c7fc514f731fbb, type: 2}
-  _citiesDatas:
-  - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
-  _workRoomsData:
-  - {fileID: 11400000, guid: 538f84166fed25a459e3eb52a5ac7aac, type: 2}
-  - {fileID: 11400000, guid: 90082b5b7c854a7479b78cae329f1dee, type: 2}
   _questsPool:
   - {fileID: 11400000, guid: 81ad56c84f8679347b6301f8a566d862, type: 2}
   _huntingQuestsDataPool:

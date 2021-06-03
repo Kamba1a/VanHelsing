@@ -11,13 +11,13 @@ namespace BeastHunterHubUI
 
         private Action _onTimeTick;
         private HubUIContext _context;
-        private Dictionary<HubUITimeStruct, List<HubUIEventModel>> _scheduledEvents;
+        private Dictionary<GameTimeStruct, List<HubUIEventModel>> _scheduledEvents;
 
 
         public HubUIEventsService(HubUIContext context)
         {
             _context = context;
-            _scheduledEvents = new Dictionary<HubUITimeStruct, List<HubUIEventModel>>();
+            _scheduledEvents = new Dictionary<GameTimeStruct, List<HubUIEventModel>>();
         }
 
 
@@ -50,14 +50,14 @@ namespace BeastHunterHubUI
             }
         }
 
-        public void OnChangedGameTime(HubUITimeStruct currentTime)
+        public void OnChangedGameTime(GameTimeStruct currentTime)
         {
             _onTimeTick?.Invoke();
             RandomEventCheck();
             ScheduleEventsCheck(currentTime);
         }
 
-        private void ScheduleEventsCheck(HubUITimeStruct invokeTime)
+        private void ScheduleEventsCheck(GameTimeStruct invokeTime)
         {
             if (_scheduledEvents.ContainsKey(invokeTime))
             {

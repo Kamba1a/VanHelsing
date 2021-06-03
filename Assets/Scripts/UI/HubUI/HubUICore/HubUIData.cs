@@ -8,18 +8,19 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
+        [Header("STARTING GAME DATA")]
+        [SerializeField] private GameDataStruct _startGameDataStruct;
+
+
+        [Header("GLOBAL SETTINGS")]
+        [SerializeField] private GameTimeSettings _gameTimeSettings;
+        [SerializeField] private int _charactersAmountForHire;
+
         //TODO: rework entity datas to start settings and global settings
         [Header("ENTITIES SETTINGS")]
-        public PlayerSettingsStruct PlayerSettings;
-        public HubUITimeSettingsStruct TimeSettings;
         [SerializeField] private AllCharactersData _charactersData;
         [SerializeField] private int _citiesShopsSlotsAmount;
-        [SerializeField] private int _randomCharactersAmount;
 
-        [Space(20, order = 1), Header("START DATA POOLS", order = 2)]
-        [SerializeField] private LocationData[] _locationDatas;
-        [SerializeField] private CityData[] _citiesDatas;
-        [SerializeField] private WorkRoomData[] _workRoomsData;
 
         [Space(20, order = 1), Header("GLOBAL DATA POOLS", order = 2)]
         [SerializeField] private QuestData[] _questsPool;
@@ -44,17 +45,16 @@ namespace BeastHunterHubUI
 
         #region Properties
 
+        public GameDataStruct StartGameDataStruct => _startGameDataStruct;
+        public GameTimeSettings GameTimeSettings => _gameTimeSettings;
         public GameObject MessageWindowPrefab => _messageWindowPrefab;
         public AllCharactersData AllCharactersData => _charactersData;
         public QuestData[] QuestsPool => _questsPool;
-        public LocationData[] Locations => (LocationData[])_locationDatas.Clone();
-        public CityData[] Cities => (CityData[])_citiesDatas.Clone();
         public int CitiesShopsSlotsAmount => _citiesShopsSlotsAmount;
-        public int RandomCharactersAmount => _randomCharactersAmount;
+        public int CharactersAmountForHire => _charactersAmountForHire;
         public ItemDataPools ItemDataPools => _itemDataPools;
         public BossData[] BossesDataPool => _bossesDataPool;
         public HuntingQuestData[] HuntingQuestsDataPool => _huntingQuestsDataPool;
-        public WorkRoomData[] WorkRoomsData => _workRoomsData;
 
         #endregion
     }

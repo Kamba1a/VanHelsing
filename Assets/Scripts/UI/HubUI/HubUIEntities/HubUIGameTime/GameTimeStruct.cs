@@ -1,11 +1,15 @@
-﻿namespace BeastHunterHubUI
+﻿using UnityEngine;
+
+
+namespace BeastHunterHubUI
 {
-    public struct HubUITimeStruct
+    [System.Serializable]
+    public struct GameTimeStruct
     {
         #region Fields
 
-        private int _day;
-        private int _hour;
+        [SerializeField] private int _day;
+        [SerializeField] private int _hour;
 
         #endregion
 
@@ -39,7 +43,7 @@
 
         #region ClassLifeCycle
 
-        public HubUITimeStruct(int day, int hour)
+        public GameTimeStruct(int day, int hour)
         {
             _day = 0;
             _hour = 0;

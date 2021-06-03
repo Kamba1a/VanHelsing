@@ -5,22 +5,22 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    public class HubUIGameTime
+    public class GameTimeModel
     {
         #region Fields
 
         private float _timePassingDelay;
-        private HubUITimeStruct _currentTime;
+        private GameTimeStruct _currentTime;
 
         #endregion
 
 
         #region Properties
 
-        public Action<HubUITimeStruct> OnChangeTimeHandler { get; set; }
+        public Action<GameTimeStruct> OnChangeTimeHandler { get; set; }
         public Action<bool> OnSwitchTimeSkipHandler { get; set; }
 
-        public HubUITimeStruct CurrentTime => _currentTime;
+        public GameTimeStruct CurrentTime => _currentTime;
         public int HoursAmountPerDay { get; private set; }
         public bool IsTimePassing { get; private set; }
 
@@ -29,12 +29,15 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public HubUIGameTime(HubUITimeSettingsStruct settings)
+        public GameTimeModel(GameTimeStruct timeStruct)
         {
-            IsTimePassing = false;
+            GameTimeSettings settings = BeastHunter.Data.HubUIData.GameTimeSettings;
             _timePassingDelay = settings.TimePassingDelay;
             HoursAmountPerDay = settings.HoursAmountPerDay;
-            _currentTime = new HubUITimeStruct(settings.DayOnStartGame, settings.HoursOnStartGame);
+
+            _currentTime = new GameTimeStruct(timeStruct.Day, timeStruct.Hour);
+
+            IsTimePassing = false;
         }
 
         #endregion
@@ -66,14 +69,14 @@ namespace BeastHunterHubUI
             IsTimePassing = false;
         }
 
-        public HubUITimeStruct AddTime(HubUITimeStruct time)
+        public GameTimeStruct AddTime(GameTimeStruct time)
         {
             return AddTime(GameTimeStructToHours(time));
         }
 
-        public HubUITimeStruct AddTime(int hours)
+        public GameTimeStruct AddTime(int hours)
         {
-            HubUITimeStruct newTime = CurrentTime;
+            GameTimeStruct newTime = CurrentTime;
 
             if (hours > 0)
             {
@@ -111,7 +114,7 @@ namespace BeastHunterHubUI
             }
         }
 
-        private int GameTimeStructToHours(HubUITimeStruct time)
+        private int GameTimeStructToHours(GameTimeStruct time)
         {
             return time.Hour + time.Day * HoursAmountPerDay;
         }

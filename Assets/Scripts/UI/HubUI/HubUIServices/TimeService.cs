@@ -11,7 +11,7 @@
         }
 
 
-        public HubUITimeStruct CalculateTimeOnAddHours(int addedHours)
+        public GameTimeStruct CalculateTimeOnAddHours(int addedHours)
         {
             return _context.GameTime.AddTime(addedHours);
         }

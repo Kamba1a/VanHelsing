@@ -12,7 +12,7 @@ namespace BeastHunterHubUI
         public List<CharacterModel> CharactersForHire { get; private set; }
         public List<LocationModel> Locations { get; private set; }
         public List<CityModel> Cities { get; private set; }
-        public HubUIGameTime GameTime { get; private set; }
+        public GameTimeModel GameTime { get; private set; }
         public List<WorkRoomModel> WorkRooms { get; private set; }
 
         #endregion
@@ -33,35 +33,39 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public void InitializeGameContent(HubUIData data)
+        public void InitializeGameContent(GameDataStruct gameData)
         {
-            Player = new PlayerModel(data.PlayerSettings, data.AllCharactersData);
-            GameTime = new HubUIGameTime(data.TimeSettings);
+            HubUIData hubUIData = BeastHunter.Data.HubUIData;
 
-            for (int i = 0; i < data.RandomCharactersAmount; i++)
+            Player = new PlayerModel(gameData.PlayerStruct);
+            GameTime = new GameTimeModel(gameData.GameTimeStruct);
+
+            CharactersForHire = new List<CharacterModel>();
+            for (int i = 0; i < hubUIData.CharactersAmountForHire; i++)
             {
                 CharacterModel newCharacter = new CharacterModel(Player.Rank);
                 CharactersForHire.Add(newCharacter);
 
-                Player.HireCharacter(newCharacter); //todo: remove (FOR DEBUG ONLY)
+                Player.HireCharacter(newCharacter); //todo: remove that line after realize characters hire! (for debug only)
             }
 
-            for (int i = 0; i < data.Cities.Length; i++)
+            for (int i = 0; i < gameData.CitiesData.Length; i++)
             {
-                Cities.Add(new CityModel(data.Cities[i]));
+                Cities.Add(new CityModel(gameData.CitiesData[i]));
             }
 
-            for (int i = 0; i < data.Locations.Length; i++)
+            for (int i = 0; i < gameData.LocationsData.Length; i++)
             {
-                Locations.Add(new LocationModel(data.Locations[i]));
+                Locations.Add(new LocationModel(gameData.LocationsData[i]));
             }
 
-            for (int i = 0; i < data.WorkRoomsData.Length; i++)
+            for (int i = 0; i < gameData.WorkRoomsData.Length; i++)
             {
-                WorkRooms.Add(new WorkRoomModel(data.WorkRoomsData[i].WorkRoomStruct));
+                WorkRooms.Add(new WorkRoomModel(gameData.WorkRoomsData[i].WorkRoomStruct));
             }
         }
 
+        //TODO: REDONE
         public MapObjectModel GetMapObjectModel(MapObjectData mapObjectData)
         {
             switch (mapObjectData.GetMapObjectType())

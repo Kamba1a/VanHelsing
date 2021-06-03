@@ -968,7 +968,7 @@ namespace BeastHunterHubUI
             _stopTimeSkipButton.SetActive(isTimePassing);
         }
 
-        private void OnChanged_GameTime(HubUITimeStruct currentTime)
+        private void OnChanged_GameTime(GameTimeStruct currentTime)
         {
             _currentDayText.text = "Day: " + currentTime.Day.ToString();
             _currentHourText.text = "Hour: " + currentTime.Hour.ToString();

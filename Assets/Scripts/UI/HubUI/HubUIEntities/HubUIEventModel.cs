@@ -11,7 +11,7 @@ namespace BeastHunterHubUI
         public Action OnTickTimeHandler { get; set; }
         public bool IsEachTimeTickInvokeOn { get; private set; }
 
-        public HubUITimeStruct InvokeTime { get; private set; }
+        public GameTimeStruct InvokeTime { get; private set; }
 
         #endregion
 

@@ -28,7 +28,7 @@ namespace BeastHunterHubUI
         public bool IsAvoidanceKnown { get; set; }
         public bool IsVulnerabilityKnown { get; set; }
         public HuntingQuestStatus QuestStatus { get; private set; }
-        public HubUITimeStruct RunningOutTime => _questEvent.InvokeTime;
+        public GameTimeStruct RunningOutTime => _questEvent.InvokeTime;
 
         #endregion
 

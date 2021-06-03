@@ -22,25 +22,29 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public PlayerModel(PlayerSettingsStruct settings, AllCharactersData allCharactersData)
+        public PlayerModel(PlayerStruct playerStruct)
         {
-            GoldAmount = settings.GoldAmount;
-            Rank = settings.StartingRank;
+            GoldAmount = playerStruct.GoldAmount;
+            Rank = playerStruct.Rank;
 
             AvailableCharacters = new CharacterUnlimitedStorage(CharacterStorageType.AvailableCharacters);
-
-            //todo: uncomment?
-            //for (int i = 0; i < settings.StartHiredCharacters.Length; i++)
-            //{
-            //    HiredCharacters.Add(new CharacterModel(settings.StartHiredCharacters[i]));
-            //}
-
-            Inventory = new ItemLimitedStorage(settings.InventorySlotsAmount, ItemStorageType.GeneralInventory);
-            for (int i = 0; i < settings.StartInventoryItems.Length; i++)
+            if (playerStruct.AvailableCharacters != null)
             {
-                BaseItemModel itemModel = HubUIServices.SharedInstance.
-                    ItemInitializeService.InitializeItemModel(settings.StartInventoryItems[i]);
-                Inventory.PutElement(i, itemModel);
+                for (int i = 0; i < playerStruct.AvailableCharacters.Length; i++)
+                {
+                    AvailableCharacters.PutElementToFirstEmptySlot(new CharacterModel(playerStruct.AvailableCharacters[i]));
+                }
+            }
+
+            Inventory = new ItemLimitedStorage(playerStruct.InventorySlotsAmount, ItemStorageType.GeneralInventory);
+            if(playerStruct.InventoryItems != null)
+            {
+                for (int i = 0; i < playerStruct.InventoryItems.Length; i++)
+                {
+                    BaseItemModel itemModel = HubUIServices.SharedInstance.
+                        ItemInitializeService.InitializeItemModel(playerStruct.InventoryItems[i]);
+                    Inventory.PutElement(i, itemModel);
+                }
             }
         }
 

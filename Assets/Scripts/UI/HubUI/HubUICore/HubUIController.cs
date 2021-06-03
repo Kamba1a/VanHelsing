@@ -48,7 +48,7 @@ namespace BeastHunterHubUI
 
             HubUIServices.SharedInstance.InitializeServices(_context);
             _data.AllCharactersData.InitializeCharacter3DViewModelRendering();
-            _context.InitializeGameContent(_data);
+            _context.InitializeGameContent(_data.StartGameDataStruct);
             new QuestController(_data.QuestsPool, _context);
             Subscriptions();
 

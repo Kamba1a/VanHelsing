@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71524d6a301c481449a54fd5ecc012ad, type: 3}
   m_Name: ItemRecipe
   m_EditorClassIdentifier: 
+  _testRecipeStruct:
+    TestBaseItemData: {fileID: 11400000, guid: e88f2f60d12eaf7499c76e491be54eba, type: 2}
+    TestString: Original
+    _testStringArray:
+    - Original
+    _testStringList:
+    - Original
   _baseHoursNumberToComplete: 10
   _item: {fileID: 11400000, guid: 3624a46c93231c840a317cef98d92a07, type: 2}
   _requiredIngredients:
