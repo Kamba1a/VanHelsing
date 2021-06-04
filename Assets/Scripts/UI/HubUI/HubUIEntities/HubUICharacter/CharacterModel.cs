@@ -10,7 +10,7 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        private AllCharactersData _allData;
+        private CharactersGlobalData _globalData;
         private Material _defaultCharacterMaterial;
 
         private Dictionary<CharacterHeadPartType, (string name, bool isActiveByDefault)> _defaultHeadPartsNames;
@@ -47,13 +47,13 @@ namespace BeastHunterHubUI
         public CharacterModel(CharacterData data)
         {
             Rank = data.Rank;
-            _allData = BeastHunter.Data.HubUIData.AllCharactersData;
+            _globalData = BeastHunter.Data.HubUIData.CharactersGlobalData;
             Name = data.Name;
             Portrait = data.Portrait;
             IsFemale = data.IsFemale;
             _defaultCharacterMaterial = data.DefaultMaterial;
 
-            Backpack = new ItemLimitedStorage(_allData.BackpackSlotAmount, ItemStorageType.CharacterBackpack);
+            Backpack = new ItemLimitedStorage(_globalData.BackpackSlotAmount, ItemStorageType.CharacterBackpack);
             if (data.StartBackpuckItems != null)
             {
                 for (int i = 0; i < data.StartBackpuckItems.Length; i++)
@@ -65,7 +65,7 @@ namespace BeastHunterHubUI
 
             Pockets = new PocketsStorage();
 
-            ClothesEquipment = new EquippedClothesStorage(_allData.ClothesSlots);
+            ClothesEquipment = new EquippedClothesStorage(_globalData.ClothesSlots);
             ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
 
             ClothesEquipment.OnTakeElementFromSlotHandler += OnTakeClothesEquipmentItem;
@@ -80,7 +80,7 @@ namespace BeastHunterHubUI
                 }
             }
 
-            WeaponEquipment = new EquippedWeaponStorage(_allData.WeaponSetsAmount);
+            WeaponEquipment = new EquippedWeaponStorage(_globalData.WeaponSetsAmount);
 
             if (data.StartWeaponEquipmentItems != null)
             {
@@ -93,7 +93,7 @@ namespace BeastHunterHubUI
 
             InitializeDefaultHeadPartsDictionary(data.DefaultHeadParts);
             InitializeDefaultModulePartsDictionary(data.DefaultModuleParts);
-            InitializeView3DModel(_allData.Character3DViewModelRendering.transform);
+            InitializeView3DModel(_globalData.Character3DViewModelRendering.transform);
 
             SkillsInitialize(data.Skills);
         }
@@ -101,35 +101,35 @@ namespace BeastHunterHubUI
         public CharacterModel(int rank)
         {
             Rank = rank;
-            _allData = BeastHunter.Data.HubUIData.AllCharactersData; ;
-            IsFemale = _allData.IsFemale() ? true : false;
-            Name = _allData.GetRandonNameFromPool(IsFemale);
-            _defaultCharacterMaterial = _allData.GetRandomMaterialFromPool();
+            _globalData = BeastHunter.Data.HubUIData.CharactersGlobalData;
+            IsFemale = _globalData.IsFemale() ? true : false;
+            Name = _globalData.GetRandonNameFromPool(IsFemale);
+            _defaultCharacterMaterial = _globalData.GetRandomMaterialFromPool();
 
-            Backpack = new ItemLimitedStorage(_allData.BackpackSlotAmount, ItemStorageType.CharacterBackpack);
+            Backpack = new ItemLimitedStorage(_globalData.BackpackSlotAmount, ItemStorageType.CharacterBackpack);
             Pockets = new PocketsStorage();
 
-            WeaponEquipment = new EquippedWeaponStorage(_allData.WeaponSetsAmount);
-            ClothesEquipment = new EquippedClothesStorage(_allData.ClothesSlots);
+            WeaponEquipment = new EquippedWeaponStorage(_globalData.WeaponSetsAmount);
+            ClothesEquipment = new EquippedClothesStorage(_globalData.ClothesSlots);
             ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
             ClothesEquipment.OnTakeElementFromSlotHandler += OnTakeClothesEquipmentItem;
             ClothesEquipment.OnPutElementToSlotHandler += OnPutClothesEquipmentItem;
 
-            List<ClothesItemModel> startingClothesItems = _allData.GetRandomStartingClothes(rank);
+            List<ClothesItemModel> startingClothesItems = _globalData.GetRandomStartingClothes(rank);
             for (int i = 0; i < startingClothesItems.Count; i++)
             {
                 ClothesEquipment.PutElementToFirstEmptySlot(startingClothesItems[i]);
             }
 
-            List<WeaponItemModel> startingWeapon = _allData.GetRandomStartingWeapon(rank);
+            List<WeaponItemModel> startingWeapon = _globalData.GetRandomStartingWeapon(rank);
             for (int i = 0; i < startingWeapon.Count; i++)
             {
                 WeaponEquipment.PutElementToFirstEmptySlot(startingWeapon[i]);
             }
 
-            InitializeDefaultHeadPartsDictionary(_allData.GetDefaultHeadModuleParts(IsFemale));
-            InitializeDefaultModulePartsDictionary(_allData.GetDefaultBodyModules(IsFemale));
-            InitializeView3DModel(_allData.Character3DViewModelRendering.transform);
+            InitializeDefaultHeadPartsDictionary(_globalData.GetDefaultHeadModuleParts(IsFemale));
+            InitializeDefaultModulePartsDictionary(_globalData.GetDefaultBodyModules(IsFemale));
+            InitializeView3DModel(_globalData.Character3DViewModelRendering.transform);
 
             //todo: realize skills randomizer by design document
             SkillsTestInitializeForRandomCharacter(); //TEMPORARY for debug (remove after realization)
@@ -186,9 +186,9 @@ namespace BeastHunterHubUI
 
          public void InitializeView3DModel(Transform parent)
         {
-            View3DModelObjectOnScene = GameObject.Instantiate(_allData.View3DModelPrefab, parent);
-            View3DModelObjectOnScene.GetComponent<Animator>().runtimeAnimatorController = _allData.View3DModelAnimatorController;
-            _characterModulesTransform = View3DModelObjectOnScene.transform.FindDeep(_allData.ModularCharactersChildGOForModulesName);
+            View3DModelObjectOnScene = GameObject.Instantiate(_globalData.View3DModelPrefab, parent);
+            View3DModelObjectOnScene.GetComponent<Animator>().runtimeAnimatorController = _globalData.View3DModelAnimatorController;
+            _characterModulesTransform = View3DModelObjectOnScene.transform.FindDeep(_globalData.ModularCharactersChildGOForModulesName);
 
             InitializeDefaultModules();
             Portrait = GetCharacterPortrait();
@@ -207,7 +207,7 @@ namespace BeastHunterHubUI
 
         private Sprite GetCharacterPortrait()
         {
-            Camera portraitCamera = _allData.CharacterPortraitCamera;
+            Camera portraitCamera = _globalData.CharacterPortraitCamera;
             RenderTexture portraitRenderTexture = portraitCamera.targetTexture;
             Rect portraitRect = new Rect(0, 0, portraitRenderTexture.width, portraitRenderTexture.height);
 
@@ -274,7 +274,7 @@ namespace BeastHunterHubUI
             _defaultModuleParts = new Dictionary<ClothesType, List<GameObject>>();
             foreach (KeyValuePair<ClothesType, List<string>> kvp in _defaultModulePartsNames)
             {
-                List<GameObject> defaultModules = AddModulePartsTo3DModel(_allData.GetModulePartsByNames(kvp.Value), _defaultCharacterMaterial);
+                List<GameObject> defaultModules = AddModulePartsTo3DModel(_globalData.GetModulePartsByNames(kvp.Value), _defaultCharacterMaterial);
                 for (int i = 0; i < defaultModules.Count; i++)
                 {
                     defaultModules[i].name += "(default)";
@@ -285,7 +285,7 @@ namespace BeastHunterHubUI
             _defaultHeadParts = new Dictionary<CharacterHeadPartType, (GameObject module, bool isActiveByDefault)>();
             foreach (KeyValuePair<CharacterHeadPartType, (string name, bool isActiveByDefault)> kvp in _defaultHeadPartsNames)
             {
-                GameObject defaultHeadPart = AddModulePartTo3DModel(_allData.GetModulePartByName(kvp.Value.name), _defaultCharacterMaterial);
+                GameObject defaultHeadPart = AddModulePartTo3DModel(_globalData.GetModulePartByName(kvp.Value.name), _defaultCharacterMaterial);
                 defaultHeadPart.name += "(default)";
                 _defaultHeadParts.Add(kvp.Key, (defaultHeadPart, kvp.Value.isActiveByDefault));
             }
@@ -348,15 +348,15 @@ namespace BeastHunterHubUI
         {
             List<GameObject> moduleParts = new List<GameObject>();
 
-            moduleParts.AddRange(_allData.GetModulePartsByNames(clothes.PartsNamesAllGender));
+            moduleParts.AddRange(_globalData.GetModulePartsByNames(clothes.PartsNamesAllGender));
 
             if (IsFemale)
             {
-                moduleParts.AddRange(_allData.GetModulePartsByNames(clothes.PartsNamesFemale));
+                moduleParts.AddRange(_globalData.GetModulePartsByNames(clothes.PartsNamesFemale));
             }
             else
             {
-                moduleParts.AddRange(_allData.GetModulePartsByNames(clothes.PartsNamesMale));
+                moduleParts.AddRange(_globalData.GetModulePartsByNames(clothes.PartsNamesMale));
             }
 
             if (moduleParts.Count > 0)
@@ -386,7 +386,7 @@ namespace BeastHunterHubUI
         private GameObject AddModulePartTo3DModel(GameObject modulePart, Material fantasyHeroMaterial)
         {
             GameObject addedModule = GameObject.Instantiate(modulePart, _characterModulesTransform);
-            _allData.BindModuleToCharacter(addedModule, View3DModelObjectOnScene);
+            _globalData.BindModuleToCharacter(addedModule, View3DModelObjectOnScene);
             addedModule.GetComponent<SkinnedMeshRenderer>().material = fantasyHeroMaterial;
             addedModule.SetActive(true);
             return addedModule;

@@ -8,19 +8,15 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        [Header("STARTING GAME DATA")]
-        [SerializeField] private GameDataStruct _startGameDataStruct;
-
-
-        [Header("GLOBAL SETTINGS")]
-        [SerializeField] private GameTimeSettings _gameTimeSettings;
-        [SerializeField] private int _charactersAmountForHire;
-
         //TODO: rework entity datas to start settings and global settings
-        [Header("ENTITIES SETTINGS")]
-        [SerializeField] private AllCharactersData _charactersData;
-        [SerializeField] private int _citiesShopsSlotsAmount;
 
+        [Header("STARTING GAME DATA")]
+        [SerializeField] private GameData _startGameDataStruct;
+
+        [Space(20, order = 1), Header("GLOBAL DATA", order = 2)]
+        [SerializeField] private GameTimeGlobalData _gameTimeGlobalData;
+        [SerializeField] private CharactersGlobalData _charactersGlobalData;
+        [SerializeField] private int _citiesShopsSlotsAmount;
 
         [Space(20, order = 1), Header("GLOBAL DATA POOLS", order = 2)]
         [SerializeField] private QuestData[] _questsPool;
@@ -45,13 +41,12 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public GameDataStruct StartGameDataStruct => _startGameDataStruct;
-        public GameTimeSettings GameTimeSettings => _gameTimeSettings;
+        public CharactersGlobalData CharactersGlobalData => _charactersGlobalData;
+        public GameData StartGameDataStruct => _startGameDataStruct;
+        public GameTimeGlobalData GameTimeGlobalData => _gameTimeGlobalData;
         public GameObject MessageWindowPrefab => _messageWindowPrefab;
-        public AllCharactersData AllCharactersData => _charactersData;
         public QuestData[] QuestsPool => _questsPool;
         public int CitiesShopsSlotsAmount => _citiesShopsSlotsAmount;
-        public int CharactersAmountForHire => _charactersAmountForHire;
         public ItemDataPools ItemDataPools => _itemDataPools;
         public BossData[] BossesDataPool => _bossesDataPool;
         public HuntingQuestData[] HuntingQuestsDataPool => _huntingQuestsDataPool;

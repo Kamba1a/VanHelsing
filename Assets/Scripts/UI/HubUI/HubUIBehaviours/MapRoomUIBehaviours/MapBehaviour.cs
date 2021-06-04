@@ -323,7 +323,7 @@ namespace BeastHunterHubUI
             _character3DViewModelRawImageBehaviour = _character3DViewModelRawImage.GetComponent<MapCharacterView3DModelBehaviour>();
 
 
-            if (_characterClothesSlotsUIBehaviours.Length != _data.AllCharactersData.ClothesSlots.Length)
+            if (_characterClothesSlotsUIBehaviours.Length != _data.CharactersGlobalData.ClothesSlots.Length)
             {
                 Debug.LogError("The number of cloth UI slots does not match the equipment of the characters!");
             }
@@ -333,7 +333,7 @@ namespace BeastHunterHubUI
                 FillCharacterClothesSlot(i);
             }
 
-            if (_characterWeaponSlotsUIBehaviours.Length != _data.AllCharactersData.WeaponSetsAmount * 2)
+            if (_characterWeaponSlotsUIBehaviours.Length != _data.CharactersGlobalData.WeaponSetsAmount * 2)
             {
                 Debug.LogError("The number of weapon UI slots does not match the equipment of the characters!");
             }
@@ -348,7 +348,7 @@ namespace BeastHunterHubUI
                 FillMapObject(_mapObjects[i], _data.MapDataStruct.MapObjects[i]);
             }
 
-            for (int i = 0; i < _data.AllCharactersData.BackpackSlotAmount; i++)
+            for (int i = 0; i < _data.CharactersGlobalData.BackpackSlotAmount; i++)
             {
                 InitializeCharacterBackpackSlotUI(i);
             }
@@ -1127,7 +1127,7 @@ namespace BeastHunterHubUI
 
         private void FillCharacterClothesSlot(int slotIndex)
         {
-            Sprite slotSprite = _data.MapDataStruct.GetClothSlotSpriteByType(_data.AllCharactersData.ClothesSlots[slotIndex]);
+            Sprite slotSprite = _data.MapDataStruct.GetClothSlotSpriteByType(_data.CharactersGlobalData.ClothesSlots[slotIndex]);
             _characterClothesSlotsUIBehaviours[slotIndex].Initialize(slotIndex, ItemStorageType.ClothesEquipment, true, slotSprite);
             _characterClothesSlotsUIBehaviours[slotIndex].SetInteractable(false);
             _characterClothesSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = OnDoubleClick_CharacterEquipmentSlot;

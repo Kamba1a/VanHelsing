@@ -1,12 +1,14 @@
 ﻿using Extensions;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 namespace BeastHunterHubUI
 {
-    [CreateAssetMenu(fileName = "AllCharacters", menuName = "CreateData/HubUIData/AllCharacters", order = 0)]
-    public class AllCharactersData : ScriptableObject
+    [Serializable]
+    public class CharactersGlobalData
     {
         #region Constants
 
@@ -20,14 +22,19 @@ namespace BeastHunterHubUI
         [SerializeField] private ClothesType[] _clothesSlots;
         [SerializeField] private int _backpuckSlotAmount;
         [SerializeField] private int _weaponSetsAmount;
-        [SerializeField] private GameObject _modularCharactersPrefab;
+        [SerializeField] private int _charactersAmountForHire;
+
+        [Header("Character prefab")]
         [SerializeField] private GameObject _view3DModelPrefab;
         [SerializeField] private RuntimeAnimatorController _view3DModelAnimatorController;
-        [SerializeField] string _modularCharactersChildGOForModulesName;
+
+        [Header("HubUI 3D-rendering")]
         [SerializeField] private GameObject _characters3DViewRenderingPrefab;
         [SerializeField] private Vector3 _characters3DViewRenderingObjectPosition;
 
         [Header("Character randomizer settings")]
+        [SerializeField] private GameObject _modularCharactersPrefab;
+        [SerializeField] private string _modularCharactersChildGOForModulesName;
         [SerializeField, Range(0, 1)] private float _femaleGenderChance;
         [SerializeField] private string[] _femaleNamesPool;
         [SerializeField] private string[] _maleNamesPool;
@@ -103,6 +110,7 @@ namespace BeastHunterHubUI
 
         #region Properties
 
+        public int AmountForHire => _charactersAmountForHire;
         public int BackpackSlotAmount => _backpuckSlotAmount;
         public int WeaponSetsAmount => _weaponSetsAmount;
         public ClothesType[] ClothesSlots => (ClothesType[])_clothesSlots.Clone();
@@ -119,7 +127,7 @@ namespace BeastHunterHubUI
 
         private void OnEnable()
         {
-            if(_modularCharactersPrefab != null)
+            if (_modularCharactersPrefab != null)
             {
                 _allHairModulesNames = GetModulesNamesByGroupName("All_01_Hair");
                 _femaleHeadModulesNames = GetModulesNamesByGroupName("Female_Head_All_Elements");
@@ -173,7 +181,7 @@ namespace BeastHunterHubUI
         public void InitializeCharacter3DViewModelRendering()
         {
             Character3DViewModelRendering =
-                Instantiate(_characters3DViewRenderingPrefab, _characters3DViewRenderingObjectPosition, Quaternion.identity);
+                GameObject.Instantiate(_characters3DViewRenderingPrefab, _characters3DViewRenderingObjectPosition, Quaternion.identity);
             CharacterPortraitCamera = Character3DViewModelRendering.transform.Find("CameraForPortrait").GetComponent<Camera>();
             CharacterPortraitCamera.enabled = false;
         }
@@ -186,7 +194,7 @@ namespace BeastHunterHubUI
                 foreach (string modulePartName in modulePartsNames)
                 {
                     GameObject modulePart = GetModulePartByName(modulePartName);
-                    if(modulePart != null)
+                    if (modulePart != null)
                     {
                         moduleParts.Add(modulePart);
                     }
@@ -198,7 +206,7 @@ namespace BeastHunterHubUI
         public GameObject GetModulePartByName(string modulePartName)
         {
             Transform transform = _modularCharactersPrefab.transform.FindDeep(modulePartName);
-            if(transform != null)
+            if (transform != null)
             {
                 return transform.gameObject;
             }
@@ -212,7 +220,7 @@ namespace BeastHunterHubUI
         public void BindModuleToCharacter(GameObject module, GameObject characterModel)
         {
             SkinnedMeshRenderer skinnedMeshRenderer = module.GetComponent<SkinnedMeshRenderer>();
-            if(skinnedMeshRenderer != null)
+            if (skinnedMeshRenderer != null)
             {
                 Transform[] bonesFromOriginal = skinnedMeshRenderer.bones;
                 Transform rootBoneFromOriginal = skinnedMeshRenderer.rootBone;
@@ -250,7 +258,7 @@ namespace BeastHunterHubUI
         public string GetRandonNameFromPool(bool isFemale)
         {
             string name = null;
-            
+
             for (int i = 0; i < CHECK_NAME_ON_FREE_ATTEMPTS_NUMBER; i++)
             {
                 name = isFemale ?
@@ -262,7 +270,7 @@ namespace BeastHunterHubUI
                     break;
                 }
 
-                if (i == CHECK_NAME_ON_FREE_ATTEMPTS_NUMBER-1)
+                if (i == CHECK_NAME_ON_FREE_ATTEMPTS_NUMBER - 1)
                 {
                     Debug.LogWarning("Need to increase the characters names pool");
                 }
@@ -295,7 +303,7 @@ namespace BeastHunterHubUI
                 clothesTypePool.RemoveAt(randomIndex);
 
                 ClothesItemData randomClothesData = BeastHunter.Data.HubUIData.ItemDataPools.GetRandomClothesDataByRankAndType(rank, randomClothesType);
-                clothes.Add(new ClothesItemModel(randomClothesData)) ;
+                clothes.Add(new ClothesItemModel(randomClothesData));
             }
 
             return clothes;

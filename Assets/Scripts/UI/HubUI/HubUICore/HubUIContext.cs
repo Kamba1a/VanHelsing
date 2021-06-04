@@ -33,7 +33,7 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public void InitializeGameContent(GameDataStruct gameData)
+        public void InitializeGameContent(GameData gameData)
         {
             HubUIData hubUIData = BeastHunter.Data.HubUIData;
 
@@ -41,7 +41,7 @@ namespace BeastHunterHubUI
             GameTime = new GameTimeModel(gameData.GameTimeStruct);
 
             CharactersForHire = new List<CharacterModel>();
-            for (int i = 0; i < hubUIData.CharactersAmountForHire; i++)
+            for (int i = 0; i < hubUIData.CharactersGlobalData.AmountForHire; i++)
             {
                 CharacterModel newCharacter = new CharacterModel(Player.Rank);
                 CharactersForHire.Add(newCharacter);

@@ -31,7 +31,7 @@ namespace BeastHunterHubUI
 
         public GameTimeModel(GameTimeStruct timeStruct)
         {
-            GameTimeSettings settings = BeastHunter.Data.HubUIData.GameTimeSettings;
+            GameTimeGlobalData settings = BeastHunter.Data.HubUIData.GameTimeGlobalData;
             _timePassingDelay = settings.TimePassingDelay;
             HoursAmountPerDay = settings.HoursAmountPerDay;
 

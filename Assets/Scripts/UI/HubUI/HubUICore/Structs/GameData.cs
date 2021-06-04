@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BeastHunterHubUI
 {
     [Serializable]
-    public struct GameDataStruct
+    public class GameData
     {
         #region Fields
 
