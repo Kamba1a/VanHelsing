@@ -72,6 +72,27 @@ namespace BeastHunterHubUI
             CharacterPortraitCamera.enabled = false;
         }
 
+        public Sprite GetCharacterPortrait()
+        {
+            RenderTexture portraitRenderTexture = CharacterPortraitCamera.targetTexture;
+            Rect portraitRect = new Rect(0, 0, portraitRenderTexture.width, portraitRenderTexture.height);
+
+            RenderTexture currentRenderTexture = RenderTexture.active;
+            RenderTexture.active = portraitRenderTexture;
+
+            CharacterPortraitCamera.Render();
+
+            Texture2D portraitTexture = new Texture2D(portraitRenderTexture.width, portraitRenderTexture.height);
+            portraitTexture.ReadPixels(portraitRect, 0, 0);
+            portraitTexture.Apply();
+
+            RenderTexture.active = currentRenderTexture;
+            CharacterPortraitCamera.enabled = false;
+            portraitRenderTexture.Release();
+
+            return Sprite.Create(portraitTexture, portraitRect, new Vector2());
+        }
+
         public void BindModuleToCharacter(GameObject module, GameObject characterModel)
         {
             SkinnedMeshRenderer skinnedMeshRenderer = module.GetComponent<SkinnedMeshRenderer>();

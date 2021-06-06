@@ -242,8 +242,8 @@ namespace BeastHunterHubUI
         {
             List<CharacterHeadPart> headModuleParts = new List<CharacterHeadPart>();
 
-            bool isFacialHair = !isFemale && Random.Range(0, 100) <= _charactersData.MaleFacialHairChance;
-            bool isHairless = Random.Range(0, 101) <= _charactersData.HairlessChance;
+            bool isFacialHair = !isFemale && Random.Range(0, 101) <= _charactersData.MaleFacialHairChance * 100;
+            bool isHairless = Random.Range(0, 101) <= _charactersData.HairlessChance * 100;
 
             string randomHeadModule;
             string randomEyebrowsModule;

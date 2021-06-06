@@ -165,7 +165,7 @@ namespace BeastHunterHubUI
             _characterModulesTransform = View3DModelObjectOnScene.transform.FindDeep(_globalData.ModularCharactersChildGOForModulesName);
 
             InitializeDefaultModules();
-            Portrait = GetCharacterPortrait();
+            Portrait = _globalData.GetCharacterPortrait();
 
             InitializeClothesModulePartsDic();
             for (int i = 0; i < ClothesEquipment.GetSlotsCount(); i++)
@@ -177,27 +177,6 @@ namespace BeastHunterHubUI
             }
 
             View3DModelObjectOnScene.SetActive(false);
-        }
-
-        private Sprite GetCharacterPortrait()
-        {
-            Camera portraitCamera = _globalData.CharacterPortraitCamera;
-            RenderTexture portraitRenderTexture = portraitCamera.targetTexture;
-            Rect portraitRect = new Rect(0, 0, portraitRenderTexture.width, portraitRenderTexture.height);
-
-            RenderTexture currentRenderTexture = RenderTexture.active;
-            RenderTexture.active = portraitRenderTexture;
-
-            portraitCamera.Render();
-
-            Texture2D portraitTexture = new Texture2D(portraitRenderTexture.width, portraitRenderTexture.height);
-            portraitTexture.ReadPixels(portraitRect, 0, 0);
-            portraitTexture.Apply();
-
-            RenderTexture.active = currentRenderTexture;
-            portraitCamera.enabled = false;
-
-            return Sprite.Create(portraitTexture, portraitRect, new Vector2());
         }
 
         private void InitializeClothesModulePartsDic()

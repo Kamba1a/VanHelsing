@@ -143,7 +143,7 @@ namespace BeastHunterHubUI
                 CharacterModel assistant = AssistantWorkplaces.GetElementBySlot(i);
                 if (assistant != null)
                 {
-                    Mathf.Clamp(AssistansGeneralSkillLevel += assistant.Skills[UsedSkill], 0, 100);
+                    AssistansGeneralSkillLevel = Mathf.Clamp(AssistansGeneralSkillLevel + assistant.Skills[UsedSkill], 0, 100);
                 }
             }
         }
