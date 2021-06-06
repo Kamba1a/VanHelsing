@@ -38,6 +38,18 @@ namespace BeastHunterHubUI
         {
             OrdersSlots = new OrderLimitedStorage(ProgressScheme[Level].OrderSlots);
 
+            if (roomStruct.Orders != null)
+            {
+                for (int i = 0; i< roomStruct.Orders.Length; i++)
+                {
+                    ItemOrderModel order = new ItemOrderModel(roomStruct.Orders[i].Recipe, OrderTimeReducePercent, roomStruct.Orders[i].ProgressToComplete);
+                    if (!OrdersSlots.PutElement(roomStruct.Orders[i].SlotIndex, order))
+                    {
+                        Debug.LogError($"Failed to place order in slot {i}");
+                    }
+                }
+            }
+
             OrdersSlots.OnPutElementToSlotHandler += OnOrderAdd;
             OrdersSlots.OnTakeElementFromSlotHandler += OnOrderRemove;
         }

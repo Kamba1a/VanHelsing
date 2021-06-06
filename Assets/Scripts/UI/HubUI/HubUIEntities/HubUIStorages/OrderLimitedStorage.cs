@@ -25,24 +25,23 @@ namespace BeastHunterHubUI
         {
             bool isSucceful = false;
 
-            if (_elementSlots[slotIndex] == null)
+            if (slotIndex < _elementSlots.Count)
             {
-                _elementSlots[slotIndex] = order;
-                isSucceful = true;
-            }
-            //else
-            //{
-            //    isSucceful = PutElementToFirstEmptySlot(order);
-            //}
+                if (_elementSlots[slotIndex] == null)
+                {
+                    _elementSlots[slotIndex] = order;
+                    isSucceful = true;
+                }
 
-            if (isSucceful)
-            {
-                OnPutElementToSlot(slotIndex, order);
+                if (isSucceful)
+                {
+                    OnPutElementToSlot(slotIndex, order);
+                }
             }
-            //else
-            //{
-            //    HubUIServices.SharedInstance.GameMessages.Notice(StorageType + " is full");
-            //}
+            else
+            {
+                Debug.LogError($"Incorrect input parameter: slot index {slotIndex} outside the list");
+            }
 
             return isSucceful;
         }

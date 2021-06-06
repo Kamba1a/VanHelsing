@@ -8,7 +8,7 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        protected HubUIEventModel _orderEvent;
+        private HubUIEventModel _orderEvent;
         private int _hoursNumberToComplete;
         private int _baseHoursToComplete;
 
@@ -42,12 +42,23 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public ItemOrderModel(ItemRecipeData recipe, float timeReducePercent)
+        public ItemOrderModel(ItemRecipeData recipe, float timeReducePercent, float progressToComplete = 0.0f)
         {
             IsCompleted = false;
             Recipe = recipe;
-            ProgressToComplete = 0.0f;
-            RecountHoursToComplete(timeReducePercent);
+            ProgressToComplete = progressToComplete;
+
+            if (ProgressToComplete == 1.0f)
+            {
+                IsCompleted = true;
+                HoursNumberToComplete = 0;
+                MakeItem();
+            }
+            else
+            {
+                IsCompleted = false;
+                RecountHoursToComplete(timeReducePercent);
+            }
         }
 
         #endregion
@@ -104,16 +115,21 @@ namespace BeastHunterHubUI
             Debug.Log("ProgressToComplete=" + ProgressToComplete);
         }
 
-        private void Complete()
+        private void MakeItem()
         {
             //todo: add fail chance
+            MakedItem = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(Recipe.Item);
+        }
+
+        private void Complete()
+        {
             IsCompleted = true;
 
             _orderEvent.OnInvokeHandler = null;
             _orderEvent.OnTickTimeHandler = null;
             _orderEvent = null;
 
-            MakedItem = HubUIServices.SharedInstance.ItemInitializeService.InitializeItemModel(Recipe.Item);
+            MakeItem();
             HubUIServices.SharedInstance.GameMessages.OnWindowMessageHandler($"Recipe {Recipe.Item.Name} is completed!");
             OnCompleteHandler?.Invoke(this);
         }

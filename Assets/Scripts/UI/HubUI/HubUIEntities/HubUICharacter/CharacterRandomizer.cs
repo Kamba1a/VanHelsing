@@ -19,6 +19,9 @@ namespace BeastHunterHubUI
 
         #endregion
 
+
+        #region Fields
+
         private GameObject _modularCharactersPrefab;
         private CharactersGlobalData _charactersData;
 
@@ -31,6 +34,11 @@ namespace BeastHunterHubUI
 
         private List<CharacterClothesModuleParts> _femaleDefaultBodyParts;
         private List<CharacterClothesModuleParts> _maleDefaultBodyParts;
+
+        #endregion
+
+
+        #region ClassLifeCycle
 
         public CharacterRandomizer()
         {
@@ -105,6 +113,11 @@ namespace BeastHunterHubUI
                 }),
             };
         }
+
+        #endregion
+
+
+        #region Methods
 
         public int GetRank()
         {
@@ -292,5 +305,6 @@ namespace BeastHunterHubUI
             return modulesNames;
         }
 
+        #endregion
     }
 }

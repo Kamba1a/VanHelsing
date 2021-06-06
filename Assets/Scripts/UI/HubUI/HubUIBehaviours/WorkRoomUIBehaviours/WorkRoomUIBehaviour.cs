@@ -270,6 +270,7 @@ namespace BeastHunterHubUI
             _draggedCharacterInfo.slotIndex = null;
         }
 
+        //todo: fix bugs with swap characters inside AvailableCharacters storage
         private void OnDropCharacterToSlot(int dropSlotIndex, CharacterStorageType dropStorageType)
         {
             if (_draggedCharacterInfo.slotIndex.HasValue)

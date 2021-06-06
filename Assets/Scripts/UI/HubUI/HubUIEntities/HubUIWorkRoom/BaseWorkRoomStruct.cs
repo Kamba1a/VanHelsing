@@ -14,9 +14,8 @@ namespace BeastHunterHubUI
         [SerializeField] private string _name;
         [SerializeField] private int _level;
         [SerializeField] private List<WorkRoomProgressLevel<T>> _progressScheme;
-
-        [SerializeField] private CharacterModel _chiefWorker;
-        [SerializeField] private List<CharacterModel> _assistants;
+        [SerializeField] private CharacterData _chiefWorker;
+        [SerializeField] private List<CharacterData> _assistants;
 
         #endregion
 
@@ -27,8 +26,8 @@ namespace BeastHunterHubUI
         public SkillType UsedSkill => _usedSkill;
         public string Name => _name;
         public int Level => _level;
-        public CharacterModel ChiefWorker => _chiefWorker;
-        public List<CharacterModel> Assistants => _assistants;
+        public CharacterData ChiefWorker => _chiefWorker;
+        public List<CharacterData> Assistants => _assistants;
         public List<WorkRoomProgressLevel<T>> ProgressScheme => _progressScheme;
 
         #endregion

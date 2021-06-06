@@ -60,7 +60,7 @@ namespace BeastHunterHubUI
             ChiefWorkplace.OnTakeElementFromSlotHandler += OnChiefRemoveBase;
             if (roomStruct.ChiefWorker != null)
             {
-                ChiefWorkplace.PutElementToFirstEmptySlot(roomStruct.ChiefWorker);
+                ChiefWorkplace.PutElementToFirstEmptySlot(new CharacterModel(roomStruct.ChiefWorker.CharacterStruct));
             }
 
             AssistantWorkplaces.OnPutElementToSlotHandler += OnAssistantAddBase;
@@ -69,7 +69,7 @@ namespace BeastHunterHubUI
             {
                 for (int i = 0; i < roomStruct.Assistants.Count; i++)
                 {
-                    if (!AssistantWorkplaces.PutElementToFirstEmptySlot(roomStruct.Assistants[i]))
+                    if (!AssistantWorkplaces.PutElementToFirstEmptySlot(new CharacterModel(roomStruct.Assistants[i].CharacterStruct)))
                     {
                         Debug.LogError("Incorrect input parameter: assistans amount more than the number of slots");
                         break;
