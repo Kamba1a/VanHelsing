@@ -42,6 +42,11 @@ namespace BeastHunterHubUI
 
         #region Methods
 
+        public PocketItemData GetRandomPocketItem()
+        {
+            return _pocketItemsPool[UnityEngine.Random.Range(0, _pocketItemsPool.Length)];
+        }
+
         public List<ClothesItemData> GetClothesDataListByRankAndType(int rank, ClothesType clothesType)
         {
             if (_clothesDataPoolDic.ContainsKey(rank))

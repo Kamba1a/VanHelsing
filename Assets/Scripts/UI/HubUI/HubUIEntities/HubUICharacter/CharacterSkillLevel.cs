@@ -12,5 +12,12 @@ namespace BeastHunterHubUI
 
         public SkillType SkillType => _skillType;
         public int SkillLevel => _skillLevel;
+
+
+        public CharacterSkillLevel(SkillType skillType, int skillLevel)
+        {
+            _skillType = skillType;
+            _skillLevel = skillLevel;
+        }
     }
 }

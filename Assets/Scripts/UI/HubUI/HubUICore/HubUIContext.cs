@@ -40,13 +40,11 @@ namespace BeastHunterHubUI
             Player = new PlayerModel(gameData.PlayerStruct);
             GameTime = new GameTimeModel(gameData.GameTimeStruct);
 
-            CharactersForHire = new List<CharacterModel>();
-            for (int i = 0; i < hubUIData.CharactersGlobalData.AmountForHire; i++)
-            {
-                CharacterModel newCharacter = new CharacterModel(Player.Rank);
-                CharactersForHire.Add(newCharacter);
+            CharactersForHire = HubUIServices.SharedInstance.RandomCharacterService.Get(hubUIData.CharactersGlobalData.AmountForHire);
 
-                Player.HireCharacter(newCharacter); //todo: remove that line after realize characters hire! (for debug only)
+            for (int i = 0; i < CharactersForHire.Count; i++)
+            {
+                Player.HireCharacter(CharactersForHire[i]); //todo: remove after realize characters hire in UI! (for debug only)
             }
 
             for (int i = 0; i < gameData.CitiesData.Length; i++)

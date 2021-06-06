@@ -56,11 +56,54 @@ MonoBehaviour:
     _workRoomsData:
     - {fileID: 11400000, guid: 538f84166fed25a459e3eb52a5ac7aac, type: 2}
     - {fileID: 11400000, guid: 90082b5b7c854a7479b78cae329f1dee, type: 2}
-  _gameTimeSettings:
+  _gameTimeGlobalData:
     _hoursAmountPerDay: 24
     _timePassingDelay: 1
-  _charactersAmountForHire: 5
-  _charactersData: {fileID: 11400000, guid: 9824cdaccbb2c104e91379e78ce53133, type: 2}
+  _charactersGlobalData:
+    _clothesSlots: 0200000004000000080000000900000005000000060000000700000001000000030000000a0000000b0000000b000000
+    _backpuckSlotAmount: 12
+    _weaponSetsAmount: 3
+    _charactersAmountForHire: 5
+    _view3DModelPrefab: {fileID: 6667037347063198021, guid: 67ebd21778b32cb47bc276ed852041f2,
+      type: 3}
+    _view3DModelAnimatorController: {fileID: 9100000, guid: 4fde703d67cadff4a9a1c1dfb6de6662,
+      type: 2}
+    _characters3DViewRenderingPrefab: {fileID: 5064816351402119910, guid: 284a4960537acb849a2b3d9f00a331e9,
+      type: 3}
+    _characters3DViewRenderingObjectPosition: {x: 1000, y: 1000, z: 1000}
+    _modularCharactersPrefab: {fileID: 1588895830433058, guid: ddc4cd0622acc4847817cc15268b4a19,
+      type: 3}
+    _modularCharactersChildGOForModulesName: Modular_Characters
+    _femaleGenderChance: 0.5
+    _femaleNamesPool:
+    - "\u041E\u043B\u044C\u0433\u0430 \u041A\u0430\u043C\u0431\u0430\u043B\u0430"
+    - "\u042D\u043B\u0438\u0437\u0430\u0431\u0435\u0442 \u0421\u0443\u043E\u043D\u043D"
+    - "\u041C\u044D\u0440\u0438 \u0414\u0436\u0435\u0439\u043D"
+    - "\u042D\u043B\u043B\u0435\u043D \u041C\u0430\u043A\u043A\u043B\u0435\u0439\u043D"
+    - "\u0421\u0435\u0431\u0438\u043B\u043B\u0430 \u041E\u0445\u043E\u0442\u043D\u0438\u0446\u0430"
+    - "\u041A\u0438\u0440\u0430 \u041C\u044B\u0448\u044C"
+    - "\u0421\u043E\u043D\u044F \u0411\u043B\u0435\u0439\u0434"
+    - "\u0427\u0435\u043B\u043B \u041A\u0430\u0440\u0430\u043C\u0438\u044F"
+    - "\u041B\u0430\u0440\u0430 \u041A\u0440\u043E\u0444\u0442"
+    - "\u0413\u0435\u0440\u043C\u0438\u043E\u043D\u0430 \u0413\u0440\u0435\u0439\u043D\u0434\u0436\u0435\u0440"
+    _maleNamesPool:
+    - "\u0414\u0435\u0439\u0432\u0438 \u0414\u0436\u043E\u043D\u0441"
+    - "\u0413\u0435\u043A\u0442\u043E\u0440 \u0411\u0430\u0440\u0431\u043E\u0441\u0441\u0430"
+    - "\u0414\u0436\u0435\u043A \u0412\u043E\u0440\u043E\u0431\u0435\u0439"
+    - "\u0411\u0440\u044E\u0441 \u0423\u044D\u0439\u043D"
+    - "\u041F\u0438\u0442\u0435\u0440 \u041F\u0430\u0440\u043A\u0435\u0440"
+    - "\u0413\u0430\u0440\u0440\u0438 \u041F\u043E\u0442\u0442\u0435\u0440"
+    - "\u0420\u043E\u043D \u0423\u0438\u0437\u043B\u0438"
+    - "\u042D\u043D\u0430\u043A\u0438\u043D \u0421\u043A\u0430\u0439\u0443\u043E\u043A\u0435\u0440"
+    - "\u041E\u0431\u0438\u0432\u0430\u043D \u041A\u0435\u043D\u043E\u0431\u0438"
+    - "\u0428\u0438\u0432 \u041F\u0430\u043B\u043F\u0430\u0442\u0438\u043D"
+    _fantasyHeroMaterialsPool:
+    - {fileID: 2100000, guid: dbae4d513a8c3de4896a75d794a5c2fd, type: 2}
+    - {fileID: 2100000, guid: 5f3e0cdb8949ede4992d6471c3fbf042, type: 2}
+    - {fileID: 2100000, guid: b54a620d9608cc341a4eec9068746498, type: 2}
+    _minClothesEquipItemsAmount: 6
+    _hairlessChance: 0.1
+    _maleFacialHairChance: 0.8
   _citiesShopsSlotsAmount: 20
   _questsPool:
   - {fileID: 11400000, guid: 81ad56c84f8679347b6301f8a566d862, type: 2}

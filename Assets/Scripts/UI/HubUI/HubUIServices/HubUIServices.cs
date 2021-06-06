@@ -13,6 +13,7 @@
         public HubUIEventsService EventsService { get; private set; }
         public CharacterCheckNameService CharacterCheckNameService { get; private set; }
         public HuntingQuestService HuntingQuestService { get; private set; }
+        public RandomCharacterService RandomCharacterService { get; private set; }
 
 
         public void InitializeServices(HubUIContext context)
@@ -24,6 +25,7 @@
             EventsService = new HubUIEventsService(context);
             CharacterCheckNameService = new CharacterCheckNameService(context);
             HuntingQuestService = new HuntingQuestService();
+            RandomCharacterService = new RandomCharacterService();
 
             MainInput = new MainInput();
             MainInput.Enable();

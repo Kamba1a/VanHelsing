@@ -32,7 +32,7 @@ namespace BeastHunterHubUI
             {
                 for (int i = 0; i < playerStruct.AvailableCharacters.Length; i++)
                 {
-                    AvailableCharacters.PutElementToFirstEmptySlot(new CharacterModel(playerStruct.AvailableCharacters[i]));
+                    AvailableCharacters.PutElementToFirstEmptySlot(new CharacterModel(playerStruct.AvailableCharacters[i].CharacterStruct));
                 }
             }
 
