@@ -128,7 +128,7 @@ Material:
     - __dirty: 0
     m_Colors:
     - _Color1: {r: 0.2283196, g: 0.5822246, b: 0.7573529, a: 1}
-    - _Color_BodyArt: {r: 0.30588236, g: 0.72156864, b: 0.6862745, a: 0}
+    - _Color_BodyArt: {r: 1, g: 0.51984906, b: 0, a: 0}
     - _Color_Eyes: {r: 0, g: 0, b: 0, a: 1}
     - _Color_Hair: {r: 0.5943396, g: 0.51722395, b: 0.4177198, a: 0}
     - _Color_Leather_Primary: {r: 0.30882353, g: 0.21390574, b: 0.1589533, a: 0}
