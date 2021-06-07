@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace BeastHunterHubUI
 {
-    class WorkRoomOrderSlotBehaviour : BaseSlotBehaviour<OrderStorageType>
+    class WorkRoomOrderSlotBehaviour : SlotBehaviour<OrderStorageType>
     {
         [SerializeField] private Button _openRecipeBookButton;
         [SerializeField] private Button _removeOrderButton;

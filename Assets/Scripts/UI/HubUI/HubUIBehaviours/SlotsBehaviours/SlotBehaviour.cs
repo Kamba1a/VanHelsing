@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace BeastHunterHubUI
 {
-    public abstract class BaseSlotBehaviour<StorageType> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler where StorageType : Enum
+    public abstract class SlotBehaviour<StorageType> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler where StorageType : Enum
     {
         #region Constants
 

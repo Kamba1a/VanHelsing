@@ -1385,9 +1385,9 @@ namespace BeastHunterHubUI
             _displayedCurrentCitizensUIBehaviours.Clear();
         }
 
-         private void SetStorageSlotsInteractable<T>(bool flag, IEnumerable<T> slotBehaviours) where T : BaseSlotBehaviour<ItemStorageType>
+         private void SetStorageSlotsInteractable<T>(bool flag, IEnumerable<T> slotBehaviours) where T : SlotBehaviour<ItemStorageType>
         {
-            foreach (BaseSlotBehaviour<ItemStorageType> slot in slotBehaviours)
+            foreach (SlotBehaviour<ItemStorageType> slot in slotBehaviours)
             {
                 slot.SetInteractable(flag);
             }
