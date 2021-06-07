@@ -13,7 +13,7 @@ namespace BeastHunterHubUI
 
         public Action<int> OnChangeMinOrderCompleteTimeHandler { get; set; }
 
-        public OrderLimitedStorage OrdersSlots { get; private set; }
+        public OrderSlotStorage OrdersSlots { get; private set; }
         public override Dictionary<int, WorkRoomProgress> ProgressScheme { get; protected set; }
 
         public int MinOrderCompleteTime
@@ -36,7 +36,7 @@ namespace BeastHunterHubUI
 
         public WorkRoomModel(WorkRoomStruct roomStruct) : base(roomStruct.BaseWorkRoomStruct)
         {
-            OrdersSlots = new OrderLimitedStorage(ProgressScheme[Level].OrderSlots);
+            OrdersSlots = new OrderSlotStorage(ProgressScheme[Level].OrderSlots);
 
             if (roomStruct.Orders != null)
             {

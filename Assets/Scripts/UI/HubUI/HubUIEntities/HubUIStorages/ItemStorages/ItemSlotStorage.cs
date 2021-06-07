@@ -1,10 +1,10 @@
 ﻿namespace BeastHunterHubUI
 {
-    public class ItemLimitedStorage : BaseItemLimitedStorage
+    public class ItemSlotStorage : BaseItemSlotStorage
     {
         #region ClassLifeCycle
 
-        public ItemLimitedStorage(int slotsAmount, ItemStorageType storageType) : base(slotsAmount, storageType) { }
+        public ItemSlotStorage(int slotsAmount, ItemStorageType storageType) : base(slotsAmount, storageType) { }
 
         #endregion
 
@@ -29,7 +29,7 @@
             {
                 if (item != null)
                 {
-                    OnPutElementToSlot(slotIndex, item);
+                    OnPutItemToSlot(slotIndex, item);
                 }
             }
             else

@@ -30,10 +30,10 @@ namespace BeastHunterHubUI
         public Sprite Portrait { get; private set; }
         public bool IsFemale { get; private set; }
         public GameObject View3DModelObjectOnScene { get; private set; }
-        public ItemLimitedStorage Backpack { get; private set; }
-        public EquippedClothesStorage ClothesEquipment { get; private set; }
-        public PocketsStorage Pockets { get; private set; }
-        public EquippedWeaponStorage WeaponEquipment { get; private set; }
+        public ItemSlotStorage Backpack { get; private set; }
+        public ClothesSlotStorage ClothesEquipment { get; private set; }
+        public PocketsSlotStorage Pockets { get; private set; }
+        public WeaponSlotStorage WeaponEquipment { get; private set; }
         public bool IsAssignedToWork { get; set; }
         public MapCharacterBehaviour Behaviour { get; set; }
         public Dictionary<SkillType, int> Skills { get; private set; }
@@ -53,7 +53,7 @@ namespace BeastHunterHubUI
             IsFemale = characterStruct.IsFemale;
             _defaultCharacterMaterial = characterStruct.DefaultMaterial;
 
-            Backpack = new ItemLimitedStorage(_globalData.BackpackSlotAmount, ItemStorageType.CharacterBackpack);
+            Backpack = new ItemSlotStorage(_globalData.BackpackSlotAmount, ItemStorageType.CharacterBackpack);
             if (characterStruct.BackpackItems != null)
             {
                 for (int i = 0; i < characterStruct.BackpackItems.Length; i++)
@@ -63,13 +63,13 @@ namespace BeastHunterHubUI
                 }
             }
 
-            Pockets = new PocketsStorage();
+            Pockets = new PocketsSlotStorage();
 
-            ClothesEquipment = new EquippedClothesStorage(_globalData.ClothesSlots);
+            ClothesEquipment = new ClothesSlotStorage(_globalData.ClothesSlots);
             ClothesEquipment.IsEnoughEmptyPocketsFunc = Pockets.IsEnoughFreeSlots;
 
-            ClothesEquipment.OnTakeElementFromSlotHandler += OnTakeClothesEquipmentItem;
-            ClothesEquipment.OnPutElementToSlotHandler += OnPutClothesEquipmentItem;
+            ClothesEquipment.OnTakeItemFromSlotHandler += OnTakeClothesEquipmentItem;
+            ClothesEquipment.OnPutItemToSlotHandler += OnPutClothesEquipmentItem;
 
             if (characterStruct.ClothesEquipmentItems != null)
             {
@@ -92,7 +92,7 @@ namespace BeastHunterHubUI
                 }
             }
 
-            WeaponEquipment = new EquippedWeaponStorage(_globalData.WeaponSetsAmount);
+            WeaponEquipment = new WeaponSlotStorage(_globalData.WeaponSetsAmount);
             if (characterStruct.WeaponEquipmentItems != null)
             {
                 for (int i = 0; i < characterStruct.WeaponEquipmentItems.Length; i++)
@@ -114,7 +114,7 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public bool EquipClothesItem(BaseItemLimitedStorage outStorage, int outStorageSlotIndex)
+        public bool EquipClothesItem(BaseItemSlotStorage outStorage, int outStorageSlotIndex)
         {
             BaseItemModel item = outStorage.GetElementBySlot(outStorageSlotIndex);
             if (item != null && item.ItemType == ItemType.Clothes)
@@ -136,7 +136,7 @@ namespace BeastHunterHubUI
             }
         }
 
-        public bool EquipWeaponItem(BaseItemLimitedStorage outStorage, int outStorageSlotIndex)
+        public bool EquipWeaponItem(BaseItemSlotStorage outStorage, int outStorageSlotIndex)
         {
             BaseItemModel item = outStorage.GetElementBySlot(outStorageSlotIndex);
             if (item != null && item.ItemType == ItemType.Weapon)

@@ -4,10 +4,39 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    public class OrderLimitedStorage : BaseLimitedStorage<ItemOrderModel, OrderStorageType>
+    public class OrderSlotStorage : BaseSlotStorage<ItemOrderModel, OrderStorageType>
     {
-        public OrderLimitedStorage(int slotsAmount) : base(slotsAmount, OrderStorageType.None) { }
+        #region Properties
 
+        public Action<OrderStorageType> OnStorageResizeHandler { get; set; }
+
+        #endregion
+
+
+        #region ClassLifeCycle
+
+        public OrderSlotStorage(int slotsAmount) : base(slotsAmount, OrderStorageType.None) { }
+
+        #endregion
+
+
+        #region Methods
+
+        public void AddSlots(int slotAmount)
+        {
+            if (slotAmount > 0)
+            {
+                for (int i = 0; i < slotAmount; i++)
+                {
+                    _elementSlots.Add(default);
+                }
+                OnStorageResize();
+            }
+            else
+            {
+                Debug.LogError($"Incorrect input parameter: parameter less or equal zero (input value: {slotAmount})");
+            }
+        }
 
         public bool HasFreeSlots()
         {
@@ -69,5 +98,12 @@ namespace BeastHunterHubUI
                 return null;
             }
         }
+
+        private void OnStorageResize()
+        {
+            OnStorageResizeHandler?.Invoke(StorageType);
+        }
+
+        #endregion
     }
 }

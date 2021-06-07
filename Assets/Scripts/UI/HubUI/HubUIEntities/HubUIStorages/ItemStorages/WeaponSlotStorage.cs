@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    public class EquippedWeaponStorage : BaseItemLimitedStorage
+    public class WeaponSlotStorage : BaseItemSlotStorage
     {
         #region Constants
 
@@ -22,7 +22,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public EquippedWeaponStorage(int weaponSetsAmount) : base(weaponSetsAmount * SLOTS_AMOUNT_IN_WEAPON_SET, ItemStorageType.WeaponEquipment) { }
+        public WeaponSlotStorage(int weaponSetsAmount) : base(weaponSetsAmount * SLOTS_AMOUNT_IN_WEAPON_SET, ItemStorageType.WeaponEquipment) { }
 
         #endregion
 
@@ -92,7 +92,7 @@ namespace BeastHunterHubUI
 
             if (isSucceful)
             {
-                OnPutElementToSlot(putSlotIndex, _elementSlots[putSlotIndex]);
+                OnPutItemToSlot(putSlotIndex, _elementSlots[putSlotIndex]);
             }
 
             if (adjacendSlotIndex.HasValue)

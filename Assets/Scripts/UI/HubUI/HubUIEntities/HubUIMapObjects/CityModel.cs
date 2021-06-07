@@ -21,8 +21,8 @@ namespace BeastHunterHubUI
         public FractionData Fraction { get; private set; } 
         public List<CitizenModel> Citizens { get; private set; }
         public List<BaseItemData> ShopItemsPool { get; private set; }
-        public ItemLimitedStorage ShopStorage { get; private set; }
-        public ItemLimitedStorage BuyBackStorage { get; private set; }
+        public ItemSlotStorage ShopStorage { get; private set; }
+        public ItemSlotStorage BuyBackStorage { get; private set; }
 
         public int PlayerReputation
         {
@@ -67,8 +67,8 @@ namespace BeastHunterHubUI
                 ShopItemsPool.Add(cityData.ShopItemsPool[i]);
             }
 
-            ShopStorage = new ItemLimitedStorage(cityData.ShopSlotAmount, ItemStorageType.ShopStorage);
-            BuyBackStorage = new ItemLimitedStorage(cityData.ShopSlotAmount, ItemStorageType.BuyBackStorage);
+            ShopStorage = new ItemSlotStorage(cityData.ShopSlotAmount, ItemStorageType.ShopStorage);
+            BuyBackStorage = new ItemSlotStorage(cityData.ShopSlotAmount, ItemStorageType.ShopBuyBackStorage);
 
             UpdateShopItems();
         }

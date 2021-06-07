@@ -5,7 +5,7 @@ using System;
 
 namespace BeastHunterHubUI
 {
-    public class EquippedClothesStorage : BaseItemLimitedStorage
+    public class ClothesSlotStorage : BaseItemSlotStorage
     {
         #region Fields
 
@@ -16,7 +16,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public EquippedClothesStorage(ClothesType[] clothTypes) : base(clothTypes.Length, ItemStorageType.ClothesEquipment)
+        public ClothesSlotStorage(ClothesType[] clothTypes) : base(clothTypes.Length, ItemStorageType.ClothesEquipment)
         {
             _slotTypes = clothTypes;
         }
@@ -84,7 +84,7 @@ namespace BeastHunterHubUI
 
             if (isSucceful)
             {
-                OnPutElementToSlot(slotIndex, item);
+                OnPutItemToSlot(slotIndex, item);
             }
 
             return isSucceful;

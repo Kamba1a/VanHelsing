@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    public class CharacterUnlimitedStorage : BaseCharacterStorage
+    public class AvailableCharactersStorage : BaseCharacterStorage
     {
         public Action<int, CharacterModel> OnAddCharacterHandler { get; set; }
         public Action<int> OnRemoveCharacterHandler { get; set; }
         public Action<int, CharacterModel> OnReplaceCharacterHandler { get; set; }
 
 
-        public CharacterUnlimitedStorage(CharacterStorageType storageType) : base(storageType)
+        public AvailableCharactersStorage(CharacterStorageType storageType) : base(storageType)
         {
             _elementSlots = new List<CharacterModel>();
         }

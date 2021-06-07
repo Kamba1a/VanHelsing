@@ -13,8 +13,8 @@ namespace BeastHunterHubUI
 
         public int GoldAmount { get; private set; }
         public int Rank { get; private set; }
-        public ItemLimitedStorage Inventory { get; private set; }
-        public CharacterUnlimitedStorage AvailableCharacters { get; private set; }
+        public ItemSlotStorage Inventory { get; private set; }
+        public AvailableCharactersStorage AvailableCharacters { get; private set; }
         public HuntingQuestModel HuntingQuest { get; private set; } 
 
         #endregion
@@ -27,7 +27,7 @@ namespace BeastHunterHubUI
             GoldAmount = playerStruct.GoldAmount;
             Rank = playerStruct.Rank;
 
-            AvailableCharacters = new CharacterUnlimitedStorage(CharacterStorageType.AvailableCharacters);
+            AvailableCharacters = new AvailableCharactersStorage(CharacterStorageType.AvailableCharacters);
             if (playerStruct.AvailableCharacters != null)
             {
                 for (int i = 0; i < playerStruct.AvailableCharacters.Length; i++)
@@ -36,7 +36,7 @@ namespace BeastHunterHubUI
                 }
             }
 
-            Inventory = new ItemLimitedStorage(playerStruct.InventorySlotsAmount, ItemStorageType.GeneralInventory);
+            Inventory = new ItemSlotStorage(playerStruct.InventorySlotsAmount, ItemStorageType.GeneralInventory);
             if(playerStruct.InventoryItems != null)
             {
                 for (int i = 0; i < playerStruct.InventoryItems.Length; i++)

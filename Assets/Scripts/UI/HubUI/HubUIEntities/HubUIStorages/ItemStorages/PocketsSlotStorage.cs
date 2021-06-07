@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BeastHunterHubUI
 {
-    public class PocketsStorage : ItemLimitedStorage
+    public class PocketsSlotStorage : ItemSlotStorage
     {
         #region Properties
 
@@ -15,7 +15,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public PocketsStorage() : base(0, ItemStorageType.PocketsStorage) { }
+        public PocketsSlotStorage() : base(0, ItemStorageType.PocketsStorage) { }
 
         #endregion
 

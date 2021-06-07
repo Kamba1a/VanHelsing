@@ -86,7 +86,7 @@ namespace BeastHunterHubUI
 
         public void SellItem(CityModel city, int inventorySlotIndex)
         {
-            ItemLimitedStorage playerInventory = _context.Player.Inventory;
+            ItemSlotStorage playerInventory = _context.Player.Inventory;
             BaseItemModel sellingItem = playerInventory.GetElementBySlot(inventorySlotIndex);
 
             if (sellingItem != null)
@@ -105,7 +105,7 @@ namespace BeastHunterHubUI
 
         public void BuyBackItem(CityModel city, int buyBackStorageSlotIndex)
         {
-            ItemLimitedStorage buyBackStorage = city.BuyBackStorage;
+            ItemSlotStorage buyBackStorage = city.BuyBackStorage;
             BaseItemModel buyingItem = buyBackStorage.GetElementBySlot(buyBackStorageSlotIndex);
             if (buyingItem != null)
             {
@@ -130,7 +130,7 @@ namespace BeastHunterHubUI
 
         public void BuyItem(CityModel city, int shopStorageSlotIndex)
         {
-            ItemLimitedStorage shopStorage = city.ShopStorage;
+            ItemSlotStorage shopStorage = city.ShopStorage;
             BaseItemModel buyingItem = shopStorage.GetElementBySlot(shopStorageSlotIndex);
 
             if (buyingItem != null)

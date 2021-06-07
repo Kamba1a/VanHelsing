@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    public class CharacterLimitedStorage : BaseCharacterStorage
+    public class CharacterSlotStorage : BaseCharacterStorage
     {
 
         #region Properties
@@ -20,7 +20,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public CharacterLimitedStorage(int slotsAmount, CharacterStorageType storageType) : base(storageType)
+        public CharacterSlotStorage(int slotsAmount, CharacterStorageType storageType) : base(storageType)
         {
             _elementSlots = new List<CharacterModel>();
 

@@ -16,8 +16,8 @@ namespace BeastHunterHubUI
         public SkillType UsedSkill { get; private set; }
         public string Name { get; private set; }
         public int Level { get; private set; }
-        public CharacterLimitedStorage ChiefWorkplace { get; private set; }
-        public CharacterLimitedStorage AssistantWorkplaces { get; private set; }
+        public CharacterSlotStorage ChiefWorkplace { get; private set; }
+        public CharacterSlotStorage AssistantWorkplaces { get; private set; }
         public abstract Dictionary<int,T> ProgressScheme { get; protected set; }
         public float OrderTimeReducePercent { get; private set; }
         public int AssistansGeneralSkillLevel { get; private set; }
@@ -53,8 +53,8 @@ namespace BeastHunterHubUI
             }
             Level = roomStruct.Level;
 
-            ChiefWorkplace = new CharacterLimitedStorage(1, CharacterStorageType.ChiefWorkplace);
-            AssistantWorkplaces = new CharacterLimitedStorage(ProgressScheme[Level].AssistansAmount, CharacterStorageType.AssistantWorkplaces);
+            ChiefWorkplace = new CharacterSlotStorage(1, CharacterStorageType.ChiefWorkplace);
+            AssistantWorkplaces = new CharacterSlotStorage(ProgressScheme[Level].AssistansAmount, CharacterStorageType.AssistantWorkplaces);
 
             ChiefWorkplace.OnPutElementToSlotHandler += OnChiefAddBase;
             ChiefWorkplace.OnTakeElementFromSlotHandler += OnChiefRemoveBase;
