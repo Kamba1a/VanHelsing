@@ -178,7 +178,7 @@ namespace BeastHunterHubUI
 
         private void RemoveCharacterListItemUI(int slotIndex)
         {
-            Destroy(GetCharacterListItemBehaviour(slotIndex).gameObject);
+            DestroyImmediate(GetCharacterListItemBehaviour(slotIndex).gameObject);
         }
 
         private GameObject InstantiateUIObject(GameObject prefab, GameObject parent)
@@ -270,7 +270,6 @@ namespace BeastHunterHubUI
             _draggedCharacterInfo.slotIndex = null;
         }
 
-        //todo: fix bugs with swap characters inside AvailableCharacters storage
         private void OnDropCharacterToSlot(int dropSlotIndex, CharacterStorageType dropStorageType)
         {
             if (_draggedCharacterInfo.slotIndex.HasValue)
@@ -280,9 +279,14 @@ namespace BeastHunterHubUI
                     BaseCharacterStorage storageOut = GetCharacterStorageByType(_draggedCharacterInfo.storageType);
                     CharacterModel character = storageOut.GetElementBySlot(_draggedCharacterInfo.slotIndex.Value);
 
+                    if(!(_draggedCharacterInfo.storageType == CharacterStorageType.AvailableCharacters && _draggedCharacterInfo.slotIndex < dropSlotIndex))
+                    {
+                        dropSlotIndex++;
+                    }
+
                     if (storageOut.RemoveElement(_draggedCharacterInfo.slotIndex.Value))
                     {
-                        GetCharacterStorageByType(dropStorageType).PutElement(dropSlotIndex + 1, character);
+                        GetCharacterStorageByType(dropStorageType).PutElement(dropSlotIndex, character);
                     }
                     else
                     {
