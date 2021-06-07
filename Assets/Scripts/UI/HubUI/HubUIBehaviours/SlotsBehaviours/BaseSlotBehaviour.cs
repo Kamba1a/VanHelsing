@@ -9,13 +9,19 @@ namespace BeastHunterHubUI
 {
     public abstract class BaseSlotBehaviour<EntityType, StorageType> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler where StorageType : Enum
     {
+        #region Fields
+
         [SerializeField] protected Image _changeableImage;
         [SerializeField] protected GameObject _objectForDrag;
 
         protected GameObject _currentDraggedObject;
         protected StorageType _storageType;
-        protected int _slotIndex;
+        protected int _storageSlotIndex;
 
+        #endregion
+
+
+        #region Properties
 
         public Action<int, StorageType> OnBeginDragHandler { get; set; }
         public Action<int, StorageType> OnEndDragHandler { get; set; }
@@ -24,9 +30,27 @@ namespace BeastHunterHubUI
         public Action<int, StorageType> OnPointerExitHandler { get; set; }
         public Func<int, bool> IsPointerEnterOn { get; set; }
 
-        public bool IsDragAndDropOn { get; set; }
-        public bool IsInteractable { get; set; }
+        public virtual bool IsDragAndDropOn { get; set; }
+        public virtual bool IsInteractable { get; set; }
 
+        #endregion
+
+
+        #region UnityMethods
+
+
+        private void OnDestroy()
+        {
+            if (_currentDraggedObject != null)
+            {
+                Destroy(_currentDraggedObject);
+            }
+        }
+
+        #endregion
+
+
+        #region Methods
 
         public abstract void UpdateInfo(EntityType entityModel);
         protected abstract void OnBeginDragHeirLogic();
@@ -35,10 +59,10 @@ namespace BeastHunterHubUI
         protected abstract void OnPointerEnterHeirLogic();
         protected abstract void OnPointerExitHeirLogic();
 
-        public virtual void Initialize(StorageType storageType, int slotIndex)
+        public virtual void Initialize(StorageType storageType, int storageSlotIndex)
         {
             _storageType = storageType;
-            _slotIndex = slotIndex;
+            _storageSlotIndex = storageSlotIndex;
             IsDragAndDropOn = true;
             IsInteractable = true;
             IsPointerEnterOn = (_slotIndex) => true;
@@ -52,6 +76,11 @@ namespace BeastHunterHubUI
             OnPointerEnterHandler = null;
             OnPointerExitHandler = null;
         }
+
+        #endregion
+
+
+        #region IBeginDragHandler
 
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -71,10 +100,15 @@ namespace BeastHunterHubUI
 
                     OnBeginDragHeirLogic();
 
-                    OnBeginDragHandler?.Invoke(_slotIndex, _storageType);
+                    OnBeginDragHandler?.Invoke(_storageSlotIndex, _storageType);
                 }
             }
         }
+
+        #endregion
+
+
+        #region IDragHandler
 
         public void OnDrag(PointerEventData eventData)
         {
@@ -84,14 +118,24 @@ namespace BeastHunterHubUI
             }
         }
 
+        #endregion
+
+
+        #region IDrophandler
+
         public void OnDrop(PointerEventData eventData)
         {
             if (IsInteractable && IsDragAndDropOn)
             {
                 OnDropHeirLogic();
-                OnDropHandler?.Invoke(_slotIndex, _storageType);
+                OnDropHandler?.Invoke(_storageSlotIndex, _storageType);
             }
         }
+
+        #endregion
+
+
+        #region IEndDragHandler
 
         public void OnEndDrag(PointerEventData eventData)
         {
@@ -104,26 +148,38 @@ namespace BeastHunterHubUI
             {
                 Destroy(_currentDraggedObject);
                 OnEndDragHeirLogic();
-                OnEndDragHandler?.Invoke(_slotIndex, _storageType);
+                OnEndDragHandler?.Invoke(_storageSlotIndex, _storageType);
             }
         }
+
+        #endregion
+
+
+        #region IPointerEnterHandler
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (IsPointerEnterOn.Invoke(_slotIndex))
+            if (IsPointerEnterOn.Invoke(_storageSlotIndex))
             {
                 OnPointerEnterHeirLogic();
-                OnPointerEnterHandler?.Invoke(_slotIndex, _storageType);
+                OnPointerEnterHandler?.Invoke(_storageSlotIndex, _storageType);
             }
         }
 
+        #endregion
+
+
+        #region IPointerExitHandler
+
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (IsPointerEnterOn.Invoke(_slotIndex))
+            if (IsPointerEnterOn.Invoke(_storageSlotIndex))
             {
                 OnPointerExitHeirLogic();
-                OnPointerExitHandler?.Invoke(_slotIndex, _storageType);
+                OnPointerExitHandler?.Invoke(_storageSlotIndex, _storageType);
             }
         }
+
+        #endregion
     }
 }
