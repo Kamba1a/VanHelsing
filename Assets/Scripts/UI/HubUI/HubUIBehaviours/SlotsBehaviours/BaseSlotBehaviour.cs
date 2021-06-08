@@ -7,8 +7,15 @@ using UnityEngine.UI;
 
 namespace BeastHunterHubUI
 {
-    public abstract class BaseSlotBehaviour<EntityType, StorageType> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler where StorageType : Enum
+    public abstract class BaseSlotBehaviour<EntityType, StorageType> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler where StorageType : Enum
     {
+        #region Constants
+
+        private const float DOUBLECLICK_TIME = 0.5f;
+
+        #endregion
+
+
         #region Fields
 
         [SerializeField] protected Image _changeableImage;
@@ -16,6 +23,7 @@ namespace BeastHunterHubUI
 
         protected GameObject _currentDraggedObject;
         protected StorageType _storageType;
+        private float _lastClickTime;
 
         #endregion
 
@@ -29,10 +37,10 @@ namespace BeastHunterHubUI
         public Action<int, StorageType> OnDropHandler { get; set; }
         public Action<int, StorageType> OnPointerEnterHandler { get; set; }
         public Action<int, StorageType> OnPointerExitHandler { get; set; }
-        public Func<int, bool> IsPointerEnterOn { get; set; }
+        public Action<int, StorageType> OnDoubleClickButtonHandler { get; set; }
 
-        public virtual bool IsDragAndDropOn { get; set; }
-        public virtual bool IsInteractable { get; set; }
+        public bool IsDragAndDropOn { get; set; }
+        public bool IsInteractable { get; private set; }
 
         #endregion
 
@@ -53,20 +61,35 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public abstract void UpdateInfo(EntityType entityModel);
-        protected abstract void OnBeginDragHeirLogic();
-        protected abstract void OnEndDragHeirLogic();
-        protected abstract void OnDropHeirLogic();
-        protected abstract void OnPointerEnterHeirLogic();
-        protected abstract void OnPointerExitHeirLogic();
+        protected abstract void FillSlot(EntityType entityModel);
+        protected abstract void ClearSlot();
 
         public virtual void Initialize(StorageType storageType, int storageSlotIndex)
         {
             _storageType = storageType;
             _storageSlotIndex = storageSlotIndex;
-            IsDragAndDropOn = true;
             IsInteractable = true;
-            IsPointerEnterOn = (_slotIndex) => true;
+            IsDragAndDropOn = true;
+            _changeableImage.enabled = false;
+        }
+
+        public void UpdateSlot(EntityType entityModel)
+        {
+            if (entityModel != null)
+            {
+                FillSlot(entityModel);
+                _changeableImage.enabled = true;
+            }
+            else
+            {
+                _changeableImage.enabled = false;
+                ClearSlot();
+            }
+        }
+
+        public virtual void SetInteractable(bool flag)
+        {
+            IsInteractable = flag;
         }
 
         public virtual void RemoveAllListeners()
@@ -76,7 +99,40 @@ namespace BeastHunterHubUI
             OnEndDragHandler = null;
             OnPointerEnterHandler = null;
             OnPointerExitHandler = null;
+            OnDoubleClickButtonHandler = null;
         }
+
+        protected virtual void OnBeginDragLogic()
+        {
+            _currentDraggedObject = Instantiate(_objectForDrag, gameObject.transform.root.Find("Canvas"));
+
+            RectTransform draggedObjectRectTransform = _currentDraggedObject.GetComponent<RectTransform>();
+            draggedObjectRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            draggedObjectRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            draggedObjectRectTransform.pivot = new Vector2(0.5f, 0.5f);
+
+            Rect objectForDragRect = _objectForDrag.GetComponent<RectTransform>().rect;
+            draggedObjectRectTransform.sizeDelta = new Vector2(objectForDragRect.width, objectForDragRect.height);
+        }
+
+        protected virtual void OnEndDragLogic()
+        {
+            Destroy(_currentDraggedObject);
+        }
+
+        protected virtual bool IsPointerEnterOn()
+        {
+            return _changeableImage.sprite != null && IsInteractable;
+        }
+
+        protected virtual bool IsPointerExitOn()
+        {
+            return _changeableImage.sprite != null && IsInteractable;
+        }
+
+        protected virtual void OnDropLogic() { }
+        protected virtual void OnPointerEnterLogic() { }
+        protected virtual void OnPointerExitLogic() { }
 
         #endregion
 
@@ -85,22 +141,11 @@ namespace BeastHunterHubUI
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (IsInteractable && IsDragAndDropOn)
+            if (IsDragAndDropOn && IsInteractable)
             {
                 if (_changeableImage.sprite != null)
                 {
-                    _currentDraggedObject = Instantiate(_objectForDrag, gameObject.transform.root.Find("Canvas"));
-
-                    RectTransform draggedObjectRectTransform = _currentDraggedObject.GetComponent<RectTransform>();
-                    draggedObjectRectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-                    draggedObjectRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-                    draggedObjectRectTransform.pivot = new Vector2(0.5f, 0.5f);
-
-                    Rect objectForDragRect = _objectForDrag.GetComponent<RectTransform>().rect;
-                    draggedObjectRectTransform.sizeDelta = new Vector2(objectForDragRect.width, objectForDragRect.height);
-
-                    OnBeginDragHeirLogic();
-
+                    OnBeginDragLogic();
                     OnBeginDragHandler?.Invoke(_storageSlotIndex, _storageType);
                 }
             }
@@ -126,9 +171,9 @@ namespace BeastHunterHubUI
 
         public void OnDrop(PointerEventData eventData)
         {
-            if (IsInteractable && IsDragAndDropOn)
+            if (IsDragAndDropOn && IsInteractable)
             {
-                OnDropHeirLogic();
+                OnDropLogic();
                 OnDropHandler?.Invoke(_storageSlotIndex, _storageType);
             }
         }
@@ -147,8 +192,7 @@ namespace BeastHunterHubUI
 
             if (_currentDraggedObject != null)
             {
-                Destroy(_currentDraggedObject);
-                OnEndDragHeirLogic();
+                OnEndDragLogic();
                 OnEndDragHandler?.Invoke(_storageSlotIndex, _storageType);
             }
         }
@@ -160,9 +204,9 @@ namespace BeastHunterHubUI
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (IsPointerEnterOn.Invoke(_storageSlotIndex))
+            if (IsPointerEnterOn())
             {
-                OnPointerEnterHeirLogic();
+                OnPointerEnterLogic();
                 OnPointerEnterHandler?.Invoke(_storageSlotIndex, _storageType);
             }
         }
@@ -174,10 +218,27 @@ namespace BeastHunterHubUI
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (IsPointerEnterOn.Invoke(_storageSlotIndex))
+            if (IsPointerExitOn())
             {
-                OnPointerExitHeirLogic();
+                OnPointerExitLogic();
                 OnPointerExitHandler?.Invoke(_storageSlotIndex, _storageType);
+            }
+        }
+
+        #endregion
+
+
+        #region IPointerClickHandler
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (IsInteractable)
+            {
+                if (Time.time < _lastClickTime + DOUBLECLICK_TIME)
+                {
+                    OnDoubleClickButtonHandler?.Invoke(_storageSlotIndex, _storageType);
+                }
+                _lastClickTime = Time.time;
             }
         }
 

@@ -515,10 +515,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5585337752527616096}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7b8da1921b88df49839579d2ecf32fa, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c043d5c764b89f4dbc6c85d2b6e4239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemImage: {fileID: 5585337752180507409}
+  _changeableImage: {fileID: 5585337752180507409}
+  _objectForDrag: {fileID: 5585337752180507411}
   _openRecipeBookButton: {fileID: 8762658393910090583}
   _removeOrderButton: {fileID: 8996274037423624288}
   _processImage: {fileID: 3618541750865423887}

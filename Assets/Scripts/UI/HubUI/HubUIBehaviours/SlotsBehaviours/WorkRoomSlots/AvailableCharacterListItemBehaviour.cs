@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 
 namespace BeastHunterHubUI
 {
-    class WorkRoomCharacterListItemBehaviour : BaseSlotBehaviour<CharacterModel, CharacterStorageType>
+    class AvailableCharacterListItemBehaviour : BaseCharacterSlotBehaviour
     {
         #region Fields
 
@@ -18,6 +19,8 @@ namespace BeastHunterHubUI
 
 
         #region Properties
+
+        public Func<int, bool> IsPointerEnterOnFunc { get; set; }
 
         protected override int _storageSlotIndex
         {
@@ -34,7 +37,7 @@ namespace BeastHunterHubUI
         #endregion
 
 
-        #region Methods
+        #region BaseCharacterSlotBehaviour
 
         public override void Initialize(CharacterStorageType storageType, int storageSlotIndex)
         {
@@ -43,46 +46,65 @@ namespace BeastHunterHubUI
             _size = _rectTransform.sizeDelta;
         }
 
-        #endregion
-
-
-        #region BaseSlotBehaviour
-
-        public override void UpdateInfo(CharacterModel character)
+        protected override void FillSlot(CharacterModel character)
         {
-            _changeableImage.sprite = character.Portrait;
+            base.FillSlot(character);
             _nameText.text = character.Name;
             _rankText.text = character.Rank.ToString();
         }
 
-        protected override void OnBeginDragHeirLogic()
+        protected override void ClearSlot()
         {
+            base.ClearSlot();
+            _nameText.text = "";
+            _rankText.text = "";
+        }
+
+        protected override bool IsPointerEnterOn()
+        {
+            return base.IsPointerEnterOn()
+                && IsPointerEnterOnFunc.Invoke(_storageSlotIndex);
+        }
+
+        protected override bool IsPointerExitOn()
+        {
+            return base.IsPointerExitOn()
+                && IsPointerEnterOnFunc.Invoke(_storageSlotIndex);
+        }
+
+        protected override void OnBeginDragLogic()
+        {
+            base.OnBeginDragLogic();
             _objectForDrag.SetActive(false);
             Vector2 newSize = _size;
             newSize.y = 0;
             _rectTransform.sizeDelta = newSize;
         }
 
-        protected override void OnEndDragHeirLogic()
+        protected override void OnEndDragLogic()
         {
+            base.OnEndDragLogic();
             _rectTransform.sizeDelta = _size;
             _objectForDrag.SetActive(true);
         }
 
-        protected override void OnDropHeirLogic()
+        protected override void OnDropLogic()
         {
+            base.OnDropLogic();
             _rectTransform.sizeDelta = _size;
         }
 
-        protected override void OnPointerEnterHeirLogic()
+        protected override void OnPointerEnterLogic()
         {
+            base.OnPointerEnterLogic();
             Vector2 newSize = _size;
             newSize.y = newSize.y * 1.5f;
             _rectTransform.sizeDelta = newSize;
         }
 
-        protected override void OnPointerExitHeirLogic()
+        protected override void OnPointerExitLogic()
         {
+            base.OnPointerExitLogic();
             _rectTransform.sizeDelta = _size;
         }
 

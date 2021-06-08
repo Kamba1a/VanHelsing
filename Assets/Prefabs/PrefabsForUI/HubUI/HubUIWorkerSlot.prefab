@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1306646832706486444}
   - component: {fileID: 1306646832706486447}
   m_Layer: 0
-  m_Name: Image
+  m_Name: Frame_img
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,10 +162,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1306646833271779637}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a03e3e4864b8934eaed7a744f8f8dc2, type: 3}
+  m_Script: {fileID: 11500000, guid: b3d8bc13a742a4440b5a48bf980eb407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemImage: {fileID: 1306646833503569932}
+  _changeableImage: {fileID: 1306646833503569932}
+  _objectForDrag: {fileID: 1306646833503569934}
 --- !u!1 &1306646833503569934
 GameObject:
   m_ObjectHideFlags: 0

@@ -359,13 +359,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6062753379447882041}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33809e440bac30345bbb417e0b3b66a7, type: 3}
+  m_Script: {fileID: 11500000, guid: e8566ff3b5a76b449a32ce48cd9dd172, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemImage: {fileID: 354419430015155449}
+  _changeableImage: {fileID: 354419430015155449}
+  _objectForDrag: {fileID: 354419430015155451}
   _slotButton: {fileID: 7901857759811145175}
   _selectSlotFrame: {fileID: 7892530466843050557}
-  _noReputationImage: {fileID: 5739010556028723715}
+  _noSaleImage: {fileID: 5739010556028723715}
 --- !u!1 &6602048227303715942
 GameObject:
   m_ObjectHideFlags: 0

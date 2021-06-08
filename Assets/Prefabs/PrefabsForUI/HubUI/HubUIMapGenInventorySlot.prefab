@@ -148,10 +148,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4453913233983459706}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4427fc90a91e895429e50e65240b7efc, type: 3}
+  m_Script: {fileID: 11500000, guid: a2462245786dca742a0b3106e135ba23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemImage: {fileID: 3271837882995857397}
+  _changeableImage: {fileID: 3271837882995857397}
+  _objectForDrag: {fileID: 7089731482139288209}
   _slotButton: {fileID: 3285131543222747247}
   _selectSlotFrame: {fileID: 1621861580295332427}
 --- !u!1 &7089731482139288209

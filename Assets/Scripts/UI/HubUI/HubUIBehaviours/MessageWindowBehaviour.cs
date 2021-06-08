@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace BeastHunterHubUI
 {
-    class MapMessageWindowBehaviour: MonoBehaviour
+    class MessageWindowBehaviour: MonoBehaviour
     {
         #region Fields
 

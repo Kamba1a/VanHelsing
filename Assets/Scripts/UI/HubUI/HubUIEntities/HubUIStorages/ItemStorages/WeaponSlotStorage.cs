@@ -15,7 +15,7 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public Action<int, Sprite> OnTwoHandedWeaponHandler;
+        public Action<int, WeaponItemModel> OnTwoHandedWeaponHandler;
 
         #endregion
 
@@ -97,7 +97,7 @@ namespace BeastHunterHubUI
 
             if (adjacendSlotIndex.HasValue)
             {
-                OnTwoHandedWeapon(adjacendSlotIndex.Value, GetElementSpriteBySlot(putSlotIndex));
+                OnTwoHandedWeapon(adjacendSlotIndex.Value, GetElementBySlot(putSlotIndex) as WeaponItemModel);
             }
 
             return isSucceful;
@@ -190,9 +190,9 @@ namespace BeastHunterHubUI
             }
         }
 
-        private void OnTwoHandedWeapon(int adjacentSlotIndex, Sprite sprite)
+        private void OnTwoHandedWeapon(int adjacentSlotIndex, WeaponItemModel weapon)
         {
-            OnTwoHandedWeaponHandler?.Invoke(adjacentSlotIndex, sprite);
+            OnTwoHandedWeaponHandler?.Invoke(adjacentSlotIndex, weapon);
         }
 
         #endregion

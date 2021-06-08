@@ -126,7 +126,7 @@ namespace BeastHunterHubUI
         private void InitializeMessageWindow(string message)
         {
             GameObject messageUI = InstantiateUIObject(_data.MessageWindowPrefab, _messagePanel);
-            MapMessageWindowBehaviour behaviour = messageUI.GetComponent<MapMessageWindowBehaviour>();
+            MessageWindowBehaviour behaviour = messageUI.GetComponent<MessageWindowBehaviour>();
             behaviour.OnCloseWindowHandler += OnClose_MessageWindow;
             behaviour.FillInfo(message);
 
@@ -138,7 +138,7 @@ namespace BeastHunterHubUI
 
         private void OnClose_MessageWindow()
         {
-            if (_messagePanel.transform.GetComponentsInChildren<MapMessageWindowBehaviour>(false).Length == 0)
+            if (_messagePanel.transform.GetComponentsInChildren<MessageWindowBehaviour>(false).Length == 0)
             {
                 _messagePanel.SetActive(false);
             }

@@ -78,10 +78,10 @@ namespace BeastHunterHubUI
                 InitializeWorkRoomButton(_context.WorkRooms[i]);
             }
 
-            _chiefSlotBehaviour.Initialize(0, CharacterStorageType.ChiefWorkplace, true);
-            _chiefSlotBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
-            _chiefSlotBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
-            _chiefSlotBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
+            _chiefSlotBehaviour.Initialize(CharacterStorageType.ChiefWorkplace, 0);
+            _chiefSlotBehaviour.OnBeginDragHandler += OnBeginDragCharacterFromSlot;
+            _chiefSlotBehaviour.OnEndDragHandler += OnEndDragCharacter;
+            _chiefSlotBehaviour.OnDropHandler += OnDropCharacterToSlot;
 
             for (int i = 0; i < _context.Player.AvailableCharacters.GetSlotsCount(); i++)
             {
@@ -145,10 +145,10 @@ namespace BeastHunterHubUI
             GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.WorkerSlotPrefab, _assistantsSlotsFillablePanel);
             WorkRoomWorkerSlotBehaviour slotBehaviour = slotUI.GetComponent<WorkRoomWorkerSlotBehaviour>();
             _assistantsSlotsBehaviours.Add(slotBehaviour);
-            slotBehaviour.Initialize(slotIndex, CharacterStorageType.AssistantWorkplaces, true);
-            slotBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
-            slotBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
-            slotBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
+            slotBehaviour.Initialize(CharacterStorageType.AssistantWorkplaces, slotIndex);
+            slotBehaviour.OnBeginDragHandler += OnBeginDragCharacterFromSlot;
+            slotBehaviour.OnEndDragHandler += OnEndDragCharacter;
+            slotBehaviour.OnDropHandler += OnDropCharacterToSlot;
             _selectedRoom.AssistantWorkplaces.OnPutElementToSlotHandler += FillCharacterSlotUI;
             _selectedRoom.AssistantWorkplaces.OnTakeElementFromSlotHandler += FillCharacterSlotUI;
         }
@@ -158,7 +158,8 @@ namespace BeastHunterHubUI
             GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.OrderSlotPrefab, _ordersSlotsFillablePanel);
             WorkRoomOrderSlotBehaviour slotBehaviour = slotUI.GetComponentInChildren<WorkRoomOrderSlotBehaviour>();
             _orderSlotsBehaviours.Add(slotBehaviour);
-            slotBehaviour.Initialize(slotIndex, OrderStorageType.None, false);
+            slotBehaviour.Initialize(OrderStorageType.None, slotIndex);
+            slotBehaviour.IsDragAndDropOn = false;
             slotBehaviour.OnClickRemoveOrderButtonHandler += OnClick_RemoveOrderFromSlotButton;
             slotBehaviour.OnClickOpenRecipeBookButtonHandler += OnClick_OrderSlot;
             _selectedRoom.OrdersSlots.OnPutElementToSlotHandler += OnAddOrderInSlot;
@@ -168,13 +169,13 @@ namespace BeastHunterHubUI
         private void InitializeCharacterListItemUI(int slotIndex, CharacterModel character)
         {
             GameObject characterUI = InstantiateUIObject(_data.WorkRoomDataStruct.CharacterListItemPrefab, _charactersFillablePanel);
-            WorkRoomCharacterListItemBehaviour uiBehaviour = characterUI.GetComponent<WorkRoomCharacterListItemBehaviour>();
+            AvailableCharacterListItemBehaviour uiBehaviour = characterUI.GetComponent<AvailableCharacterListItemBehaviour>();
             uiBehaviour.Initialize(CharacterStorageType.AvailableCharacters, slotIndex);
-            uiBehaviour.UpdateInfo(character);
+            uiBehaviour.UpdateSlot(character);
             uiBehaviour.OnBeginDragHandler += OnBeginDragCharacterFromSlot;
             uiBehaviour.OnEndDragHandler += OnEndDragCharacter;
             uiBehaviour.OnDropHandler += OnDropCharacterToSlot;
-            uiBehaviour.IsPointerEnterOn += IsPointerEnterCharacterListItemOn;
+            uiBehaviour.IsPointerEnterOnFunc += IsPointerEnterCharacterListItemOn;
         }
 
         private void RemoveCharacterListItemUI(int slotIndex)
@@ -392,14 +393,13 @@ namespace BeastHunterHubUI
 
         private void FillCharacterSlotUI(CharacterStorageType storageType, int slotIndex, CharacterModel character)
         {
-            BaseCharacterStorage storage = GetCharacterStorageByType(storageType);
-            Sprite sprite = storage.GetElementSpriteBySlot(slotIndex);
+            CharacterModel characterInSlot = GetCharacterStorageByType(storageType).GetElementBySlot(slotIndex);
 
             switch (storageType)
             {
                 case CharacterStorageType.ChiefWorkplace:
 
-                    _chiefSlotBehaviour.FillSlot(sprite);
+                    _chiefSlotBehaviour.UpdateSlot(characterInSlot);
                     if (character != null)
                     {
                         _chiefSkillLevelImage.fillAmount = (float)character.Skills[_selectedRoom.UsedSkill] / 100;
@@ -415,7 +415,7 @@ namespace BeastHunterHubUI
 
                 case CharacterStorageType.AssistantWorkplaces:
 
-                    _assistantsSlotsBehaviours[slotIndex].FillSlot(sprite);
+                    _assistantsSlotsBehaviours[slotIndex].UpdateSlot(characterInSlot);
                     _assistantsSkillLevelImage.fillAmount = (float)_selectedRoom.AssistansGeneralSkillLevel / 100;
                     _assistantsSkillLevelText.text = _selectedRoom.AssistansGeneralSkillLevel.ToString() + "%";
 
@@ -431,29 +431,29 @@ namespace BeastHunterHubUI
 
         private void OnAddOrderInSlot(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
         {
-            _orderSlotsBehaviours[slotIndex].FillSlot(order.Recipe.Item.Icon, order.IsCompleted);
+            _orderSlotsBehaviours[slotIndex].UpdateSlot(order);
             _orderSlotsBehaviours[slotIndex].UpdateCraftTimeText(order.HoursNumberToComplete);
             order.OnChangeHoursNumberToCompleteHandler += _orderSlotsBehaviours[slotIndex].UpdateCraftTimeText;
         }
 
         private void OnRemoveOrderFromSlot(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
         {
-            _orderSlotsBehaviours[slotIndex].FillSlot(null, null);
+            _orderSlotsBehaviours[slotIndex].UpdateSlot(null);
             order.OnChangeHoursNumberToCompleteHandler -= _orderSlotsBehaviours[slotIndex].UpdateCraftTimeText;
         }
 
         private void UpdateCharacterListItemUI(int slotIndex, CharacterModel character)
         {
-            GetCharacterListItemBehaviour(slotIndex).UpdateInfo(character);
+            GetCharacterListItemBehaviour(slotIndex).UpdateSlot(character);
         }
 
         #endregion
 
         #region OtherMethods
 
-        private WorkRoomCharacterListItemBehaviour GetCharacterListItemBehaviour(int index)
+        private AvailableCharacterListItemBehaviour GetCharacterListItemBehaviour(int index)
         {
-            return _charactersFillablePanel.transform.GetChild(index).GetComponent<WorkRoomCharacterListItemBehaviour>();
+            return _charactersFillablePanel.transform.GetChild(index).GetComponent<AvailableCharacterListItemBehaviour>();
         }
 
         private BaseCharacterStorage GetCharacterStorageByType(CharacterStorageType storageType)

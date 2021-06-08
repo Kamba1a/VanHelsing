@@ -4,11 +4,11 @@ using UnityEngine.UI;
 
 namespace BeastHunterHubUI
 {
-    class MapShopSlotBehaviour : MapItemStorageSlotBehaviour
+    class MapShopItemSlotBehaviour : MapItemSlotBehaviour
     {
         #region Fields
 
-        [SerializeField] private Image _noReputationImage;
+        [SerializeField] private Image _noSaleImage;
 
         #endregion
 
@@ -17,7 +17,7 @@ namespace BeastHunterHubUI
 
         public void SetAvailability(bool isAvailability)
         {
-            _noReputationImage.enabled = !isAvailability;
+            _noSaleImage.enabled = !isAvailability;
         }
 
         #endregion
