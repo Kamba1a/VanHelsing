@@ -9,7 +9,7 @@ using System.Collections;
 
 namespace BeastHunterHubUI
 {
-    public class MapBehaviour : MonoBehaviour, IStart, IDestroy
+    public class MapRoomUIBehaviour : MonoBehaviour, IStart, IDestroy
     {
         #region PrivateData
 

@@ -17,7 +17,7 @@ namespace BeastHunterHubUI
         private List<IUpdate> _updateBehaviours;
         private List<IDestroy> _destroyBehaviours;
 
-        private MapBehaviour _mapBehaviour;
+        private MapRoomUIBehaviour _mapBehaviour;
         private QuestRoomUIBehaviour _questRoomUIBehaviour;
         private WorkRoomUIBehaviour _workRoomUIBehaviour;
 
@@ -32,7 +32,7 @@ namespace BeastHunterHubUI
             _updateBehaviours = new List<IUpdate>();
             _destroyBehaviours = new List<IDestroy>();
 
-            _mapBehaviour = GetComponentInChildren<MapBehaviour>(true);
+            _mapBehaviour = GetComponentInChildren<MapRoomUIBehaviour>(true);
             _questRoomUIBehaviour = GetComponentInChildren<QuestRoomUIBehaviour>(true);
             _workRoomUIBehaviour = GetComponentInChildren<WorkRoomUIBehaviour>(true);
 
