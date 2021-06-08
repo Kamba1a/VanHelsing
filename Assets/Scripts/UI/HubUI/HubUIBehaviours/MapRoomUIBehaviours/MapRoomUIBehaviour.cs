@@ -128,7 +128,7 @@ namespace BeastHunterHubUI
         #region Fields
 
         [Header("Map objects")]
-        [SerializeField] private GameObject[] _mapObjects;
+        [SerializeField] private GameObject _mapObjectsPanel;
 
         [Header("Hub map")]
         [SerializeField] private GameObject _mainPanel;
@@ -343,9 +343,10 @@ namespace BeastHunterHubUI
                 FillWeaponSlot(i);
             }
 
-            for (int i = 0; i < _mapObjects.Length; i++)
+            MapObjectBehaviour[] mapObjectBehaviour = _mapObjectsPanel.GetComponentsInChildren<MapObjectBehaviour>(true);
+            for (int i = 0; i < mapObjectBehaviour.Length; i++)
             {
-                FillMapObject(_mapObjects[i], _data.MapDataStruct.MapObjects[i]);
+                FillMapObject(mapObjectBehaviour[i]);
             }
 
             for (int i = 0; i < _data.CharactersGlobalData.BackpackSlotAmount; i++)
@@ -1153,40 +1154,32 @@ namespace BeastHunterHubUI
             _characterWeaponSlotsUIBehaviours[slotIndex].OnPointerExitHandler += OnPointerExit_Slot;
         }
 
-        private void FillMapObject(GameObject mapObject, MapObjectData mapObjectdata)
+        //TODO: HIGH PRIORITY! rework!
+        private void FillMapObject(MapObjectBehaviour mapObjectBehaviour)
         {
-            MapObjectModel mapObjectModel = _context.GetMapObjectModel(mapObjectdata);
+            //MapObjectModel mapObjectModel = _context.GetMapObjectModel(mapObjectdata);
+            //mapObjectModel.Behaviour = mapObjectBehaviour;
 
-            if (mapObject != null)
-            {
-                MapObjectBehaviour mapObjectBehaviour = mapObject.GetComponent<MapObjectBehaviour>();
-                mapObjectModel.Behaviour = mapObjectBehaviour;
+            //switch (mapObjectdata.GetMapObjectType())
+            //{
+            //    case MapObjectType.Location:
 
-                switch (mapObjectdata.GetMapObjectType())
-                {
-                    case MapObjectType.Location:
+            //        mapObjectBehaviour.FillInfo(mapObjectModel as LocationModel);
+            //        mapObjectBehaviour.OnClick_ButtonHandler += OnClick_LocationButton;
 
-                        mapObjectBehaviour.FillInfo(mapObjectModel as LocationModel);
-                        mapObjectBehaviour.OnClick_ButtonHandler += OnClick_LocationButton;
+            //        break;
+            //    case MapObjectType.City:
 
-                        break;
-                    case MapObjectType.City:
+            //        mapObjectBehaviour.FillInfo(mapObjectModel as CityModel);
+            //        mapObjectBehaviour.OnClick_ButtonHandler += OnClick_CityButton;
 
-                        mapObjectBehaviour.FillInfo(mapObjectModel as CityModel);
-                        mapObjectBehaviour.OnClick_ButtonHandler += OnClick_CityButton;
+            //        break;
+            //    default:
 
-                        break;
-                    default:
+            //        Debug.LogError(this + " incorrect HubMapUIMapObjectType value");
 
-                        Debug.LogError(this + " incorrect HubMapUIMapObjectType value");
-
-                        break;
-                }
-            }
-            else
-            {
-                Debug.LogError(this + " HubMapUIContext not contain requested HubMapUIMapObjectModel: " + mapObjectModel.Name);
-            }
+            //        break;
+            //}
         }
 
         private void FillTooltipByItemInfo(int slotIndex, ItemStorageType storageType)

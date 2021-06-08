@@ -24,7 +24,7 @@ namespace BeastHunterHubUI
         [SerializeField] private float _charactersPanelSwipeStep;
 
         [Header("Objects on map")]
-        [SerializeField] private MapObjectData[] _mapObjects;
+        [SerializeField] private MapObjectData[] _mapObjects; //to delete
 
         [Header("Equipment slot type sprites")]
         [SerializeField] Sprite _weaponSlotIcon;
@@ -54,7 +54,7 @@ namespace BeastHunterHubUI
         public GameObject InventorySlotUIPrefab => _inventorySlotUIPrefab;
         public GameObject AnswerButtonUIPrefab => _answerButtonUIPrefab;
         public GameObject CharacterBackpackSlotUIPrefab => _characterBackpuckSlotUIPrefab;
-        public MapObjectData[] MapObjects => _mapObjects;
+        //public MapObjectData[] MapObjects => _mapObjects; //to delete
         public Sprite WeaponSlotIcon => _weaponSlotIcon;
         public Sprite PocketItemSlotIcon => _pocketItemSlotIcon;
         public float TooltipShowingDelay => _tooltipShowingDelay;

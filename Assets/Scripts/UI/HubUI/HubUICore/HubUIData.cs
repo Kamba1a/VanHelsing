@@ -18,7 +18,7 @@ namespace BeastHunterHubUI
         [SerializeField] private CharactersGlobalData _charactersGlobalData;
         [SerializeField] private int _citiesShopsSlotsAmount;
 
-        [Space(20, order = 1), Header("GLOBAL DATA POOLS", order = 2)]
+        [Space(20, order = 1), Header("OBJECTS POOLS", order = 2)]
         [SerializeField] private QuestData[] _questsPool;
         [SerializeField] private HuntingQuestData[] _huntingQuestsDataPool;
         [SerializeField] private BossData[] _bossesDataPool;
@@ -28,13 +28,13 @@ namespace BeastHunterHubUI
         [SerializeField] private GameObject _messageWindowPrefab;
 
         [Space(20, order = 1), Header("MAP ROOM SETTINGS", order = 2)]
-        public MapDataStruct MapDataStruct;
+        [SerializeField] public MapDataStruct MapDataStruct;
 
         [Space(20, order = 1), Header("QUEST ROOM SETTINGS", order = 2)]
-        public QuestRoomDataStruct QuestRoomDataStruct;
+        [SerializeField] public QuestRoomDataStruct QuestRoomDataStruct;
 
         [Space(20, order = 1), Header("WORK ROOM SETTINGS", order = 2)]
-        public WorkRoomUIDataStruct WorkRoomDataStruct;
+        [SerializeField] public WorkRoomUIDataStruct WorkRoomDataStruct;
 
         #endregion
 
