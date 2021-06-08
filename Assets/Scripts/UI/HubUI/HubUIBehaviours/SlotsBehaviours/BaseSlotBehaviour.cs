@@ -16,12 +16,13 @@ namespace BeastHunterHubUI
 
         protected GameObject _currentDraggedObject;
         protected StorageType _storageType;
-        protected int _storageSlotIndex;
 
         #endregion
 
 
         #region Properties
+
+        protected virtual int _storageSlotIndex { get; set; }
 
         public Action<int, StorageType> OnBeginDragHandler { get; set; }
         public Action<int, StorageType> OnEndDragHandler { get; set; }

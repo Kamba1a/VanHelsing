@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 3626724097013294672}
   - component: {fileID: 3626724097013294674}
   m_Layer: 0
-  m_Name: ClothSlot
+  m_Name: HubUIMapCharacterEquipmentSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -313,7 +313,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3626724097013294678}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e927af325ba927949afb89c6923b03e6, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a01f07b7c54e02469e0c09b2b47b8af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _itemImage: {fileID: 3626724096548055574}

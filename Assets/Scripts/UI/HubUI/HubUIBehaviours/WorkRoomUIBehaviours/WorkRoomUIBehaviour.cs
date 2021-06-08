@@ -169,10 +169,11 @@ namespace BeastHunterHubUI
         {
             GameObject characterUI = InstantiateUIObject(_data.WorkRoomDataStruct.CharacterListItemPrefab, _charactersFillablePanel);
             WorkRoomCharacterListItemBehaviour uiBehaviour = characterUI.GetComponent<WorkRoomCharacterListItemBehaviour>();
-            uiBehaviour.Initialize(slotIndex, character);
-            uiBehaviour.OnBeginDragItemHandler += OnBeginDragCharacterFromSlot;
-            uiBehaviour.OnEndDragItemHandler += OnEndDragCharacter;
-            uiBehaviour.OnDroppedItemHandler += OnDropCharacterToSlot;
+            uiBehaviour.Initialize(CharacterStorageType.AvailableCharacters, slotIndex);
+            uiBehaviour.UpdateInfo(character);
+            uiBehaviour.OnBeginDragHandler += OnBeginDragCharacterFromSlot;
+            uiBehaviour.OnEndDragHandler += OnEndDragCharacter;
+            uiBehaviour.OnDropHandler += OnDropCharacterToSlot;
             uiBehaviour.IsPointerEnterOn += IsPointerEnterCharacterListItemOn;
         }
 

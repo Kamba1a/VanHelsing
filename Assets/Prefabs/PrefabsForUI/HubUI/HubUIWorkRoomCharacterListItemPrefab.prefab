@@ -541,8 +541,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eba1b00b10343d4cb2871be1d984cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _changeableImage: {fileID: 5008816692199320717}
   _objectForDrag: {fileID: 7438242082190170131}
-  _characterPortraitImage: {fileID: 5008816692199320717}
   _nameText: {fileID: 5008816692000758390}
   _rankText: {fileID: 5008816691225093893}
 --- !u!1 &5008816691901069871
