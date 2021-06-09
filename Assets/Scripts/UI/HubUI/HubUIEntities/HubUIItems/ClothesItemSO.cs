@@ -4,7 +4,7 @@
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "ClothesItem", menuName = "CreateData/HubUIData/Items/Clothes", order = 0)]
-    public class ClothesItemData : BaseItemData
+    public class ClothesItemSO : BaseItemSO
     {
         #region Fields
 

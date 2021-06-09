@@ -18,7 +18,7 @@ namespace BeastHunterHubUI
         #endregion
 
 
-        public BaseItemModel(BaseItemData data)
+        public BaseItemModel(BaseItemSO data)
         {
             ItemType = data.ItemType;
             DataInstanceID = data.GetInstanceID();

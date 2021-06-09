@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "AnimaliaBoss", menuName = "CreateData/HubUIData/Boss/AnimaliaBoss", order = 0)]
-    public class AnimaliaBossData : BossData
+    public class AnimaliaBossSO : BossDataSO
     {
         [Header("AnimaliaBossData")]
         [SerializeField] private AnimaliaBossType _bossSubtype;

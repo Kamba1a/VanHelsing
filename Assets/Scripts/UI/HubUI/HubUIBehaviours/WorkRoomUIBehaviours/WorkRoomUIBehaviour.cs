@@ -29,7 +29,7 @@ namespace BeastHunterHubUI
         [SerializeField] private WorkRoomCharacterPanelBehaviour _characterPanelBehaviour;
 
         //TEMPORARY! Remove after debug!
-        [SerializeField] private ItemRecipeData _recipeForDebug;
+        [SerializeField] private ItemRecipeSO _recipeForDebug;
 
 
         private HubUIContext _context;

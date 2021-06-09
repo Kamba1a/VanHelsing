@@ -4,7 +4,7 @@
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "WorkRoom", menuName = "CreateData/HubUIData/WorkRoom", order = 0)]
-    public class WorkRoomData : ScriptableObject
+    public class WorkRoomSO : ScriptableObject
     {
         [SerializeField] private WorkRoomStruct _workRoomStruct;
 

@@ -7,7 +7,7 @@ namespace BeastHunterHubUI
     {
         #region Methods
 
-        public BaseItemModel InitializeItemModel(BaseItemData data)
+        public BaseItemModel InitializeItemModel(BaseItemSO data)
         {
             switch (data.ItemType)
             {
@@ -15,16 +15,16 @@ namespace BeastHunterHubUI
                     return new BaseItemModel(data);
 
                 case ItemType.Clothes:
-                    return new ClothesItemModel(data as ClothesItemData);
+                    return new ClothesItemModel(data as ClothesItemSO);
 
                 case ItemType.PocketItem:
-                    return new PocketItemModel(data as PocketItemData);
+                    return new PocketItemModel(data as PocketItemSO);
 
                 case ItemType.Weapon:
-                    return new WeaponItemModel(data as WeaponItemData);
+                    return new WeaponItemModel(data as WeaponItemSO);
 
                 case ItemType.Ingredient:
-                    return new IngredientItemModel(data as IngredientItemData);
+                    return new IngredientItemModel(data as IngredientItemSO);
 
                 default:
                     Debug.LogError(this + ": incorrect HubMapUIItemType");

@@ -16,7 +16,7 @@ namespace BeastHunterHubUI
 
                 for (int i = 0; i < amount; i++)
                 {
-                    CharacterStruct characterStruct = GetRandomCharacterStruct(randomizer);
+                    CharacterData characterStruct = GetRandomCharacterStruct(randomizer);
                     CharacterModel model = new CharacterModel(characterStruct);
                     list.Add(model);
                 }
@@ -29,12 +29,12 @@ namespace BeastHunterHubUI
             return list;
         }
 
-        private CharacterStruct GetRandomCharacterStruct(CharacterRandomizer randomizer)
+        private CharacterData GetRandomCharacterStruct(CharacterRandomizer randomizer)
         {
-            CharacterStruct characterStruct = new CharacterStruct();
+            CharacterData characterStruct = new CharacterData();
             bool isFemale = randomizer.IsFemale() ? true : false;
             int rank = randomizer.GetRank();
-            ClothesItemData[] clothes = randomizer.GetRandomClothes(rank).ToArray();
+            ClothesItemSO[] clothes = randomizer.GetRandomClothes(rank).ToArray();
             int pocketsAmount = CountPockets(clothes);
 
             characterStruct.Rank = rank;
@@ -53,11 +53,11 @@ namespace BeastHunterHubUI
             return characterStruct;
         }
 
-        private int CountPockets(IEnumerable<ClothesItemData> clothes)
+        private int CountPockets(IEnumerable<ClothesItemSO> clothes)
         {
             int pocketsAmount = 0;
 
-            foreach (ClothesItemData cloth in clothes)
+            foreach (ClothesItemSO cloth in clothes)
             {
                 pocketsAmount += cloth.PocketsAmount;
             }

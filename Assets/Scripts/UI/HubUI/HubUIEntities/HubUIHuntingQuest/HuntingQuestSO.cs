@@ -4,7 +4,7 @@
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "HuntingQuest", menuName = "CreateData/HubUIData/HuntingQuest", order = 0)]
-    public class HuntingQuestData: ScriptableObject
+    public class HuntingQuestSO: ScriptableObject
     {
         [SerializeField] private string _title;
         [SerializeField, TextArea(3,10)] private string _description;

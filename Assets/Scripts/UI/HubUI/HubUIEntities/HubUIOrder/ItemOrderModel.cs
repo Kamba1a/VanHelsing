@@ -22,7 +22,7 @@ namespace BeastHunterHubUI
 
         public bool IsCompleted { get; private set; }
         public float ProgressToComplete { get; private set; }
-        public ItemRecipeData Recipe { get; private set; }
+        public ItemRecipeSO Recipe { get; private set; }
         public BaseItemModel MakedItem { get; private set; }
         public int HoursNumberToComplete
         {
@@ -42,7 +42,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public ItemOrderModel(ItemRecipeData recipe, float timeReducePercent, float progressToComplete = 0.0f)
+        public ItemOrderModel(ItemRecipeSO recipe, float timeReducePercent, float progressToComplete = 0.0f)
         {
             IsCompleted = false;
             Recipe = recipe;

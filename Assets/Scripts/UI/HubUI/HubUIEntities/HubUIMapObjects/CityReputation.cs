@@ -8,7 +8,7 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        [SerializeField] public CityData _city;
+        [SerializeField] public CitySO _city;
         [SerializeField] public int _reputation;
 
         #endregion
@@ -16,7 +16,7 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public CityData City => _city;
+        public CitySO City => _city;
         public int Reputation => _reputation;
 
         #endregion

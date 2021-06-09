@@ -3,13 +3,12 @@
 
 namespace BeastHunterHubUI
 {
-    [CreateAssetMenu(fileName = "Fraction", menuName = "CreateData/HubUIData/Fraction", order = 0)]
-    public class FractionData: ScriptableObject
+    [CreateAssetMenu(fileName = "Dweller", menuName = "CreateData/HubUIData/Dweller", order = 0)]
+    public class DwellerSO : ScriptableObject
     {
         #region Fields
 
         [SerializeField] private string _name;
-        [SerializeField] private Sprite _logo;
 
         #endregion
 
@@ -17,7 +16,6 @@ namespace BeastHunterHubUI
         #region Properties
 
         public string Name => _name;
-        public Sprite Logo => _logo;
 
         #endregion
     }

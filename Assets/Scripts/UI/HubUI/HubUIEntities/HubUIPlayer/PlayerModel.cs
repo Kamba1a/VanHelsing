@@ -22,7 +22,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public PlayerModel(PlayerStruct playerStruct)
+        public PlayerModel(PlayerData playerStruct)
         {
             GoldAmount = playerStruct.GoldAmount;
             Rank = playerStruct.Rank;

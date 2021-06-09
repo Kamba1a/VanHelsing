@@ -4,7 +4,7 @@
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "IngredientItem", menuName = "CreateData/HubUIData/Items/IngredientItem", order = 0)]
-    public class IngredientItemData : BaseItemData
+    public class IngredientItemSO : BaseItemSO
     {
         public override ItemType ItemType => ItemType.Ingredient;
     }

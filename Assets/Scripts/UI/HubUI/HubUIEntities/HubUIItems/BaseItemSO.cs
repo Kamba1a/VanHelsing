@@ -3,7 +3,7 @@
 
 namespace BeastHunterHubUI
 {
-    public abstract class BaseItemData : ScriptableObject
+    public abstract class BaseItemSO : ScriptableObject
     {
         #region Fields
 

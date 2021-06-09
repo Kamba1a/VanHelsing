@@ -46,7 +46,7 @@
         {
             //todo: count by design document
             //temporary for debug:
-            return location.TravelTime;
+            return location.BaseTravelTime;
         }
     }
 }

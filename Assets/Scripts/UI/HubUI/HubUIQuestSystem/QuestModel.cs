@@ -8,7 +8,7 @@ namespace BeastHunterHubUI
     {
         #region Properties
 
-        public QuestData Data { get; private set; }
+        public QuestSO Data { get; private set; }
         public QuestStatus Status { get; set; }
         public QuestTaskData CurrentTask { get; private set; }
 
@@ -17,7 +17,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public QuestModel(QuestData data, QuestStatus status)
+        public QuestModel(QuestSO data, QuestStatus status)
         {
             Data = data;
             Status = status;
@@ -40,7 +40,7 @@ namespace BeastHunterHubUI
 
         public bool IsEnoughCityReputation(CityModel city)
         {
-            if (HasCityRequirement(city.DataInstanceID))
+            if (HasCityRequirement(city.InstanceID))
             {
                 return Data.RequiredReputation.Reputation <= city.PlayerReputation;
             }
@@ -58,7 +58,7 @@ namespace BeastHunterHubUI
             return CurrentTask.Id == Data.EmptyEndTaskId;
         }
 
-        private bool HasQuestCompleteRequirement(QuestData questData)
+        private bool HasQuestCompleteRequirement(QuestSO questData)
         {
             if (Data.RequiredQuest != null)
             {

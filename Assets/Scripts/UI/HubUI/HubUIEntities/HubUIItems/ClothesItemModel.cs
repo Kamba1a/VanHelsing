@@ -20,7 +20,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public ClothesItemModel(ClothesItemData data) : base(data)
+        public ClothesItemModel(ClothesItemSO data) : base(data)
         {
             ClothesType = data.ClothesType;
             PocketsAmount = data.PocketsAmount;

@@ -4,17 +4,17 @@
 namespace BeastHunterHubUI
 {
     [System.Serializable]
-    public struct CharacterStruct
+    public class CharacterData
     {
         public string Name;
         public Sprite Portrait;
         public bool IsFemale;
         public int Rank;
         public Material DefaultMaterial;
-        public BaseItemData[] BackpackItems;
-        public ClothesItemData[] ClothesEquipmentItems;
-        public PocketItemData[] PocketItems;
-        public WeaponItemData[] WeaponEquipmentItems;
+        public BaseItemSO[] BackpackItems;
+        public ClothesItemSO[] ClothesEquipmentItems;
+        public PocketItemSO[] PocketItems;
+        public WeaponItemSO[] WeaponEquipmentItems;
         public CharacterClothesModuleParts[] DefaultModuleParts;
         public CharacterHeadPart[] DefaultHeadParts;
         public CharacterSkillLevel[] Skills;

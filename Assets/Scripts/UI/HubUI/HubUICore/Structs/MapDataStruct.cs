@@ -24,7 +24,7 @@ namespace BeastHunterHubUI
         [SerializeField] private float _charactersPanelSwipeStep;
 
         [Header("Objects on map")]
-        [SerializeField] private MapObjectData[] _mapObjects; //to delete
+        [SerializeField] private MapObjectSO[] _mapObjects; //to delete
 
         [Header("Equipment slot type sprites")]
         [SerializeField] Sprite _weaponSlotIcon;

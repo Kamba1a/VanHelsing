@@ -20,7 +20,7 @@ namespace BeastHunterHubUI
 
         public string Title { get; private set; }
         public string Description { get; private set; }
-        public BossData BossData { get; private set; }
+        public BossDataSO BossData { get; private set; }
         public bool IsBossTypeKnown { get; set; }
         public bool IsBossSubtypeKnown { get; set; }
         public bool IsBossSizeKnown { get; set; }
@@ -35,7 +35,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public HuntingQuestModel(HuntingQuestData data, BossData bossData)
+        public HuntingQuestModel(HuntingQuestSO data, BossDataSO bossData)
         {
             _hoursAmountBeforeHunt = data.HoursAmountBeforeHunt;
             Title = data.Title;

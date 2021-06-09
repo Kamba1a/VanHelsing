@@ -4,7 +4,7 @@
     {
         #region ClassLifeCycle
 
-        public IngredientItemModel(IngredientItemData data) : base(data) { }
+        public IngredientItemModel(IngredientItemSO data) : base(data) { }
 
         #endregion
     }

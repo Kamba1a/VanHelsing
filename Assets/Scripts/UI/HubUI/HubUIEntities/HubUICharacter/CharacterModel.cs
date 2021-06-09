@@ -44,7 +44,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public CharacterModel(CharacterStruct characterStruct)
+        public CharacterModel(CharacterData characterStruct)
         {
             Rank = characterStruct.Rank;
             _globalData = BeastHunter.Data.HubUIData.CharactersGlobalData;

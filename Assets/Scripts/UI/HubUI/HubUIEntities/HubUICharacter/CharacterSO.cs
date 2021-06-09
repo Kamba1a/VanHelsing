@@ -4,25 +4,25 @@
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "Character", menuName = "CreateData/HubUIData/Character", order = 0)]
-    public class CharacterData : ScriptableObject
+    public class CharacterSO : ScriptableObject
     {
         #region Fields
 
-        [SerializeField] private CharacterStruct _characterStruct;
+        [SerializeField] private CharacterData _characterStruct;
 
         #endregion
 
 
         #region Properties
 
-        public CharacterStruct CharacterStruct => _characterStruct;
+        public CharacterData CharacterStruct => _characterStruct;
 
         #endregion
 
 
         #region ClassLifeCycle
 
-        public CharacterData(CharacterStruct characterStruct)
+        public CharacterSO(CharacterData characterStruct)
         {
             _characterStruct = characterStruct;
         }

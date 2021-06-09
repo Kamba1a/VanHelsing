@@ -11,7 +11,7 @@
 
         #region ClassLifeCycle
 
-        public WeaponItemModel(WeaponItemData data) : base(data)
+        public WeaponItemModel(WeaponItemSO data) : base(data)
         {
             IsTwoHanded = data.IsTwoHanded;
         }

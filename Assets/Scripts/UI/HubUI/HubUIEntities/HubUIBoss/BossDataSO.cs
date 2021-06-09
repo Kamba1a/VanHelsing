@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BeastHunterHubUI
 {
-    public abstract class BossData : ScriptableObject
+    public abstract class BossDataSO : ScriptableObject
     {
         [Header("BaseBossData")]
         [SerializeField] private string _name;

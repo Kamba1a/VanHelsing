@@ -9,22 +9,24 @@ namespace BeastHunterHubUI
 
         public int LoadSceneId { get; private set; }
         public Sprite Screenshot { get; private set;}
-        public int TravelTime { get; private set; }
-        public DwellerData[] Dwellers { get; private set; }
-        public IngredientItemData[] Ingredients { get; private set; }
+        public int BaseTravelTime { get; private set; }
+        public DwellerSO[] Dwellers { get; private set; }
+        public IngredientItemSO[] Ingredients { get; private set; }
 
         #endregion
 
 
-        public LocationModel(MapObjectData mapObjectData) : base(mapObjectData)
-        {
-            LocationData locationData = mapObjectData as LocationData;
+        #region ClassLifeCycle
 
+        public LocationModel(LocationStruct locationData) : base(locationData.MapObjectData)
+        {
             LoadSceneId = locationData.LoadSceneId;
             Screenshot = locationData.Screenshot;
-            TravelTime = locationData.TravelTime;
+            BaseTravelTime = locationData.BaseTravelTime;
             Dwellers = locationData.Dwellers;
             Ingredients = locationData.Ingredients;
         }
+
+        #endregion
     }
 }

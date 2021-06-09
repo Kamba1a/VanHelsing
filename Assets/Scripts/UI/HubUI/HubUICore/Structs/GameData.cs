@@ -9,22 +9,22 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        [SerializeField] private GameTimeStruct _gameTimeStruct;
-        [SerializeField] private PlayerStruct _playerStruct;
-        [SerializeField] private LocationData[] _locationsData;
-        [SerializeField] private CityData[] _citiesData;
-        [SerializeField] private WorkRoomData[] _workRoomsData;
+        [SerializeField] private GameTimeStruct _currentGameTime;
+        [SerializeField] private PlayerData _playerData;
+        [SerializeField] private LocationSO[] _locationsSO;
+        [SerializeField] private CitySO[] _citiesSO;
+        [SerializeField] private WorkRoomSO[] _workRoomsSO;
 
         #endregion
 
 
         #region Properties
 
-        public GameTimeStruct GameTimeStruct => _gameTimeStruct;
-        public PlayerStruct PlayerStruct => _playerStruct;
-        public LocationData[] LocationsData => (LocationData[])_locationsData.Clone();
-        public CityData[] CitiesData => (CityData[])_citiesData.Clone();
-        public WorkRoomData[] WorkRoomsData => (WorkRoomData[])_workRoomsData.Clone();
+        public GameTimeStruct CurrentGameTime => _currentGameTime;
+        public PlayerData PlayerData => _playerData;
+        public LocationSO[] LocationsSO => (LocationSO[])_locationsSO.Clone();
+        public CitySO[] CitiesSO => (CitySO[])_citiesSO.Clone();
+        public WorkRoomSO[] WorkRoomsSO => (WorkRoomSO[])_workRoomsSO.Clone();
 
         #endregion
     }

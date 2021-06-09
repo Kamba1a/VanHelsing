@@ -7,10 +7,10 @@ namespace BeastHunterHubUI
     public struct WorkRoomStruct
     {
         [SerializeField] private BaseWorkRoomStruct<WorkRoomProgress> _baseWorkRoomStruct;
-        [SerializeField] private ItemOrderStruct[] _orders;
+        [SerializeField] private ItemOrderData[] _orders;
 
 
         public BaseWorkRoomStruct<WorkRoomProgress> BaseWorkRoomStruct => _baseWorkRoomStruct;
-        public ItemOrderStruct[] Orders => (ItemOrderStruct[])_orders?.Clone();
+        public ItemOrderData[] Orders => (ItemOrderData[])_orders?.Clone();
     }
 }

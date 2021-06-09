@@ -37,8 +37,8 @@ namespace BeastHunterHubUI
         {
             HubUIData hubUIData = BeastHunter.Data.HubUIData;
 
-            Player = new PlayerModel(gameData.PlayerStruct);
-            GameTime = new GameTimeModel(gameData.GameTimeStruct);
+            Player = new PlayerModel(gameData.PlayerData);
+            GameTime = new GameTimeModel(gameData.CurrentGameTime);
 
             CharactersForHire = HubUIServices.SharedInstance.RandomCharacterService.Get(hubUIData.CharactersGlobalData.AmountForHire);
 
@@ -47,43 +47,29 @@ namespace BeastHunterHubUI
                 Player.HireCharacter(CharactersForHire[i]); //todo: remove after realize characters hire in UI! (for debug only)
             }
 
-            for (int i = 0; i < gameData.CitiesData.Length; i++)
+            for (int i = 0; i < gameData.CitiesSO.Length; i++)
             {
-                Cities.Add(new CityModel(gameData.CitiesData[i]));
+                Cities.Add(new CityModel(gameData.CitiesSO[i].CityData));
             }
 
-            for (int i = 0; i < gameData.LocationsData.Length; i++)
+            for (int i = 0; i < gameData.LocationsSO.Length; i++)
             {
-                Locations.Add(new LocationModel(gameData.LocationsData[i]));
+                Locations.Add(new LocationModel(gameData.LocationsSO[i].LocationData));
             }
 
-            for (int i = 0; i < gameData.WorkRoomsData.Length; i++)
+            for (int i = 0; i < gameData.WorkRoomsSO.Length; i++)
             {
-                WorkRooms.Add(new WorkRoomModel(gameData.WorkRoomsData[i].WorkRoomStruct));
+                WorkRooms.Add(new WorkRoomModel(gameData.WorkRoomsSO[i].WorkRoomStruct));
             }
         }
 
         //TODO: REDONE
-        public MapObjectModel GetMapObjectModel(MapObjectData mapObjectData)
-        {
-            switch (mapObjectData.GetMapObjectType())
-            {
-                case MapObjectType.Location:
-                    return GetLocation(mapObjectData as LocationData);
 
-                case MapObjectType.City:
-                    return GetCity(mapObjectData as CityData);
-
-                default:
-                    return null;
-            }
-        }
-
-        public CityModel GetCity(CityData cityData)
+        public CityModel GetCity(CitySO cityData)
         {
             if (cityData != null)
             {
-                return Cities.Find(city => city.DataInstanceID == cityData.GetInstanceID());
+                return Cities.Find(city => city.InstanceID == cityData.GetInstanceID());
             }
             else
             {
@@ -92,20 +78,7 @@ namespace BeastHunterHubUI
             }
         }
 
-        public LocationModel GetLocation(LocationData locationData)
-        {
-            if (locationData != null)
-            {
-                return Locations.Find(location => location.DataInstanceID == locationData.GetInstanceID());
-            }
-            else
-            {
-                Debug.LogError(this + ": input parameter is null");
-                return null;
-            }
-        }
-
-        public CitizenModel GetCitizen(CitizenData citizenData)
+        public CitizenModel GetCitizen(CitizenSO citizenData)
         {
             if (citizenData != null)
             {

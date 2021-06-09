@@ -4,7 +4,7 @@
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "PocketItem", menuName = "CreateData/HubUIData/Items/PocketItem", order = 0)]
-    public class PocketItemData : BaseItemData
+    public class PocketItemSO : BaseItemSO
     {
         #region Properties
 

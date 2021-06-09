@@ -9,7 +9,7 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        [SerializeField] private CitizenData _citizen;
+        [SerializeField] private CitizenSO _citizen;
         [SerializeField] private int _answerId;
 
         #endregion
@@ -17,7 +17,7 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public CitizenData Citizen => _citizen;
+        public CitizenSO Citizen => _citizen;
         public int QuestAnswerId => _answerId;
 
         #endregion

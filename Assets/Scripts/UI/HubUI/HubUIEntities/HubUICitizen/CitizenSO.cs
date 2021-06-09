@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "Citizen", menuName = "CreateData/HubUIData/Citizen", order = 0)]
-    public class CitizenData : ScriptableObject
+    public class CitizenSO : ScriptableObject
     {
         #region Fields
 

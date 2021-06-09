@@ -4,7 +4,7 @@
     {
         #region ClassLifeCycle
 
-        public PocketItemModel(PocketItemData data) : base(data) { }
+        public PocketItemModel(PocketItemSO data) : base(data) { }
 
         #endregion
     }

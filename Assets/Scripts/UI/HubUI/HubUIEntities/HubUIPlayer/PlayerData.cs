@@ -5,15 +5,15 @@ using UnityEngine;
 namespace BeastHunterHubUI
 {
     [Serializable]
-    public struct PlayerStruct
+    public struct PlayerData
     {
         #region Fields
 
         [SerializeField] private int _rank;
         [SerializeField] private int _goldAmount;
         [SerializeField] private int _inventorySlotsAmount;
-        [SerializeField] private BaseItemData[] _inventoryItems;
-        [SerializeField] private CharacterData[] _availableCharacters;
+        [SerializeField] private BaseItemSO[] _inventoryItems;
+        [SerializeField] private CharacterSO[] _availableCharacters;
 
         #endregion
 
@@ -23,8 +23,8 @@ namespace BeastHunterHubUI
         public int Rank => _rank;
         public int GoldAmount => _goldAmount;
         public int InventorySlotsAmount => _inventorySlotsAmount;
-        public BaseItemData[] InventoryItems => (BaseItemData[])_inventoryItems?.Clone();
-        public CharacterData[] AvailableCharacters => (CharacterData[])_availableCharacters?.Clone();
+        public BaseItemSO[] InventoryItems => (BaseItemSO[])_inventoryItems?.Clone();
+        public CharacterSO[] AvailableCharacters => (CharacterSO[])_availableCharacters?.Clone();
 
         #endregion
     }

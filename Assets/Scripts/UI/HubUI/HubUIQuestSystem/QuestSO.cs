@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "Quest", menuName = "CreateData/HubUIData/Quest", order = 0)]
-    public class QuestData : ScriptableObject
+    public class QuestSO : ScriptableObject
     {
         #region Fields
 
@@ -14,7 +14,7 @@ namespace BeastHunterHubUI
         [SerializeField] private int _firstTaskId;
         [SerializeField] private int _emptyEndTaskId;
         [SerializeField] private CityReputation _requiredReputation;
-        [SerializeField] private QuestData _requiredQuest;
+        [SerializeField] private QuestSO _requiredQuest;
 
         #if UNITY_EDITOR
         private int _tasksListCount;
@@ -30,7 +30,7 @@ namespace BeastHunterHubUI
         public int FirstTaskId => _firstTaskId;
         public int EmptyEndTaskId => _emptyEndTaskId;
         public CityReputation RequiredReputation => _requiredReputation;
-        public QuestData RequiredQuest => _requiredQuest;
+        public QuestSO RequiredQuest => _requiredQuest;
         public List<QuestTaskData> Tasks => _tasks;
 
         #endregion

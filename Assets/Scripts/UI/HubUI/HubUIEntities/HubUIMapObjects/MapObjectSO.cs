@@ -2,10 +2,14 @@
 
 namespace BeastHunterHubUI
 {
-    public abstract class MapObjectData : ScriptableObject
+    public abstract class MapObjectSO : ScriptableObject
     {
         #region Fields
 
+        [SerializeField] private MapObjectStruct _mapObjectStruct;
+
+
+        //TO REMOVE:
         [Header("Map object data")]
         [SerializeField] private bool _isBlockedAtStart;
         [SerializeField] private string _name;
@@ -16,6 +20,9 @@ namespace BeastHunterHubUI
 
         #region Properties
 
+        public MapObjectStruct MapObjectStruct => _mapObjectStruct;
+
+        //to remove:
         public bool IsBlockedAtStart => _isBlockedAtStart;
         public string Name => _name;
         public string Description => _description;
@@ -25,7 +32,7 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public abstract MapObjectType GetMapObjectType();
+        public abstract MapObjectType GetMapObjectType(); //to remove
 
         #endregion
     }

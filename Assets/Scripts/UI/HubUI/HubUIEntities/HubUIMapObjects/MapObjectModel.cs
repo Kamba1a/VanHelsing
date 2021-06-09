@@ -16,8 +16,7 @@ namespace BeastHunterHubUI
 
         public Action<MapObjectModel> OnChangeBlockedStatus { get; set; }
 
-        public MapObjectType MapObjectType { get; private set; }
-        public int DataInstanceID { get; private set; }
+        public int InstanceID { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public MapObjectBehaviour Behaviour { get; set; }
@@ -43,13 +42,12 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCicle
 
-        public MapObjectModel(MapObjectData mapObjectData)
+        public MapObjectModel(MapObjectStruct mapObjectStruct)
         {
-            MapObjectType = mapObjectData.GetMapObjectType();
-            DataInstanceID = mapObjectData.GetInstanceID();
-            Name = mapObjectData.Name;
-            Description = mapObjectData.Description;
-            IsBlocked = mapObjectData.IsBlockedAtStart;
+            InstanceID = mapObjectStruct.InstanceId;
+            Name = mapObjectStruct.Name;
+            Description = mapObjectStruct.Description;
+            IsBlocked = mapObjectStruct.IsBlocked;
         }
 
         #endregion

@@ -46,7 +46,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCyrcle
 
-        public CitizenModel(CitizenData data)
+        public CitizenModel(CitizenSO data)
         {
             DataInstanceId = data.GetInstanceID();
             Name = data.Name;

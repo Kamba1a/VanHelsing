@@ -29,7 +29,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public QuestController(QuestData[] quests ,HubUIContext context)
+        public QuestController(QuestSO[] quests ,HubUIContext context)
         {
             _context = context;
 
@@ -75,7 +75,7 @@ namespace BeastHunterHubUI
             }
         }
 
-        private QuestModel GetQuestModel(QuestData questData)
+        private QuestModel GetQuestModel(QuestSO questData)
         {
             QuestModel result;
             result = _activeQuests.Find(quest => quest.Data == questData);
@@ -196,7 +196,7 @@ namespace BeastHunterHubUI
         {
             if (excludeCheckType != RequirementCheckType.CityReputation)
             {
-                CityData cityData = quest.Data.RequiredReputation.City;
+                CitySO cityData = quest.Data.RequiredReputation.City;
                 bool checkReputationRequirement = quest.IsEnoughCityReputation(_context.GetCity(cityData));
 
                 if (!checkReputationRequirement)
@@ -207,7 +207,7 @@ namespace BeastHunterHubUI
 
             if (excludeCheckType != RequirementCheckType.QuestComplete)
             {
-                QuestData questData = quest.Data.RequiredQuest;
+                QuestSO questData = quest.Data.RequiredQuest;
                 bool checkQuestRequirement = quest.IsRequirementQuestComleted(GetQuestModel(questData));
 
                 if (!checkQuestRequirement)

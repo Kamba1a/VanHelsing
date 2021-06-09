@@ -6,16 +6,16 @@ using UnityEngine;
 namespace BeastHunterHubUI
 {
     [CreateAssetMenu(fileName = "ItemDataPools", menuName = "CreateData/HubUIData/ItemDataPools", order = 0)]
-    public class ItemDataPools : ScriptableObject
+    public class ItemSOPools : ScriptableObject
     {
         #region Fields
 
-        [SerializeField] private ClothesItemData[] _clothesItemsPool;
-        [SerializeField] private WeaponItemData[] _weaponItemsPool;
-        [SerializeField] private PocketItemData[] _pocketItemsPool;
+        [SerializeField] private ClothesItemSO[] _clothesItemsPool;
+        [SerializeField] private WeaponItemSO[] _weaponItemsPool;
+        [SerializeField] private PocketItemSO[] _pocketItemsPool;
 
-        private Dictionary<int, List<WeaponItemData>> _weaponDataPoolDic;
-        private Dictionary<int, Dictionary<ClothesType, List<ClothesItemData>>> _clothesDataPoolDic;
+        private Dictionary<int, List<WeaponItemSO>> _weaponDataPoolDic;
+        private Dictionary<int, Dictionary<ClothesType, List<ClothesItemSO>>> _clothesDataPoolDic;
 
         #endregion
 
@@ -24,8 +24,8 @@ namespace BeastHunterHubUI
 
         private void OnEnable()
         {
-            InitializeWeaponDataPoolDictionary();
-            InitializeClothesDataPoolDictionary();
+            InitializeWeaponPoolDictionary();
+            InitializeClothesPoolDictionary();
         }
 
         private void OnDisable()
@@ -42,12 +42,12 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public PocketItemData GetRandomPocketItem()
+        public PocketItemSO GetRandomPocketItem()
         {
             return _pocketItemsPool[UnityEngine.Random.Range(0, _pocketItemsPool.Length)];
         }
 
-        public List<ClothesItemData> GetClothesDataListByRankAndType(int rank, ClothesType clothesType)
+        public List<ClothesItemSO> GetClothesSOListByRankAndType(int rank, ClothesType clothesType)
         {
             if (_clothesDataPoolDic.ContainsKey(rank))
             {
@@ -60,13 +60,13 @@ namespace BeastHunterHubUI
             }
         }
 
-        public ClothesItemData GetRandomClothesDataByRankAndType(int rank, ClothesType clothesType)
+        public ClothesItemSO GetRandomClothesSOByRankAndType(int rank, ClothesType clothesType)
         {
-            List<ClothesItemData> clothesList = GetClothesDataListByRankAndType(rank, clothesType);
+            List<ClothesItemSO> clothesList = GetClothesSOListByRankAndType(rank, clothesType);
             return clothesList[UnityEngine.Random.Range(0, clothesList.Count)];
         }
 
-        public List<WeaponItemData> GetWeapondataListByRank(int rank)
+        public List<WeaponItemSO> GetWeaponSOListByRank(int rank)
         {
             if (_weaponDataPoolDic.ContainsKey(rank))
             {
@@ -79,13 +79,13 @@ namespace BeastHunterHubUI
             }
         }
 
-        public WeaponItemData GetRandomWeaponDataByRank(int rank)
+        public WeaponItemSO GetRandomWeaponSOByRank(int rank)
         {
-            List<WeaponItemData> weaponDataList = GetWeapondataListByRank(rank);
+            List<WeaponItemSO> weaponDataList = GetWeaponSOListByRank(rank);
             return weaponDataList[UnityEngine.Random.Range(0, weaponDataList.Count)];
         }
 
-        public WeaponItemData GetRandomWeaponDataByRanks(int[] ranks)
+        public WeaponItemSO GetRandomWeaponSOByRanks(int[] ranks)
         {
             List<int> ranksChecked = new List<int>();
 
@@ -98,10 +98,10 @@ namespace BeastHunterHubUI
             }
 
             int randomRankIndex = UnityEngine.Random.Range(0, ranksChecked.Count);
-            return GetRandomWeaponDataByRank(randomRankIndex);
+            return GetRandomWeaponSOByRank(randomRankIndex);
         }
 
-        public ClothesItemData GetRandomClothesDataByRanksAndType(int[] ranks, ClothesType clothesType)
+        public ClothesItemSO GetRandomClothesSOByRanksAndType(int[] ranks, ClothesType clothesType)
         {
             List<int> ranksChecked = new List<int>();
 
@@ -114,12 +114,12 @@ namespace BeastHunterHubUI
             }
 
             int randomRankIndex = UnityEngine.Random.Range(0, ranksChecked.Count);
-            return GetRandomClothesDataByRankAndType(randomRankIndex, clothesType);
+            return GetRandomClothesSOByRankAndType(randomRankIndex, clothesType);
         }
 
-        private void InitializeWeaponDataPoolDictionary()
+        private void InitializeWeaponPoolDictionary()
         {
-            _weaponDataPoolDic = new Dictionary<int, List<WeaponItemData>>();
+            _weaponDataPoolDic = new Dictionary<int, List<WeaponItemSO>>();
 
             if(_weaponItemsPool != null)
             {
@@ -128,16 +128,16 @@ namespace BeastHunterHubUI
                     int itemRank = _weaponItemsPool[i].Rank;
                     if (!_weaponDataPoolDic.ContainsKey(itemRank))
                     {
-                        _weaponDataPoolDic.Add(itemRank, new List<WeaponItemData>());
+                        _weaponDataPoolDic.Add(itemRank, new List<WeaponItemSO>());
                     }
                     _weaponDataPoolDic[itemRank].Add(_weaponItemsPool[i]);
                 }
             }
         }
 
-        private void InitializeClothesDataPoolDictionary()
+        private void InitializeClothesPoolDictionary()
         {
-            _clothesDataPoolDic = new Dictionary<int, Dictionary<ClothesType, List<ClothesItemData>>>();
+            _clothesDataPoolDic = new Dictionary<int, Dictionary<ClothesType, List<ClothesItemSO>>>();
 
             if(_clothesItemsPool != null)
             {
@@ -146,10 +146,10 @@ namespace BeastHunterHubUI
                     int itemRank = _clothesItemsPool[i].Rank;
                     if (!_clothesDataPoolDic.ContainsKey(itemRank))
                     {
-                        Dictionary<ClothesType, List<ClothesItemData>> clothesTypesDic = new Dictionary<ClothesType, List<ClothesItemData>>();
+                        Dictionary<ClothesType, List<ClothesItemSO>> clothesTypesDic = new Dictionary<ClothesType, List<ClothesItemSO>>();
                         foreach (ClothesType clothesType in Enum.GetValues(typeof(ClothesType)))
                         {
-                            clothesTypesDic.Add(clothesType, new List<ClothesItemData>());
+                            clothesTypesDic.Add(clothesType, new List<ClothesItemSO>());
                         }
                         _clothesDataPoolDic.Add(itemRank, clothesTypesDic);
 

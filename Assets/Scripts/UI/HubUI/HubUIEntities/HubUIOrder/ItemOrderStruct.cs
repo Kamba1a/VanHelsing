@@ -1,10 +1,10 @@
 ﻿namespace BeastHunterHubUI
 {
     [System.Serializable]
-    public struct ItemOrderStruct
+    public class ItemOrderData
     {
         public int SlotIndex;
-        public ItemRecipeData Recipe;
+        public ItemRecipeSO Recipe;
         public float ProgressToComplete;
     }
 }

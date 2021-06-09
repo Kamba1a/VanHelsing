@@ -10,7 +10,7 @@ namespace BeastHunterHubUI
         #region Fields
 
         [Tooltip("Put the character SO, in which you want to save the module parts of the character on the scene")]
-        [SerializeField] CharacterData _characterData;
+        [SerializeField] CharacterSO _characterData;
         [Tooltip("Put the new Fantasy Hero material, in which you want to save current material settings")]
         [SerializeField] private Material _fantasyHeroMaterial;
 

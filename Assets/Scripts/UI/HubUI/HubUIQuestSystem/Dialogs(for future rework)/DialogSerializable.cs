@@ -3,7 +3,7 @@
     [System.Serializable]
     public class DialogSerializable
     {
-        public CitizenData CitizenData;
+        public CitizenSO CitizenData;
         public CitizenDialog CitizenDialog;
     }
 }

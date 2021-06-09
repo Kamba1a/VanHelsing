@@ -126,9 +126,9 @@ namespace BeastHunterHubUI
             return 0;
         }
 
-        public List<BaseItemData> GetRandomBackpackItems()
+        public List<BaseItemSO> GetRandomBackpackItems()
         {
-            List<BaseItemData> list = new List<BaseItemData>();
+            List<BaseItemSO> list = new List<BaseItemSO>();
 
             //logic
 
@@ -186,9 +186,9 @@ namespace BeastHunterHubUI
             return _charactersData.FantasyHeroMaterialsPool[Random.Range(0, _charactersData.FantasyHeroMaterialsPool.Length)];
         }
 
-        public List<ClothesItemData> GetRandomClothes(int rank)
+        public List<ClothesItemSO> GetRandomClothes(int rank)
         {
-            List<ClothesItemData> clothes = new List<ClothesItemData>();
+            List<ClothesItemSO> clothes = new List<ClothesItemSO>();
 
             int clothesItemsAmount = Random.Range(_charactersData.MinClothesEquipItemsAmount, _charactersData.ClothesSlots.Length);
 
@@ -204,26 +204,26 @@ namespace BeastHunterHubUI
                 ClothesType randomClothesType = clothesTypePool[randomIndex];
                 clothesTypePool.RemoveAt(randomIndex);
 
-                ClothesItemData randomClothesData = BeastHunter.Data.HubUIData.ItemDataPools.GetRandomClothesDataByRankAndType(rank, randomClothesType);
+                ClothesItemSO randomClothesData = BeastHunter.Data.HubUIData.ItemDataPools.GetRandomClothesSOByRankAndType(rank, randomClothesType);
                 clothes.Add(randomClothesData);
             }
 
             return clothes;
         }
 
-        public List<WeaponItemData> GetRandomWeapon(int rank)
+        public List<WeaponItemSO> GetRandomWeapon(int rank)
         {
-            List<WeaponItemData> weapons = new List<WeaponItemData>();
+            List<WeaponItemSO> weapons = new List<WeaponItemSO>();
 
-            WeaponItemData randomWeaponData = BeastHunter.Data.HubUIData.ItemDataPools.GetRandomWeaponDataByRank(rank);
+            WeaponItemSO randomWeaponData = BeastHunter.Data.HubUIData.ItemDataPools.GetRandomWeaponSOByRank(rank);
             weapons.Add(randomWeaponData);
 
             return weapons;
         }
 
-        public List<PocketItemData> GetRandomPocketItems(int maxPockets)
+        public List<PocketItemSO> GetRandomPocketItems(int maxPockets)
         {
-            List<PocketItemData> list = new List<PocketItemData>();
+            List<PocketItemSO> list = new List<PocketItemSO>();
 
             //temporary for debug:
             if (maxPockets > 0)
@@ -231,7 +231,7 @@ namespace BeastHunterHubUI
                 int itemsAmount = Random.Range(1, Mathf.CeilToInt(maxPockets/3));
                 for (int i = 0; i < itemsAmount; i++)
                 {
-                    PocketItemData randomPocketData = BeastHunter.Data.HubUIData.ItemDataPools.GetRandomPocketItem();
+                    PocketItemSO randomPocketData = BeastHunter.Data.HubUIData.ItemDataPools.GetRandomPocketItem();
                     list.Add(randomPocketData);
                 }
             }

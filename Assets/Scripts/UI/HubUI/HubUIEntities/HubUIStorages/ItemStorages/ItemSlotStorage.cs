@@ -64,7 +64,7 @@
             return true;
         }
 
-        public bool IsContainItem(BaseItemData item)
+        public bool IsContainItem(BaseItemSO item)
         {
             for (int i = 0; i < _elementSlots.Count; i++)
             {
@@ -76,7 +76,7 @@
             return false;
         }
 
-        public bool RemoveFirstItem(BaseItemData item)
+        public bool RemoveFirstItem(BaseItemSO item)
         {
             for (int i = 0; i < _elementSlots.Count; i++)
             {
