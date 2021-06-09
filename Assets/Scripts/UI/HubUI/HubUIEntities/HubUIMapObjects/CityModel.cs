@@ -45,7 +45,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public CityModel(CityStruct cityData) : base(cityData.MapObjectData)
+        public CityModel(CityData cityData) : base(cityData.MapObjectData)
         {
             HubUIData hubUIData = BeastHunter.Data.HubUIData;
 

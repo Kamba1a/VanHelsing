@@ -42,7 +42,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCicle
 
-        public MapObjectModel(MapObjectStruct mapObjectStruct)
+        public MapObjectModel(MapObjectData mapObjectStruct)
         {
             InstanceID = mapObjectStruct.InstanceId;
             Name = mapObjectStruct.Name;

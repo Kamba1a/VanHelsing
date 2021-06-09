@@ -133,7 +133,7 @@ namespace BeastHunterHubUI
 
         private void InitializeWorkRoomButton(WorkRoomModel model)
         {
-            GameObject buttonUI = InstantiateUIObject(_data.WorkRoomDataStruct.WorkRoomButtonPrefab, _roomButtonsFillablePanel);
+            GameObject buttonUI = InstantiateUIObject(_data.WorkRoomData.WorkRoomButtonPrefab, _roomButtonsFillablePanel);
             WorkRoomButtonBehaviour buttonBehaviour = buttonUI.GetComponentInChildren<WorkRoomButtonBehaviour>();
             buttonBehaviour.Initialize(model);
             buttonBehaviour.OnClickButtonHandler += OnClick_RoomButton;
@@ -142,7 +142,7 @@ namespace BeastHunterHubUI
 
         private void InitializeAssistantSlotUI(int slotIndex)
         {
-            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.WorkerSlotPrefab, _assistantsSlotsFillablePanel);
+            GameObject slotUI = InstantiateUIObject(_data.WorkRoomData.WorkerSlotPrefab, _assistantsSlotsFillablePanel);
             WorkRoomWorkerSlotBehaviour slotBehaviour = slotUI.GetComponent<WorkRoomWorkerSlotBehaviour>();
             _assistantsSlotsBehaviours.Add(slotBehaviour);
             slotBehaviour.Initialize(CharacterStorageType.AssistantWorkplaces, slotIndex);
@@ -155,7 +155,7 @@ namespace BeastHunterHubUI
 
         private void InitializeOrderSlotUI(int slotIndex)
         {
-            GameObject slotUI = InstantiateUIObject(_data.WorkRoomDataStruct.OrderSlotPrefab, _ordersSlotsFillablePanel);
+            GameObject slotUI = InstantiateUIObject(_data.WorkRoomData.OrderSlotPrefab, _ordersSlotsFillablePanel);
             WorkRoomOrderSlotBehaviour slotBehaviour = slotUI.GetComponentInChildren<WorkRoomOrderSlotBehaviour>();
             _orderSlotsBehaviours.Add(slotBehaviour);
             slotBehaviour.Initialize(OrderStorageType.None, slotIndex);
@@ -168,7 +168,7 @@ namespace BeastHunterHubUI
 
         private void InitializeCharacterListItemUI(int slotIndex, CharacterModel character)
         {
-            GameObject characterUI = InstantiateUIObject(_data.WorkRoomDataStruct.CharacterListItemPrefab, _charactersFillablePanel);
+            GameObject characterUI = InstantiateUIObject(_data.WorkRoomData.CharacterListItemPrefab, _charactersFillablePanel);
             AvailableCharacterListItemBehaviour uiBehaviour = characterUI.GetComponent<AvailableCharacterListItemBehaviour>();
             uiBehaviour.Initialize(CharacterStorageType.AvailableCharacters, slotIndex);
             uiBehaviour.UpdateSlot(character);

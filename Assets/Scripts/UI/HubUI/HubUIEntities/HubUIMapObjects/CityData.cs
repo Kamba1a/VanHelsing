@@ -5,11 +5,11 @@ using UnityEngine;
 namespace BeastHunterHubUI
 {
     [Serializable]
-    public class CityStruct
+    public class CityData
     {
         #region Fields
 
-        [SerializeField] private MapObjectStruct _mapObjectData;
+        [SerializeField] private MapObjectData _mapObjectData;
         [SerializeField] private FractionSO _fraction;
         [SerializeField] private CitizenSO[] _citizens;
         [SerializeField] private BaseItemSO[] _shopItemsPool;
@@ -21,10 +21,10 @@ namespace BeastHunterHubUI
 
         #region Properties
 
-        public MapObjectStruct MapObjectData => _mapObjectData;
+        public MapObjectData MapObjectData => _mapObjectData;
         public FractionSO Fraction => _fraction;
-        public CitizenSO[] Citizens => _citizens;
-        public BaseItemSO[] ShopItemsPool => _shopItemsPool;
+        public CitizenSO[] Citizens => (CitizenSO[])_citizens?.Clone();
+        public BaseItemSO[] ShopItemsPool => (BaseItemSO[])_shopItemsPool?.Clone();
         public int PlayerReputation => _playerReputation;
         public int MinItemsAmountInShop => _minItemsAmountInShop;
 

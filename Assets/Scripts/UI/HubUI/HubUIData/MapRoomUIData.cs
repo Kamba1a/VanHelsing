@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BeastHunterHubUI
 {
     [Serializable]
-    public struct MapDataStruct
+    public class MapRoomUIData
     {
         #region Fields
 
@@ -22,9 +22,6 @@ namespace BeastHunterHubUI
         [Header("Settings")]
         [SerializeField] private float _tooltipShowingDelay;
         [SerializeField] private float _charactersPanelSwipeStep;
-
-        [Header("Objects on map")]
-        [SerializeField] private MapObjectSO[] _mapObjects; //to delete
 
         [Header("Equipment slot type sprites")]
         [SerializeField] Sprite _weaponSlotIcon;
@@ -54,7 +51,6 @@ namespace BeastHunterHubUI
         public GameObject InventorySlotUIPrefab => _inventorySlotUIPrefab;
         public GameObject AnswerButtonUIPrefab => _answerButtonUIPrefab;
         public GameObject CharacterBackpackSlotUIPrefab => _characterBackpuckSlotUIPrefab;
-        //public MapObjectData[] MapObjects => _mapObjects; //to delete
         public Sprite WeaponSlotIcon => _weaponSlotIcon;
         public Sprite PocketItemSlotIcon => _pocketItemSlotIcon;
         public float TooltipShowingDelay => _tooltipShowingDelay;

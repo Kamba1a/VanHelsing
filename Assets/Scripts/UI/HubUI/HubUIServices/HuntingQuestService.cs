@@ -29,7 +29,7 @@ namespace BeastHunterHubUI
                 bossIndexes.Add(i);
             }
 
-            for (int i = 0; i < _hubUIData.QuestRoomDataStruct.HuntingQuestAmount; i++)
+            for (int i = 0; i < _hubUIData.QuestRoomData.HuntingQuestAmount; i++)
             {
                 int questIndex = questIndexes[UnityEngine.Random.Range(0, questIndexes.Count)];
                 int bossIndex = bossIndexes[UnityEngine.Random.Range(0, bossIndexes.Count)];

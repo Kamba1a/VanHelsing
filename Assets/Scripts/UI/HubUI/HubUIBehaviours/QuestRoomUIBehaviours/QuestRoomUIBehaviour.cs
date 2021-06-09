@@ -51,7 +51,7 @@ namespace BeastHunterHubUI
 
                 for (int i = 0; i < quests.Count; i++)
                 {
-                    GameObject questUI = InstantiateUIObject(_data.QuestRoomDataStruct.QuestListItemPrefab, _questListPanel);
+                    GameObject questUI = InstantiateUIObject(_data.QuestRoomData.QuestListItemPrefab, _questListPanel);
                     HuntingQuestListItemBehaviour questBehaviour = questUI.GetComponent<HuntingQuestListItemBehaviour>();
                     questBehaviour.FillInfo(quests[i]);
                     questBehaviour.OnClickButtonHandler += OnClick_QuestListItem;

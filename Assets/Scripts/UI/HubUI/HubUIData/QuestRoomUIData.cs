@@ -4,7 +4,7 @@
 namespace BeastHunterHubUI
 {
     [System.Serializable]
-    public struct QuestRoomDataStruct
+    public class QuestRoomUIData
     {
         #region Fields
 

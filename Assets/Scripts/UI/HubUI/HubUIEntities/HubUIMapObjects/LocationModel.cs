@@ -18,7 +18,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public LocationModel(LocationStruct locationData) : base(locationData.MapObjectData)
+        public LocationModel(LocationData locationData) : base(locationData.MapObjectData)
         {
             LoadSceneId = locationData.LoadSceneId;
             Screenshot = locationData.Screenshot;

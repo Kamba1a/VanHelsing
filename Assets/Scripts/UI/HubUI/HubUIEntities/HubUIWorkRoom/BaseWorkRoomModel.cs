@@ -27,7 +27,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public BaseWorkRoomModel(BaseWorkRoomStruct<T> roomStruct)
+        public BaseWorkRoomModel(BaseWorkRoomData<T> roomStruct)
         {
             RoomType = roomStruct.RoomType;
             UsedSkill = roomStruct.UsedSkill;

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BeastHunterHubUI
 {
     [System.Serializable]
-    public struct BaseWorkRoomStruct<T> where T : BaseWorkRoomProgress
+    public class BaseWorkRoomData<T> where T : BaseWorkRoomProgress
     {
         #region Fields
 

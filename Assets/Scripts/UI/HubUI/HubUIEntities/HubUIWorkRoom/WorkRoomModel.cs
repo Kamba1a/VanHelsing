@@ -34,7 +34,7 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCycle
 
-        public WorkRoomModel(WorkRoomStruct roomStruct) : base(roomStruct.BaseWorkRoomStruct)
+        public WorkRoomModel(WorkRoomData roomStruct) : base(roomStruct.BaseWorkRoomData)
         {
             OrdersSlots = new OrderSlotStorage(ProgressScheme[Level].OrderSlots);
 

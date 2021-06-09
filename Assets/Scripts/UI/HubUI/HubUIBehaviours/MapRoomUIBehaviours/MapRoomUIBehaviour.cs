@@ -305,8 +305,8 @@ namespace BeastHunterHubUI
             _selected = new SelectedElements();
             _data = BeastHunter.Data.HubUIData;
             _context = context;
-            _charactersPanelSwipeStep = _data.MapDataStruct.CharactersPanelSwipeStep;
-            _tooltipShowingDelay = _data.MapDataStruct.TooltipShowingDelay;
+            _charactersPanelSwipeStep = _data.MapData.CharactersPanelSwipeStep;
+            _tooltipShowingDelay = _data.MapData.TooltipShowingDelay;
 
             _rightInfoPanelObjectsForDestroy = new List<GameObject>();
             _displayedCurrentCitizensUIBehaviours = new Dictionary<CitizenModel, MapCitizenBehaviour>();
@@ -1001,9 +1001,9 @@ namespace BeastHunterHubUI
         {
             for (int i = 0; i < amount; i++)
             {
-                GameObject slotUI = InstantiateUIObject(_data.MapDataStruct.EquipmentSlotUIPrefab, _pocketSlotsPanel);
+                GameObject slotUI = InstantiateUIObject(_data.MapData.EquipmentSlotUIPrefab, _pocketSlotsPanel);
                 MapEquipmentSlotBehaviour slotBehaviour = slotUI.GetComponent<MapEquipmentSlotBehaviour>();
-                slotBehaviour.Initialize(ItemStorageType.PocketsStorage, i, _data.MapDataStruct.PocketItemSlotIcon);
+                slotBehaviour.Initialize(ItemStorageType.PocketsStorage, i, _data.MapData.PocketItemSlotIcon);
                 slotBehaviour.UpdateSlot(_selected.Character.Pockets.GetElementBySlot(i));
                 slotBehaviour.OnBeginDragHandler = OnBeginDragItemFromSlot;
                 slotBehaviour.OnDropHandler = OnDropItemToSlot;
@@ -1025,7 +1025,7 @@ namespace BeastHunterHubUI
 
         private void InitializeCharacterUI(CharacterModel character)
         {
-            GameObject characterUI = InstantiateUIObject(_data.MapDataStruct.CharacterUIPrefab, _charactersPanelFillable);
+            GameObject characterUI = InstantiateUIObject(_data.MapData.CharacterUIPrefab, _charactersPanelFillable);
             MapCharacterBehaviour behaviourUI = characterUI.GetComponentInChildren<MapCharacterBehaviour>();
             behaviourUI.Initialize(character);
             behaviourUI.OnClick_ButtonHandler += OnClick_CharacterButton;
@@ -1033,7 +1033,7 @@ namespace BeastHunterHubUI
 
         private void InitializeCharacterBackpackSlotUI(int slotIndex)
         {
-            GameObject backpackSlotUI = InstantiateUIObject(_data.MapDataStruct.CharacterBackpackSlotUIPrefab, _characterInventoryPanel);
+            GameObject backpackSlotUI = InstantiateUIObject(_data.MapData.CharacterBackpackSlotUIPrefab, _characterInventoryPanel);
 
             MapItemSlotBehaviour slotBehaviour = backpackSlotUI.GetComponent<MapItemSlotBehaviour>();
             slotBehaviour.Initialize(ItemStorageType.CharacterBackpack, slotIndex);
@@ -1050,7 +1050,7 @@ namespace BeastHunterHubUI
 
         private void InitializeGeneralInventorySlotUI(int slotIndex)
         {
-            GameObject inventorySlotUI = InstantiateUIObject(_data.MapDataStruct.InventorySlotUIPrefab, _inventoryItemsPanel);
+            GameObject inventorySlotUI = InstantiateUIObject(_data.MapData.InventorySlotUIPrefab, _inventoryItemsPanel);
 
             MapItemSlotBehaviour slotBehaviour = inventorySlotUI.GetComponent<MapItemSlotBehaviour>();
             slotBehaviour.Initialize(ItemStorageType.GeneralInventory, slotIndex);
@@ -1067,7 +1067,7 @@ namespace BeastHunterHubUI
 
         private void InitializeBuyBackSlotUI(int slotIndex)
         {
-            GameObject buyBackSlotUI = InstantiateUIObject(_data.MapDataStruct.ShopSlotUIPrefab, _buyBackItemsPanel);
+            GameObject buyBackSlotUI = InstantiateUIObject(_data.MapData.ShopSlotUIPrefab, _buyBackItemsPanel);
 
             MapItemSlotBehaviour slotBehaviour = buyBackSlotUI.GetComponent<MapItemSlotBehaviour>();
             slotBehaviour.Initialize(ItemStorageType.ShopBuyBackStorage, slotIndex);
@@ -1082,7 +1082,7 @@ namespace BeastHunterHubUI
 
         private void InitializeShopSlotUI(int slotIndex)
         {
-            GameObject shopSlotUI = InstantiateUIObject(_data.MapDataStruct.ShopSlotUIPrefab, _buyingItemsPanel);
+            GameObject shopSlotUI = InstantiateUIObject(_data.MapData.ShopSlotUIPrefab, _buyingItemsPanel);
 
             MapShopItemSlotBehaviour slotBehaviour = shopSlotUI.GetComponent<MapShopItemSlotBehaviour>();
             slotBehaviour.Initialize(ItemStorageType.ShopStorage, slotIndex);
@@ -1097,7 +1097,7 @@ namespace BeastHunterHubUI
 
         private void InitializeCitizenUI(CitizenModel citizen)
         {
-            GameObject citizenUI = InstantiateUIObject(_data.MapDataStruct.CitizenUIPrefab, _citizenPanel);
+            GameObject citizenUI = InstantiateUIObject(_data.MapData.CitizenUIPrefab, _citizenPanel);
 
             MapCitizenBehaviour citizenUIBehaviour = citizenUI.GetComponentInChildren<MapCitizenBehaviour>();
             citizenUIBehaviour.FillCitizenInfo(citizen);
@@ -1111,7 +1111,7 @@ namespace BeastHunterHubUI
 
         private void InitializeDialogAnswerButton(CitizenModel citizen, DialogAnswer answer)
         {
-            GameObject answerButton = InstantiateUIObject(_data.MapDataStruct.AnswerButtonUIPrefab, _answerButtonsPanel);
+            GameObject answerButton = InstantiateUIObject(_data.MapData.AnswerButtonUIPrefab, _answerButtonsPanel);
             answerButton.GetComponentInChildren<Text>().text = answer.Text;
 
             if (answer.IsDialogEnd)
@@ -1130,7 +1130,7 @@ namespace BeastHunterHubUI
 
         private void FillCharacterClothesSlot(int slotIndex)
         {
-            Sprite slotSprite = _data.MapDataStruct.GetClothSlotSpriteByType(_data.CharactersGlobalData.ClothesSlots[slotIndex]);
+            Sprite slotSprite = _data.MapData.GetClothSlotSpriteByType(_data.CharactersGlobalData.ClothesSlots[slotIndex]);
             _characterClothesSlotsUIBehaviours[slotIndex].Initialize(ItemStorageType.ClothesEquipment, slotIndex, slotSprite);
             _characterClothesSlotsUIBehaviours[slotIndex].SetInteractable(false);
             _characterClothesSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = OnDoubleClick_CharacterEquipmentSlot;
@@ -1143,7 +1143,7 @@ namespace BeastHunterHubUI
 
         private void FillWeaponSlot(int slotIndex)
         {
-            Sprite slotSprite = _data.MapDataStruct.WeaponSlotIcon;
+            Sprite slotSprite = _data.MapData.WeaponSlotIcon;
             _characterWeaponSlotsUIBehaviours[slotIndex].Initialize(ItemStorageType.WeaponEquipment, slotIndex, slotSprite);
             _characterWeaponSlotsUIBehaviours[slotIndex].SetInteractable(false);
             _characterWeaponSlotsUIBehaviours[slotIndex].OnDoubleClickButtonHandler = OnDoubleClick_CharacterEquipmentSlot;
@@ -1311,7 +1311,7 @@ namespace BeastHunterHubUI
 
                 for (int i = 0; i < location.Dwellers.Length; i++)
                 {
-                    GameObject dwellerUI = InstantiateUIObject(_data.MapDataStruct.LocationTextUIPrefab, _dwellersPanel);
+                    GameObject dwellerUI = InstantiateUIObject(_data.MapData.LocationTextUIPrefab, _dwellersPanel);
                     _rightInfoPanelObjectsForDestroy.Add(dwellerUI);
                     dwellerUI.GetComponentInChildren<Text>().text = location.Dwellers[i].Name;
                 }
@@ -1328,7 +1328,7 @@ namespace BeastHunterHubUI
 
                 for (int i = 0; i < location.Ingredients.Length; i++)
                 {
-                    GameObject ingredientUI = InstantiateUIObject(_data.MapDataStruct.LocationTextUIPrefab, _ingredientsPanel);
+                    GameObject ingredientUI = InstantiateUIObject(_data.MapData.LocationTextUIPrefab, _ingredientsPanel);
                     _rightInfoPanelObjectsForDestroy.Add(ingredientUI);
                     ingredientUI.GetComponentInChildren<Text>().text = location.Ingredients[i].Name;
                 }
