@@ -63,7 +63,7 @@ namespace BeastHunterHubUI
             }
         }
 
-        public List<MapObjectModel> GetMapObjects()
+        public List<MapObjectModel> GetAllMapObjects()
         {
             List<MapObjectModel> list = new List<MapObjectModel>();
 
@@ -80,12 +80,12 @@ namespace BeastHunterHubUI
             return list;
         }
 
-        public CityModel GetCity(int instanceId)
+        public CityModel GetCityById(int instanceId)
         {
             return Cities.Find(city => city.InstanceID == instanceId);
         }
 
-        public CitizenModel GetCitizen(int instanceId)
+        public CitizenModel GetCitizenById(int instanceId)
         {
             for (int cityIndex = 0; cityIndex < Cities.Count; cityIndex++)
             {

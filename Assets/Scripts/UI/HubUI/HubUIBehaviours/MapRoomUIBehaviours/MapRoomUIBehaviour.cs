@@ -344,7 +344,7 @@ namespace BeastHunterHubUI
             }
 
             MapObjectBehaviour[] mapObjectBehaviour = _mapObjectsPanel.GetComponentsInChildren<MapObjectBehaviour>(true);
-            List<MapObjectModel> mapObjects = _context.GetMapObjects();
+            List<MapObjectModel> mapObjects = _context.GetAllMapObjects();
 
             for (int i = 0; i < mapObjects.Count; i++)
             {

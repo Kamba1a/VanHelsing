@@ -1,8 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace BeastHunterHubUI
 {
+    ///<summary>
+    /// Important note to understand what this quest system is and why it is here.
+    /// 1) This quest system was not created in accordance with the game design doc!
+    /// 2) This system was done simply because the programmer was interested in trying something like that. 
+    /// 3) This system allows to create simple quests from citizens in cities.
+    /// 4) And the most important:
+    ///    Most likely system has flaws that need to be fixed OR it might be better in the future to just cut that system out from code.
+    /// </summary>
+
     public class QuestController
     {
         #region PrivateData
@@ -197,7 +207,7 @@ namespace BeastHunterHubUI
             if (excludeCheckType != RequirementCheckType.CityReputation)
             {
                 CitySO citySO = quest.Data.RequiredReputation.City;
-                bool checkReputationRequirement = quest.IsEnoughCityReputation(_context.GetCity(citySO.CityData.MapObjectData.InstanceId));
+                bool checkReputationRequirement = quest.IsEnoughCityReputation(_context.GetCityById(citySO.CityData.MapObjectData.InstanceId));
 
                 if (!checkReputationRequirement)
                 {
@@ -244,14 +254,14 @@ namespace BeastHunterHubUI
         {
             if (quest.CurrentTask.IsCitizenInitiateDialog)
             {
-                _context.GetCitizen(quest.CurrentTask.TargetCitizen.InstanceId).
+                _context.GetCitizenById(quest.CurrentTask.TargetCitizen.InstanceId).
                     SetCurrentDialogNode(quest.CurrentTask.InitiatedDialogId);
             }
         }
 
         private void ActivateQuestAnswers(QuestModel quest)
         {
-            QuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.TargetCitizen.InstanceId).
+            QuestAnswer questAnswer = _context.GetCitizenById(quest.CurrentTask.TargetCitizen.InstanceId).
                 GetQuestAnswerById(quest.CurrentTask.TargetQuestAnswerId);
 
             if (questAnswer != null)
@@ -268,7 +278,7 @@ namespace BeastHunterHubUI
 
             for (int i = 0; i < quest.CurrentTask.AdditionalCitizensAnswers.Length; i++)
             {
-                questAnswer = _context.GetCitizen(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen.InstanceId).
+                questAnswer = _context.GetCitizenById(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen.InstanceId).
                     GetQuestAnswerById(quest.CurrentTask.AdditionalCitizensAnswers[i].QuestAnswerId);
                 
                 if (questAnswer != null)
@@ -284,14 +294,14 @@ namespace BeastHunterHubUI
 
         private void DeactivateQuestAnswers(QuestModel quest)
         {
-            QuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.TargetCitizen.InstanceId).
+            QuestAnswer questAnswer = _context.GetCitizenById(quest.CurrentTask.TargetCitizen.InstanceId).
                         GetQuestAnswerById(quest.CurrentTask.TargetQuestAnswerId);
             questAnswer.IsActivated = false;
             questAnswer.Answer.OnAnswerSelectByPlayerHandler -= (handlerValue) => QuestProgressing(quest);
 
             for (int i = 0; i < quest.CurrentTask.AdditionalCitizensAnswers.Length; i++)
             {
-                questAnswer = _context.GetCitizen(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen.InstanceId).
+                questAnswer = _context.GetCitizenById(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen.InstanceId).
                     GetQuestAnswerById(quest.CurrentTask.AdditionalCitizensAnswers[i].QuestAnswerId);
                 questAnswer.IsActivated = false;
             }
@@ -299,7 +309,7 @@ namespace BeastHunterHubUI
 
         private void SetMarkerTypeToCitizen(QuestModel quest, QuestMarkerType questMarker)
         {
-            _context.GetCitizen(quest.CurrentTask.TargetCitizen.InstanceId).QuestMarkerType = questMarker;
+            _context.GetCitizenById(quest.CurrentTask.TargetCitizen.InstanceId).QuestMarkerType = questMarker;
         }
 
         private void SetInteractableQuestAnswer(QuestAnswer questAnswer, QuestModel quest)
