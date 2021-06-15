@@ -88,7 +88,7 @@ namespace BeastHunterHubUI
                 {
                     int h = hours;
                     int d = 0;
-                    while (h > HoursAmountPerDay - newTime.Hour)
+                    while (h >= HoursAmountPerDay - newTime.Hour)
                     {
                         h -= HoursAmountPerDay;
                         d++;

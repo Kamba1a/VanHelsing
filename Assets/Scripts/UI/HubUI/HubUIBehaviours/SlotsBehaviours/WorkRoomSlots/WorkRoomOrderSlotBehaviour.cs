@@ -59,7 +59,6 @@ namespace BeastHunterHubUI
         public void UpdateCraftTimeText(int hours)
         {
             _timeText.text = $"{hours} {HubUIServices.SharedInstance.TimeService.GetHoursWord(hours)}";
-            _processImage.SetActive(hours > 0);
         }
 
         private void OnClickRemoveOrderButton()

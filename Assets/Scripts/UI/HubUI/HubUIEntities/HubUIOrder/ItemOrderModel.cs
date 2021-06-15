@@ -11,7 +11,6 @@ namespace BeastHunterHubUI
         private HubUIEventModel _orderEvent;
         private int _hoursNumberToComplete;
         private int _baseHoursToComplete;
-        private Action<int> _onChangeHoursNumberToCompleteHandler;
 
         #endregion
 
@@ -19,25 +18,7 @@ namespace BeastHunterHubUI
         #region Properties
 
         public Action<ItemOrderModel> OnCompleteHandler { get; set; }
-        public Action<int> OnChangeHoursNumberToCompleteHandler
-        {
-            get
-            {
-                return _onChangeHoursNumberToCompleteHandler;
-            }
-            set
-            {
-                _onChangeHoursNumberToCompleteHandler = value;
-                if (_onChangeHoursNumberToCompleteHandler != null)
-                {
-                    Debug.Log("OnChangeHoursNumberToCompleteHandler length = " + _onChangeHoursNumberToCompleteHandler.GetInvocationList().Length);
-                }
-                else
-                {
-                    Debug.Log("OnChangeHoursNumberToCompleteHandler length = 0");
-                }
-            }
-        }
+        public Action<int> OnChangeHoursNumberToCompleteHandler { get; set; }
 
         public bool IsCompleted { get; private set; }
         public float ProgressToComplete { get; private set; }
@@ -124,14 +105,14 @@ namespace BeastHunterHubUI
 
         private void TimeTickUpdate()
         {
-            Debug.Log("TimeTickUpdate()");
+            //Debug.Log("TimeTickUpdate()");
 
             int spentHour = 1;
             HoursNumberToComplete = HoursNumberToComplete - spentHour < 0 ? 0 : HoursNumberToComplete - spentHour;
             ProgressToComplete = (float)(_baseHoursToComplete - HoursNumberToComplete) / _baseHoursToComplete;
 
-            Debug.Log("HoursNumberToComplete="+ HoursNumberToComplete);
-            Debug.Log("ProgressToComplete=" + ProgressToComplete);
+            //Debug.Log("HoursNumberToComplete="+ HoursNumberToComplete);
+            //Debug.Log("ProgressToComplete=" + ProgressToComplete);
         }
 
         private void MakeItem()

@@ -34,6 +34,7 @@ namespace BeastHunterHubUI
                 {
                     _scheduledEvents.Remove(eventModel.InvokeTime);
                 }
+                Debug.Log($"Remove event from scheduler on time: {eventModel.InvokeTime}");
             }
         }
 
@@ -48,6 +49,7 @@ namespace BeastHunterHubUI
             {
                 _onTimeTick += eventModel.TimeTick;
             }
+            Debug.Log($"Add event to scheduler on time: {eventModel.InvokeTime}");
         }
 
         public void OnChangedGameTime(GameTimeStruct currentTime)

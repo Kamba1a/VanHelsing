@@ -162,8 +162,6 @@ namespace BeastHunterHubUI
             slotBehaviour.IsDragAndDropOn = false;
             slotBehaviour.OnClickRemoveOrderButtonHandler += OnClick_RemoveOrderFromSlotButton;
             slotBehaviour.OnClickOpenRecipeBookButtonHandler += OnClick_OrderSlot;
-            _selectedRoom.OrdersSlots.OnPutElementToSlotHandler += OnAddOrderInSlot;
-            _selectedRoom.OrdersSlots.OnTakeElementFromSlotHandler += OnRemoveOrderFromSlot;
         }
 
         private void InitializeCharacterListItemUI(int slotIndex, CharacterModel character)
@@ -357,6 +355,8 @@ namespace BeastHunterHubUI
                     OnAddOrderInSlot(OrderStorageType.None, i, order);
                 }
             }
+            _selectedRoom.OrdersSlots.OnPutElementToSlotHandler += OnAddOrderInSlot;
+            _selectedRoom.OrdersSlots.OnTakeElementFromSlotHandler += OnRemoveOrderFromSlot;
         }
 
         private void ClearRoomPanel()
@@ -374,6 +374,7 @@ namespace BeastHunterHubUI
                 if (order != null)
                 {
                     order.OnChangeHoursNumberToCompleteHandler -= _orderSlotsBehaviours[i].UpdateCraftTimeText;
+                    order.OnCompleteHandler -= _orderSlotsBehaviours[i].UpdateSlot;
                 }
             }
 
@@ -431,16 +432,17 @@ namespace BeastHunterHubUI
 
         private void OnAddOrderInSlot(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
         {
-            Debug.Log($"OnAddOrderInSlot {slotIndex}");
             _orderSlotsBehaviours[slotIndex].UpdateSlot(order);
             _orderSlotsBehaviours[slotIndex].UpdateCraftTimeText(order.HoursNumberToComplete);
             order.OnChangeHoursNumberToCompleteHandler += _orderSlotsBehaviours[slotIndex].UpdateCraftTimeText;
+            order.OnCompleteHandler += _orderSlotsBehaviours[slotIndex].UpdateSlot;
         }
 
         private void OnRemoveOrderFromSlot(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
         {
-            _orderSlotsBehaviours[slotIndex].UpdateSlot(null);
             order.OnChangeHoursNumberToCompleteHandler -= _orderSlotsBehaviours[slotIndex].UpdateCraftTimeText;
+            order.OnCompleteHandler -= _orderSlotsBehaviours[slotIndex].UpdateSlot;
+            _orderSlotsBehaviours[slotIndex].UpdateSlot(null);
         }
 
         private void UpdateCharacterListItemUI(int slotIndex, CharacterModel character)
