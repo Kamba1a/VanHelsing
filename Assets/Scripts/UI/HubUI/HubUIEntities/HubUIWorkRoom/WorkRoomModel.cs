@@ -135,7 +135,7 @@ namespace BeastHunterHubUI
                 order.AddOrderEvent();
             }
             UpdateMinOrderCompleteTime();
-            order.OnChangeHoursNumberToCompleteHandler += OnChangeOrderBaseCompleteTime;
+            order.OnChangeHoursNumberToCompleteHandler += OnChangeHoursNumberToComplete;
         }
 
         private void OnOrderRemove(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
@@ -146,11 +146,11 @@ namespace BeastHunterHubUI
             UpdateMinOrderCompleteTime();
         }
 
-        private void OnChangeOrderBaseCompleteTime(int orderTime)
+        private void OnChangeHoursNumberToComplete(int hours)
         {
-            if (orderTime < MinOrderCompleteTime)
+            if (hours < MinOrderCompleteTime)
             {
-                MinOrderCompleteTime = orderTime;
+                MinOrderCompleteTime = hours;
             }
         }
 

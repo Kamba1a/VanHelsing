@@ -11,6 +11,7 @@ namespace BeastHunterHubUI
         private HubUIEventModel _orderEvent;
         private int _hoursNumberToComplete;
         private int _baseHoursToComplete;
+        private Action<int> _onChangeHoursNumberToCompleteHandler;
 
         #endregion
 
@@ -18,7 +19,25 @@ namespace BeastHunterHubUI
         #region Properties
 
         public Action<ItemOrderModel> OnCompleteHandler { get; set; }
-        public Action<int> OnChangeHoursNumberToCompleteHandler { get; set; }
+        public Action<int> OnChangeHoursNumberToCompleteHandler
+        {
+            get
+            {
+                return _onChangeHoursNumberToCompleteHandler;
+            }
+            set
+            {
+                _onChangeHoursNumberToCompleteHandler = value;
+                if (_onChangeHoursNumberToCompleteHandler != null)
+                {
+                    Debug.Log("OnChangeHoursNumberToCompleteHandler length = " + _onChangeHoursNumberToCompleteHandler.GetInvocationList().Length);
+                }
+                else
+                {
+                    Debug.Log("OnChangeHoursNumberToCompleteHandler length = 0");
+                }
+            }
+        }
 
         public bool IsCompleted { get; private set; }
         public float ProgressToComplete { get; private set; }
@@ -87,8 +106,8 @@ namespace BeastHunterHubUI
 
         public void RecountHoursToComplete(float timeReducePercent)
         {
-            Debug.Log("UpdateHoursNumberToComplete()");
-            Debug.Log("timeReducePercent=" + timeReducePercent);
+            //Debug.Log("RecountHoursToComplete()");
+            //Debug.Log("timeReducePercent=" + timeReducePercent);
 
             _baseHoursToComplete = (int)Mathf.Round(Recipe.BaseHoursNumberToComplete * timeReducePercent);
             HoursNumberToComplete = (int)Mathf.Round(_baseHoursToComplete - (_baseHoursToComplete * ProgressToComplete));
@@ -99,8 +118,8 @@ namespace BeastHunterHubUI
                 AddOrderEvent();
             }
 
-            Debug.Log("_baseHoursToComplete=" + _baseHoursToComplete);
-            Debug.Log("HoursNumberToComplete=" + HoursNumberToComplete);
+            //Debug.Log("_baseHoursToComplete=" + _baseHoursToComplete);
+            //Debug.Log("HoursNumberToComplete=" + HoursNumberToComplete);
         }
 
         private void TimeTickUpdate()

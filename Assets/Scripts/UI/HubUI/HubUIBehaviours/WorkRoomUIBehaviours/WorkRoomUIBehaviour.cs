@@ -431,6 +431,7 @@ namespace BeastHunterHubUI
 
         private void OnAddOrderInSlot(OrderStorageType storageType, int slotIndex, ItemOrderModel order)
         {
+            Debug.Log($"OnAddOrderInSlot {slotIndex}");
             _orderSlotsBehaviours[slotIndex].UpdateSlot(order);
             _orderSlotsBehaviours[slotIndex].UpdateCraftTimeText(order.HoursNumberToComplete);
             order.OnChangeHoursNumberToCompleteHandler += _orderSlotsBehaviours[slotIndex].UpdateCraftTimeText;
