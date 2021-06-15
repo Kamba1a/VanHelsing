@@ -18,5 +18,10 @@ namespace BeastHunterHubUI
         public CityData CityData => _cityData;
 
         #endregion
+
+        private void OnEnable()
+        {
+            _cityData.MapObjectData.SetInstanceId(GetInstanceID());
+        }
     }
 }

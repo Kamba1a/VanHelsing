@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a053d550d020c47a49daa8839c29e9, type: 3}
   m_Name: Location_1
   m_EditorClassIdentifier: 
-  _isBlockedAtStart: 0
-  _name: "\u0424\u043E\u0440\u0442"
-  _description: Lorem ipsum
-  _loadSceneId: 0
-  _screenshot: {fileID: 21300000, guid: 95187df84f56c4247a4cf20c453fc85c, type: 3}
-  _travelTime: 32
-  _dwellers: []
-  _ingredients: []
+  _locationData:
+    _mapObjectData:
+      _instanceId: 79514
+      _hubMapIndex: 1
+      _isBlocked: 0
+      _name: "\u0424\u043E\u0440\u0442"
+      _description: "\u041E\u0431 \u044D\u0442\u043E\u0439 \u043B\u043E\u043A\u0430\u0446\u0438\u0438
+        \u043D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u0438\u0437\u0432\u0435\u0441\u0442\u043D\u043E"
+    _loadSceneId: 0
+    _screenshot: {fileID: 21300000, guid: 95187df84f56c4247a4cf20c453fc85c, type: 3}
+    _baseTravelTime: 32
+    _dwellers: []
+    _ingredients: []

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d5df81f399d44c47b3e6d1c32b6278e, type: 3}
   m_Name: Kupec_Kuplinec
   m_EditorClassIdentifier: 
+  _instanceId: 73850
   _name: Kupec Kuplinec
   _portrait: {fileID: 21300000, guid: 3bf854bf2bc26094d86801b40d9b7279, type: 3}
   _firstDialogId: 0

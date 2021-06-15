@@ -21,6 +21,7 @@
 
         #region Methods
 
+        /// <summary>Checks if the character name is used among existing characters in the game</summary>
         public bool IsNameFree(string name)
         {
             for (int i = 0; i < _context.Player.AvailableCharacters.GetSlotsCount(); i++)

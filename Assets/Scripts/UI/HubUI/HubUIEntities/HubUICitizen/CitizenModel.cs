@@ -18,7 +18,7 @@ namespace BeastHunterHubUI
 
         public Action<QuestMarkerType> OnChangeQuestMarkerTypeHandler { get; set; }
 
-        public int DataInstanceId { get; private set; }
+        public int InstanceId { get; private set; }
         public string Name { get; private set; }
         public Sprite Portrait { get; private set; }
         public List<QuestAnswer> QuestAnswers { get; set; }
@@ -46,24 +46,24 @@ namespace BeastHunterHubUI
 
         #region ClassLifeCyrcle
 
-        public CitizenModel(CitizenSO data)
+        public CitizenModel(CitizenSO citizenSO)
         {
-            DataInstanceId = data.GetInstanceID();
-            Name = data.Name;
-            Portrait = data.Portrait;
+            InstanceId = citizenSO.InstanceId;
+            Name = citizenSO.Name;
+            Portrait = citizenSO.Portrait;
             QuestMarkerType = QuestMarkerType.None;
 
             QuestAnswers = new List<QuestAnswer>();
-            for (int i = 0; i < data.QuestAnswers.Count; i++)
+            for (int i = 0; i < citizenSO.QuestAnswers.Count; i++)
             {
-                QuestAnswers.Add(new QuestAnswer(data.QuestAnswers[i]));
+                QuestAnswers.Add(new QuestAnswer(citizenSO.QuestAnswers[i]));
                 QuestAnswers[i].Answer.OnAnswerSelectByPlayerHandler += SetCurrentDialogNode;
             }
 
             Dialogs = new List<DialogNode>();
-            for (int i = 0; i < data.Dialogs.Count; i++)
+            for (int i = 0; i < citizenSO.Dialogs.Count; i++)
             {
-                Dialogs.Add(new DialogNode(data.Dialogs[i]));
+                Dialogs.Add(new DialogNode(citizenSO.Dialogs[i]));
 
                 for (int j = 0; j < Dialogs[i].Answers.Count; j++)
                 {
@@ -71,7 +71,7 @@ namespace BeastHunterHubUI
                 }
             }
 
-            CurrentDialog = Dialogs.Find(dialog => dialog.Id == data.FirstDialogId);
+            CurrentDialog = Dialogs.Find(dialog => dialog.Id == citizenSO.FirstDialogId);
         }
 
         #endregion

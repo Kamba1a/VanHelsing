@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdc4f56eb8b4c2742b1415abd0385973, type: 3}
   m_Name: HubUIData
   m_EditorClassIdentifier: 
-  _startGameDataStruct:
-    _gameTimeStruct:
+  _startGameData:
+    _currentGameTime:
       _day: 1
       _hour: 12
-    _playerStruct:
+    _playerData:
       _rank: 0
       _goldAmount: 200
-      _inventorySlotsAmount: 50
+      _inventorySlotsAmount: 60
       _inventoryItems:
       - {fileID: 11400000, guid: b82379ba5dbb65c4a9c24795aacbca77, type: 2}
       - {fileID: 11400000, guid: 4ef6411f36ddde84e85833d692065971, type: 2}
@@ -45,17 +45,26 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 899f376411d00d646aeb701d5ddb4f7e, type: 2}
       - {fileID: 11400000, guid: 0095dc81f4df59045abcc52e5a8d23d1, type: 2}
       _availableCharacters: []
-    _locationsData:
+    _locationsSO:
+    - {fileID: 11400000, guid: a4953306eee0c584a8c7fc514f731fbb, type: 2}
     - {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
     - {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
     - {fileID: 11400000, guid: 860d3696ec691de4e9302d6819bd9cda, type: 2}
     - {fileID: 11400000, guid: 9b605ac1c7e3a6b458708df1317a7eaf, type: 2}
-    - {fileID: 11400000, guid: a4953306eee0c584a8c7fc514f731fbb, type: 2}
-    _citiesData:
+    _citiesSO:
     - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
-    _workRoomsData:
+    _workRoomsSO:
     - {fileID: 11400000, guid: 538f84166fed25a459e3eb52a5ac7aac, type: 2}
     - {fileID: 11400000, guid: 90082b5b7c854a7479b78cae329f1dee, type: 2}
+  _questsSOPool:
+  - {fileID: 11400000, guid: 81ad56c84f8679347b6301f8a566d862, type: 2}
+  _huntingQuestsSOPool:
+  - {fileID: 11400000, guid: 6569354df43ee3c42b7aad209f3a8887, type: 2}
+  - {fileID: 11400000, guid: 666a5504f1c1909428191750e9c916a6, type: 2}
+  _bossesSOPool:
+  - {fileID: 11400000, guid: 2c3011b637f41c8478a9ff84ef154776, type: 2}
+  - {fileID: 11400000, guid: 10da2d25f5f199641bb3b02d2ef18da7, type: 2}
+  _itemSOPools: {fileID: 11400000, guid: 5efb51aa2c6b6b0449cb922c915b405e, type: 2}
   _gameTimeGlobalData:
     _hoursAmountPerDay: 24
     _timePassingDelay: 1
@@ -105,18 +114,9 @@ MonoBehaviour:
     _hairlessChance: 0.1
     _maleFacialHairChance: 0.8
   _citiesShopsSlotsAmount: 20
-  _questsPool:
-  - {fileID: 11400000, guid: 81ad56c84f8679347b6301f8a566d862, type: 2}
-  _huntingQuestsDataPool:
-  - {fileID: 11400000, guid: 6569354df43ee3c42b7aad209f3a8887, type: 2}
-  - {fileID: 11400000, guid: 666a5504f1c1909428191750e9c916a6, type: 2}
-  _bossesDataPool:
-  - {fileID: 11400000, guid: 2c3011b637f41c8478a9ff84ef154776, type: 2}
-  - {fileID: 11400000, guid: 10da2d25f5f199641bb3b02d2ef18da7, type: 2}
-  _itemDataPools: {fileID: 11400000, guid: 5efb51aa2c6b6b0449cb922c915b405e, type: 2}
   _messageWindowPrefab: {fileID: 8800125775024752673, guid: 1f584825ef8ac7c409d78790dd09a67a,
     type: 3}
-  MapDataStruct:
+  _mapData:
     _citizenUIPrefab: {fileID: 5311113231720852829, guid: a9a2ad70cde8fd5409f8b95ef49c4e33,
       type: 3}
     _locationTextUIPrefab: {fileID: 4845705783241596257, guid: a6b652d58e47e6b48807f69de54a5709,
@@ -133,15 +133,8 @@ MonoBehaviour:
       type: 3}
     _characterBackpuckSlotUIPrefab: {fileID: 4649815293729276567, guid: 7899f865f88bda740864b45d02cbea24,
       type: 3}
-    _tooltipShowingDelay: 0.75
+    _tooltipShowingDelay: 1.75
     _charactersPanelSwipeStep: 1
-    _mapObjects:
-    - {fileID: 11400000, guid: b0fed0d57aef54a48b35754d9082df4c, type: 2}
-    - {fileID: 11400000, guid: 744614ebf3a669b4f855ee609c71b538, type: 2}
-    - {fileID: 11400000, guid: 5a390b452918f4046948d2da88f1333c, type: 2}
-    - {fileID: 11400000, guid: 860d3696ec691de4e9302d6819bd9cda, type: 2}
-    - {fileID: 11400000, guid: 9b605ac1c7e3a6b458708df1317a7eaf, type: 2}
-    - {fileID: 11400000, guid: a4953306eee0c584a8c7fc514f731fbb, type: 2}
     _weaponSlotIcon: {fileID: 21300000, guid: 5fd50594014b70e48bd6993443d46b32, type: 3}
     _armSlotIcon: {fileID: 21300000, guid: 70a77abda853dd941a0c8debf1de9b04, type: 3}
     _backSlotIcon: {fileID: 21300000, guid: 6fc27c9d7fc2d9448af6851bf935e6d2, type: 3}
@@ -157,18 +150,16 @@ MonoBehaviour:
     _beltSlotIcon: {fileID: 21300000, guid: da09804303305f542a686824630e7269, type: 3}
     _pocketItemSlotIcon: {fileID: 21300000, guid: fe025e83f69d0b54f8a4fe3c7c128fd7,
       type: 3}
-  QuestRoomDataStruct:
+  _questRoomData:
     _questListItemPrefab: {fileID: 4561106657247383774, guid: 1f6cb4251a86aab46912695617d8e932,
       type: 3}
     _huntingQuestAmount: 2
-  WorkRoomDataStruct:
+  _workRoomData:
     _workRoomButtonPrefab: {fileID: 6542063352831393134, guid: 422c2fe1f43e8e2489906de36f97dc94,
       type: 3}
     _workerSlotPrefab: {fileID: 1306646833271779637, guid: 59466932bc7fdc048a3cb794d04cb730,
       type: 3}
     _orderSlotPrefab: {fileID: 5585337752527616096, guid: 114647e0e418d7e4ab742b56e7d0131f,
-      type: 3}
-    _makedItemSlotPrefab: {fileID: 6189855442535406670, guid: e04f5c587f2972048b9f8b6e999d50ba,
       type: 3}
     _characterListItemPrefab: {fileID: 5008816691853892247, guid: b299710c61697a84483131e556e9a550,
       type: 3}

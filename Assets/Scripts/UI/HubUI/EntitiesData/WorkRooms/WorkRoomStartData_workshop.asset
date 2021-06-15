@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a331e7eaf987ef4cb49d798f6898a4c, type: 3}
   m_Name: WorkRoomStartData_workshop
   m_EditorClassIdentifier: 
-  _workRoomStruct:
-    _baseWorkRoomStruct:
+  _workRoomData:
+    _baseWorkRoomData:
       _roomType: 1
       _usedSkill: 2
       _name: "\u041C\u0430\u0441\u0442\u0435\u0440\u0441\u043A\u0430\u044F"
@@ -25,9 +25,12 @@ MonoBehaviour:
           _ordersSlots: 1
       - _level: 2
         _progress:
-          _assistansAmount: 4
+          _assistansAmount: 3
           _ordersSlots: 1
       - _level: 3
         _progress:
-          _assistansAmount: 5
+          _assistansAmount: 3
           _ordersSlots: 1
+      _chiefWorker: {fileID: 0}
+      _assistants: []
+    _orders: []

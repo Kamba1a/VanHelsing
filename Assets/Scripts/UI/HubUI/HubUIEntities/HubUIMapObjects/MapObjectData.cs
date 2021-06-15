@@ -8,7 +8,7 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
-        [SerializeField] private int _instanceId;
+        [SerializeField, ReadOnlyInUnityInspector] private int _instanceId;
         [SerializeField] private int _hubMapIndex;
         [SerializeField] private bool _isBlocked;
         [SerializeField] private string _name;
@@ -24,6 +24,20 @@ namespace BeastHunterHubUI
         public bool IsBlocked => _isBlocked;
         public string Name => _name;
         public string Description => _description;
+
+        #endregion
+
+
+        #region Methods
+
+        public void SetInstanceId(int id)
+        {
+            if (_instanceId == 0)
+            {
+                _instanceId = id;
+                Debug.Log($"Set id = {id}");
+            }
+        }
 
         #endregion
     }

@@ -29,6 +29,7 @@ namespace BeastHunterHubUI
 
         protected override void FillSlot(ItemOrderModel entityModel)
         {
+            _changeableImage.sprite = entityModel.Recipe.Item.Icon;
             _openRecipeBookButton.interactable = false;
             _removeOrderButton.gameObject.SetActive(!entityModel.IsCompleted);
             _processImage.SetActive(!entityModel.IsCompleted);

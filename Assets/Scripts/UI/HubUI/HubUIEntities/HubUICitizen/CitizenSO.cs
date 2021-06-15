@@ -9,6 +9,7 @@ namespace BeastHunterHubUI
     {
         #region Fields
 
+        [SerializeField, ReadOnlyInUnityInspector] private int _instanceId;
         [SerializeField] private string _name;
         [SerializeField] private Sprite _portrait;
         [SerializeField] private int _firstDialogId;
@@ -31,6 +32,7 @@ namespace BeastHunterHubUI
 
         #region Properties
 
+        public int InstanceId => _instanceId;
         public string Name => _name;
         public Sprite Portrait => _portrait;
         public int FirstDialogId => _firstDialogId;
@@ -44,6 +46,7 @@ namespace BeastHunterHubUI
 
         private void OnEnable()
         {
+            SetInstanceId();
             #if UNITY_EDITOR
             _dialogsListCount = _dialogs.Count;
             _questAnswersListCount = _questAnswers.Count;
@@ -62,6 +65,15 @@ namespace BeastHunterHubUI
 
 
         #region Methods
+
+        private void SetInstanceId()
+        {
+            if (_instanceId == 0)
+            {
+                _instanceId = GetInstanceID();
+                Debug.Log($"Set instance id = {_instanceId}");
+            }
+        }
 
         #if UNITY_EDITOR
         private void OnChangeDialogListIdValidate()

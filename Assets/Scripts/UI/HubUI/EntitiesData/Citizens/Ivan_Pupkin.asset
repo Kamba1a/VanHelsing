@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d5df81f399d44c47b3e6d1c32b6278e, type: 3}
   m_Name: Ivan_Pupkin
   m_EditorClassIdentifier: 
+  _instanceId: 73848
   _name: Ivan Pupkin
   _portrait: {fileID: 21300000, guid: b9311721a8cc7474384ce23a02e4515b, type: 3}
   _firstDialogId: 0

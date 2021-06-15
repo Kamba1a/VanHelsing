@@ -344,9 +344,12 @@ namespace BeastHunterHubUI
             }
 
             MapObjectBehaviour[] mapObjectBehaviour = _mapObjectsPanel.GetComponentsInChildren<MapObjectBehaviour>(true);
-            for (int i = 0; i < mapObjectBehaviour.Length; i++)
+            List<MapObjectModel> mapObjects = _context.GetMapObjects();
+
+            for (int i = 0; i < mapObjects.Count; i++)
             {
-                FillMapObject(mapObjectBehaviour[i]);
+                mapObjects[i].Behaviour = mapObjectBehaviour[mapObjects[i].HubMapIndex];
+                FillMapObject(mapObjects[i]);
             }
 
             for (int i = 0; i < _data.CharactersGlobalData.BackpackSlotAmount; i++)
@@ -1154,32 +1157,24 @@ namespace BeastHunterHubUI
             _characterWeaponSlotsUIBehaviours[slotIndex].OnPointerExitHandler += OnPointerExit_Slot;
         }
 
-        //TODO: HIGH PRIORITY! rework!
-        private void FillMapObject(MapObjectBehaviour mapObjectBehaviour)
+        private void FillMapObject(MapObjectModel mapObjectModel)
         {
-            //MapObjectModel mapObjectModel = _context.GetMapObjectModel(mapObjectdata);
-            //mapObjectModel.Behaviour = mapObjectBehaviour;
+            MapObjectBehaviour behaviour = mapObjectModel.Behaviour;
 
-            //switch (mapObjectdata.GetMapObjectType())
-            //{
-            //    case MapObjectType.Location:
-
-            //        mapObjectBehaviour.FillInfo(mapObjectModel as LocationModel);
-            //        mapObjectBehaviour.OnClick_ButtonHandler += OnClick_LocationButton;
-
-            //        break;
-            //    case MapObjectType.City:
-
-            //        mapObjectBehaviour.FillInfo(mapObjectModel as CityModel);
-            //        mapObjectBehaviour.OnClick_ButtonHandler += OnClick_CityButton;
-
-            //        break;
-            //    default:
-
-            //        Debug.LogError(this + " incorrect HubMapUIMapObjectType value");
-
-            //        break;
-            //}
+            if (mapObjectModel is CityModel)
+            {
+                behaviour.FillInfo(mapObjectModel as CityModel);
+                behaviour.OnClick_ButtonHandler += OnClick_CityButton;
+            }
+            else if (mapObjectModel is LocationModel)
+            {
+                behaviour.FillInfo(mapObjectModel as LocationModel);
+                behaviour.OnClick_ButtonHandler += OnClick_LocationButton;
+            }
+            else
+            {
+                Debug.LogError(this + " unknown map object model value");
+            }
         }
 
         private void FillTooltipByItemInfo(int slotIndex, ItemStorageType storageType)

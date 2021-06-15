@@ -196,8 +196,8 @@ namespace BeastHunterHubUI
         {
             if (excludeCheckType != RequirementCheckType.CityReputation)
             {
-                CitySO cityData = quest.Data.RequiredReputation.City;
-                bool checkReputationRequirement = quest.IsEnoughCityReputation(_context.GetCity(cityData));
+                CitySO citySO = quest.Data.RequiredReputation.City;
+                bool checkReputationRequirement = quest.IsEnoughCityReputation(_context.GetCity(citySO.CityData.MapObjectData.InstanceId));
 
                 if (!checkReputationRequirement)
                 {
@@ -244,14 +244,14 @@ namespace BeastHunterHubUI
         {
             if (quest.CurrentTask.IsCitizenInitiateDialog)
             {
-                _context.GetCitizen(quest.CurrentTask.TargetCitizen).
+                _context.GetCitizen(quest.CurrentTask.TargetCitizen.InstanceId).
                     SetCurrentDialogNode(quest.CurrentTask.InitiatedDialogId);
             }
         }
 
         private void ActivateQuestAnswers(QuestModel quest)
         {
-            QuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.TargetCitizen).
+            QuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.TargetCitizen.InstanceId).
                 GetQuestAnswerById(quest.CurrentTask.TargetQuestAnswerId);
 
             if (questAnswer != null)
@@ -268,7 +268,7 @@ namespace BeastHunterHubUI
 
             for (int i = 0; i < quest.CurrentTask.AdditionalCitizensAnswers.Length; i++)
             {
-                questAnswer = _context.GetCitizen(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen).
+                questAnswer = _context.GetCitizen(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen.InstanceId).
                     GetQuestAnswerById(quest.CurrentTask.AdditionalCitizensAnswers[i].QuestAnswerId);
                 
                 if (questAnswer != null)
@@ -284,14 +284,14 @@ namespace BeastHunterHubUI
 
         private void DeactivateQuestAnswers(QuestModel quest)
         {
-            QuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.TargetCitizen).
+            QuestAnswer questAnswer = _context.GetCitizen(quest.CurrentTask.TargetCitizen.InstanceId).
                         GetQuestAnswerById(quest.CurrentTask.TargetQuestAnswerId);
             questAnswer.IsActivated = false;
             questAnswer.Answer.OnAnswerSelectByPlayerHandler -= (handlerValue) => QuestProgressing(quest);
 
             for (int i = 0; i < quest.CurrentTask.AdditionalCitizensAnswers.Length; i++)
             {
-                questAnswer = _context.GetCitizen(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen).
+                questAnswer = _context.GetCitizen(quest.CurrentTask.AdditionalCitizensAnswers[i].Citizen.InstanceId).
                     GetQuestAnswerById(quest.CurrentTask.AdditionalCitizensAnswers[i].QuestAnswerId);
                 questAnswer.IsActivated = false;
             }
@@ -299,7 +299,7 @@ namespace BeastHunterHubUI
 
         private void SetMarkerTypeToCitizen(QuestModel quest, QuestMarkerType questMarker)
         {
-            _context.GetCitizen(quest.CurrentTask.TargetCitizen).QuestMarkerType = questMarker;
+            _context.GetCitizen(quest.CurrentTask.TargetCitizen.InstanceId).QuestMarkerType = questMarker;
         }
 
         private void SetInteractableQuestAnswer(QuestAnswer questAnswer, QuestModel quest)

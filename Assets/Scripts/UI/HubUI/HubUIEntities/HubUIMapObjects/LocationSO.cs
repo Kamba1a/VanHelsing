@@ -18,5 +18,18 @@ namespace BeastHunterHubUI
         public LocationData LocationData => _locationData;
 
         #endregion
+
+
+        #region UnityMethods
+
+        private void OnEnable()
+        {
+            if (_locationData != null && _locationData.MapObjectData != null)
+            {
+                _locationData.MapObjectData.SetInstanceId(GetInstanceID());
+            }
+        }
+
+        #endregion
     }
 }
