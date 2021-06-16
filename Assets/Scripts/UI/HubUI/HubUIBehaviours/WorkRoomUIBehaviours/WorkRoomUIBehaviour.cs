@@ -14,6 +14,7 @@ namespace BeastHunterHubUI
         [SerializeField] private GameObject _roomButtonsFillablePanel;
         [SerializeField] private GameObject _roomPanel;
         [SerializeField] private Text _roomNameText;
+        [SerializeField] private Text _roomLevelText;
         [SerializeField] private Button _roomUpgradeButton;
         [SerializeField] private Button _roomCloseButton;
         [SerializeField] private WorkRoomWorkerSlotBehaviour _chiefSlotBehaviour;
@@ -368,6 +369,7 @@ namespace BeastHunterHubUI
         private void FillRoomPanel(WorkRoomModel room)
         {
             _roomNameText.text = room.Name;
+            _roomLevelText.text = $"Ур. {room.Level}";
 
             FillCharacterSlotUI(CharacterStorageType.ChiefWorkplace, 0, room.ChiefWorkplace.GetElementBySlot(0));
             room.ChiefWorkplace.OnPutElementToSlotHandler += FillCharacterSlotUI;
