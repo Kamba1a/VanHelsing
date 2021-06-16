@@ -76,18 +76,6 @@ namespace BeastHunterHubUI
             return false;
         }
 
-        public override Sprite GetElementSpriteBySlot(int slotIndex)
-        {
-            if (_elementSlots[slotIndex] != null)
-            {
-                return _elementSlots[slotIndex].Portrait;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         public override bool RemoveElement(int slotIndex)
         {
             if (_elementSlots[slotIndex] != null)

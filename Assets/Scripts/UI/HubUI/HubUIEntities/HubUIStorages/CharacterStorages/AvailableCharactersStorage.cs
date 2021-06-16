@@ -72,18 +72,6 @@ namespace BeastHunterHubUI
             return true;
         }
 
-        public override Sprite GetElementSpriteBySlot(int slotIndex)
-        {
-            if (_elementSlots[slotIndex] != null)
-            {
-                return _elementSlots[slotIndex].Portrait;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         public override void SwapElementsWithOtherStorage(int currentStorageSlotIndex, BaseStorage<CharacterModel, CharacterStorageType> otherStorage, int otherStorageSlotIndex)
         {
             CharacterModel currentStorageElement = this.GetElementBySlot(currentStorageSlotIndex);

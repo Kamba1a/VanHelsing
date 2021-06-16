@@ -28,8 +28,8 @@ namespace BeastHunterHubUI
         [SerializeField] private Button _takeMakedItemsButton;
         [SerializeField] private WorkRoomCharacterPanelBehaviour _characterPanelBehaviour;
 
-        //TEMPORARY! Remove after debug!
-        [SerializeField] private ItemRecipeSO _recipeForDebug;
+        //Todo: remove after the implementation of the recipe selection panel
+        [SerializeField] private ItemRecipeSO _recipeForDebug; //TEMPORARY
 
 
         private HubUIContext _context;
@@ -174,6 +174,11 @@ namespace BeastHunterHubUI
             uiBehaviour.OnEndDragHandler += OnEndDragCharacter;
             uiBehaviour.OnDropHandler += OnDropCharacterToSlot;
             uiBehaviour.IsPointerEnterOnFunc += IsPointerEnterCharacterListItemOn;
+
+            if(_selectedRoom != null)
+            {
+                uiBehaviour.SetDisplayedSkill(_selectedRoom.UsedSkill, character);
+            }
         }
 
         private void RemoveCharacterListItemUI(int slotIndex)
@@ -357,6 +362,12 @@ namespace BeastHunterHubUI
             }
             _selectedRoom.OrdersSlots.OnPutElementToSlotHandler += OnAddOrderInSlot;
             _selectedRoom.OrdersSlots.OnTakeElementFromSlotHandler += OnRemoveOrderFromSlot;
+
+            AvailableCharacterListItemBehaviour[] charactersBehaviours = _charactersFillablePanel.GetComponentsInChildren<AvailableCharacterListItemBehaviour>(true);
+            for (int i = 0; i < charactersBehaviours.Length; i++)
+            {
+                charactersBehaviours[i].SetDisplayedSkill(room.UsedSkill, _context.Player.AvailableCharacters.GetElementBySlot(i));
+            }
         }
 
         private void ClearRoomPanel()

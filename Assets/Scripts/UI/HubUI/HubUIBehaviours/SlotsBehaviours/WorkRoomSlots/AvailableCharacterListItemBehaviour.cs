@@ -11,9 +11,15 @@ namespace BeastHunterHubUI
 
         [SerializeField] private Text _nameText;
         [SerializeField] private Text _rankText;
+        [SerializeField] private Text _skillNameText;
+        [SerializeField] private Text _skillLevelText;
+        [SerializeField] private Image _skillLevelImage;
+        [SerializeField] private GameObject _skillPanel;
+
 
         private RectTransform _rectTransform;
         private Vector2 _size;
+        private SkillType _displayedSkill;
 
         #endregion
 
@@ -39,6 +45,31 @@ namespace BeastHunterHubUI
 
         #region BaseCharacterSlotBehaviour
 
+        public void SetDisplayedSkill(SkillType skillType, CharacterModel character)
+        {
+            _displayedSkill = skillType;
+            UpdateDisplayedSkill(character);
+        }
+
+        private void UpdateDisplayedSkill(CharacterModel character)
+        {
+            Debug.Log("UpdateDisplayedSkill");
+            Debug.Log("_displayedSkill=" + _displayedSkill);
+            if (_displayedSkill != SkillType.None)
+            {
+                Debug.Log("_displayedSkill=true");
+                _skillNameText.text = _displayedSkill.ToString();
+                _skillLevelText.text = character.Skills[_displayedSkill].ToString() + "%";
+                _skillLevelImage.fillAmount = (float)character.Skills[_displayedSkill] / 100;
+                _skillPanel.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("_displayedSkill=false");
+                _skillPanel.SetActive(false);
+            }
+        }
+
         public override void Initialize(CharacterStorageType storageType, int storageSlotIndex)
         {
             base.Initialize(CharacterStorageType.AvailableCharacters, storageSlotIndex);
@@ -51,6 +82,7 @@ namespace BeastHunterHubUI
             base.FillSlot(character);
             _nameText.text = character.Name;
             _rankText.text = character.Rank.ToString();
+            UpdateDisplayedSkill(character);
         }
 
         protected override void ClearSlot()
@@ -58,6 +90,9 @@ namespace BeastHunterHubUI
             base.ClearSlot();
             _nameText.text = "";
             _rankText.text = "";
+            _skillNameText.text = "";
+            _skillLevelText.text = "";
+            _skillLevelImage.fillAmount = 0;
         }
 
         protected override bool IsPointerEnterOn()

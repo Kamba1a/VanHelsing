@@ -32,18 +32,6 @@ namespace BeastHunterHubUI
 
         #region Methods
 
-        public override Sprite GetElementSpriteBySlot(int slotIndex)
-        {
-            if (_elementSlots[slotIndex] != null)
-            {
-                return _elementSlots[slotIndex].Icon;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         public override bool RemoveElement(int slotIndex)
         {
             if (_elementSlots[slotIndex] != null)
