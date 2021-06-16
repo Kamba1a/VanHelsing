@@ -28,6 +28,12 @@ namespace BeastHunterHubUI
         [SerializeField] private Button _takeMakedItemsButton;
         [SerializeField] private WorkRoomCharacterPanelBehaviour _characterPanelBehaviour;
 
+        [Header("Upgrade room panel")]
+        [SerializeField] private GameObject _upgradeRoomPanel;
+        [SerializeField] private Button _upgradeRoomApplyButton;
+        [SerializeField] private Button _upgradeRoomCancelButton;
+
+        [Space]
         //Todo: remove after the implementation of the recipe selection panel
         [SerializeField] private ItemRecipeSO _recipeForDebug; //TEMPORARY
 
@@ -50,6 +56,7 @@ namespace BeastHunterHubUI
             _roomUpgradeButton.onClick.AddListener(OnClick_UpgradeRoomButton);
             _createOrderButton.onClick.AddListener(OnClick_CreateOrderButton);
             _takeMakedItemsButton.onClick.AddListener(OnClick_TakeMakedItemsButton);
+            _upgradeRoomCancelButton.onClick.AddListener(OnClick_CloseUpgradeRoomButton);
         }
 
         private void OnDisable()
@@ -58,6 +65,7 @@ namespace BeastHunterHubUI
             _roomUpgradeButton.onClick.RemoveAllListeners();
             _createOrderButton.onClick.RemoveAllListeners();
             _takeMakedItemsButton.onClick.RemoveAllListeners();
+            _upgradeRoomCancelButton.onClick.RemoveAllListeners();
         }
 
         #endregion
@@ -96,6 +104,7 @@ namespace BeastHunterHubUI
             gameObject.SetActive(true);
             _roomButtonsFillablePanel.SetActive(true);
             _roomPanel.SetActive(false);
+            _upgradeRoomPanel.SetActive(false);
         }
 
         #endregion
@@ -175,7 +184,7 @@ namespace BeastHunterHubUI
             uiBehaviour.OnDropHandler += OnDropCharacterToSlot;
             uiBehaviour.IsPointerEnterOnFunc += IsPointerEnterCharacterListItemOn;
 
-            if(_selectedRoom != null)
+            if (_selectedRoom != null)
             {
                 uiBehaviour.SetDisplayedSkill(_selectedRoom.UsedSkill, character);
             }
@@ -205,7 +214,7 @@ namespace BeastHunterHubUI
             _roomPanel.SetActive(true);
         }
 
-         private void OnClick_CloseRoomButton()
+        private void OnClick_CloseRoomButton()
         {
             _roomPanel.SetActive(false);
             ClearRoomPanel();
@@ -248,12 +257,25 @@ namespace BeastHunterHubUI
                     _selectedRoom.OrdersSlots.RemoveElement(i);
                 }
             }
-            
+
         }
 
         private void OnClick_UpgradeRoomButton()
         {
-            //todo: open add window
+            FillUpgradeRoomPanel();
+            _upgradeRoomPanel.SetActive(true);
+        }
+
+        private void OnClick_ApplyUpgradeRoomButton()
+        {
+            _selectedRoom.LevelUp();
+            OnClick_CloseUpgradeRoomButton();
+        }
+
+        private void OnClick_CloseUpgradeRoomButton()
+        {
+            _upgradeRoomPanel.SetActive(false);
+            _upgradeRoomApplyButton.onClick.RemoveAllListeners();
         }
 
         #endregion
@@ -284,7 +306,7 @@ namespace BeastHunterHubUI
                     BaseCharacterStorage storageOut = GetCharacterStorageByType(_draggedCharacterInfo.storageType);
                     CharacterModel character = storageOut.GetElementBySlot(_draggedCharacterInfo.slotIndex.Value);
 
-                    if(!(_draggedCharacterInfo.storageType == CharacterStorageType.AvailableCharacters && _draggedCharacterInfo.slotIndex < dropSlotIndex))
+                    if (!(_draggedCharacterInfo.storageType == CharacterStorageType.AvailableCharacters && _draggedCharacterInfo.slotIndex < dropSlotIndex))
                     {
                         dropSlotIndex++;
                     }
@@ -321,7 +343,7 @@ namespace BeastHunterHubUI
         {
             if (_draggedCharacterInfo.slotIndex.HasValue)
             {
-                if(_draggedCharacterInfo.storageType != CharacterStorageType.AvailableCharacters)
+                if (_draggedCharacterInfo.storageType != CharacterStorageType.AvailableCharacters)
                 {
                     return true;
                 }
@@ -336,6 +358,12 @@ namespace BeastHunterHubUI
         #endregion
 
         #region FillAndClearMethods
+
+        private void FillUpgradeRoomPanel()
+        {
+            //todo: add required resources and checking resources amount etc
+            _upgradeRoomApplyButton.onClick.AddListener(OnClick_ApplyUpgradeRoomButton); //todo: disable button if not enough resources
+        }
 
         private void FillRoomPanel(WorkRoomModel room)
         {
@@ -368,6 +396,8 @@ namespace BeastHunterHubUI
             {
                 charactersBehaviours[i].SetDisplayedSkill(room.UsedSkill, _context.Player.AvailableCharacters.GetElementBySlot(i));
             }
+
+            room.OnLevelUpHandler += UpdateRoomPanel;
         }
 
         private void ClearRoomPanel()
@@ -378,6 +408,7 @@ namespace BeastHunterHubUI
             _selectedRoom.AssistantWorkplaces.OnTakeElementFromSlotHandler -= FillCharacterSlotUI;
             _selectedRoom.OrdersSlots.OnTakeElementFromSlotHandler -= OnRemoveOrderFromSlot;
             _selectedRoom.OrdersSlots.OnPutElementToSlotHandler -= OnAddOrderInSlot;
+            _selectedRoom.OnLevelUpHandler -= UpdateRoomPanel;
 
             for (int i = 0; i < _selectedRoom.OrdersSlots.GetSlotsCount(); i++)
             {
@@ -401,6 +432,12 @@ namespace BeastHunterHubUI
 
             _assistantsSlotsBehaviours.Clear();
             _orderSlotsBehaviours.Clear();
+        }
+
+        private void UpdateRoomPanel()
+        {
+            ClearRoomPanel();
+            FillRoomPanel(_selectedRoom);
         }
 
         private void FillCharacterSlotUI(CharacterStorageType storageType, int slotIndex, CharacterModel character)

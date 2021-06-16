@@ -9,8 +9,7 @@ namespace BeastHunterHubUI
     {
         #region Properties
 
-        public Action<WorkRoomType> OnLevelUpHandler { get; set; }
-        public Action OnInfoUpdateHandler { get; set; }
+        public Action OnLevelUpHandler { get; set; }
 
         public WorkRoomType RoomType { get; private set; }
         public SkillType UsedSkill { get; private set; }
@@ -106,7 +105,6 @@ namespace BeastHunterHubUI
             character.IsAssignedToWork = true;
             RecountOrderTimeReducePercent();
             OnChiefAdd(character);
-            OnInfoUpdateHandler?.Invoke();
         }
 
         private void OnChiefRemoveBase(CharacterStorageType storageType, int slotIndex, CharacterModel character)
@@ -114,7 +112,6 @@ namespace BeastHunterHubUI
             character.IsAssignedToWork = false;
             RecountOrderTimeReducePercent();
             OnChiefRemove(character);
-            OnInfoUpdateHandler?.Invoke();
         }
 
         private void OnAssistantAddBase(CharacterStorageType storageType, int slotIndex, CharacterModel character)
@@ -123,7 +120,6 @@ namespace BeastHunterHubUI
             RecountAssistansGeneralSkillLevel();
             RecountOrderTimeReducePercent();
             OnAssistantAdd(character);
-            OnInfoUpdateHandler?.Invoke();
         }
 
         private void OnAssistantRemoveBase(CharacterStorageType storageType, int slotIndex, CharacterModel character)
@@ -132,7 +128,6 @@ namespace BeastHunterHubUI
             RecountAssistansGeneralSkillLevel();
             RecountOrderTimeReducePercent();
             OnAssistantRemove(character);
-            OnInfoUpdateHandler?.Invoke();
         }
 
         private void RecountAssistansGeneralSkillLevel()
@@ -150,7 +145,7 @@ namespace BeastHunterHubUI
 
         private void OnLevelUp()
         {
-            OnLevelUpHandler?.Invoke(RoomType);
+            OnLevelUpHandler?.Invoke();
         }
 
         private void RecountOrderTimeReducePercent()
