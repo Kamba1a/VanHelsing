@@ -21,11 +21,11 @@ MonoBehaviour:
       _progressScheme:
       - _level: 1
         _progress:
-          _assistansAmount: 3
+          _assistansAmount: 1
           _ordersSlots: 1
       - _level: 2
         _progress:
-          _assistansAmount: 3
+          _assistansAmount: 2
           _ordersSlots: 2
       - _level: 3
         _progress:

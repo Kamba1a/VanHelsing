@@ -53,11 +53,8 @@ namespace BeastHunterHubUI
 
         private void UpdateDisplayedSkill(CharacterModel character)
         {
-            Debug.Log("UpdateDisplayedSkill");
-            Debug.Log("_displayedSkill=" + _displayedSkill);
             if (_displayedSkill != SkillType.None)
             {
-                Debug.Log("_displayedSkill=true");
                 _skillNameText.text = _displayedSkill.ToString();
                 _skillLevelText.text = character.Skills[_displayedSkill].ToString() + "%";
                 _skillLevelImage.fillAmount = (float)character.Skills[_displayedSkill] / 100;
@@ -65,7 +62,6 @@ namespace BeastHunterHubUI
             }
             else
             {
-                Debug.Log("_displayedSkill=false");
                 _skillPanel.SetActive(false);
             }
         }
